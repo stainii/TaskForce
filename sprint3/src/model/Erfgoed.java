@@ -8,17 +8,40 @@ public class Erfgoed
 	private Model m;
 	private int id;
 	private String naam;
+	private String postcode;
+	private String deelgemeente; 
+	private String straat; 
+	private String huisnr; 
+	private String omschrijving;
+	private String typeErfgoed;
+	private String kenmerken; 
+	private String geschiedenis;
+	private String nuttigeInfo;
+	private String link;
 	private int burgerId;
-	private String plaats;
 	
-	public Erfgoed(int id, String naam, int burgerId, String plaats, Model m)
+	public Erfgoed(int id, String naam, String postcode, String deelgemeente,
+			String straat, String huisnr, String omschrijving,
+			String typeErfgoed, String kenmerken, String geschiedenis,
+			String nuttigeInfo, String link, int burgerId, Model m)
 	{
 		this.m = m;
 		this.id = id;
 		this.naam = naam;
-		this.plaats = plaats;
+		this.postcode = postcode; 
+		this.deelgemeente = deelgemeente;
+		this.straat = straat;
+		this.huisnr = huisnr;
+		this.omschrijving = omschrijving; 
+		this.typeErfgoed = typeErfgoed; 
+		this.kenmerken = kenmerken; 
+		this.geschiedenis = geschiedenis; 
+		this.nuttigeInfo = nuttigeInfo;
+		this.link = link;
 		this.setBurgerId(burgerId);
 	}
+	
+	// ------- getters ------------
 	
 	public int getId()
 	{
@@ -27,6 +50,51 @@ public class Erfgoed
 	public String getNaam()
 	{
 		return naam;
+	}
+
+	public String getPostcode() {
+		return postcode;
+	}
+
+	public String getDeelgemeente() {
+		return deelgemeente;
+	}
+
+	public String getStraat() {
+		return straat;
+	}
+
+	public String getHuisnr() {
+		return huisnr;
+	}
+
+	public String getOmschrijving() {
+		return omschrijving;
+	}
+
+	public String getTypeErfgoed() {
+		return typeErfgoed;
+	}
+
+	public String getKenmerken() {
+		return kenmerken;
+	}
+
+	public String getGeschiedenis() {
+		return geschiedenis;
+	}
+
+	public String getNuttigeInfo() {
+		return nuttigeInfo;
+	}
+	
+	public String getLink() {
+		return link;
+	}
+	
+	public int getBurgerId()
+	{
+		return burgerId;
 	}
 	public Burger getEigenaar()
 	{
@@ -57,14 +125,8 @@ public class Erfgoed
 			return returnArray;
 	}
 	
-	public String getPlaats()
-	{
-		return plaats;
-	}
-	public int getBurgerId()
-	{
-		return burgerId;
-	}
+
+	// -------- setters -------------
 	
 	public void setId(int id)
 	{
@@ -76,14 +138,50 @@ public class Erfgoed
 		this.naam = naam;
 		m.notifyListeners();
 	}
+	
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
+	public void setDeelgemeente(String deelgemeente) {
+		this.deelgemeente = deelgemeente;
+	}
+
+	public void setStraat(String straat) {
+		this.straat = straat;
+	}
+
+	public void setHuisnr(String huisnr) {
+		this.huisnr = huisnr;
+	}
+
+	public void setOmschrijving(String omschrijving) {
+		this.omschrijving = omschrijving;
+	}
+
+	public void setTypeErfgoed(String typeErfgoed) {
+		this.typeErfgoed = typeErfgoed;
+	}
+
+	public void setKenmerken(String kenmerken) {
+		this.kenmerken = kenmerken;
+	}
+
+	public void setGeschiedenis(String geschiedenis) {
+		this.geschiedenis = geschiedenis;
+	}
+
+	public void setNuttigeInfo(String nuttigeInfo) {
+		this.nuttigeInfo = nuttigeInfo;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
 	public void setBurgerId(int burgerId)
 	{
 		this.burgerId = burgerId;
-		m.notifyListeners();
-	}
-	public void setPlaats(String plaats)
-	{
-		this.plaats = plaats;
 		m.notifyListeners();
 	}
 
@@ -91,10 +189,12 @@ public class Erfgoed
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + burgerId;
-		result = prime * result + id;
-		result = prime * result + ((naam == null) ? 0 : naam.hashCode());
-		result = prime * result + ((plaats == null) ? 0 : plaats.hashCode());
+		result = prime * result
+				+ ((deelgemeente == null) ? 0 : deelgemeente.hashCode());
+		result = prime * result + ((huisnr == null) ? 0 : huisnr.hashCode());
+		result = prime * result
+				+ ((postcode == null) ? 0 : postcode.hashCode());
+		result = prime * result + ((straat == null) ? 0 : straat.hashCode());
 		return result;
 	}
 
@@ -107,21 +207,26 @@ public class Erfgoed
 		if (getClass() != obj.getClass())
 			return false;
 		Erfgoed other = (Erfgoed) obj;
-		if (burgerId != other.burgerId)
-			return false;
-		if (id != other.id)
-			return false;
-		if (naam == null) {
-			if (other.naam != null)
+		if (deelgemeente == null) {
+			if (other.deelgemeente != null)
 				return false;
-		} else if (!naam.equals(other.naam))
+		} else if (!deelgemeente.equals(other.deelgemeente))
 			return false;
-		if (plaats == null) {
-			if (other.plaats != null)
+		if (huisnr == null) {
+			if (other.huisnr != null)
 				return false;
-		} else if (!plaats.equals(other.plaats))
+		} else if (!huisnr.equals(other.huisnr))
+			return false;
+		if (postcode == null) {
+			if (other.postcode != null)
+				return false;
+		} else if (!postcode.equals(other.postcode))
+			return false;
+		if (straat == null) {
+			if (other.straat != null)
+				return false;
+		} else if (!straat.equals(other.straat))
 			return false;
 		return true;
 	}
-
 }

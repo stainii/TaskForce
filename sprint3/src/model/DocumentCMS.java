@@ -16,13 +16,14 @@ public class DocumentCMS
 	private Date datum;
 	private String opmerkingen; 
 	private String tekst; 
-	private String type; 
+	private String typeDocument;  
 	private String redenAfwijzing;
 	private BufferedImage image;
+	private int mediaId;
 	
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String status, Date datum, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId,String redenAfwijzing, Model m)
+	public DocumentCMS(int id, String status, Date datum, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId,String redenAfwijzing, int mediaId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -32,8 +33,9 @@ public class DocumentCMS
 		this.datum = datum;
 		this.opmerkingen = opmerkingen;
 		this.tekst = tekst; 
-		this.type = type;
+		this.typeDocument = type;
 		this.redenAfwijzing = redenAfwijzing;
+		this.mediaId = mediaId;
 	}
 	
 	//deze constructor wordt gebruikt hij het toevoegen van een nieuw document aan een erfgoed
@@ -47,7 +49,7 @@ public class DocumentCMS
 		this.datum = new Date(d.getDatabankTijd().getTime());
 		this.opmerkingen = "";
 		this.tekst = "";
-		this.type = "Onbekend";
+		this.typeDocument = "Onbekend";
 		this.redenAfwijzing = "";
 	}
 
@@ -95,14 +97,10 @@ public class DocumentCMS
 	}
 
 
-	public String getType() {
-		return type;
+	public String getTypeDocument() {
+		return typeDocument;
 	}
 	
-	public int getErfgoedId() {
-		return erfgoedId;
-	}	
-
 	public BufferedImage getImage() {
 		return image;
 	}
@@ -110,7 +108,14 @@ public class DocumentCMS
 	public String getRedenAfwijzing() {
 		return redenAfwijzing;
 	}
+	
+	public int getErfgoedId() {
+		return erfgoedId;
+	}	
 
+	public int getMediaId() {
+		return mediaId;
+	}
 
 
 
@@ -146,17 +151,9 @@ public class DocumentCMS
 		m.notifyListeners();
 	}
 
-
-	public void setType(String type)
+	public void setTypeDocument(String type)
 	{
-		this.type = type;
-		m.notifyListeners();
-	}
-
-
-	public void setErfgoedId(int erfgoedId)
-	{
-		this.erfgoedId = erfgoedId;
+		this.typeDocument = type;
 		m.notifyListeners();
 	}
 	
@@ -166,7 +163,6 @@ public class DocumentCMS
 		m.notifyListeners();
 	}
 	
-
 	public void setImage(BufferedImage image) 
 	{
 		this.image = image;
@@ -178,6 +174,17 @@ public class DocumentCMS
 		this.redenAfwijzing = redenAfwijzing;
 		m.notifyListeners();
 	}
+	
+	public void setErfgoedId(int erfgoedId)
+	{
+		this.erfgoedId = erfgoedId;
+		m.notifyListeners();
+	}
+	
+	public void setMediaId(int mediaId) {
+		this.mediaId = mediaId;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -192,7 +199,7 @@ public class DocumentCMS
 				+ ((redenAfwijzing == null) ? 0 : redenAfwijzing.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((tekst == null) ? 0 : tekst.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((typeDocument == null) ? 0 : typeDocument.hashCode());
 		result = prime * result + (verwijderd ? 1231 : 1237);
 		return result;
 	}
@@ -235,10 +242,10 @@ public class DocumentCMS
 				return false;
 		} else if (!tekst.equals(other.tekst))
 			return false;
-		if (type == null) {
-			if (other.type != null)
+		if (typeDocument == null) {
+			if (other.typeDocument != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!typeDocument.equals(other.typeDocument))
 			return false;
 		if (verwijderd != other.verwijderd)
 			return false;

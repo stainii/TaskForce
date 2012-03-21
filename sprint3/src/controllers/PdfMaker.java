@@ -82,7 +82,7 @@ public class PdfMaker
 			
 		for(DocumentCMS c : document.getErfgoed().getDocumenten())
 		{
-			if(c.getType().equals("Afbeelding"))
+			if(c.getTypeDocument().equals("Afbeelding"))
 			{
 
 				Paragraph afbeelding = new Paragraph();
@@ -110,7 +110,7 @@ public class PdfMaker
 				doc.add(opmerking);
 			}
 			
-			if(c.getType().equals("Tekst"))
+			if(c.getTypeDocument().equals("Tekst"))
 			{
 				Paragraph tekst = new Paragraph();
 				tekst.add(new Paragraph("Tekst",tussentitel));

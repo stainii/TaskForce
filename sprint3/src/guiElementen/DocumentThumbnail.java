@@ -41,13 +41,13 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		setOpaque(false);
 		setPreferredSize(new Dimension(85,85));
 		
-		if (doc.getType().equals("Afbeelding"))
+		if (doc.getTypeDocument().equals("Afbeelding"))
 		{
 			Afbeelding afb = new Afbeelding(doc,85,85,databank);
 			afb.addMouseListener(this);
 			add(afb);
 		}
-		else if (doc.getType().equals("Video"))
+		else if (doc.getTypeDocument().equals("Video"))
 		{
 			JLabel video = new JLabel();
 			video.setIcon(new ImageIcon(getClass().getResource("../views/imgs/video.png")));

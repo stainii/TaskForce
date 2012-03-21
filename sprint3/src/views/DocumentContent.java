@@ -104,7 +104,7 @@ public class DocumentContent extends JPanel implements FocusListener
 		c.gridx=2;
 		JTextField plaats = new JTextField(20);
 		tekstvakken.add(plaats);
-		plaats.setText(document.getErfgoed().getPlaats());
+		plaats.setText(document.getErfgoed().getDeelgemeente());
 		plaats.setEditable(false);
 		plaats.setBorder(null);
 		plaats.setOpaque(false);
@@ -161,15 +161,15 @@ public class DocumentContent extends JPanel implements FocusListener
 		c.gridy =1;
 		c.gridheight= 7;
 		
-		if (doc.getType().equals("Afbeelding"))
+		if (doc.getTypeDocument().equals("Afbeelding"))
 		{
 			media = new DocumentAfbeelding(controller,databank);
 		}
-		else if (doc.getType().equals("Tekst"))
+		else if (doc.getTypeDocument().equals("Tekst"))
 		{
 			media = new DocumentTekst(controller); 
 		}
-		else if (doc.getType().equals("Video"))
+		else if (doc.getTypeDocument().equals("Video"))
 		{
 			media = new DocumentVideo();
 		}

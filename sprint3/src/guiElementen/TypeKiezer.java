@@ -65,7 +65,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 					{
 						//lees de afbeelding in en sla ze op in het voorlopige document. Toon daarna de afbeelding.
 						controller.getVoorlopigDocument().setImage(ImageIO.read(chooser.getSelectedFile()));
-						controller.getVoorlopigDocument().setType("Afbeelding");
+						controller.getVoorlopigDocument().setTypeDocument("Afbeelding");
 						content.setMedia(new DocumentAfbeelding(controller,databank));
 					} 
 					catch (IOException e1) 
@@ -97,7 +97,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			public void mouseClicked(MouseEvent e) 
 			{
 				//zet het documentType op tekst en verander naar de gewone view. In de gewone view, maak het tekstvak bewerkbaar.
-				controller.getVoorlopigDocument().setType("Tekst");
+				controller.getVoorlopigDocument().setTypeDocument("Tekst");
 				DocumentTekst doctekst = new DocumentTekst(controller);
 				doctekst.setEditable(true);
 			}

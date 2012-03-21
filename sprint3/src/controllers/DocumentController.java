@@ -20,7 +20,7 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getStatus(), doc.getDatum(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getType(), doc.getErfgoedId(),doc.getRedenAfwijzing(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getStatus(), doc.getDatum(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getMediaId(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
 		voorlopigDocument.setImage(doc.getImage());
 		this.m = m;
@@ -44,7 +44,7 @@ public class DocumentController
 		origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
 		origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
 		origineelDocument.setTekst(voorlopigDocument.getTekst());
-		origineelDocument.setType(voorlopigDocument.getType());
+		origineelDocument.setTypeDocument(voorlopigDocument.getTypeDocument());
 		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
 		origineelDocument.setImage(voorlopigDocument.getImage());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());

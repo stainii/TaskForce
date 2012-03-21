@@ -64,17 +64,17 @@ public class Tegel extends JPanel implements MouseListener
 		c.gridx = 1;
 		c.gridy = 1;
 		c.gridheight = 6;		
-		if (document.getType().equals("Afbeelding"))
+		if (document.getTypeDocument().equals("Afbeelding"))
 		{
 			add(new Afbeelding(document,100,100,data), c);
 		}
-		else if (document.getType().equals("Video"))
+		else if (document.getTypeDocument().equals("Video"))
 		{
 			JLabel icoon = new JLabel();
 			icoon.setIcon(new ImageIcon(getClass().getResource("../views/imgs/video.png")));
 			add(icoon,c);
 		}
-		else if (document.getType().equals("Tekst"))
+		else if (document.getTypeDocument().equals("Tekst"))
 		{
 			JLabel icoon = new JLabel();
 			icoon.setIcon(new ImageIcon(getClass().getResource("../views/imgs/tekst.png")));
@@ -94,7 +94,7 @@ public class Tegel extends JPanel implements MouseListener
 		c.gridy = 2;
 		add(new JLabelFactory().getTegelTekst(doc.getEigenaar().getNaam()),c);
 		c.gridy=3;
-		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getPlaats()),c);
+		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
 		c.gridy = 4;
 		add(new JLabelFactory().getTegelTekst(doc.getDatum().toString()), c);
 		

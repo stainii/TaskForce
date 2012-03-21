@@ -74,7 +74,7 @@ public class Beoordeling extends JPanel
 			nogNietBeoordeeld.setVisible(false);
 			afwijzen.setIcon(new ImageIcon(getClass().getResource("imgs/afgekeurd.png")));
 		}
-		if (doc.getType().equals("Onbekend"))
+		if (doc.getTypeDocument().equals("Onbekend"))
 		{
 			nogNietBeoordeeld.setVisible(false);
 			goedkeuren.setVisible(false);
@@ -90,7 +90,7 @@ public class Beoordeling extends JPanel
 			redenAfwijzing.setEditable(false);
 		
 		//als het type nog niet bepaald is (bij het maken van een nieuw document)
-		if (doc.getType().equals("Onbekend"))
+		if (doc.getTypeDocument().equals("Onbekend"))
 		{
 			verwijderen.setVisible(false);		
 		}
@@ -119,7 +119,7 @@ public class Beoordeling extends JPanel
 			});
 		}
 		
-		if (doc.getType().equals("Onbekend"))
+		if (doc.getTypeDocument().equals("Onbekend"))
 		{
 			bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 			bewerken.addMouseListener(new MouseListener()
@@ -184,7 +184,7 @@ public class Beoordeling extends JPanel
 							switch (i)
 							{
 								case 0: controller.getVoorlopigDocument().getErfgoed().setNaam(t.getText()); break;
-								case 1: controller.getVoorlopigDocument().getErfgoed().setPlaats(t.getText()); break;
+								case 1: controller.getVoorlopigDocument().getErfgoed().setDeelgemeente(t.getText()); break;
 								case 2: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
 							}
 							

@@ -272,7 +272,7 @@ public class AfgekeurdMail implements SoortMail
 "</tr>"+
 "<tr>"+
 "<td>" + "<strong>Locatie erfgoed: </strong>" + "</td>" +
-"<td>" + document.getErfgoed().getPlaats() + "</td>" +
+"<td>" + document.getErfgoed().getDeelgemeente() + "</td>" +
 "</tr>"+
 "<tr>"+
 "<td>" + "<strong>Datum inzending: </strong>" + "</td>" +

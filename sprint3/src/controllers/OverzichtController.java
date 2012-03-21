@@ -98,7 +98,7 @@ public class OverzichtController
 		{
 			if (d.getErfgoed().getNaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getErfgoed().getPlaats().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getErfgoed().getDeelgemeente().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);

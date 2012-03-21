@@ -54,18 +54,18 @@ public class Rij extends JPanel implements MouseListener
 		setLayout(new GridLayout(1,7));
 		
 		//afbeelding		
-		if (document.getType().equals("Afbeelding"))
+		if (document.getTypeDocument().equals("Afbeelding"))
 		{
 			add(new Afbeelding(document,50,50,data));
 		}
-		else if (document.getType().equals("Video"))
+		else if (document.getTypeDocument().equals("Video"))
 		{
 			JLabel icoon = new JLabel();
 			icoon.setHorizontalAlignment(JLabel.CENTER);
 			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/video_lijst.png")));
 			add(icoon);
 		}
-		else  if (document.getType().equals("Tekst"))
+		else  if (document.getTypeDocument().equals("Tekst"))
 		{
 			JLabel icoon = new JLabel();
 			icoon.setHorizontalAlignment(JLabel.CENTER);
@@ -85,7 +85,7 @@ public class Rij extends JPanel implements MouseListener
 		
 		add(new JLabelFactory().getTegelTekst(document.getEigenaar().getNaam()));
 		
-		add(new JLabelFactory().getTegelTekst(document.getErfgoed().getPlaats()));
+		add(new JLabelFactory().getTegelTekst(document.getErfgoed().getDeelgemeente()));
 		
 		add(new JLabelFactory().getTegelTekst(document.getDatum().toString()));
 		
