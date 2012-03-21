@@ -100,11 +100,37 @@ public class OverzichtController
 				resultaat.add(d);
 			else if (d.getErfgoed().getDeelgemeente().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
+			else if (d.getErfgoed().getGeschiedenis().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getHuisnr().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getKenmerken().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getLink().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getNuttigeInfo().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getOmschrijving().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getPostcode().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getStraat().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getErfgoed().getTypeErfgoed().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getEmail().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getStatus().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getRedenAfwijzing().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getTekst().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getOpmerkingen().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getDatum().toString().toLowerCase().contains(s.toLowerCase()))
 					resultaat.add(d);

@@ -16,7 +16,6 @@ public class DocumentController
 	private Databank d;
 	private Model m;
 	
-	
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
@@ -48,6 +47,7 @@ public class DocumentController
 		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
 		origineelDocument.setImage(voorlopigDocument.getImage());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
+		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 	}
 	public void verwijder()
 	{
