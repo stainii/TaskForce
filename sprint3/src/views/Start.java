@@ -34,7 +34,7 @@ import controllers.Databank;
 import controllers.Login;
 
 import model.Model;
-/**GIT TEST**/
+/**GIT TEST WERKT BIJ STIJN**/
 @SuppressWarnings("serial")
 public class Start extends JPanel implements ActionListener
 {	
