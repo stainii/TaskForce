@@ -110,21 +110,7 @@ public class AfgekeurdMail implements SoortMail
 				"<table class=\"w255\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"255\">" +
 				"<tbody><tr><td class=\"w255\" height=\"8\" width=\"255\"></td></tr>" +
 				"</tbody></table>" +
-				/*"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" +
-				"<tbody><tr>" +
-				"<td valign=\"middle\"><fblike></fblike></td>" +
-				"<td width=\"3\"></td>" +
-				"<td valign=\"middle\"><div class=\"header-content\"></div></td>" +
-				"<td class=\"w10\" width=\"10\"></td>" +
-				"<td valign=\"middle\"><tweet></tweet></td>" +
-				"<td width=\"3\"></td>" +
-				"<td valign=\"middle\"><div class=\"header-content\"></div></td>" +
-				"<td class=\"w10\" width=\"10\"></td>" +
-				"<td valign=\"middle\"><forwardtoafriend><img src=\"https://img.createsend1.com/img/templatebuilder/forward-glyph.png\" alt=\"Forward icon\"=\"\" border=\"0\" height=\"14\" width=\"19\"></forwardtoafriend></td>" +
-				"<td width=\"3\"></td>" +
-				"<td valign=\"middle\"><div class=\"header-content\"><forwardtoafriend>Forward</forwardtoafriend></div></td>" +
-				" </tr>" +
-				"</tbody></table>" +*/
+				
 				" <table class=\"w255\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"255\">" +
 				" <tbody><tr><td class=\"w255\" height=\"8\" width=\"255\"></td></tr>" +
 				" </tbody></table>" +
@@ -183,50 +169,13 @@ public class AfgekeurdMail implements SoortMail
 				"</div>" +
 				"</td>" +
 				"</tr>" +
-				/*"<tr><td class=\"w580\" height=\"10\" width=\"580\"></td></tr>" +
-				"</tbody></table>" +
-				"</layout>" +
-				"<layout label=\"Text with full-width image\">" +
-				"<table class=\"w580\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"580\">" +
-				"<tbody><tr>" +
-				"<td class=\"w580\" width=\"580\">" +
-				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">Add a title</singleline></p>" +
-				"</td>" +
-				"</tr>" +
-				"<tr>" +
-				"<td class=\"w580\" width=\"580\"><img editable=\"true\" label=\"Image\" class=\"w580\" border=\"0\" width=\"580\"></td>" +
-				"</tr>" +
-				"<tr><td class=\"w580\" height=\"15\" width=\"580\"></td></tr>" +
-				"<tr>" +
-				"<td class=\"w580\" width=\"580\">" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" +
-				"</tr>" +*/
 				"<tr><td class=\"w580\" height=\"10\" width=\"580\"></td></tr>" +
 				"</tbody></table>" +
 				"</layout>" +
 				"<layout label=\"Text with right-aligned image\">" +
 				"<table class=\"w580\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"580\">" +
 				"<tbody><tr>" +
-				/*"<td class=\"w580\" width=\"580\">" +
-				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
-"Add a title" +
-				"</singleline></p>" +
-				"<table align=\"right\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" +
-				"<tbody><tr>" +
-				"<td class=\"w30\" width=\"15\"></td>" +
-				"<td><img editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\"></td>" +
-				"</tr>" +
-				"<tr><td class=\"w30\" height=\"5\" width=\"15\"></td><td></td></tr>" +
-				"</tbody></table>" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">" +
-"Enter your description" +
-				"</multiline>" +
-				"</div>" +
-				"</td>" +*/
+				
 				"</tr>" +
 				"<tr><td class=\"w580\" height=\"10\" width=\"580\"></td></tr>" +
 				"</tbody></table>" +
@@ -267,20 +216,22 @@ public class AfgekeurdMail implements SoortMail
 	"<td>" + document.getErfgoed().getNaam() + "</td>" +
 "</tr>"+
 "<tr>"+
-"<td>" + "<strong>Eigenaar inzending: </strong>" + "</td>" +
-"<td>" + document.getEigenaar().getNaam() + "</td>" +
+	"<td>" + "<strong>Eigenaar inzending: </strong>" + "</td>" +
+	"<td>" + document.getEigenaar().getNaam() + "</td>" +
 "</tr>"+
 "<tr>"+
-"<td>" + "<strong>Locatie erfgoed: </strong>" + "</td>" +
-"<td>" + document.getErfgoed().getDeelgemeente() + "</td>" +
+	"<td>" + "<strong>Locatie erfgoed: </strong>" + "</td>" +
+	"<td>" + document.getErfgoed().getStraat() + " " + document.getErfgoed().getHuisnr() + "</td>" +
+	"<td>" + document.getErfgoed().getPostcode() + " " + document.getErfgoed().getDeelgemeente() + "</td>" +
+	"<td>" + document.getErfgoed().getOmschrijving() + "</td>" +
 "</tr>"+
 "<tr>"+
-"<td>" + "<strong>Datum inzending: </strong>" + "</td>" +
-"<td>" + document.getDatum() + "</td>" +
+	"<td>" + "<strong>Datum inzending: </strong>" + "</td>" +
+	"<td>" + document.getDatum() + "</td>" +
 "</tr>"+
 "<tr>"+
-"<td>" + "<strong>Datum goedkeuring: </strong>" + "</td>" +
-"<td>" + new Date()+ "</td>" +
+	"<td>" + "<strong>Datum goedkeuring: </strong>" + "</td>" +
+	"<td>" + new Date()+ "</td>" +
 "</tr>"+
 "</table>" +
 
@@ -297,14 +248,7 @@ public class AfgekeurdMail implements SoortMail
 				"<td class=\"w275\" valign=\"top\" width=\"275\">" +
 				"<table class=\"w275\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"275\">" +
 				"<tbody>" +
-				/*"<tr>" +
-				"<td class=\"w275\" width=\"275\">" +
-				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">Add a title</singleline></p>" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" +
-				"</tr>" + */
+
 				"<tr><td class=\"w275\" height=\"10\" width=\"275\"></td></tr>" +
 				"</tbody></table>" +
 				"</td>" +
@@ -312,14 +256,7 @@ public class AfgekeurdMail implements SoortMail
 				"<td class=\"w275\" valign=\"top\" width=\"275\">" +
 				"<table class=\"w275\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"275\">" +
 				"<tbody>" +
-				/*"<tr>" +
-				"<td class=\"w275\" width=\"275\">" +
-				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">Add a title</singleline></p>" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" +
-				"</tr>" + */
+
 				"<tr><td class=\"w275\" height=\"10\" width=\"275\"></td></tr>" +
 				"</tbody></table>" +
 				"</td>" +
@@ -332,15 +269,7 @@ public class AfgekeurdMail implements SoortMail
 				"<td class=\"w180\" valign=\"top\" width=\"180\">" +
 				"<table class=\"w180\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"180\">" +
 				"<tbody><tr>" +
-				/*"<td class=\"w180\" width=\"180\"><img editable=\"true\" label=\"Image\" class=\"w180\" border=\"0\" width=\"180\"></td>" +
-				"</tr>" +
-				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
-				"<tr>" +
-				"<td class=\"w180\" width=\"180\">" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" + */
+
 				"</tr>" +
 				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
 				"</tbody></table>" + 
@@ -349,15 +278,7 @@ public class AfgekeurdMail implements SoortMail
 				"<td class=\"w180\" valign=\"top\" width=\"180\">" +
 				"<table class=\"w180\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"180\">" +
 				"<tbody><tr>" +
-				/*"<td class=\"w180\" width=\"180\"><img editable=\"true\" label=\"Image\" class=\"w180\" border=\"0\" width=\"180\"></td>" +
-				"</tr>" +
-				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
-				"<tr>" +
-				"<td class=\"w180\" width=\"180\">" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" + */
+
 				"</tr>" +
 				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
 				"</tbody></table>" +
@@ -366,15 +287,7 @@ public class AfgekeurdMail implements SoortMail
 				"<td class=\"w180\" valign=\"top\" width=\"180\">" +
 				"<table class=\"w180\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"180\">" +
 				"<tbody><tr>" +
-				/*"<td class=\"w180\" width=\"180\"><img editable=\"true\" label=\"Image\" class=\"w180\" border=\"0\" width=\"180\"></td>" +
-				"</tr>" +
-				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
-				"<tr>" +
-				"<td class=\"w180\" width=\"180\">" +
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">Enter your description</multiline>" +
-				"</div>" +
-				"</td>" + */
+
 				"</tr>" +
 				"<tr><td class=\"w180\" height=\"10\" width=\"180\"></td></tr>" +
 				"</tbody></table>" +
@@ -415,7 +328,6 @@ public class AfgekeurdMail implements SoortMail
 				"</tr>" +
 				"</tbody></table></body></html>"
 				;
-		
 		
 		return afkeurmail;
 	}

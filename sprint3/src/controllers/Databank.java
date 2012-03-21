@@ -117,14 +117,23 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			Blob afbBlob = c.createBlob();
+			if (doc.getTypeDocument().equals("Afbeelding"))	
+			{
+				Blob afbBlob = c.createBlob();
+				OutputStream afbStream = afbBlob.setBinaryStream(1);
+				ImageIO.write(doc.getImage(), "jpg", afbStream);
 				
-			OutputStream afbStream = afbBlob.setBinaryStream(1);
+				s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
+				s.setBlob(1,afbBlob);
+				s.executeUpdate();
 				
-			if (doc.getTypeDocument().equals("Afbeelding"))
-				ImageIO.write(doc.getImage(), "jpg", afbStream);			
+				s2 = c.createStatement();
+				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
+				rs.next();
+				doc.setMediaId(rs.getInt("MediaId"));
+			}
 			
-			s = c.prepareStatement("INSERT INTO Document(StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, doc.getStatus());
 			s.setDate(2, doc.getDatum());
@@ -164,11 +173,12 @@ public class Databank
 		{
 			try
 			{
+				if (rs!=null)
+					rs.close();
 				if (s!=null)
 					s.close();
 				if (s2!=null)
 					s2.close();
-			//	rs.close();
 				if (c!=null)
 					c.close();
 			}
@@ -208,9 +218,10 @@ public class Databank
 		{
 			try
 			{
-				s.close();
-			//	rs.close();
-				c.close();
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
 			}
 			catch (SQLException e)
 			{
@@ -228,12 +239,17 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			Blob afbBlob = c.createBlob();
-			
-			OutputStream afbStream = afbBlob.setBinaryStream(1);
-			
 			if (doc.getTypeDocument().equals("Afbeelding"))
+			{
+				Blob afbBlob = c.createBlob();
+				OutputStream afbStream = afbBlob.setBinaryStream(1);
 				ImageIO.write(doc.getImage(), "jpg", afbStream);
+				
+				s = c.prepareStatement("UPDATE Media SET BLOB=? WHERE MediaId = ?");
+				s.setBlob(1,afbBlob);
+				s.setInt(2,doc.getMediaId());
+				s.executeUpdate();
+			}
 			
 			s = c.prepareStatement("UPDATE Document SET StatusDocument = ?, DatumToegevoegd =?, Obsolete = ?,Opmerkingen = ?,Tekst = ?, TypeDocument = ? , RedenAfwijzing = ?, ErfgoedId = ?, MediaId = ? WHERE DocumentId = ?");
 			s.setString(1, doc.getStatus());
@@ -245,7 +261,7 @@ public class Databank
 			s.setString(7, doc.getRedenAfwijzing());
 			s.setInt(8, doc.getErfgoedId());
 			s.setInt(9, doc.getMediaId());
-			s.setInt(9, doc.getId());
+			s.setInt(10, doc.getId());
 			s.executeUpdate();
 			
 			s = c.prepareStatement("UPDATE Erfgoed SET Naam = ?, Postcode = ?, Deelgemeente = ?, Straat = ?, " +
@@ -305,31 +321,26 @@ public class Databank
 	public BufferedImage getBlob(int docId)
 	{
 		Connection c = null;
-		PreparedStatement loadImage = null;
+		PreparedStatement s = null;
 		BufferedImage image = null;
+		ResultSet rs = null;
 
 		try
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			/*loadImage = c.prepareStatement("SELECT BLOB FROM DOCUMENT WHERE DocumentId=?");
-			loadImage.setInt(1, docId);*/
-			
-			loadImage = c.prepareStatement("SELECT BLOB FROM MEDIA m, DOCUMENT d WHERE d.MediaId= m.MediaId AND d.DocumentId = ?");
-			loadImage.setInt(1, docId);
+			s = c.prepareStatement("SELECT BLOB FROM MEDIA m, DOCUMENT d WHERE d.MediaId= m.MediaId AND d.DocumentId = ?");
+			s.setInt(1, docId);
 			
 			try
 			{
-				ResultSet rs =loadImage.executeQuery();
+				rs = s.executeQuery();
 				
 				if(rs.next())
 				{
-					Blob imageBlob = rs.getBlob("BLOB");
-					
+					Blob imageBlob = rs.getBlob("BLOB");		
 					InputStream imageBlobStream = imageBlob.getBinaryStream();
-					
 					image = ImageIO.read(imageBlobStream);
-
 				}
 				else
 					System.out.println("Afbeelding niet gevonden");
@@ -347,8 +358,10 @@ public class Databank
 		{
 			try
 			{
-				if (loadImage!=null)
-					loadImage.close();
+				if (rs!=null)
+					rs.close();
+				if (s!=null)
+					s.close();
 				if (c!=null)
 					c.close();
 			}
@@ -387,7 +400,8 @@ public class Databank
 		{
 			try
 			{
-				//rs.close();
+				if (rs!=null)
+					rs.close();
 				if (s!=null)
 					s.close();
 				if (c!=null)
@@ -429,7 +443,8 @@ public class Databank
 		{
 			try
 			{
-				//rs.close();
+				if (rs!=null)
+					rs.close();
 				if (s!=null)
 					s.close();
 				if (c!=null)
@@ -469,33 +484,17 @@ public class Databank
 			while (rs.next())
 			{
 				String actie = rs.getString("Actie").trim();
-				if (actie.equals("Gewijzigd"))
+				if (actie.equals("Gewijzigd") || actie.equals("Goedgekeurd") || actie.equals("Afgekeurd"))
 				{
 					aantalWijzigingen++;
-					m.bewerkDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getInt("MediaId"),m), 
+					
+					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getInt("MediaId"),m);
+					doc.setImage(null);	//hierdoor wordt de afbeelding opnieuw ingeladen (moest ze upgedate zijn...)
+					m.bewerkDocument(doc, 
 							new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
 									rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"),m));
 				}
-				
-				else if (actie.equals("Goedgekeurd"))
-				{
-					aantalWijzigingen++;
-					m.bewerkDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getInt("MediaId"),m), 
-							new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
-									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-									rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"),m));
-				}
-				
-				else if (actie.equals("Afgekeurd"))
-				{
-					aantalWijzigingen++;
-					m.bewerkDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getInt("MediaId"),m), 
-							new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
-									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-									rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"),m));
-				}
-				
 				else if (actie.equals("Verwijderd"))
 				{
 					aantalVerwijderd++;
@@ -518,7 +517,8 @@ public class Databank
 		{
 			try
 			{
-				//rs.close();
+				if (rs!=null)
+					rs.close();
 				if (s !=null)
 					s.close();
 				if (c!=null)

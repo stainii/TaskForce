@@ -12,7 +12,7 @@ public class Login
 {
 	/**Controleert de login **/
 	
-	private final static String connectie = "jdbc:odbc:projecten2";
+	private final static String connectie = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
 	
 	public static boolean controleerLogin(String gebruikersnaam, String wachtwoord) 
 	{
