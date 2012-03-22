@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -133,7 +134,7 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -145,8 +146,10 @@ public class Databank
 			s.setString(8, doc.getRedenAfwijzing());
 			s.setDate(9, doc.getDatumGewijzigd());
 			s.setInt(10,doc.getErfgoedId());
-			s.setInt(11, doc.getMediaId());
-			
+			if (doc.getTypeDocument().equals("Tekst"))
+					s.setNull(11, Types.INTEGER);
+			else 
+				s.setInt(11, doc.getMediaId());
 			s.executeUpdate();
 			
 			
@@ -235,94 +238,91 @@ public class Databank
 	
 	public void updateDocument(DocumentCMS doc)
 	{
-		toevoegenDocument(doc);
-		
-		/*Connection c = null;
+		Connection c = null;
 		PreparedStatement s = null;
+		Statement s2 = null;
+		ResultSet rs = null;
+		int id = -1;
+		
 		try
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			if (doc.getTypeDocument().equals("Afbeelding"))
+			if (doc.getTypeDocument().equals("Afbeelding"))	
 			{
 				Blob afbBlob = c.createBlob();
 				OutputStream afbStream = afbBlob.setBinaryStream(1);
 				ImageIO.write(doc.getImage(), "jpg", afbStream);
 				
-				s = c.prepareStatement("UPDATE Media SET BLOB=? WHERE MediaId = ?");
+				s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
 				s.setBlob(1,afbBlob);
-				s.setInt(2,doc.getMediaId());
 				s.executeUpdate();
+				
+				s2 = c.createStatement();
+				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
+				rs.next();
+				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("UPDATE Document SET DocumentTitel = ?, StatusDocument = ?, DatumToegevoegd =?, Obsolete = ?,Opmerkingen = ?,Tekst = ?, TypeDocument = ? , RedenAfwijzing = ?, DatumLaatsteWijziging = ?, WijzigingStatus = 'Nog te beoordelen', ErfgoedId = ?, MediaId = ? WHERE DocumentId = ?");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?)");
+			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
 			s.setDate(3, doc.getDatumToegevoegd());
-			s.setBoolean(4, doc.isVerwijderd());
+			s.setBoolean(4,doc.isVerwijderd());
 			s.setString(5, doc.getOpmerkingen());
 			s.setString(6, doc.getTekst());
 			s.setString(7, doc.getTypeDocument());
 			s.setString(8, doc.getRedenAfwijzing());
 			s.setDate(9, doc.getDatumGewijzigd());
-			s.setInt(10, doc.getErfgoedId());
-			s.setInt(11, doc.getMediaId());
-			s.setInt(12, doc.getId());
+			s.setInt(10,doc.getErfgoedId());
+			if (doc.getTypeDocument().equals("Tekst"))
+					s.setNull(11, Types.INTEGER);
+			else 
+				s.setInt(11, doc.getMediaId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("UPDATE Erfgoed SET Naam = ?, Postcode = ?, Deelgemeente = ?, Straat = ?, " +
-					"Huisnr = ?, Omschrijving = ?, TypeErfgoed = ?, Kenmerken = ?, Geschiedenis = ?, " +
-					"NuttigeInfo = ?, Link = ?, BurgerId = ? WHERE ErfgoedId = ? ");
-			s.setString(1, doc.getErfgoed().getNaam());
-			s.setString(2, doc.getErfgoed().getPostcode()); 
-			s.setString(3, doc.getErfgoed().getDeelgemeente()); 
-			s.setString(4, doc.getErfgoed().getStraat()); 
-			s.setString(5, doc.getErfgoed().getHuisnr()); 
-			s.setString(6, doc.getErfgoed().getOmschrijving()); 
-			s.setString(7, doc.getErfgoed().getTypeErfgoed()); 
-			s.setString(8, doc.getErfgoed().getKenmerken()); 
-			s.setString(9, doc.getErfgoed().getGeschiedenis()); 
-			s.setString(10, doc.getErfgoed().getNuttigeInfo()); 
-			s.setString(11, doc.getErfgoed().getLink()); 
-			s.setInt(12, doc.getErfgoed().getBurgerId());
-			s.setInt(13, doc.getErfgoedId());
-			s.executeUpdate();
+			
+			s2 = c.createStatement();
+			rs = s2.executeQuery(("SELECT DocumentId FROM Document ORDER BY DocumentId DESC"));
+			rs.next();
+			id = rs.getInt("DocumentId");
 			
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
-			s.setInt(1, doc.getId());
-			s.setString(2,"Gewijzigd");
+			s.setInt(1, id);
+			s.setString(2,"Toegevoegd");
 			s.setString(3, m.getBeheerder());
 			s.executeUpdate();
 		}
-		catch (SQLException e)
+		catch (SQLException sql)
 		{
-			JOptionPane.showMessageDialog(null, "Fout bij het updaten van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			sql.printStackTrace();
+		}
+		catch(IOException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		}
-		catch(IOException ioe )
-		{
-			ioe.printStackTrace();
-		}
-		catch (IllegalArgumentException i)
-		{
-			JOptionPane.showMessageDialog(null, "Het gekozen bestand is geen geldige afbeelding.", "Bestand ongeldig",JOptionPane.ERROR_MESSAGE);
-			i.printStackTrace();
 		}
 		finally
 		{
 			try
 			{
-				if (s != null)
+				if (rs!=null)
+					rs.close();
+				if (s!=null)
 					s.close();
-				if (c != null)
+				if (s2!=null)
+					s2.close();
+				if (c!=null)
 					c.close();
 			}
 			catch (SQLException e)
 			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het updaten van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het wijzigen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 	public BufferedImage getBlob(int docId)
 	{

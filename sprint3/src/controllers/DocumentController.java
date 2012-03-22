@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.Date;
 
+import javax.swing.JOptionPane;
+
 import model.DocumentCMS;
 import model.Model;
 
@@ -63,8 +65,10 @@ public class DocumentController
 	
 	public void update()
 	{
-		wijzigingenDoorvoeren();
-		d.updateDocument(origineelDocument);
+		/*wijzigingenDoorvoeren();
+		d.updateDocument(origineelDocument);*/
+		d.updateDocument(voorlopigDocument);
+		JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
 	}
 	public void toevoegen()
 	{

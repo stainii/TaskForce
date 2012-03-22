@@ -34,7 +34,7 @@ public class DocumentCMS
 		this.verwijderd = verwijderd;
 		this.setErfgoedId(erfgoedId);
 		this.datumToegevoegd = datumToegevoegd;
-		this.datumGewijzigd = datumGewijzigd;
+		this.datumGewijzigd = datumWijziging;
 		this.opmerkingen = opmerkingen;
 		this.tekst = tekst; 
 		this.typeDocument = type;
@@ -48,7 +48,7 @@ public class DocumentCMS
 		this.m = m;
 		this.id = -1;		//moet later uit databank ingelezen worden
 		this.titel ="";
-		this.status = "Nog niet beoordeeld";
+		this.status = "Goedgekeurd";
 		this.verwijderd = false;
 		this.setErfgoedId(e.getId());
 		this.datumToegevoegd = new Date(d.getDatabankTijd().getTime());

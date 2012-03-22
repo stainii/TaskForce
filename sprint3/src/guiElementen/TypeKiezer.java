@@ -99,6 +99,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 				//zet het documentType op tekst en verander naar de gewone view. In de gewone view, maak het tekstvak bewerkbaar.
 				controller.getVoorlopigDocument().setTypeDocument("Tekst");
 				DocumentTekst doctekst = new DocumentTekst(controller);
+				content.setMedia(doctekst);
 				doctekst.setEditable(true);
 			}
 		});
