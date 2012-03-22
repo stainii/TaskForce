@@ -155,7 +155,7 @@ public class AfgekeurdMail implements SoortMail
 				
 // Tekst
 "Geachte " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + 
-"<p>Er werd besloten u document " +
+"<p>Er werd besloten u document " + "<em>" +document.getTitel() +"</em>" + " voor " + 
 "<em>" +document.getErfgoed().getNaam() +"</em>"+" niet te gebruiken op onze site wegens volgende reden: " + "<br/>" +
 "<b>" + reden.getReden() +"</b>" +"<br/>" +
 "U kan altijd uw document aanpassen via onze site, zodanig dat wij uw inzending opnieuw kunnen bekijken."+
@@ -227,7 +227,7 @@ public class AfgekeurdMail implements SoortMail
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Datum inzending: </strong>" + "</td>" +
-	"<td>" + document.getDatum() + "</td>" +
+	"<td>" + document.getDatumToegevoegd() + "</td>" +
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Datum goedkeuring: </strong>" + "</td>" +

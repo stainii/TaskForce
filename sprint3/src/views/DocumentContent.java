@@ -122,7 +122,7 @@ public class DocumentContent extends JPanel implements FocusListener
 		c.gridx = 2;
 		JTextField datum = new JTextField(20);
 		//tekstvakken.add(datum);			//moet niet, de datum moet niet aangepast worden
-		datum.setText("" + document.getDatum());
+		datum.setText("" + document.getDatumToegevoegd());
 		datum.setEditable(false);
 		datum.setBorder(null);
 		datum.setOpaque(false);

@@ -87,7 +87,7 @@ public class Rij extends JPanel implements MouseListener
 		
 		add(new JLabelFactory().getTegelTekst(document.getErfgoed().getDeelgemeente()));
 		
-		add(new JLabelFactory().getTegelTekst(document.getDatum().toString()));
+		add(new JLabelFactory().getTegelTekst(document.getDatumToegevoegd().toString()));
 		
 		if (document.getStatus().equals("Goedgekeurd"))
 			add(new JLabelFactory().getGoedgekeurd(document.getStatus()));

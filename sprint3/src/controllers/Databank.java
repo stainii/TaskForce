@@ -49,11 +49,11 @@ public class Databank
 			s = c.createStatement();
 			
 			//documenten laden
-			rs = s.executeQuery("SELECT * FROM Document WHERE Obsolete = 0");
+			rs = s.executeQuery("SELECT * FROM Document WHERE Obsolete = 0 AND WijzigingStatus = 'Actief'");
 		
 			while (rs.next())
 			{
-				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getInt("MediaId"),m));
+				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"), rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getDate("DatumLaatsteWijziging"), rs.getInt("MediaId"),m));
 			}
 			
 			//burgers laden
@@ -133,17 +133,19 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?)");
 			
-			s.setString(1, doc.getStatus());
-			s.setDate(2, doc.getDatum());
-			s.setBoolean(3,doc.isVerwijderd());
-			s.setString(4, doc.getOpmerkingen());
-			s.setString(5, doc.getTekst());
-			s.setString(6, doc.getTypeDocument());
-			s.setString(7, doc.getRedenAfwijzing());
-			s.setInt(8,doc.getErfgoedId());
-			s.setInt(9, doc.getMediaId());
+			s.setString(1, doc.getTitel());
+			s.setString(2, doc.getStatus());
+			s.setDate(3, doc.getDatumToegevoegd());
+			s.setBoolean(4,doc.isVerwijderd());
+			s.setString(5, doc.getOpmerkingen());
+			s.setString(6, doc.getTekst());
+			s.setString(7, doc.getTypeDocument());
+			s.setString(8, doc.getRedenAfwijzing());
+			s.setDate(9, doc.getDatumGewijzigd());
+			s.setInt(10,doc.getErfgoedId());
+			s.setInt(11, doc.getMediaId());
 			
 			s.executeUpdate();
 			
@@ -233,7 +235,9 @@ public class Databank
 	
 	public void updateDocument(DocumentCMS doc)
 	{
-		Connection c = null;
+		toevoegenDocument(doc);
+		
+		/*Connection c = null;
 		PreparedStatement s = null;
 		try
 		{
@@ -251,17 +255,19 @@ public class Databank
 				s.executeUpdate();
 			}
 			
-			s = c.prepareStatement("UPDATE Document SET StatusDocument = ?, DatumToegevoegd =?, Obsolete = ?,Opmerkingen = ?,Tekst = ?, TypeDocument = ? , RedenAfwijzing = ?, ErfgoedId = ?, MediaId = ? WHERE DocumentId = ?");
-			s.setString(1, doc.getStatus());
-			s.setDate(2, doc.getDatum());
-			s.setBoolean(3, doc.isVerwijderd());
-			s.setString(4, doc.getOpmerkingen());
-			s.setString(5, doc.getTekst());
-			s.setString(6, doc.getTypeDocument());
-			s.setString(7, doc.getRedenAfwijzing());
-			s.setInt(8, doc.getErfgoedId());
-			s.setInt(9, doc.getMediaId());
-			s.setInt(10, doc.getId());
+			s = c.prepareStatement("UPDATE Document SET DocumentTitel = ?, StatusDocument = ?, DatumToegevoegd =?, Obsolete = ?,Opmerkingen = ?,Tekst = ?, TypeDocument = ? , RedenAfwijzing = ?, DatumLaatsteWijziging = ?, WijzigingStatus = 'Nog te beoordelen', ErfgoedId = ?, MediaId = ? WHERE DocumentId = ?");
+			s.setString(1, doc.getTitel());
+			s.setString(2, doc.getStatus());
+			s.setDate(3, doc.getDatumToegevoegd());
+			s.setBoolean(4, doc.isVerwijderd());
+			s.setString(5, doc.getOpmerkingen());
+			s.setString(6, doc.getTekst());
+			s.setString(7, doc.getTypeDocument());
+			s.setString(8, doc.getRedenAfwijzing());
+			s.setDate(9, doc.getDatumGewijzigd());
+			s.setInt(10, doc.getErfgoedId());
+			s.setInt(11, doc.getMediaId());
+			s.setInt(12, doc.getId());
 			s.executeUpdate();
 			
 			s = c.prepareStatement("UPDATE Erfgoed SET Naam = ?, Postcode = ?, Deelgemeente = ?, Straat = ?, " +
@@ -316,7 +322,7 @@ public class Databank
 				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het updaten van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 	public BufferedImage getBlob(int docId)
 	{
@@ -488,7 +494,7 @@ public class Databank
 				{
 					aantalWijzigingen++;
 					
-					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getInt("MediaId"),m);
+					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getDate("DatumLaatsteWijziging"), rs.getInt("MediaId"),m);
 					doc.setImage(null);	//hierdoor wordt de afbeelding opnieuw ingeladen (moest ze upgedate zijn...)
 					m.bewerkDocument(doc, 
 							new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
@@ -504,7 +510,7 @@ public class Databank
 				else if (actie.equals("Toegevoegd"))
 				{
 					aantalToegevoegd++;
-					m.toevoegenDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"),rs.getString("Opmerkingen"),rs.getString("Tekst"),rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getInt("MediaId"),m));
+					m.toevoegenDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getDate("DatumToegevoegd"),rs.getBoolean("Obsolete"),rs.getString("Opmerkingen"),rs.getString("Tekst"),rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getDate("DatumLaatsteWijziging"),rs.getInt("MediaId"),m));
 				}
 			}
 		}

@@ -84,7 +84,7 @@ public class OverzichtController
 			@Override
 			public int compare(DocumentCMS doc1, DocumentCMS doc2)
 			{
-				return -doc1.getDatum().toString().compareTo(doc2.getDatum().toString());
+				return -doc1.getDatumToegevoegd().toString().compareTo(doc2.getDatumToegevoegd().toString());
 			}
 		});
 		notifyListeners();
@@ -124,6 +124,8 @@ public class OverzichtController
 				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getEmail().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
+			else if (d.getTitel().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
 			else if (d.getStatus().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getRedenAfwijzing().toLowerCase().contains(s.toLowerCase()))
@@ -132,8 +134,10 @@ public class OverzichtController
 				resultaat.add(d);
 			else if (d.getOpmerkingen().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getDatum().toString().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getDatumToegevoegd().toString().toLowerCase().contains(s.toLowerCase()))
 					resultaat.add(d);
+			else if (d.getDatumGewijzigd().toString().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
 		}
 		
 		return resultaat;

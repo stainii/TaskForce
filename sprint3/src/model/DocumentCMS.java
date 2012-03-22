@@ -9,11 +9,13 @@ import controllers.Databank;
 public class DocumentCMS
 {	
 	private int id;
+	private String titel;
 	private String status;
 	private boolean verwijderd;
 	private Model m;
 	private int erfgoedId;
-	private Date datum;
+	private Date datumToegevoegd;
+	private Date datumGewijzigd;
 	private String opmerkingen; 
 	private String tekst; 
 	private String typeDocument;  
@@ -23,14 +25,16 @@ public class DocumentCMS
 	
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String status, Date datum, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId,String redenAfwijzing, int mediaId, Model m)
+	public DocumentCMS(int id, String titel, String status, Date datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId,String redenAfwijzing, Date datumWijziging, int mediaId, Model m)
 	{
 		this.m = m;
 		this.id = id;
+		this.titel = titel;
 		this.status = status;
 		this.verwijderd = verwijderd;
 		this.setErfgoedId(erfgoedId);
-		this.datum = datum;
+		this.datumToegevoegd = datumToegevoegd;
+		this.datumGewijzigd = datumGewijzigd;
 		this.opmerkingen = opmerkingen;
 		this.tekst = tekst; 
 		this.typeDocument = type;
@@ -43,10 +47,12 @@ public class DocumentCMS
 	{
 		this.m = m;
 		this.id = -1;		//moet later uit databank ingelezen worden
+		this.titel ="";
 		this.status = "Nog niet beoordeeld";
 		this.verwijderd = false;
 		this.setErfgoedId(e.getId());
-		this.datum = new Date(d.getDatabankTijd().getTime());
+		this.datumToegevoegd = new Date(d.getDatabankTijd().getTime());
+		this.datumGewijzigd = new Date(d.getDatabankTijd().getTime());
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
@@ -56,6 +62,10 @@ public class DocumentCMS
 
 	public int getId() {
 		return id;
+	}
+	
+	public String getTitel() {
+		return titel;
 	}
 
 	public String getStatus() {
@@ -77,9 +87,13 @@ public class DocumentCMS
 		return getErfgoed().getEigenaar();
 	}
 	
-	public Date getDatum()
+	public Date getDatumToegevoegd()
 	{
-		return datum;
+		return datumToegevoegd;
+	}
+	public Date getDatumGewijzigd()
+	{
+		return datumGewijzigd;
 	}
 
 	public boolean isVerwijderd() {
@@ -118,14 +132,18 @@ public class DocumentCMS
 	}
 
 
-
 	// setters
 	public void setId(int id)
 	{
 		this.id = id;
 		m.notifyListeners();
 	}
-
+	
+	public void setTitel(String titel)
+	{
+		this.titel = titel;
+	}
+	
 	public void setStatus(String status)
 	{
 		this.status = status;
@@ -157,9 +175,14 @@ public class DocumentCMS
 		m.notifyListeners();
 	}
 	
-	public void setDatum(Date datum)
+	public void setDatumToegevoegd(Date datum)
 	{
-		this.datum = datum;
+		this.datumToegevoegd = datum;
+		m.notifyListeners();
+	}
+	public void setDatumGewijzigd(Date datum)
+	{
+		this.datumGewijzigd = datum;
 		m.notifyListeners();
 	}
 	
@@ -185,22 +208,26 @@ public class DocumentCMS
 		this.mediaId = mediaId;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((datum == null) ? 0 : datum.hashCode());
+		result = prime * result
+				+ ((datumGewijzigd == null) ? 0 : datumGewijzigd.hashCode());
+		result = prime * result
+				+ ((datumToegevoegd == null) ? 0 : datumToegevoegd.hashCode());
 		result = prime * result + erfgoedId;
 		result = prime * result + id;
+		result = prime * result + mediaId;
 		result = prime * result
 				+ ((opmerkingen == null) ? 0 : opmerkingen.hashCode());
 		result = prime * result
 				+ ((redenAfwijzing == null) ? 0 : redenAfwijzing.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((tekst == null) ? 0 : tekst.hashCode());
-		result = prime * result + ((typeDocument == null) ? 0 : typeDocument.hashCode());
-		result = prime * result + (verwijderd ? 1231 : 1237);
+		result = prime * result + ((titel == null) ? 0 : titel.hashCode());
+		result = prime * result
+				+ ((typeDocument == null) ? 0 : typeDocument.hashCode());
 		return result;
 	}
 
@@ -213,14 +240,21 @@ public class DocumentCMS
 		if (getClass() != obj.getClass())
 			return false;
 		DocumentCMS other = (DocumentCMS) obj;
-		if (datum == null) {
-			if (other.datum != null)
+		if (datumGewijzigd == null) {
+			if (other.datumGewijzigd != null)
 				return false;
-		} else if (!datum.equals(other.datum))
+		} else if (!datumGewijzigd.equals(other.datumGewijzigd))
+			return false;
+		if (datumToegevoegd == null) {
+			if (other.datumToegevoegd != null)
+				return false;
+		} else if (!datumToegevoegd.equals(other.datumToegevoegd))
 			return false;
 		if (erfgoedId != other.erfgoedId)
 			return false;
 		if (id != other.id)
+			return false;
+		if (mediaId != other.mediaId)
 			return false;
 		if (opmerkingen == null) {
 			if (other.opmerkingen != null)
@@ -242,13 +276,17 @@ public class DocumentCMS
 				return false;
 		} else if (!tekst.equals(other.tekst))
 			return false;
+		if (titel == null) {
+			if (other.titel != null)
+				return false;
+		} else if (!titel.equals(other.titel))
+			return false;
 		if (typeDocument == null) {
 			if (other.typeDocument != null)
 				return false;
 		} else if (!typeDocument.equals(other.typeDocument))
 			return false;
-		if (verwijderd != other.verwijderd)
-			return false;
 		return true;
 	}
+
 }

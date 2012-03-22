@@ -150,7 +150,7 @@ public class GoedkeurMail implements SoortMail
 				"<multiline label=\"Description\">" +
 				
 // Tekst
-"Geachte " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + "<p>Hierbij hebben wij het genoegen u mee te delen dat uw document " +
+"Geachte " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + "<p>Hierbij hebben wij het genoegen u mee te delen dat uw document " + "<p>Er werd besloten u document " + "<em>" + document.getTitel() +"</em>" + " voor " +
 "<em>" +document.getErfgoed().getNaam() +"</em>"+" is goedgekeurd" +
 " en dat deze snel op onze website zal beschikbaar zijn.</p> "+
 "<p>Wij danken u vriendelijk voor uw inzending</p>"+
@@ -222,7 +222,7 @@ public class GoedkeurMail implements SoortMail
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Datum inzending: </strong>" + "</td>" +
-	"<td>" + document.getDatum() + "</td>" +
+	"<td>" + document.getDatumToegevoegd() + "</td>" +
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Datum goedkeuring: </strong>" + "</td>" +

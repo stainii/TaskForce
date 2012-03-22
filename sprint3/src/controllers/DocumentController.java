@@ -1,5 +1,7 @@
 package controllers;
 
+import java.sql.Date;
+
 import model.DocumentCMS;
 import model.Model;
 
@@ -19,7 +21,7 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getStatus(), doc.getDatum(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getMediaId(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
 		voorlopigDocument.setImage(doc.getImage());
 		this.m = m;
@@ -38,8 +40,9 @@ public class DocumentController
 	public void wijzigingenDoorvoeren()
 	{
 		origineelDocument.setId(voorlopigDocument.getId());
+		origineelDocument.setTitel(voorlopigDocument.getTitel());
 		origineelDocument.setStatus(voorlopigDocument.getStatus());
-		origineelDocument.setDatum(voorlopigDocument.getDatum());
+		origineelDocument.setDatumToegevoegd(voorlopigDocument.getDatumToegevoegd());
 		origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
 		origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
 		origineelDocument.setTekst(voorlopigDocument.getTekst());
@@ -48,6 +51,9 @@ public class DocumentController
 		origineelDocument.setImage(voorlopigDocument.getImage());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
 		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
+		
+		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
 	}
 	public void verwijder()
 	{
@@ -71,6 +77,9 @@ public class DocumentController
 	{
 		origineelDocument.setStatus("Goedgekeurd");
 		voorlopigDocument.setStatus("Goedgekeurd");
+		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		
 		d.updateDocument(origineelDocument);
 	}
 	public void afkeuren(String reden)
@@ -79,6 +88,9 @@ public class DocumentController
 		origineelDocument.setRedenAfwijzing(reden);
 		voorlopigDocument.setStatus("Afgekeurd");
 		voorlopigDocument.setRedenAfwijzing(reden);
+		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		
 		d.updateDocument(origineelDocument);
 	}
 }
