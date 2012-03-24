@@ -5,6 +5,8 @@ package views;
 
 
 import guiElementen.JLabelFactory;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -28,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
+import administrator.Administrator;
+
 import systemTray.InSystemTray;
 
 import controllers.Databank;
@@ -43,7 +47,7 @@ public class Start extends JPanel implements ActionListener
 	private JPasswordField wachtwoordTxt;
 	private JTextField gebruikersnaamTxt;
 	private JPanel voortgang, login;
-	private JLabel voortgangLbl;
+	private JLabel voortgangLbl, logo;
 	private JFrame frame;
 	private boolean sysTrayAlIngeladen;	//is de system tray al ingeladen? zo ja, dan moet hij niet opnieuw gemaakt worden
 	
@@ -65,8 +69,8 @@ public class Start extends JPanel implements ActionListener
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
 		
-		JLabel logo = new JLabel();
-		logo.setIcon(new ImageIcon(getClass().getResource("imgs/herzeleLogin.jpg")));
+		logo = new JLabel();
+		logo.setIcon(new ImageIcon(getClass().getResource("imgs/logo.png")));
 		add(logo);
 		
 		login = new JPanel();
@@ -102,7 +106,6 @@ public class Start extends JPanel implements ActionListener
 		c.fill = GridBagConstraints.HORIZONTAL;
 		gebruikersnaamTxt = new JTextField(15);
 		login.add(gebruikersnaamTxt,c);
-		
 		
 		c.gridx =2;
 		c.gridy = 2;
@@ -143,7 +146,14 @@ public class Start extends JPanel implements ActionListener
 		voortgang.setVisible(true);
 		repaint();
 		
-		if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+		if(Administrator.isAdministrator(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+		{
+			voortgang.setVisible(false);
+			logo.setVisible(false);
+			new Administrator();
+		}
+		
+		else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 		{
 			new Laden(frame, voortgangLbl, gebruikersnaamTxt.getText(), sysTrayAlIngeladen).execute();	//laadt het programma in					
 		}

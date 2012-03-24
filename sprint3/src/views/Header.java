@@ -30,7 +30,7 @@ public class Header extends JPanel implements MouseListener
 	private Image background = backgroundIcon.getImage();
 	
 	//logo linksboven
-	private ImageIcon logoIcon = new ImageIcon(getClass().getResource("imgs/herzele.jpg"));
+	private ImageIcon logoIcon = new ImageIcon(getClass().getResource("imgs/logoHeader.png"));
 	private Image logo = logoIcon.getImage();
 	
 	private JLabel inlogLbl, uitlogLbl;
@@ -43,7 +43,7 @@ public class Header extends JPanel implements MouseListener
 		if (background != null)
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 		if(logo != null)
-			g.drawImage(logo, 10,10,57,99,this);
+			g.drawImage(logo, 8,0,88,110,this);
 	}
 	
 	public Header(Model m, JFrame f)
