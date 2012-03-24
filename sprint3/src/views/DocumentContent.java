@@ -1,7 +1,9 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,6 +27,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
+
+import speeltuin.ErfgoedPanel;
 
 import controllers.Databank;
 import controllers.DocumentController;
@@ -58,9 +62,13 @@ public class DocumentContent extends JPanel implements FocusListener
 		tekstvakken = new ArrayList<JTextComponent>();
 		
 		setOpaque(false);
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BorderLayout());
 		
+		JPanel documentPanel = new JPanel(new GridBagLayout());
+		documentPanel.setOpaque(false);
+		add(documentPanel, BorderLayout.CENTER);
+
+		GridBagConstraints c = new GridBagConstraints();
 		//erfgoed titel
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.insets = new Insets(2,3,2,3);
@@ -82,24 +90,24 @@ public class DocumentContent extends JPanel implements FocusListener
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
 		titel.addFocusListener(this);
 		titel.setFocusable(false);
-		add(titel,c);
+		documentPanel.add(titel,c);
 		
 		
 		//naam eigenaar
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		add(new JLabelFactory().getNormaleTekst(doc.getEigenaar().getGebruikersnaam() + " - " + doc.getEigenaar().getNaam()),c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getEigenaar().getGebruikersnaam() + " - " + doc.getEigenaar().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridy =3;
-		add(new JLabel("   "),c);
+		documentPanel.add(new JLabel("   "),c);
 		
 		//locatie
 		c.gridx=1;
 		c.gridy=4;
 		c.gridwidth=3;
-		add(new JLabelFactory().getNormaleTekst("Locatie: "),c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Locatie: "),c);
 		
 		c.gridx=2;
 		JTextField plaats = new JTextField(20);
@@ -111,13 +119,13 @@ public class DocumentContent extends JPanel implements FocusListener
 		plaats.setForeground(Color.WHITE);
 		plaats.addFocusListener(this);
 		plaats.setFocusable(false);
-		add(plaats,c);
+		documentPanel.add(plaats,c);
 		
 		//datum
 		c.gridx = 1;
 		c.gridy =5;
 		c.gridwidth = 1;
-		add(new JLabelFactory().getNormaleTekst("Datum ingediend: "), c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Datum ingediend: "), c);
 		
 		c.gridx = 2;
 		JTextField datum = new JTextField(20);
@@ -129,13 +137,13 @@ public class DocumentContent extends JPanel implements FocusListener
 		datum.setForeground(Color.WHITE);
 		datum.addFocusListener(this);
 		datum.setFocusable(false);
-		add(datum, c);
+		documentPanel.add(datum, c);
 		
 		//opmerkingen
 		c.gridx=1;
 		c.gridy =6;
 		c.gridwidth = 2;
-		add(new JLabelFactory().getNormaleTekst("Opmerkingen: "), c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Opmerkingen: "), c);
 		
 		c.gridx=1;
 		c.gridy = 7 ;
@@ -154,7 +162,7 @@ public class DocumentContent extends JPanel implements FocusListener
 		opmerkingen.setLineWrap(true);
 		opmerkingen.grabFocus(); 		//nodig zodat de waarschuwing niet automatisch verschijnt
 		
-		add(opmerkingen, c);
+		documentPanel.add(opmerkingen, c);
 		
 		//media
 		c.gridx = 3;
@@ -184,21 +192,21 @@ public class DocumentContent extends JPanel implements FocusListener
 			opmerkingen.setForeground(Color.black);
 			opmerkingen.setBorder(new JTextField().getBorder());			
 		}
-		add((Component) media,c);
+		documentPanel.add((Component) media,c);
 		
 		//beoordeling
 		c.gridx = 3;
 		c.gridy = 12;
 		c.gridheight = 1;
 		beoordeling = new Beoordeling(databank,model,document,hoofd,this, controller);
-		add(beoordeling,c);
+		documentPanel.add(beoordeling,c);
 		
 		//waarschuwing voor het wijzigen van velden in erfgoed
 		c.gridy = 13;
 		c.gridwidth = 3;
 		waarschuwing = new JLabelFactory().getWaarschuwing("<html><center>Opgelet: wijzigingen in dit tekstvak gelden<br />voor alle documenten in dit erfgoed!</center></html>");
 		waarschuwing.setVisible(false);
-		add(waarschuwing, c);
+		documentPanel.add(waarschuwing, c);
 	}
 	
 	//retourneert alle tekstvakken die bewerkbaar mogen gezet worden door (o.a.) Beoordeling

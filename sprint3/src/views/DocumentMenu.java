@@ -12,15 +12,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -185,19 +182,7 @@ public class DocumentMenu extends JPanel
 			}
 		});
 		add(pdf);
-		
-		
-		JButton pdf = new JButton("Maak een pdf");
-		pdf.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-
-			}
-		});
-		//add(pdf);
-		
+				
 		//toon andere documenten van het erfgoed
 		add(new JLabelFactory().getMenuTitel("Andere documenten"));
 	
