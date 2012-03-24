@@ -28,7 +28,7 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 	private Afbeelding afb;
 	private JLabel kiesAndereAfbeelding; 
 	
-	public DocumentAfbeelding(DocumentController con, Databank d)
+	public DocumentAfbeelding(DocumentController con, Databank d, boolean wijziging)
 	{
 		this.controller = con;
 		this.databank = d;
@@ -43,28 +43,56 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 		c.weighty=0;
 		c.fill = GridBagConstraints.BOTH;
 		
-		afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,d);
-		afb.addMouseListener(new MouseListener()
+		if (!wijziging)
 		{
-			
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
+			afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,d);
+			afb.addMouseListener(new MouseListener()
 			{
-				new FullScreenAfbeelding(controller.getVoorlopigDocument(),databank);				
-			}
-		});
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					new FullScreenAfbeelding(controller.getVoorlopigDocument(),databank);				
+				}
+			});
+		}
+		else
+		{
+			afb = new Afbeelding(controller.getOrigineelDocument().getLaatsteWijziging(),350,300,d);
+			afb.addMouseListener(new MouseListener()
+			{
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					new FullScreenAfbeelding(controller.getVoorlopigDocument().getLaatsteWijziging(),databank);				
+				}
+			});
+		}
 		add(afb, c);
 		
 		

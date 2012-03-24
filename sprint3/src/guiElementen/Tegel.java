@@ -96,7 +96,7 @@ public class Tegel extends JPanel implements MouseListener
 		c.gridy=3;
 		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
 		c.gridy = 4;
-		add(new JLabelFactory().getTegelTekst(doc.getDatumToegevoegd().toString()), c);
+		add(new JLabelFactory().getTegelTekst(doc.getDatumToegevoegd().toString().substring(0, 10)), c);
 		
 		c.gridy = 5;
 		if (doc.getStatus().equals("Goedgekeurd"))

@@ -91,7 +91,7 @@ public class Afbeelding extends JPanel
 			}
 			
 			
-			label.setIcon(scale(afb.getImage(),schaal));	//schalen en adden aan label		
+			label.setIcon(scale(afb.getImage(),schaal));	//schalen en adden aan label
 			label.setText("");	//"laden"-tekst wegdoen
 			
 			return null;

@@ -26,7 +26,6 @@ import controllers.mail.AfgekeurdMail;
 import controllers.mail.GoedkeurMail;
 import controllers.mail.MailSchool;
 import controllers.mail.MailThuis;
-import controllers.mail.SoortMail;
 
 /** Deel van de GUI waarin je een document goedkeurt of afkeurt. **/
 
@@ -180,21 +179,17 @@ public class Beoordeling extends JPanel
 							t.setForeground(Color.white);
 							t.setBorder(null);
 							
-							if (i!=2)			//opmerkingen
-								t.setFocusable(false);
-							
 							switch (i)
 							{
-								case 0: controller.getVoorlopigDocument().getErfgoed().setNaam(t.getText()); break;
-								case 1: controller.getVoorlopigDocument().getErfgoed().setDeelgemeente(t.getText()); break;
-								case 2: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
+								case 0: controller.getVoorlopigDocument().setTitel(t.getText()); break;
+								case 1: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
 							}
 							
 						}
+						
 						documentContent.setEditable(false);
-						documentContent.getTekstvakken().get(2).grabFocus();	//opmerkingen
-						bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 						controller.update();
+						hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));
 					}
 					else
 					{

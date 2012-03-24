@@ -47,13 +47,12 @@ public class Model
 		this.erfgoed = erfgoed;
 		notifyListeners();
 	}
-
 	public void setDocumenten(ArrayList<DocumentCMS> documenten)
 	{
 		this.documenten = documenten;
 		notifyListeners();
 	}
-	
+
 	public void toevoegenDocument(DocumentCMS d)
 	{
 		documenten.add(d);

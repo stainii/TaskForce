@@ -3,12 +3,11 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import guiElementen.Beoordeling;
@@ -28,8 +27,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
 
-import speeltuin.ErfgoedPanel;
-
 import controllers.Databank;
 import controllers.DocumentController;
 import model.DocumentCMS;
@@ -39,7 +36,7 @@ import model.Model;
  * mogelijkheid om het document te bewerken of verwijderen */
 
 @SuppressWarnings("serial")
-public class DocumentContent extends JPanel implements FocusListener
+public class DocumentContent extends JPanel
 {
 	private Model model;
 	private Databank databank;
@@ -49,7 +46,8 @@ public class DocumentContent extends JPanel implements FocusListener
 	private DocumentMedia media;
 	private DocumentController controller;
 	private ArrayList<JTextComponent> tekstvakken;
-	private JLabel waarschuwing;
+	private JLabel wijzigingMedia;
+	private JPanel documentPanel;
 	
 	public DocumentContent(Model m, Databank db, Hoofd h, DocumentCMS doc)
 	{
@@ -64,12 +62,15 @@ public class DocumentContent extends JPanel implements FocusListener
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		JPanel documentPanel = new JPanel(new GridBagLayout());
+		//add(new ErfgoedPanel(model, databank, doc.getErfgoed(), hoofd), BorderLayout.NORTH);
+		
+		documentPanel = new JPanel(new GridBagLayout());
 		documentPanel.setOpaque(false);
 		add(documentPanel, BorderLayout.CENTER);
 
 		GridBagConstraints c = new GridBagConstraints();
-		//erfgoed titel
+		
+		//document titel
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.insets = new Insets(2,3,2,3);
 		c.gridx = 1;
@@ -82,75 +83,74 @@ public class DocumentContent extends JPanel implements FocusListener
 		
 		JTextField titel = new JTextField(20);
 		tekstvakken.add(titel);
-		titel.setText(document.getErfgoed().getNaam());
+		titel.setText(document.getTitel());
 		titel.setEditable(false);
 		titel.setBorder(null);
 		titel.setOpaque(false);
 		titel.setForeground(Color.WHITE);
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
-		titel.addFocusListener(this);
-		titel.setFocusable(false);
 		documentPanel.add(titel,c);
 		
+		//wijziging titel
+		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getTitel().equals(document.getTitel()))
+		{
+			c.gridy = 2;
+			documentPanel.add(new JLabelFactory().getWijziging("Wijziging " + document.getLaatsteWijziging().getDatumGewijzigd() + ": " + document.getLaatsteWijziging().getTitel()), c);
+		}
 		
 		//naam eigenaar
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		c.gridwidth = 4;
 		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getEigenaar().getGebruikersnaam() + " - " + doc.getEigenaar().getNaam()),c);
 		
 		//beetje ruimte
-		c.gridy =3;
+		c.gridy =4;
 		documentPanel.add(new JLabel("   "),c);
 		
-		//locatie
-		c.gridx=1;
-		c.gridy=4;
-		c.gridwidth=3;
-		documentPanel.add(new JLabelFactory().getNormaleTekst("Locatie: "),c);
-		
-		c.gridx=2;
-		JTextField plaats = new JTextField(20);
-		tekstvakken.add(plaats);
-		plaats.setText(document.getErfgoed().getDeelgemeente());
-		plaats.setEditable(false);
-		plaats.setBorder(null);
-		plaats.setOpaque(false);
-		plaats.setForeground(Color.WHITE);
-		plaats.addFocusListener(this);
-		plaats.setFocusable(false);
-		documentPanel.add(plaats,c);
-		
-		//datum
+		//datum toegevoegd
 		c.gridx = 1;
-		c.gridy =5;
+		c.gridy = 5;
 		c.gridwidth = 1;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Datum ingediend: "), c);
 		
 		c.gridx = 2;
-		JTextField datum = new JTextField(20);
+		JTextField datumToegevoegd = new JTextField(20);
 		//tekstvakken.add(datum);			//moet niet, de datum moet niet aangepast worden
-		datum.setText("" + document.getDatumToegevoegd());
-		datum.setEditable(false);
-		datum.setBorder(null);
-		datum.setOpaque(false);
-		datum.setForeground(Color.WHITE);
-		datum.addFocusListener(this);
-		datum.setFocusable(false);
-		documentPanel.add(datum, c);
+		datumToegevoegd.setText("" + document.getDatumToegevoegd());
+		datumToegevoegd.setEditable(false);
+		datumToegevoegd.setBorder(null);
+		datumToegevoegd.setOpaque(false);
+		datumToegevoegd.setForeground(Color.WHITE);
+		documentPanel.add(datumToegevoegd, c);
+		
+		//datum gewijzigd
+		c.gridx = 1;
+		c.gridy = 6;
+		c.gridwidth = 1;
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Datum laatste geaccep. wijz.: "), c);
+				
+		c.gridx = 2;
+		JTextField datumGewijzigd = new JTextField(20);
+		datumGewijzigd.setText("" + document.getDatumToegevoegd());
+		datumGewijzigd.setEditable(false);
+		datumGewijzigd.setBorder(null);
+		datumGewijzigd.setOpaque(false);
+		datumGewijzigd.setForeground(Color.WHITE);
+		documentPanel.add(datumGewijzigd, c);
 		
 		//opmerkingen
-		c.gridx=1;
-		c.gridy =6;
+		c.gridx = 1;
+		c.gridy = 7;
 		c.gridwidth = 2;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Opmerkingen: "), c);
 		
-		c.gridx=1;
-		c.gridy = 7 ;
+		c.gridx= 1;
+		c.gridy = 8 ;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.VERTICAL;
 		
-		JTextArea opmerkingen = new JTextArea(10,30);
+		JTextArea opmerkingen = new JTextArea(5,30);
 		tekstvakken.add(opmerkingen);
 		opmerkingen.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
 		opmerkingen.setText(document.getOpmerkingen());
@@ -160,22 +160,36 @@ public class DocumentContent extends JPanel implements FocusListener
 		opmerkingen.setOpaque(false);
 		opmerkingen.setForeground(Color.WHITE);
 		opmerkingen.setLineWrap(true);
-		opmerkingen.grabFocus(); 		//nodig zodat de waarschuwing niet automatisch verschijnt
-		
 		documentPanel.add(opmerkingen, c);
+		
+		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
+		{
+			c.gridy = 9;
+			
+			JTextArea opmerkingenWijziging = new JTextArea(5,30);
+			opmerkingenWijziging.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
+			opmerkingenWijziging.setText("Wijziging " + document.getLaatsteWijziging().getDatumGewijzigd() + ": " + document.getLaatsteWijziging().getOpmerkingen());
+			opmerkingenWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
+			opmerkingenWijziging.setEditable(false);
+			opmerkingenWijziging.setBorder(null);
+			opmerkingenWijziging.setOpaque(false);
+			opmerkingenWijziging.setLineWrap(true);
+			opmerkingenWijziging.setForeground(Color.RED);
+			documentPanel.add(opmerkingenWijziging, c);
+		}
 		
 		//media
 		c.gridx = 3;
-		c.gridy =1;
-		c.gridheight= 7;
+		c.gridy = 1;
+		c.gridheight = 9;
 		
 		if (doc.getTypeDocument().equals("Afbeelding"))
 		{
-			media = new DocumentAfbeelding(controller,databank);
+			media = new DocumentAfbeelding(controller,databank,false);
 		}
 		else if (doc.getTypeDocument().equals("Tekst"))
 		{
-			media = new DocumentTekst(controller); 
+			media = new DocumentTekst(controller,false); 
 		}
 		else if (doc.getTypeDocument().equals("Video"))
 		{
@@ -194,19 +208,119 @@ public class DocumentContent extends JPanel implements FocusListener
 		}
 		documentPanel.add((Component) media,c);
 		
-		//beoordeling
+		//wijziging
 		c.gridx = 3;
 		c.gridy = 12;
 		c.gridheight = 1;
+		if (doc.getTypeDocument().equals("Afbeelding"))
+		{
+			if (document.getLaatsteWijziging() != null && document.getLaatsteWijziging().getMediaId()!=document.getMediaId())
+			{
+				wijzigingMedia = new JLabelFactory().getWijziging("Bekijk wijziging afbeelding");
+				wijzigingMedia.addMouseListener(new MouseListener()
+				{
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					
+					@Override
+					public void mousePressed(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseClicked(MouseEvent e)
+					{
+						if(wijzigingMedia.getText().equals("Bekijk wijziging afbeelding"))
+						{
+							setMedia(new DocumentAfbeelding(controller,databank,true));
+							wijzigingMedia.setText("Bekijk huidige afbeelding");
+						}
+						else
+						{
+							setMedia(new DocumentAfbeelding(controller,databank,false));
+							wijzigingMedia.setText("Bekijk wijziging afbeelding");
+						}
+					}
+				});
+				documentPanel.add(wijzigingMedia,c);
+			}
+		}
+		else if (doc.getTypeDocument().equals("Tekst"))
+		{
+			if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getTekst().equals(document.getTekst()))
+			{
+				wijzigingMedia = new JLabelFactory().getWijziging("Bekijk wijziging tekst");
+				wijzigingMedia.addMouseListener(new MouseListener()
+				{
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					
+					@Override
+					public void mousePressed(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseClicked(MouseEvent e)
+					{
+						if(wijzigingMedia.getText().equals("Bekijk wijziging tekst"))
+						{
+							setMedia(new DocumentTekst(controller,true));
+							wijzigingMedia.setText("Bekijk huidige tekst");
+						}
+						else
+						{
+							setMedia(new DocumentTekst(controller,false));
+							wijzigingMedia.setText("Bekijk wijziging tekst");
+						}
+					}
+				});
+				documentPanel.add(wijzigingMedia,c);
+			} 
+		}
+		else if (doc.getTypeDocument().equals("Video"))
+		{
+			if (document.getLaatsteWijziging() != null && document.getLaatsteWijziging().getMediaId()!=document.getMediaId())
+			{
+				wijzigingMedia = new JLabelFactory().getWijziging("Bekijk wijziging video");
+				wijzigingMedia.addMouseListener(new MouseListener()
+				{
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					
+					@Override
+					public void mousePressed(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					
+					@Override
+					public void mouseClicked(MouseEvent e)
+					{
+						setMedia(new DocumentVideo());						
+					}
+				});
+				add(wijzigingMedia,c);
+			}
+		}
+		
+		//beoordeling
+		c.gridx = 3;
+		c.gridy = 13;
+		c.gridheight = 1;
 		beoordeling = new Beoordeling(databank,model,document,hoofd,this, controller);
 		documentPanel.add(beoordeling,c);
-		
-		//waarschuwing voor het wijzigen van velden in erfgoed
-		c.gridy = 13;
-		c.gridwidth = 3;
-		waarschuwing = new JLabelFactory().getWaarschuwing("<html><center>Opgelet: wijzigingen in dit tekstvak gelden<br />voor alle documenten in dit erfgoed!</center></html>");
-		waarschuwing.setVisible(false);
-		documentPanel.add(waarschuwing, c);
 	}
 	
 	//retourneert alle tekstvakken die bewerkbaar mogen gezet worden door (o.a.) Beoordeling
@@ -229,12 +343,12 @@ public class DocumentContent extends JPanel implements FocusListener
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 3;
 		c.gridy =1;
-		c.gridheight= 7;
+		c.gridheight= 9;
 		
 		setVisible(false); 
-		remove((JPanel)media);
+		documentPanel.remove((JPanel)media);
 		media = dm; 
-		add((JPanel)media,c);
+		documentPanel.add((JPanel)media,c);
 		setVisible(true);
 		
 	}
@@ -255,17 +369,5 @@ public class DocumentContent extends JPanel implements FocusListener
 				return;
 			super.insertString(offs, str, a);
 		}	
-	}
-
-	@Override
-	public void focusGained(FocusEvent arg0)		//als een veld van erfgoed bewerkt wordt, moet de gebruiker
-	{												//gewaarschuwd worden dat zijn wijziging toegepast wordt in
-		waarschuwing.setVisible(true);				//alle documenten voor dat erfgoed
-		
-	}
-	@Override
-	public void focusLost(FocusEvent arg0)
-	{
-		waarschuwing.setVisible(false);
 	}
 }

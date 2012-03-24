@@ -49,14 +49,6 @@ public class JLabelFactory
 		label.setForeground(new Color(50,50,50));
 		return label;
 	}
-	public JLabel getWaarschuwing(String s)
-	{
-		JLabel label = new JLabel(s);
-		label.setFont(new Font("Comic Sans", Font.BOLD, 15));
-		label.setForeground(Color.RED);
-		return label;
-	}
-	
 	public JLabel getPaginaNummer(int s)
 	{
 		JLabel label = new JLabel(s + "");
@@ -133,6 +125,14 @@ public class JLabelFactory
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Comic Sans", Font.ITALIC, 12));
 		label.setForeground(Color.WHITE);
+		return label;
+	}
+	
+	public JLabel getWijziging(String s)
+	{
+		JLabel label = new JLabel(s);
+		label.setFont(new Font("Comic Sans", Font.ITALIC, 12));
+		label.setForeground(Color.RED);
 		return label;
 	}
 }

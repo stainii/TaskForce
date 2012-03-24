@@ -39,7 +39,22 @@ public class DocumentController
 		return voorlopigDocument;
 	}
 	
-	public void wijzigingenDoorvoeren()
+	public void verwijder()
+	{
+		d.verwijderDocument(origineelDocument);
+		m.verwijderDocument(origineelDocument);
+	}
+	
+	public void update()
+	{
+		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
+		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		origineelDocument.setLaatsteWijziging(voorlopigDocument);
+		
+		d.updateDocument(voorlopigDocument);
+		JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
+	}
+	public void toevoegen()
 	{
 		origineelDocument.setId(voorlopigDocument.getId());
 		origineelDocument.setTitel(voorlopigDocument.getTitel());
@@ -54,25 +69,9 @@ public class DocumentController
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
 		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 		
-		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
-		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
-	}
-	public void verwijder()
-	{
-		d.verwijderDocument(origineelDocument);
-		m.verwijderDocument(origineelDocument);
-	}
-	
-	public void update()
-	{
-		/*wijzigingenDoorvoeren();
-		d.updateDocument(origineelDocument);*/
-		d.updateDocument(voorlopigDocument);
-		JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
-	}
-	public void toevoegen()
-	{
-		wijzigingenDoorvoeren();
+		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
+		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		
 		origineelDocument.setId(d.toevoegenDocument(origineelDocument));
 		m.toevoegenDocument(origineelDocument);
 	}
@@ -81,8 +80,8 @@ public class DocumentController
 	{
 		origineelDocument.setStatus("Goedgekeurd");
 		voorlopigDocument.setStatus("Goedgekeurd");
-		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
-		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
+		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
 		
 		d.updateDocument(origineelDocument);
 	}
@@ -92,8 +91,8 @@ public class DocumentController
 		origineelDocument.setRedenAfwijzing(reden);
 		voorlopigDocument.setStatus("Afgekeurd");
 		voorlopigDocument.setRedenAfwijzing(reden);
-		origineelDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
-		voorlopigDocument.setDatumGewijzigd(new Date(d.getDatabankTijd().getTime()));
+		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
+		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
 		
 		d.updateDocument(origineelDocument);
 	}

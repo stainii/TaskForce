@@ -2,6 +2,7 @@ package model;
 
 import java.awt.image.BufferedImage;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import controllers.Databank;
 
@@ -14,18 +15,18 @@ public class DocumentCMS
 	private boolean verwijderd;
 	private Model m;
 	private int erfgoedId;
-	private Date datumToegevoegd;
-	private Date datumGewijzigd;
+	private Timestamp datumToegevoegd;
+	private Timestamp datumGewijzigd;
 	private String opmerkingen; 
 	private String tekst; 
 	private String typeDocument;  
 	private String redenAfwijzing;
 	private BufferedImage image;
 	private int mediaId;
-	
+	private DocumentCMS laatsteWijziging;	
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Date datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId,String redenAfwijzing, Date datumWijziging, int mediaId, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -51,8 +52,8 @@ public class DocumentCMS
 		this.status = "Goedgekeurd";
 		this.verwijderd = false;
 		this.setErfgoedId(e.getId());
-		this.datumToegevoegd = new Date(d.getDatabankTijd().getTime());
-		this.datumGewijzigd = new Date(d.getDatabankTijd().getTime());
+		this.datumToegevoegd = d.getDatabankTijd();
+		this.datumGewijzigd = d.getDatabankTijd();
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
@@ -87,48 +88,60 @@ public class DocumentCMS
 		return getErfgoed().getEigenaar();
 	}
 	
-	public Date getDatumToegevoegd()
+	public Timestamp getDatumToegevoegd()
 	{
 		return datumToegevoegd;
 	}
-	public Date getDatumGewijzigd()
+	public Timestamp getDatumGewijzigd()
 	{
 		return datumGewijzigd;
 	}
 
-	public boolean isVerwijderd() {
+	public boolean isVerwijderd()
+	{
 		return verwijderd;
 	}
 	
-	public String getOpmerkingen() {
+	public String getOpmerkingen()
+	{
 		return opmerkingen;
-		
 	}
 
 
-	public String getTekst() {
+	public String getTekst()
+	{
 		return tekst;
 	}
 
 
-	public String getTypeDocument() {
+	public String getTypeDocument()
+	{
 		return typeDocument;
 	}
 	
-	public BufferedImage getImage() {
+	public BufferedImage getImage()
+	{
 		return image;
 	}
 	
-	public String getRedenAfwijzing() {
+	public String getRedenAfwijzing()
+	{
 		return redenAfwijzing;
 	}
 	
-	public int getErfgoedId() {
+	public int getErfgoedId()
+	{
 		return erfgoedId;
 	}	
 
-	public int getMediaId() {
+	public int getMediaId()
+	{
 		return mediaId;
+	}
+	
+	public DocumentCMS getLaatsteWijziging()
+	{
+		return laatsteWijziging;
 	}
 
 
@@ -175,12 +188,12 @@ public class DocumentCMS
 		m.notifyListeners();
 	}
 	
-	public void setDatumToegevoegd(Date datum)
+	public void setDatumToegevoegd(Timestamp datum)
 	{
 		this.datumToegevoegd = datum;
 		m.notifyListeners();
 	}
-	public void setDatumGewijzigd(Date datum)
+	public void setDatumGewijzigd(Timestamp datum)
 	{
 		this.datumGewijzigd = datum;
 		m.notifyListeners();
@@ -204,8 +217,14 @@ public class DocumentCMS
 		m.notifyListeners();
 	}
 	
-	public void setMediaId(int mediaId) {
+	public void setMediaId(int mediaId)
+	{
 		this.mediaId = mediaId;
+	}
+	
+	public void setLaatsteWijziging(DocumentCMS doc)
+	{
+		laatsteWijziging = doc;
 	}
 
 	@Override
