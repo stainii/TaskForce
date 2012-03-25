@@ -45,7 +45,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/transparantGrijs.png"));
 	private Image background = backgroundIcon.getImage();
 	
-	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld;
+	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld, afbeelding, tekst, video;
 	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
 	private JLabel zoekBtn;
@@ -159,26 +159,44 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		goedgekeurd = new JCheckBox("Goedgekeurd");
 		afgekeurd = new JCheckBox("Afgekeurd");
 		nietBeoordeeld = new JCheckBox("Nog niet beoordeeld");
+		afbeelding = new JCheckBox("Afbeelding    "); 
+		tekst = new JCheckBox("Tekst            "); 
+		video = new JCheckBox("Video          "); 
 		
 		goedgekeurd.setOpaque(false);
 		afgekeurd.setOpaque(false);
 		nietBeoordeeld.setOpaque(false);
+		afbeelding.setOpaque(false);
+		tekst.setOpaque(false);
+		video.setOpaque(false);
 		
 		goedgekeurd.setForeground(Color.white);
 		afgekeurd.setForeground(Color.white);
-		nietBeoordeeld.setForeground(Color.white);
+		nietBeoordeeld.setForeground(Color.white);		
+		afbeelding.setForeground(Color.white);
+		tekst.setForeground(Color.white);
+		video.setForeground(Color.white);
 		
 		goedgekeurd.setSelected(false);
 		afgekeurd.setSelected(false);
 		nietBeoordeeld.setSelected(true);
+		afbeelding.setSelected(false);
+		tekst.setSelected(false);
+		video.setSelected(false);
 		
 		goedgekeurd.addChangeListener(this);
 		afgekeurd.addChangeListener(this); 
 		nietBeoordeeld.addChangeListener(this); 
+		afbeelding.addChangeListener(this); 
+		tekst.addChangeListener(this); 
+		video.addChangeListener(this); 
 		
 		add(goedgekeurd);
 		add(afgekeurd);
 		add(nietBeoordeeld);
+		add(afbeelding);
+		add(tekst);
+		add(video);
 		
 		
 		//sorteren
@@ -250,6 +268,12 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			gefilterd.addAll(c.filterOpStatus("Afgekeurd"));
 		if (nietBeoordeeld.isSelected())
 			gefilterd.addAll(c.filterOpStatus("Nog niet beoordeeld"));
+		if (afbeelding.isSelected())
+			gefilterd.addAll(c.filterOpType("Afbeelding"));
+		if (tekst.isSelected())
+			gefilterd.addAll(c.filterOpType("Tekst"));
+		if (video.isSelected())
+			gefilterd.addAll(c.filterOpType("Video"));
 		
 		if (!zoekTxt.getText().equals("") && !zoekTxt.getText().equals("zoeken..."))
 		{

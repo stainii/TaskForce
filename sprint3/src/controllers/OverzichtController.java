@@ -51,6 +51,23 @@ public class OverzichtController
 		return gefilterd;
 	}
 	
+	
+	public ArrayList<DocumentCMS> filterOpType(String s)
+	{
+		ArrayList<DocumentCMS> origineel = m.getDocumenten();
+		ArrayList<DocumentCMS> gefilterd = new ArrayList<DocumentCMS>();
+		
+		for (DocumentCMS d: origineel)
+		{
+			if (d.getTypeDocument().equals(s))
+			{
+				gefilterd.add(d);
+			}
+		}
+		
+		return gefilterd;
+	}
+	
 	public void sorteerOpBurger()
 	{
 		Collections.sort(inTeLaden, new Comparator<DocumentCMS>()
