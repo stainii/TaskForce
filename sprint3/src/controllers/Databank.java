@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+
+import model.Actie;
 import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -217,8 +219,9 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("UPDATE Document SET Obsolete = 1 WHERE DocumentId=?");
+			s = c.prepareStatement("UPDATE Document SET Obsolete = 1 WHERE DocumentId=? OR WijzigingVanDocument=?");
 			s.setInt(1, doc.getId());
+			s.setInt(2, doc.getId());
 			s.executeUpdate();
 			
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
@@ -244,6 +247,47 @@ public class Databank
 			catch (SQLException e)
 			{
 				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void verwijderenOngedaanMaken(DocumentCMS doc)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE Document SET Obsolete = 0 WHERE DocumentId=? OR WijzigingVanDocument=?");
+			s.setInt(1, doc.getId());
+			s.setInt(2, doc.getId());
+			s.executeUpdate();
+			
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s.setInt(1, doc.getId());
+			s.setString(2,"Toegevoegd");
+			s.setString(3, m.getBeheerder());
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het ongedaan maken van het verwijderen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ongedaan maken van het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}
@@ -478,6 +522,70 @@ public class Databank
 			}
 		}
 		return t;
+	}
+	
+	public ArrayList<Actie> getActies()
+	{
+		ArrayList<Actie> acties = new ArrayList<Actie>();
+		
+		Connection c = null;
+		PreparedStatement s = null, s2 = null;
+		ResultSet rs = null, rs2 = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("SELECT * FROM LOGBOEK WHERE Gebruikersnaam = ? AND GebruikerRol = 'Beheerder' ORDER BY DatumTijd DESC;");
+			s.setString(1, m.getBeheerder());
+			
+			rs = s.executeQuery();
+		
+			while (rs.next())
+			{
+				int documentId = rs.getInt("DocumentId");
+				s2 = c.prepareStatement("SELECT * FROM DOCUMENT WHERE DocumentId = ?;");
+				s2.setInt(1, documentId);
+				rs2 = s2.executeQuery();
+				DocumentCMS doc = null;
+				if (rs2.next())
+				{
+					doc = new DocumentCMS(documentId,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(),rs2.getTimestamp("DatumToegevoegd"),rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),rs2.getInt("ErfgoedId"),rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"),m);
+				}
+				
+				acties.add(new Actie(doc,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
+			}
+				
+
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ophalen van het logboek)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (rs!=null)
+					rs.close();
+				if (rs2!=null)
+					rs2.close();
+				if (s!=null)
+					s.close();
+				if (s2!=null)
+					s2.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ophalen van het logboek, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return acties;
 	}
 	
 	public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
