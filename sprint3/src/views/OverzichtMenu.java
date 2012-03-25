@@ -46,7 +46,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private Image background = backgroundIcon.getImage();
 	
 	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld;
-	private JRadioButton burger, erfgoed, datum;
+	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
 	private JLabel zoekBtn;
 	
@@ -187,15 +187,18 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		burger = new JRadioButton("Burger         ");
 		erfgoed = new JRadioButton("Erfgoed     ");
 		datum = new JRadioButton("Laatst toegevoegd");
+		typeDoc = new JRadioButton("Type     ");
 		
 		burger.setForeground(Color.white);
 		erfgoed.setForeground(Color.white);
 		datum.setForeground(Color.white);
+		typeDoc.setForeground(Color.white);
 		
 		burger.setOpaque(false);
 		erfgoed.setOpaque(false);
 		datum.setOpaque(false);
 		datum.setSelected(true);
+		typeDoc.setOpaque(false);
 		
 		ImageIcon selected = new ImageIcon(getClass().getResource("imgs/radiobutton_selected.png"));
 		ImageIcon notSelected = new ImageIcon(getClass().getResource("imgs/radiobutton_normal.png"));
@@ -204,27 +207,33 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		burger.setSelectedIcon(selected);
 		erfgoed.setSelectedIcon(selected);
 		datum.setSelectedIcon(selected);
+		typeDoc.setSelectedIcon(selected);
 		
 		burger.setIcon(notSelected);
 		erfgoed.setIcon(notSelected);
 		datum.setIcon(notSelected);
+		typeDoc.setIcon(notSelected);
 
 		burger.setRolloverIcon(hover);
 		erfgoed.setRolloverIcon(hover);
 		datum.setRolloverIcon(hover);
+		typeDoc.setRolloverIcon(hover);
 		
 		burger.addChangeListener(this);
 		erfgoed.addChangeListener(this);
 		datum.addChangeListener(this);
+		typeDoc.addChangeListener(this);
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(burger);
 		group.add(erfgoed);
-		group.add(datum);		
+		group.add(datum);
+		group.add(typeDoc);
 		
 		add(burger);
 		add(erfgoed);
 		add(datum);
+		add(typeDoc);
 		
 		goedgekeurd.grabFocus(); 	//zodat het zoekveld niet direct een rood icoontje heeft
 		stateChanged(new ChangeEvent(this));
@@ -260,6 +269,10 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		else if (datum.isSelected())
 		{
 			c.sorteerOpLaatstToegevoegd();
+		}
+		else if (typeDoc.isSelected())
+		{
+			c.sorteerOpType();
 		}
 	}
 }

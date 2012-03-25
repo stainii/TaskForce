@@ -90,6 +90,19 @@ public class OverzichtController
 		notifyListeners();
 	}
 	
+	public void sorteerOpType()
+	{
+		Collections.sort(inTeLaden, new Comparator<DocumentCMS>()
+		{
+			@Override
+			public int compare(DocumentCMS doc1, DocumentCMS doc2)
+			{
+				return doc1.getTypeDocument().compareTo(doc2.getTypeDocument());
+			}
+		});
+		notifyListeners();
+	}
+	
 	public ArrayList<DocumentCMS> zoek(String s, ArrayList<DocumentCMS> docs)
 	{
 		ArrayList<DocumentCMS> resultaat = new ArrayList<DocumentCMS>();
