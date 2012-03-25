@@ -128,7 +128,6 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				
 				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank),hoofd));
 			}
 		});

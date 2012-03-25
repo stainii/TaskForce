@@ -18,7 +18,7 @@ import controllers.Databank;
 
 
 @SuppressWarnings("serial")
-public class Rij extends JPanel implements MouseListener
+public class RijDocument extends JPanel implements MouseListener
 {
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
 	private Image backgroundTegel = backgroundIcon.getImage();
@@ -38,7 +38,7 @@ public class Rij extends JPanel implements MouseListener
 			g.drawImage(backgroundTegel, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public Rij(Model m, Databank d, DocumentCMS doc, Hoofd h)
+	public RijDocument(Model m, Databank d, DocumentCMS doc, Hoofd h)
 	{
 		this.model = m;
 		this.data = d;
@@ -51,7 +51,7 @@ public class Rij extends JPanel implements MouseListener
 		
 		addMouseListener(this);
 		
-		setLayout(new GridLayout(1,7));
+		setLayout(new GridLayout(1,8));
 		
 		//afbeelding		
 		if (document.getTypeDocument().equals("Afbeelding"))
@@ -81,7 +81,9 @@ public class Rij extends JPanel implements MouseListener
 		}
 		
 		//tekst
-		add(new JLabelFactory().getTegelTitel(document.getErfgoed().getNaam()));
+		add(new JLabelFactory().getTegelTitel(document.getTitel()));
+		
+		add(new JLabelFactory().getTegelTekst("Voor " + document.getErfgoed().getNaam()));
 		
 		add(new JLabelFactory().getTegelTekst(document.getEigenaar().getNaam()));
 		

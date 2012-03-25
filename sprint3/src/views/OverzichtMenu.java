@@ -123,6 +123,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			{
 				zoekTxt.setText("");
 				zoekBtn.setIcon(new ImageIcon(getClass().getResource("imgs/zoek_hover.png")));
+				stateChanged(new ChangeEvent(this));
 			}
 		});
 		add(zoekTxt);

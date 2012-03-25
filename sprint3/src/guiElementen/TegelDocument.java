@@ -25,7 +25,7 @@ import model.Model;
  * Toont info over een document en is aanklikbaar **/
 
 @SuppressWarnings("serial")
-public class Tegel extends JPanel implements MouseListener
+public class TegelDocument extends JPanel implements MouseListener
 {
 	//achtergrond
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
@@ -45,7 +45,7 @@ public class Tegel extends JPanel implements MouseListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public Tegel(Model m, Databank d, DocumentCMS doc, Hoofd h)
+	public TegelDocument(Model m, Databank d, DocumentCMS doc, Hoofd h)
 	{
 		this.model = m;
 		this.data = d;
@@ -54,7 +54,7 @@ public class Tegel extends JPanel implements MouseListener
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(10,10,10,10) );
-		setPreferredSize(new Dimension(300,150));
+		setPreferredSize(new Dimension(300,160));
 		
 		addMouseListener(this);
 		
@@ -63,7 +63,7 @@ public class Tegel extends JPanel implements MouseListener
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		c.gridheight = 6;		
+		c.gridheight = 7;		
 		if (document.getTypeDocument().equals("Afbeelding"))
 		{
 			add(new Afbeelding(document,100,100,data), c);
@@ -90,15 +90,17 @@ public class Tegel extends JPanel implements MouseListener
 		c.gridx = 2;
 		c.gridy = 1;
 		c.gridheight = 1;
-		add(new JLabelFactory().getTegelTitel(doc.getErfgoed().getNaam()),c);
+		add(new JLabelFactory().getTegelTitel(doc.getTitel()),c);
 		c.gridy = 2;
+		add(new JLabelFactory().getTegelTekst("Voor " + doc.getErfgoed().getNaam()),c);
+		c.gridy = 3;
 		add(new JLabelFactory().getTegelTekst(doc.getEigenaar().getNaam()),c);
-		c.gridy=3;
-		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
 		c.gridy = 4;
+		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
+		c.gridy = 5;
 		add(new JLabelFactory().getTegelTekst(doc.getDatumToegevoegd().toString().substring(0, 10)), c);
 		
-		c.gridy = 5;
+		c.gridy = 6;
 		if (doc.getStatus().equals("Goedgekeurd"))
 			add(new JLabelFactory().getGoedgekeurd(doc.getStatus()),c);
 		else if (doc.getStatus().equals("Afgekeurd"))
@@ -106,7 +108,7 @@ public class Tegel extends JPanel implements MouseListener
 		else
 			add(new JLabelFactory().getNogNietBeoordeeld(doc.getStatus()),c);
 				
-		c.gridy = 6;
+		c.gridy = 7;
 		
 		JLabel verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));

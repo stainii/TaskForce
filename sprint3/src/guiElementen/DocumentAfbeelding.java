@@ -25,13 +25,15 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 {
 	private DocumentController controller;
 	private Databank databank;
+	private boolean wijziging;
 	private Afbeelding afb;
 	private JLabel kiesAndereAfbeelding; 
 	
-	public DocumentAfbeelding(DocumentController con, Databank d, boolean wijziging)
+	public DocumentAfbeelding(DocumentController con, Databank d, boolean w)
 	{
 		this.controller = con;
 		this.databank = d;
+		this.wijziging = w;
 		
 		setOpaque(false);
 		setLayout(new GridBagLayout());
@@ -89,7 +91,7 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					new FullScreenAfbeelding(controller.getVoorlopigDocument().getLaatsteWijziging(),databank);				
+					new FullScreenAfbeelding(controller.getOrigineelDocument().getLaatsteWijziging(),databank);				
 				}
 			});
 		}
@@ -182,7 +184,10 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 					JFileChooser chooser = new JFileChooser();
 					if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						ImageIO.write(controller.getVoorlopigDocument().getImage(),"jpg", chooser.getSelectedFile());
+						if (!wijziging)
+							ImageIO.write(controller.getVoorlopigDocument().getImage(),"jpg", chooser.getSelectedFile());
+						else
+							ImageIO.write(controller.getOrigineelDocument().getLaatsteWijziging().getImage(),"jpg", chooser.getSelectedFile());
 					}
 				}
 				catch (IOException e1)

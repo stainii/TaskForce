@@ -139,8 +139,9 @@ public class Beoordeling extends JPanel
 				
 				@Override
 				public void mouseClicked(MouseEvent e) 
-				{					
-					controller.getVoorlopigDocument().setOpmerkingen(documentContent.getTekstvakken().get(2).getText());
+				{	
+					controller.getVoorlopigDocument().setTitel(documentContent.getTekstvakken().get(0).getText());
+					controller.getVoorlopigDocument().setOpmerkingen(documentContent.getTekstvakken().get(1).getText());
 					documentContent.setEditable(false);
 					controller.toevoegen();
 					//maak een nieuw DocumentView van het net gemaakte document

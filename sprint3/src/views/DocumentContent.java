@@ -95,7 +95,7 @@ public class DocumentContent extends JPanel
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getTitel().equals(document.getTitel()))
 		{
 			c.gridy = 2;
-			documentPanel.add(new JLabelFactory().getWijziging("Wijziging " + document.getLaatsteWijziging().getDatumGewijzigd() + ": " + document.getLaatsteWijziging().getTitel()), c);
+			documentPanel.add(new JLabelFactory().getWijziging("Wijziging: " + document.getLaatsteWijziging().getTitel()), c);
 		}
 		
 		//naam eigenaar
@@ -117,7 +117,7 @@ public class DocumentContent extends JPanel
 		c.gridx = 2;
 		JTextField datumToegevoegd = new JTextField(20);
 		//tekstvakken.add(datum);			//moet niet, de datum moet niet aangepast worden
-		datumToegevoegd.setText("" + document.getDatumToegevoegd());
+		datumToegevoegd.setText(document.getDatumToegevoegd().toString().substring(0,19));
 		datumToegevoegd.setEditable(false);
 		datumToegevoegd.setBorder(null);
 		datumToegevoegd.setOpaque(false);
@@ -128,11 +128,11 @@ public class DocumentContent extends JPanel
 		c.gridx = 1;
 		c.gridy = 6;
 		c.gridwidth = 1;
-		documentPanel.add(new JLabelFactory().getNormaleTekst("Datum laatste geaccep. wijz.: "), c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Laatste geaccep. wijz.: "), c);
 				
 		c.gridx = 2;
 		JTextField datumGewijzigd = new JTextField(20);
-		datumGewijzigd.setText("" + document.getDatumToegevoegd());
+		datumGewijzigd.setText(document.getDatumToegevoegd().toString().substring(0,19));
 		datumGewijzigd.setEditable(false);
 		datumGewijzigd.setBorder(null);
 		datumGewijzigd.setOpaque(false);
@@ -150,7 +150,7 @@ public class DocumentContent extends JPanel
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.VERTICAL;
 		
-		JTextArea opmerkingen = new JTextArea(5,30);
+		JTextArea opmerkingen = new JTextArea(10,30);
 		tekstvakken.add(opmerkingen);
 		opmerkingen.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
 		opmerkingen.setText(document.getOpmerkingen());
@@ -168,7 +168,7 @@ public class DocumentContent extends JPanel
 			
 			JTextArea opmerkingenWijziging = new JTextArea(5,30);
 			opmerkingenWijziging.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
-			opmerkingenWijziging.setText("Wijziging " + document.getLaatsteWijziging().getDatumGewijzigd() + ": " + document.getLaatsteWijziging().getOpmerkingen());
+			opmerkingenWijziging.setText("Wijziging: " + document.getLaatsteWijziging().getOpmerkingen());
 			opmerkingenWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
 			opmerkingenWijziging.setEditable(false);
 			opmerkingenWijziging.setBorder(null);
@@ -182,6 +182,7 @@ public class DocumentContent extends JPanel
 		c.gridx = 3;
 		c.gridy = 1;
 		c.gridheight = 9;
+		c.gridwidth = 2;
 		
 		if (doc.getTypeDocument().equals("Afbeelding"))
 		{
@@ -201,10 +202,15 @@ public class DocumentContent extends JPanel
 			media = new TypeKiezer(controller, this, databank);
 			setEditable(true);
 			
+			titel.setOpaque(true);
+			titel.setEditable(true);
+			titel.setForeground(Color.black);
+			titel.setBorder(new JTextField().getBorder());
+			
 			opmerkingen.setOpaque(true);
 			opmerkingen.setEditable(true);
 			opmerkingen.setForeground(Color.black);
-			opmerkingen.setBorder(new JTextField().getBorder());			
+			opmerkingen.setBorder(new JTextArea().getBorder());
 		}
 		documentPanel.add((Component) media,c);
 		
@@ -321,6 +327,23 @@ public class DocumentContent extends JPanel
 		c.gridheight = 1;
 		beoordeling = new Beoordeling(databank,model,document,hoofd,this, controller);
 		documentPanel.add(beoordeling,c);
+		
+		/**
+		//vorige volgende knoppen
+		c.gridx = 1;
+		c.gridy = 13;
+		c.gridwidth = 3;
+		JPanel vorigeVolgendePanel = new JPanel(new GridLayout(1,2));
+		vorigeVolgendePanel.setOpaque(false);
+		documentPanel.add(vorigeVolgendePanel,c);
+		
+		JLabel vorige = new JLabelFactory().getNormaleTekst("Vorige");
+		vorige.setHorizontalAlignment(JLabel.LEFT);
+		JLabel volgende = new JLabelFactory().getNormaleTekst("Volgende");
+		volgende.setHorizontalAlignment(JLabel.RIGHT);
+		vorigeVolgendePanel.add(vorige);
+		vorigeVolgendePanel.add(volgende);
+		**/		
 	}
 	
 	//retourneert alle tekstvakken die bewerkbaar mogen gezet worden door (o.a.) Beoordeling

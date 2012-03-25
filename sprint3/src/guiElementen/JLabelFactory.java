@@ -49,6 +49,8 @@ public class JLabelFactory
 		label.setForeground(new Color(50,50,50));
 		return label;
 	}
+	
+	
 	public JLabel getPaginaNummer(int s)
 	{
 		JLabel label = new JLabel(s + "");

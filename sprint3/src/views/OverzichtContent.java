@@ -9,9 +9,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
 import guiElementen.JLabelFactory;
-import guiElementen.Rij;
-import guiElementen.Tegel;
+import guiElementen.RijDocument;
+import guiElementen.TegelDocument;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -47,6 +49,8 @@ import model.Model;
  * 		6) Iedere keer als er iets verandert in het model, of als het scherm van grootte verandert, wordt toonContent()
  * 		   opnieuw uitgevoerd. Als het scherm van grootte verandert wordt ook opnieuw gekeken hoeveel tegels/rijen er
  *         op het scherm kunnen. 
+ *      7) Als typeContent "documenten" is, dan worden tegels/rijen voor documenten ingeladen. Anders worden tegels/rijen voor
+ *         erfgoed ingeladen.
  * **/
 
 @SuppressWarnings("serial")
@@ -54,12 +58,14 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 {
 	private OverzichtController controller;
 	private JPanel docPanel, scrollPanel;
+	private JLabel documentenTitel, erfgoedTitel;
 	private Model m;
 	private Databank d;
 	private Hoofd h;
 	private int ondergrens;
 	private int huidigePagina;
 	private String view;
+	private String typeContent;
 		
 
 	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtController c)
@@ -69,6 +75,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.h = h;
 		this.controller = c;
 		this.view = "TegelView";
+		this.typeContent = "Documenten";
 		
 		addComponentListener(this);
 		m.addListener(this);
@@ -76,8 +83,88 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		//titel
-		add(new JLabelFactory().getTitel("   Documenten"), BorderLayout.NORTH);
+		//titels
+		JPanel typeContentKiezer = new JPanel();
+		FlowLayout f = new FlowLayout();
+		f.setAlignment(FlowLayout.LEFT);
+		typeContentKiezer.setLayout(f);
+		typeContentKiezer.setOpaque(false);
+		
+		documentenTitel = new JLabelFactory().getTitel("   Documenten");
+		documentenTitel.addMouseListener(new MouseListener()
+		{	
+			@Override
+			public void mouseReleased(MouseEvent arg0){}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				if (typeContent.equals("Documenten"))
+					((JLabel)e.getSource()).setForeground(Color.WHITE);
+				else
+					((JLabel)e.getSource()).setForeground(new Color(120,120,120));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				if (typeContent.equals("Erfgoed"))
+					((JLabel)e.getSource()).setForeground(new Color(200,200,200));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0)
+			{
+				setTypeContent("Documenten");
+				documentenTitel.setForeground(Color.WHITE);
+				erfgoedTitel.setForeground(new Color(120,120,120));
+			}
+		});
+		
+		erfgoedTitel = new JLabelFactory().getTitel(" Erfgoed");
+		erfgoedTitel.addMouseListener(new MouseListener()
+		{	
+			@Override
+			public void mouseReleased(MouseEvent arg0){}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				if (typeContent.equals("Erfgoed"))
+					((JLabel)e.getSource()).setForeground(Color.WHITE);
+				else
+					((JLabel)e.getSource()).setForeground(new Color(120,120,120));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				if (typeContent.equals("Documenten"))
+					((JLabel)e.getSource()).setForeground(new Color(200,200,200));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0)
+			{
+				setTypeContent("Erfgoed");
+				erfgoedTitel.setForeground(Color.WHITE);
+				documentenTitel.setForeground(new Color(120,120,120));
+			}
+		});
+		
+		typeContentKiezer.add(documentenTitel, BorderLayout.NORTH);
+		typeContentKiezer.add(erfgoedTitel, BorderLayout.NORTH);
+		if (typeContent.equals("Documenten"))
+			erfgoedTitel.setForeground(new Color(120,120,120));			
+		else
+			documentenTitel.setForeground(new Color(120,120,120));
+		add(typeContentKiezer,BorderLayout.NORTH);
 		
 		
 		//paneel met de documenten
@@ -85,9 +172,9 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		docPanel.setOpaque(false);
 		add(docPanel, BorderLayout.CENTER);
 		
-		FlowLayout f =new FlowLayout();
-		f.setAlignment(FlowLayout.LEFT);
-		docPanel.setLayout(f);
+		FlowLayout fl =new FlowLayout();
+		fl.setAlignment(FlowLayout.LEFT);
+		docPanel.setLayout(fl);
 		setVisible(true);
 		
 		//nummering
@@ -97,6 +184,11 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		scrollPanel.setPreferredSize(new Dimension(0,30));
 		add(scrollPanel, BorderLayout.SOUTH);
 		
+	}
+	public void setTypeContent(String string)
+	{
+		typeContent = string;
+		stateChanged(new ChangeEvent(this));
 	}
 	public String getView() {
 		return view;
@@ -130,12 +222,35 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			{
 				docPanel.setLayout(new GridLayout(bepaalAantalOpScherm(),1));
 			}
+			
+			ArrayList<Integer> gepasseerdeErfgoed = new ArrayList<Integer>();
+			
 			for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller.getInTeLaden().size() ;i++)
 			{
-				if (view.equals("TegelView"))
-					docPanel.add(new Tegel(m,d,controller.getInTeLaden().get(i),h));
-				else
-					docPanel.add(new Rij(m,d,controller.getInTeLaden().get(i),h));
+				if (view.equals("TegelView") && typeContent.equals("Documenten"))
+				{
+					docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+				}
+				else if (view.equals("TegelView") && typeContent.equals("Erfgoed"))
+				{
+					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					{
+						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+					}
+				}
+				else if (view.equals("LijstView") && typeContent.equals("Documenten"))
+				{
+					docPanel.add(new RijDocument(m,d,controller.getInTeLaden().get(i),h));
+				}
+				else if (view.equals("LijstView") && typeContent.equals("Erfgoed"))
+				{
+					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					{
+						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+					}
+				}
 			}
 			
 			docPanel.setVisible(true);
@@ -427,7 +542,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	
 	public int bepaalAantalOpScherm()
 	{
-		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)(this.getHeight() / 150)) : (int) (this.getHeight() / 50));
+		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)(this.getHeight() / 160)) : (int) (this.getHeight() / 50));
 	}
 
 	@Override

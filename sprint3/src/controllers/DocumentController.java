@@ -83,7 +83,7 @@ public class DocumentController
 		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
 		
-		d.updateDocument(origineelDocument);
+		d.beoordeelDocument(origineelDocument,true);
 	}
 	public void afkeuren(String reden)
 	{
@@ -94,6 +94,6 @@ public class DocumentController
 		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
 		
-		d.updateDocument(origineelDocument);
+		d.beoordeelDocument(origineelDocument,false);
 	}
 }

@@ -383,6 +383,64 @@ public class Databank
 			}
 		}
 	}
+	
+	public void beoordeelDocument(DocumentCMS doc, boolean goedgekeurd)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE DOCUMENT SET StatusDocument = ?, RedenAfwijzing = ? WHERE DocumentId = ?");
+			
+			if (goedgekeurd)
+			{
+				s.setString(1, "Goedgekeurd");
+				s.setString(2,"");
+			}
+			else
+			{
+				s.setString(1, "Afgekeurd");
+				s.setString(2,doc.getRedenAfwijzing());
+			}
+			s.setInt(3, doc.getId());
+			s.executeUpdate();
+			
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s.setInt(1, doc.getId());
+			
+			if (goedgekeurd)
+				s.setString(2,"Goedgekeurd");
+			else
+				s.setString(2,"Af" +
+						"gekeurd");
+			
+			s.setString(3, m.getBeheerder());
+			s.executeUpdate();
+		}
+		catch (SQLException sql)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			sql.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het beoordelen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public BufferedImage getBlob(int docId)
 	{
 		Connection c = null;
