@@ -13,7 +13,10 @@ import java.util.ArrayList;
 
 import guiElementen.JLabelFactory;
 import guiElementen.RijDocument;
+import guiElementen.RijErfgoed;
 import guiElementen.TegelDocument;
+import guiElementen.TegelErfgoed;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -235,7 +238,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
 					{
-						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						docPanel.add(new TegelErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
 					}
 				}
@@ -247,7 +250,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
 					{
-						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						docPanel.add(new RijErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
 					}
 				}

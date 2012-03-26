@@ -125,6 +125,19 @@ public class Erfgoed
 			return returnArray;
 	}
 	
+	public int getAantalDocumentenMetStatus(String status)
+	{
+		int aantal = 0;
+		for (DocumentCMS d: m.getDocumenten())
+		{
+			if (d.getErfgoedId() == this.id && d.getStatus().equals(status))
+			{
+				aantal++;
+			}
+		}
+		return aantal;
+	}
+	
 
 	// -------- setters -------------
 	

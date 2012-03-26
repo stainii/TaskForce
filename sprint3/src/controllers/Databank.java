@@ -413,8 +413,7 @@ public class Databank
 			if (goedgekeurd)
 				s.setString(2,"Goedgekeurd");
 			else
-				s.setString(2,"Af" +
-						"gekeurd");
+				s.setString(2,"Afgekeurd");
 			
 			s.setString(3, m.getBeheerder());
 			s.executeUpdate();
