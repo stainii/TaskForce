@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import model.Erfgoed;
 import model.Model;
 import views.DocumentView;
+import views.ErfgoedView;
 import views.Hoofd;
 import controllers.Databank;
 
@@ -72,7 +73,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent arg0)
 	{
-		hoofd.setContentPaneel(new DocumentView(model,data,erfgoed.getDocumenten().get(0),hoofd));
+		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd));
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}

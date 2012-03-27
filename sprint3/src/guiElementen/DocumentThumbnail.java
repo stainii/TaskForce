@@ -79,7 +79,8 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		content.quit();
+		if (content!=null)		//is nul als je van erfgoedfiche naar hier komt
+			content.quit();
 		hoofd.setContentPaneel(new DocumentView(model,databank,document,hoofd));
 	}
 

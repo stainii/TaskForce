@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 import controllers.Databank;
 
 import views.DocumentView;
+import views.ErfgoedView;
 import views.Hoofd;
 import views.Start;
 
@@ -102,7 +103,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		hoofd.setContentPaneel(new DocumentView(model,data,erfgoed.getDocumenten().get(0),hoofd));		
+		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd));
 	}
 
 	@Override

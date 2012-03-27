@@ -173,7 +173,8 @@ public class OverzichtController
 		return resultaat;
 	}
 	
-	public ArrayList<DocumentCMS> getInTeLaden() {
+	public ArrayList<DocumentCMS> getInTeLaden()
+	{
 		return inTeLaden;
 	}
 

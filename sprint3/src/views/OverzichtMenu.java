@@ -298,5 +298,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		{
 			c.sorteerOpType();
 		}
+		
+		linkerscherm.stateChanged(e);
 	}
 }
