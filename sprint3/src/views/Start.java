@@ -149,7 +149,8 @@ public class Start extends JPanel implements ActionListener
 		{
 			voortgang.setVisible(false);
 			logo.setVisible(false);
-			new Administrator();
+			frame.dispose();
+			new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame	
 		}
 		
 		else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
