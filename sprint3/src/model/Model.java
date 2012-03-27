@@ -12,6 +12,7 @@ public class Model
 	private ArrayList<Burger> burgers;
 	private ArrayList<Erfgoed> erfgoed;
 	private ArrayList<DocumentCMS> documenten;
+	private ArrayList<Beheerder> beheerders;
 	private ArrayList<ChangeListener> listeners;
 	private String beheerder;
 	
@@ -21,9 +22,11 @@ public class Model
 		listeners = new ArrayList<ChangeListener>();
 		burgers = new ArrayList<Burger>();
 		erfgoed = new ArrayList<Erfgoed>();
+		beheerders = new ArrayList<Beheerder>();
 		documenten = new ArrayList<DocumentCMS>();
 	}
 	
+	//getters
 	public ArrayList<Burger> getBurgers()
 	{
 		return burgers;
@@ -36,7 +39,22 @@ public class Model
 	{
 		return documenten;
 	}
-
+	public Beheerder getBeheerders()
+	{	
+		ArrayList<Beheerder> beheerder = beheerders;
+		for (Beheerder b: beheerder)
+		{
+			return b;
+		}
+		return null;
+	}
+	public ArrayList<Beheerder> getBeheerderArrayList()
+	{
+		return beheerders;
+	}
+	
+	
+	//setters
 	public void setBurgers(ArrayList<Burger> burgers)
 	{
 		this.burgers = burgers;
@@ -50,6 +68,11 @@ public class Model
 	public void setDocumenten(ArrayList<DocumentCMS> documenten)
 	{
 		this.documenten = documenten;
+		notifyListeners();
+	}
+	public void setBeheerders(ArrayList<Beheerder> beheerders)
+	{
+		this.beheerders = beheerders;
 		notifyListeners();
 	}
 
