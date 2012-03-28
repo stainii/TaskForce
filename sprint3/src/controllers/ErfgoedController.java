@@ -36,7 +36,7 @@ public class ErfgoedController
 
 	public void verwijder()
 	{
-		//d.verwijderErfgoed(origineelErfgoed);		
+		d.verwijderErfgoed(origineelErfgoed);
 		m.verwijderErfgoed(origineelErfgoed);
 	}
 	
@@ -60,7 +60,7 @@ public class ErfgoedController
 		origineelErfgoed.setTypeErfgoed(voorlopigErfgoed.getTypeErfgoed());
 		origineelErfgoed.setVerwijderd(voorlopigErfgoed.isVerwijderd());
 		
-		//d.updateErfgoed(origineelErfgoed);
+		d.updateErfgoed(origineelErfgoed);
 		m.bewerkErfgoed(origineelErfgoed);
 		
 	}

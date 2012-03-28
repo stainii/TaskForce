@@ -37,13 +37,12 @@ public class DocumentMenu extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/transparantGrijs.png"));
 	private Image background = backgroundIcon.getImage();
 	
-	private JLabel toevoegen, pdf;
+	private JLabel toevoegen;
 	private Model model;
 	private Databank databank;
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private DocumentContent content;
-	private Burger burger;
 	private JLabel overzicht, erfgoed;
 	
 
@@ -161,59 +160,10 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, burger),hoofd));
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, model.getBeheerder().getId()),hoofd));
 			}
 		});
 		add(toevoegen);
-		
-		// pdf button
-		pdf = new JLabelFactory().getMenuTitel("Pdf maken");
-		pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-		pdf.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				
-				File file = new File("");
-				
-				int resul = chooser.showSaveDialog(hoofd);
-				if(resul == JFileChooser.APPROVE_OPTION)
-				{
-					file = chooser.getSelectedFile();
-				}
-				
-				new PdfMaker(document.getErfgoed(), model, file);
-				
-				try
-				{
-					Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
-				}
-				catch (IOException ioe){}
-			}
-		});
-		add(pdf);
 				
 		//toon andere documenten van het erfgoed
 		add(new JLabelFactory().getMenuTitel("Andere documenten"));

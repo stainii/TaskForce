@@ -68,7 +68,7 @@ public class Databank
 			}
 			
 			//erfgoed laden
-			rs = s.executeQuery("SELECT * FROM Erfgoed");
+			rs = s.executeQuery("SELECT * FROM Erfgoed WHERE Obsolete = 0");
 			
 			while (rs.next())
 			{
@@ -156,7 +156,7 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -172,6 +172,7 @@ public class Databank
 					s.setNull(11, Types.INTEGER);
 			else 
 				s.setInt(11, doc.getMediaId());
+			s.setInt(12,doc.getBurgerId());
 			s.executeUpdate();
 			
 			
@@ -230,7 +231,7 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			s = c.prepareStatement("INSERT INTO Erfgoed(Naam, Postcode, Deelgemeente, Straat, Huisnr, Omschrijving, TypeErfgoed, Kenmerken, Geschiedenis, NuttigeInfo, Link, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Erfgoed(Naam, Postcode, Deelgemeente, Straat, Huisnr, Omschrijving, TypeErfgoed, Kenmerken, Geschiedenis, NuttigeInfo, Link, Obsolete, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, e.getNaam());
 			s.setString(2, e.getPostcode());
@@ -243,7 +244,8 @@ public class Databank
 			s.setString(9, e.getGeschiedenis());
 			s.setString(10,e.getNuttigeInfo());
 			s.setString(11,e.getLink());
-			s.setInt(12,e.getBurgerId());
+			s.setBoolean(12,false);
+			s.setInt(13,e.getBurgerId());
 			s.executeUpdate();
 			
 			
@@ -334,19 +336,25 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
+			
+			s = c.prepareStatement("UPDATE Document SET Obsolete = 1 WHERE ErfgoedId=?");
+			s.setInt(1, erf.getId());
+			s.executeUpdate();
+			
 			s = c.prepareStatement("UPDATE Erfgoed SET Obsolete = 1 WHERE ErfgoedId=?");
 			s.setInt(1, erf.getId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			
+			/*s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, erf.getId());
 			s.setString(2,"Verwijderd");
 			s.setString(3, m.getBeheerder().getNaam());
-			s.executeUpdate();
+			s.executeUpdate();*/
 		}
 		catch (SQLException e)
 		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verwijderen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Fout bij het verwijderen van een erfgoed!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 		finally
@@ -360,7 +368,7 @@ public class Databank
 			}
 			catch (SQLException e)
 			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de erfgoed! (bij het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}
@@ -436,7 +444,7 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -450,8 +458,9 @@ public class Databank
 			s.setInt(10,doc.getErfgoedId());
 			s.setInt(11, doc.getMediaId());
 			s.setInt(12, doc.getId());
+			s.setInt(13,doc.getBurgerId());
 			if (doc.getTypeDocument().equals("Tekst"))
-					s.setNull(11, Types.INTEGER);
+				s.setNull(11, Types.INTEGER);
 			else 
 				s.setInt(11, doc.getMediaId());
 			s.executeUpdate();
@@ -495,6 +504,53 @@ public class Databank
 			{
 				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het wijzigen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateErfgoed(Erfgoed e)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+						
+			s = c.prepareStatement("UPDATE Erfgoed SET Naam = ?, Postcode = ?, Deelgemeente = ?, Straat = ?, Huisnr = ?, Omschrijving = ?, TypeErfgoed = ?, Kenmerken = ?, Geschiedenis = ?, NuttigeInfo = ?, Link = ? WHERE ErfgoedId = ?");
+			
+			s.setString(1, e.getNaam());
+			s.setString(2, e.getPostcode());
+			s.setString(3, e.getDeelgemeente());
+			s.setString(4, e.getStraat());
+			s.setString(5, e.getHuisnr());
+			s.setString(6, e.getOmschrijving());
+			s.setString(7, e.getTypeErfgoed());
+			s.setString(8, e.getKenmerken());
+			s.setString(9, e.getGeschiedenis());
+			s.setString(10,e.getNuttigeInfo());
+			s.setString(11, e.getLink());
+			s.setInt(12, e.getId());
+			s.executeUpdate();
+		}
+		catch (SQLException sql)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van erfgoed!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			sql.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException ex)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het wijzigen van erfgoed, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
 			}
 		}
 	}

@@ -81,8 +81,8 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
-		setLayout(f);
-		
+		setLayout(f);		
+
 		//toevoegbutton
 		toevoegen = new JLabelFactory().getMenuTitel("Erfgoed toevoegen");
 		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
@@ -113,7 +113,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			}
 		});
 		add(toevoegen);
-
+		
 		//switch tussen tegel- of lijstview 
 		add(new OverzichtKiezer(linkerscherm, controller));
 		

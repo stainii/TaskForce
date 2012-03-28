@@ -47,8 +47,7 @@ public class ErfgoedMenu extends JPanel
 	private Model model;
 	private Databank databank;
 	private Hoofd hoofd;
-	private Erfgoed erfgoed;
-	private Burger burger; 
+	private Erfgoed erfgoed; 
 	private JLabel overzicht, bewerken, verwijderen, nieuwOpslaan;
 	private ErfgoedContent content;
 	private ErfgoedController controller;
@@ -139,7 +138,7 @@ public class ErfgoedMenu extends JPanel
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
+					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, model.getBeheerder().getId()),hoofd));
 				}
 			});
 			add(toevoegen);

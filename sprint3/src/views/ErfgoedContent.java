@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -173,6 +174,7 @@ public class ErfgoedContent extends JPanel
 		omschrijving.setBorder(null);
 		omschrijving.setOpaque(false);
 		omschrijving.setForeground(Color.WHITE);
+		omschrijving.setLineWrap(true);
 		add(omschrijving,c);
 		
 		
@@ -192,6 +194,7 @@ public class ErfgoedContent extends JPanel
 		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setOpaque(false);
 		nuttigeInfo.setForeground(Color.WHITE);
+		nuttigeInfo.setLineWrap(true);
 		add(nuttigeInfo,c);
 		
 		//kenmerken
@@ -210,6 +213,7 @@ public class ErfgoedContent extends JPanel
 		kenmerken.setBorder(null);
 		kenmerken.setOpaque(false);
 		kenmerken.setForeground(Color.WHITE);
+		kenmerken.setLineWrap(true);
 		add(kenmerken,c);
 		
 		//geschiedenis
@@ -228,6 +232,7 @@ public class ErfgoedContent extends JPanel
 		geschiedenis.setBorder(null);
 		geschiedenis.setOpaque(false);
 		geschiedenis.setForeground(Color.WHITE);
+		geschiedenis.setLineWrap(true);
 		add(geschiedenis,c);
 		
 		
@@ -243,6 +248,9 @@ public class ErfgoedContent extends JPanel
 		int x = 0;
 		int y = 1;
 		c.gridwidth=1;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
@@ -254,14 +262,16 @@ public class ErfgoedContent extends JPanel
 			
 			c.gridx=x;
 			c.gridy=y;
-			documentenPanel.add(new DocumentThumbnail(model, databank, doc, hoofd, null), c);
+			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
+			documentenPanel.add(l, c);
 		}
-		documentenPanel.setBackground(Color.BLACK);
 		
 		c.gridx=7;
 		c.gridy=3;
 		c.gridwidth=2;
-		c.gridheight=10;
+		c.gridheight=11;
+		c.weightx = 0;
+		c.weighty = 0;
 		c.fill = GridBagConstraints.VERTICAL;
 		add(documentenPanel,c);	
 		

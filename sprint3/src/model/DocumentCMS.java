@@ -3,6 +3,7 @@ package model;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import controllers.Databank;
 
@@ -46,21 +47,21 @@ public class DocumentCMS
 	}
 	
 	//deze constructor wordt gebruikt hij het toevoegen van een nieuw document aan een erfgoed
-	public DocumentCMS(Erfgoed e, Model m, Databank d, Burger b)
+	public DocumentCMS(Erfgoed e, Model m, Databank d, int burgerId)
 	{
 		this.m = m;
 		this.id = -1;		//moet later uit databank ingelezen worden
 		this.titel ="";
 		this.status = "Goedgekeurd";
 		this.verwijderd = false;
-		this.setErfgoedId(e.getId());
+		this.erfgoedId = e.getId();
 		this.datumToegevoegd = d.getDatabankTijd();
 		this.datumGewijzigd = d.getDatabankTijd();
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
 		this.redenAfwijzing = "";
-		this.setBurgerId(b.getId()); 
+		this.burgerId = burgerId; 
 	}
 
 
@@ -93,7 +94,15 @@ public class DocumentCMS
 	
 	public Burger getEigenaar()
 	{
-		return getErfgoed().getEigenaar();
+		ArrayList<Burger> burgers = m.getBurgers();
+		for (Burger b: burgers)
+		{
+			if (b.getId()==burgerId)
+			{
+				return b;
+			}
+		}
+		return null;
 	}
 	
 	public Timestamp getDatumToegevoegd()
