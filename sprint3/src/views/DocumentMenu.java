@@ -26,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import controllers.Databank;
 import controllers.PdfMaker;
 
+import model.Burger;
 import model.DocumentCMS;
 import model.Model;
 
@@ -42,6 +43,7 @@ public class DocumentMenu extends JPanel
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private DocumentContent content;
+	private Burger burger;
 	private JLabel overzicht, erfgoed;
 	
 
@@ -159,7 +161,7 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank),hoofd));
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, burger),hoofd));
 			}
 		});
 		add(toevoegen);

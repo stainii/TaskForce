@@ -56,7 +56,7 @@ public class Databank
 		
 			while (rs.next())
 			{
-				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"),m));
+				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"),m));
 			}
 			
 			//burgers laden
@@ -74,7 +74,7 @@ public class Databank
 			{
 				erfgoed.add(new Erfgoed(rs.getInt("ErfgoedId"),rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 						rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"), m));
+						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), m));
 			}
 			
 			
@@ -86,7 +86,7 @@ public class Databank
 				rs = s2.executeQuery();
 				if (rs.next())
 				{
-					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"),m));
+					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"),m));
 				}
 			}
 			
@@ -721,7 +721,7 @@ public class Databank
 				DocumentCMS doc = null;
 				if (rs2.next())
 				{
-					doc = new DocumentCMS(documentId,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(),rs2.getTimestamp("DatumToegevoegd"),rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),rs2.getInt("ErfgoedId"),rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"),m);
+					doc = new DocumentCMS(documentId,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(),rs2.getTimestamp("DatumToegevoegd"),rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),rs2.getInt("ErfgoedId"),rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"),m);
 				}
 				
 				acties.add(new Actie(doc,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
@@ -789,12 +789,12 @@ public class Databank
 				{
 					aantalWijzigingen++;
 					
-					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"),m);
+					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"),m);
 					doc.setImage(null);	//hierdoor wordt de afbeelding opnieuw ingeladen (moest ze upgedate zijn...)
 					m.bewerkDocument(doc); 
 					m.bewerkErfgoed(new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-									rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"),m));
+									rs.getString("NuttigeInfo"), rs.getString("Link"),rs.getBoolean("Obsolete"), rs.getInt("BurgerId"),m));
 				}
 				else if (actie.equals("Verwijderd"))
 				{
@@ -805,7 +805,7 @@ public class Databank
 				else if (actie.equals("Toegevoegd"))
 				{
 					aantalToegevoegd++;
-					m.toevoegenDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"),rs.getString("Opmerkingen"),rs.getString("Tekst"),rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getTimestamp("DatumLaatsteWijziging"),rs.getInt("MediaId"),m));
+					m.toevoegenDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"),rs.getString("Opmerkingen"),rs.getString("Tekst"),rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getTimestamp("DatumLaatsteWijziging"),rs.getInt("MediaId"),rs.getInt("BurgerId"),m));
 				}
 			}
 		}

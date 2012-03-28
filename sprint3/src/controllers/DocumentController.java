@@ -23,7 +23,7 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
 		voorlopigDocument.setImage(doc.getImage());
 		this.m = m;
@@ -68,6 +68,7 @@ public class DocumentController
 		origineelDocument.setImage(voorlopigDocument.getImage());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
 		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
+		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
 		
 		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
