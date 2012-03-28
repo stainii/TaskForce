@@ -196,7 +196,6 @@ class Laden extends SwingWorker<Void,Void>
 		m.setBeheerder(beheerder);
 		Databank d = new Databank(m);
 		d.laadDatabank();
-		d.getBeheerdersUitDatabank();
 		
 		//Interface (GUI) maken en eigenschappen instellen
 		laden.setText("Bezig met laden interface...");

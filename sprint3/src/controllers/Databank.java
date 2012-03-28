@@ -14,11 +14,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-
-
 import model.Actie;
 import model.Burger;
 import model.DocumentCMS;
@@ -90,6 +87,9 @@ public class Databank
 					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"),m));
 				}
 			}
+			
+			//KEVIN
+			//get beheerders uit databank komt hier
 			
 		}
 		catch (SQLException e)
