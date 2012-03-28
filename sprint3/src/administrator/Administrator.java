@@ -401,9 +401,7 @@ public class Administrator extends JPanel
 	{
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
-
-		}
+		public void mouseClicked(MouseEvent e) {}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -468,10 +466,8 @@ public class Administrator extends JPanel
 				try {
 					d.voegBeheerderToeAanDatabank(naamTxt.getText(), Login.convert(wachtwoordTxt.getText()), beoordelenNieuweBh.isSelected(), wijzigenNieuweBh.isSelected(), verwijderenNieuweBh.isSelected(), toevoegenNieuweBh.isSelected());
 				} catch (NoSuchAlgorithmException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				naamTxt.setText("");
@@ -487,13 +483,6 @@ public class Administrator extends JPanel
 				for(Beheerder s : m.getBeheerders())		//overloopt de ArrayList en vult de JComboBox met de namen
 				{
 					beheerderCB.addItem(s.getNaam());
-				}
-				
-				
-				// zit alles in model? 
-				for(Beheerder b : m.getBeheerders())
-				{
-					System.out.println(b.getNaam());
 				}
 			}	
 		}	
