@@ -38,7 +38,7 @@ public class Erfgoed
 		this.geschiedenis = geschiedenis; 
 		this.nuttigeInfo = nuttigeInfo;
 		this.link = link;
-		this.setBurgerId(burgerId);
+		this.burgerId = burgerId;
 	}
 	
 	public Erfgoed(Model m)
@@ -106,13 +106,9 @@ public class Erfgoed
 		ArrayList<Burger> burgers = m.getBurgers();
 		for (Burger b: burgers)
 		{
-			ArrayList<Erfgoed> erfgoed = b.getErfgoed();
-			for (Erfgoed e: erfgoed)
+			if (b.getId()==burgerId)
 			{
-				if (e.equals(this))
-				{
-					return b;
-				}
+				return b;
 			}
 		}
 		return null;

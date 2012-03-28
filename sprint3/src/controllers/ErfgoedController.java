@@ -1,10 +1,4 @@
 package controllers;
-
-import java.sql.Date;
-
-import javax.swing.JOptionPane;
-
-import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
 
@@ -87,7 +81,7 @@ public class ErfgoedController
 		/*origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());*/
 		
-		//origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
+		origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
 		m.toevoegenErfgoed(origineelErfgoed);
 	}
 }

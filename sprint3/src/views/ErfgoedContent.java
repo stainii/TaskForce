@@ -263,7 +263,12 @@ public class ErfgoedContent extends JPanel
 		c.gridwidth=2;
 		c.gridheight=10;
 		c.fill = GridBagConstraints.VERTICAL;
-		add(documentenPanel,c);				
+		add(documentenPanel,c);	
+		
+		
+		//als het een nieuw erfgoed is (m.a.w. een leeg erfgoed), dan worden alles editable gezet
+		if (tekstvakken.get(0).getText().equals(""))
+			bewerken();
 	}
 	
 	public String[] bewerken()

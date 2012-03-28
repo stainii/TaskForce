@@ -218,6 +218,73 @@ public class Databank
 		return id;
 	}
 	
+	public int toevoegenErfgoed(Erfgoed e)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		Statement s2 = null;
+		ResultSet rs = null;
+		int id = -1;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			
+			s = c.prepareStatement("INSERT INTO Erfgoed(Naam, Postcode, Deelgemeente, Straat, Huisnr, Omschrijving, TypeErfgoed, Kenmerken, Geschiedenis, NuttigeInfo, Link, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+			
+			s.setString(1, e.getNaam());
+			s.setString(2, e.getPostcode());
+			s.setString(3, e.getDeelgemeente());
+			s.setString(4, e.getStraat());
+			s.setString(5, e.getHuisnr());
+			s.setString(6, e.getOmschrijving());
+			s.setString(7, e.getTypeErfgoed());
+			s.setString(8, e.getKenmerken());
+			s.setString(9, e.getGeschiedenis());
+			s.setString(10,e.getNuttigeInfo());
+			s.setString(11,e.getLink());
+			s.setInt(12,e.getBurgerId());
+			s.executeUpdate();
+			
+			
+			s2 = c.createStatement();
+			rs = s2.executeQuery(("SELECT ErfgoedId FROM Erfgoed ORDER BY ErfgoedId DESC"));
+			rs.next();
+			id = rs.getInt("ErfgoedId");
+			
+			/*s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s.setInt(1, id);
+			s.setString(2,"Toegevoegd");
+			s.setString(3, m.getBeheerder().getNaam());
+			s.executeUpdate();*/
+		}
+		catch (SQLException sql)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het toevoegen van een erfgoed!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			sql.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (rs!=null)
+					rs.close();
+				if (s!=null)
+					s.close();
+				if (s2!=null)
+					s2.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException exc)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het toevoegen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				exc.printStackTrace();
+			}
+		}
+		return id;
+	}
+	
 	public void verwijderDocument(DocumentCMS doc)
 	{
 		Connection c = null;
