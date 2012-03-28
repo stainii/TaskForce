@@ -5,13 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Menu;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 import guiElementen.JLabelFactory;
 import guiElementen.RijDocument;
@@ -230,7 +228,9 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			
 			ArrayList<Integer> gepasseerdeErfgoed = new ArrayList<Integer>();
 			
-			for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller.getInTeLaden().size() ;i++)
+			int maximum = ondergrens+aantalTegels;
+			
+			for (int i=ondergrens;i<maximum && i<controller.getInTeLaden().size() ;i++)
 			{
 				if (view.equals("TegelView") && typeContent.equals("Documenten"))
 				{
@@ -243,6 +243,10 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 						docPanel.add(new TegelErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
 					}
+					else
+					{
+						maximum++;	//tijdelijke oplossing
+					}
 				}
 				else if (view.equals("LijstView") && typeContent.equals("Documenten"))
 				{
@@ -254,6 +258,10 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 					{
 						docPanel.add(new RijErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+					}
+					else
+					{
+						maximum++;	//tijdelijke oplossing
 					}
 				}
 			}

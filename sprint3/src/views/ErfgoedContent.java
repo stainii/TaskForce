@@ -13,6 +13,7 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -171,11 +172,16 @@ public class ErfgoedContent extends JPanel
 		tekstvakken.add(omschrijving);
 		omschrijving.setText(erfgoed.getOmschrijving());
 		omschrijving.setEditable(false);
-		omschrijving.setBorder(null);
 		omschrijving.setOpaque(false);
+		omschrijving.setBorder(null);
 		omschrijving.setForeground(Color.WHITE);
 		omschrijving.setLineWrap(true);
-		add(omschrijving,c);
+		JScrollPane omschrijvingScroll = new JScrollPane(omschrijving);
+		omschrijvingScroll.setBorder(null);
+		omschrijvingScroll.getViewport().setBorder(null);
+		omschrijvingScroll.setOpaque(false);
+		omschrijvingScroll.getViewport().setOpaque(false);
+		add(omschrijvingScroll,c);
 		
 		
 		//nuttige info
@@ -191,11 +197,16 @@ public class ErfgoedContent extends JPanel
 		tekstvakken.add(nuttigeInfo);
 		nuttigeInfo.setText(erfgoed.getNuttigeInfo());
 		nuttigeInfo.setEditable(false);
-		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setOpaque(false);
+		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setForeground(Color.WHITE);
 		nuttigeInfo.setLineWrap(true);
-		add(nuttigeInfo,c);
+		JScrollPane nuttigeInfoScroll = new JScrollPane(nuttigeInfo);
+		nuttigeInfoScroll.setBorder(null);
+		nuttigeInfoScroll.getViewport().setBorder(null);
+		nuttigeInfoScroll.setOpaque(false);
+		nuttigeInfoScroll.getViewport().setOpaque(false);
+		add(nuttigeInfoScroll,c);
 		
 		//kenmerken
 		c.gridx=1;
@@ -214,7 +225,12 @@ public class ErfgoedContent extends JPanel
 		kenmerken.setOpaque(false);
 		kenmerken.setForeground(Color.WHITE);
 		kenmerken.setLineWrap(true);
-		add(kenmerken,c);
+		JScrollPane kenmerkenScroll = new JScrollPane(kenmerken);
+		kenmerkenScroll.setBorder(null);
+		kenmerkenScroll.getViewport().setBorder(null);
+		kenmerkenScroll.setOpaque(false);
+		kenmerkenScroll.getViewport().setOpaque(false);
+		add(kenmerkenScroll,c);
 		
 		//geschiedenis
 		c.gridx=1;
@@ -233,7 +249,12 @@ public class ErfgoedContent extends JPanel
 		geschiedenis.setOpaque(false);
 		geschiedenis.setForeground(Color.WHITE);
 		geschiedenis.setLineWrap(true);
-		add(geschiedenis,c);
+		JScrollPane geschiedenisScroll = new JScrollPane(geschiedenis);
+		geschiedenisScroll.setBorder(null);
+		geschiedenisScroll.getViewport().setBorder(null);
+		geschiedenisScroll.setOpaque(false);
+		geschiedenisScroll.getViewport().setOpaque(false);
+		add(geschiedenisScroll,c);
 		
 		
 		/**RECHTERKANT**/

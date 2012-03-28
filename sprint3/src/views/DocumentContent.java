@@ -20,6 +20,7 @@ import guiElementen.TypeKiezer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
@@ -150,32 +151,40 @@ public class DocumentContent extends JPanel
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.VERTICAL;
 		
-		JTextArea opmerkingen = new JTextArea(10,30);
+		JTextArea opmerkingen = new JTextArea(5,30);
 		tekstvakken.add(opmerkingen);
-		opmerkingen.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
 		opmerkingen.setText(document.getOpmerkingen());
 		opmerkingen.setFont(new JLabelFactory().getItalic("").getFont());
 		opmerkingen.setEditable(false);
-		opmerkingen.setBorder(null);
 		opmerkingen.setOpaque(false);
+		opmerkingen.setBorder(null);
 		opmerkingen.setForeground(Color.WHITE);
 		opmerkingen.setLineWrap(true);
-		documentPanel.add(opmerkingen, c);
+		JScrollPane opmerkingenScroll = new JScrollPane(opmerkingen);
+		opmerkingenScroll.getViewport().setOpaque(false);
+		opmerkingenScroll.getViewport().setBorder(null);
+		opmerkingenScroll.setBorder(null);
+		opmerkingenScroll.setOpaque(false);
+		
+		documentPanel.add(opmerkingenScroll, c);
 		
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
 		{
 			c.gridy = 9;
-			
-			JTextArea opmerkingenWijziging = new JTextArea(5,30);
-			opmerkingenWijziging.setDocument(new CustomDocument(opmerkingen));	//zorgt voor de limiet van 255 tekens
+			JTextArea opmerkingenWijziging = new JTextArea(3,30);
 			opmerkingenWijziging.setText("Wijziging: " + document.getLaatsteWijziging().getOpmerkingen());
 			opmerkingenWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
 			opmerkingenWijziging.setEditable(false);
-			opmerkingenWijziging.setBorder(null);
 			opmerkingenWijziging.setOpaque(false);
+			opmerkingenWijziging.setBorder(null);
 			opmerkingenWijziging.setLineWrap(true);
 			opmerkingenWijziging.setForeground(Color.RED);
-			documentPanel.add(opmerkingenWijziging, c);
+			JScrollPane opmerkingenWijzigingScroll = new JScrollPane(opmerkingenWijziging);
+			opmerkingenWijzigingScroll.getViewport().setOpaque(false);
+			opmerkingenWijzigingScroll.getViewport().setBorder(null);
+			opmerkingenWijzigingScroll.setBorder(null);
+			opmerkingenWijzigingScroll.setOpaque(false);
+			documentPanel.add(opmerkingenWijzigingScroll, c);
 		}
 		
 		//media
@@ -374,23 +383,5 @@ public class DocumentContent extends JPanel
 		documentPanel.add((JPanel)media,c);
 		setVisible(true);
 		
-	}
-	
-	//zorgt ervoor dat opmerkingen niet meer dan 255 karakters kan bevatten
-	public static class CustomDocument extends PlainDocument
-	{
-		private static int MAX_LENGTH = 255;
-		private JTextArea tField;
-		public CustomDocument(JTextArea field)
-		{
-			tField = field;
-		}
-
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException
-		{
-			if(str == null || tField.getText().length() > MAX_LENGTH) 
-				return;
-			super.insertString(offs, str, a);
-		}	
 	}
 }

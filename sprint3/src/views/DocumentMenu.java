@@ -14,19 +14,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controllers.Databank;
-import controllers.PdfMaker;
 
-import model.Burger;
 import model.DocumentCMS;
 import model.Model;
 
@@ -103,7 +98,7 @@ public class DocumentMenu extends JPanel
 		add(overzicht);
 		
 		erfgoed =new JLabelFactory().getMenuTitel("Bekijk erfgoedfiche");
-		//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+		erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin_zwartwit.png")));
 		erfgoed.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -115,13 +110,13 @@ public class DocumentMenu extends JPanel
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+				erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin_zwartwit.png")));
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) 
 			{
-				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+				erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin.png")));
 			}
 			
 			@Override
