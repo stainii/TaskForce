@@ -103,10 +103,7 @@ public class Model
 	
 	public void verwijderErfgoed(Erfgoed e)
 	{
-		System.out.println(documenten.size());
-		documenten.removeAll(e.getDocumenten());
-		System.out.println(documenten.size());
-		
+		documenten.removeAll(e.getDocumenten());	
 		erfgoed.remove(e);
 		notifyListeners();
 	}
