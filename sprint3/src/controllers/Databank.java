@@ -95,7 +95,7 @@ public class Databank
 			
 			while (rs.next())
 			{				
-				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Wachtwoord"), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
 			}
 		}
 		catch (SQLException e)
@@ -766,5 +766,87 @@ public class Databank
 		}
 		
 		return "Er zijn " + aantalWijzigingen + " documenten gewijzigd, " + aantalVerwijderd + " documenten verwijderd en " + aantalToegevoegd + " documenten toegevoegd.";
+	}
+	
+	
+	//___ Methoden voor klasse Administrator
+	
+	public void getBeheerdersUitDatabank()			// Deze methode wordt ENKEL door Administrator gebruikt! Enkel de beheerders worden ingeladen, niet de volledige databank moet voor deze klasse ingeladen worden
+	{
+		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
+		Connection c = null;
+		Statement s = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.createStatement();
+			
+			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0");
+			
+			while (rs.next())
+			{				
+				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Wachtwoord"), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+			}
+			m.setBeheerders(beheerders);
+		
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateBeheerdersDatabank(Beheerder b)
+	{	
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE BEHEERDER SET KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ?, KanToevoegen = ? WHERE BeheerderId = ?");
+			s.setBoolean(1, b.KanBeoordelen());
+			s.setBoolean(2, b.KanWijzigen());
+			s.setBoolean(3, b.KanVerwijderen());
+			s.setBoolean(4, b.KanToevoegen());
+			s.setInt(5, b.getId());
+			s.executeUpdate();
+					
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void voegBeheerderToeAanDatabank(String n, String w, boolean kb, boolean kw, boolean kv, boolean kt)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam, Wachtwoord,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,0)");
+			s.setString(1,n);
+			s.setString(2, w);
+			s.setBoolean(3, kb);
+			s.setBoolean(4,kw);
+			s.setBoolean(5,kv);
+			s.setBoolean(6,kt);
+			
+			s.executeUpdate();	
+			
+			m.toevoegenBeheerder(new Beheerder(-1,n, w, kb, kw, kv, kt,m));
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
 	}
 }

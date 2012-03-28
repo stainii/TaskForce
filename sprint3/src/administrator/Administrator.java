@@ -18,7 +18,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,7 +64,7 @@ public class Administrator extends JPanel
 	private JCheckBox wijzigenNieuweBh, toevoegenNieuweBh, verwijderenNieuweBh, beoordelenNieuweBh;
 	private JComboBox beheerderCB;
 	private JTextField naamTxt, wachtwoordTxt;
-	private int geselecteerdeBeheerder;
+	private Beheerder geselecteerdeBeheerder;
 	private static String gebruiker;
 	private JPanel startpanel,toevoegBeheerderPanel;
 	
@@ -78,7 +80,8 @@ public class Administrator extends JPanel
 	{
 		m = new Model();
 		d = new Databank(m);
-		//Labels
+				
+		d.getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
 		
 		startpanel = new JPanel();
 		startpanel.setOpaque(false);
@@ -116,17 +119,18 @@ public class Administrator extends JPanel
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
-			{
-				for(int i = 0; i<m.getBeheerderArrayList().size();i++)
+			{		
+				for(Beheerder b : m.getBeheerders())
 				{
-					if(beheerderCB.getSelectedItem().equals(m.getBeheerderArrayList().get(i).getNaam()))
+					if(beheerderCB.getSelectedItem().equals(b.getNaam()))
 					{
-						geselecteerdeBeheerder = m.getBeheerderArrayList().get(i).getId();
+						m.setBeheerder(beheerderCB.getSelectedItem().toString());
+						geselecteerdeBeheerder = b;
 						opslaan.setVisible(true);
-						wijzigen.setSelected(m.getBeheerderArrayList().get(i).KanWijzigen());
-						toevoegen.setSelected(m.getBeheerderArrayList().get(i).KanToevoegen());
-						beoordelen.setSelected(m.getBeheerderArrayList().get(i).KanBeoordelen());
-						verwijderen.setSelected(m.getBeheerderArrayList().get(i).KanVerwijderen());
+						wijzigen.setSelected(b.KanWijzigen());
+						toevoegen.setSelected(b.KanToevoegen());
+						beoordelen.setSelected(b.KanBeoordelen());
+						verwijderen.setSelected(b.KanVerwijderen());
 					}
 					else if(beheerderCB.getSelectedIndex() == 0)
 					{
@@ -135,7 +139,7 @@ public class Administrator extends JPanel
 						beoordelen.setSelected(false);
 						verwijderen.setSelected(false);
 						opslaan.setVisible(false);
-					}	
+					}
 				}
 			}
 		});
@@ -144,9 +148,7 @@ public class Administrator extends JPanel
 		opslaan.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
 		opslaan.addMouseListener(new OpslaanListener());
 		
-		d.getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
-		
-		for(Beheerder s : m.getBeheerderArrayList())		//overloopt de ArrayList en vult de JComboBox met de namen
+		for(Beheerder s : m.getBeheerders())		//overloopt de ArrayList en vult de JComboBox met de namen
 		{
 			beheerderCB.addItem(s.getNaam());
 		}
@@ -250,7 +252,7 @@ public class Administrator extends JPanel
 		
 		c.gridx = 1; 
 		c.gridy = 3;
-		toevoegBeheerderPanel.add(new JLabelFactory().getItalic("<html><u>Geef een niewe beheerder: </u></html>"),c);
+		toevoegBeheerderPanel.add(new JLabelFactory().getItalic("<html><u>Geef een nieuwe beheerder: </u></html>"),c);
 				
 		c.gridx = 1;
 		c.gridy = 4;
@@ -439,13 +441,12 @@ public class Administrator extends JPanel
 		@Override
 		public void mousePressed(MouseEvent arg0) 
 		{
-			m.getBeheerders().setKanWijzigen(wijzigen.isSelected());
-			m.getBeheerders().setKanToevoegen(toevoegen.isSelected());
-			m.getBeheerders().setKanVerwijderen(verwijderen.isSelected());
-			m.getBeheerders().setKanBeoordelen(beoordelen.isSelected());
+			m.getBeheerder().setKanWijzigen(wijzigen.isSelected());
+			m.getBeheerder().setKanToevoegen(toevoegen.isSelected());
+			m.getBeheerder().setKanVerwijderen(verwijderen.isSelected());
+			m.getBeheerder().setKanBeoordelen(beoordelen.isSelected());
 				
-			d.updateBeheerdersDatabank(geselecteerdeBeheerder);
-			d.laadDatabank();	// opnieuw alle gegevens verversen ! Mss nog veranderen?? 
+			d.updateBeheerdersDatabank(geselecteerdeBeheerder);	
 		}
 
 		@Override
@@ -464,7 +465,15 @@ public class Administrator extends JPanel
 				JOptionPane.showMessageDialog(null,"Beide velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				d.voegBeheerderToeAanDatabank(naamTxt.getText(), wachtwoordTxt.getText(), beoordelenNieuweBh.isSelected(), wijzigenNieuweBh.isSelected(), verwijderenNieuweBh.isSelected(), toevoegenNieuweBh.isSelected());
+				try {
+					d.voegBeheerderToeAanDatabank(naamTxt.getText(), Login.convert(wachtwoordTxt.getText()), beoordelenNieuweBh.isSelected(), wijzigenNieuweBh.isSelected(), verwijderenNieuweBh.isSelected(), toevoegenNieuweBh.isSelected());
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				naamTxt.setText("");
 				wachtwoordTxt.setText("");
 				beoordelenNieuweBh.setSelected(false);
@@ -472,6 +481,20 @@ public class Administrator extends JPanel
 				verwijderenNieuweBh.setSelected(false);
 				toevoegenNieuweBh.setSelected(false);
 				nieuweBh.setVisible(true);
+				
+				beheerderCB.removeAll();
+				
+				for(Beheerder s : m.getBeheerders())		//overloopt de ArrayList en vult de JComboBox met de namen
+				{
+					beheerderCB.addItem(s.getNaam());
+				}
+				
+				
+				// zit alles in model? 
+				for(Beheerder b : m.getBeheerders())
+				{
+					System.out.println(b.getNaam());
+				}
 			}	
 		}	
 		@Override

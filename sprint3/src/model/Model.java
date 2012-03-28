@@ -83,6 +83,11 @@ public class Model
 		notifyListeners();
 	}
 	
+	public void toevoegenBeheerder(Beheerder b)
+	{
+		beheerders.add(b);
+		notifyListeners();
+	}
 	
 	public void verwijderDocument(int id)		//deze methode verwijdert het document op basis van zijn databankId
 	{
