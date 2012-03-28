@@ -5,15 +5,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Menu;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import guiElementen.JLabelFactory;
 import guiElementen.RijDocument;
+import guiElementen.RijErfgoed;
 import guiElementen.TegelDocument;
+import guiElementen.TegelErfgoed;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -78,7 +83,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.typeContent = "Documenten";
 		
 		addComponentListener(this);
-		m.addListener(this);
+		//m.addListener(this);
 		controller.addListener(this);
 		setOpaque(false);
 		setLayout(new BorderLayout());
@@ -205,7 +210,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.ondergrens = ondergrens;
 	}
 	public void toonContent(int aantalTegels)
-	{			
+	{
 		toonScrollbar(aantalTegels);
 		if (aantalTegels >0)
 		{
@@ -235,7 +240,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
 					{
-						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						docPanel.add(new TegelErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
 					}
 				}
@@ -247,7 +252,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
 					{
-						docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
+						docPanel.add(new RijErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
 						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
 					}
 				}

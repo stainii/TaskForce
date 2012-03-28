@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import views.DocumentView;
 import views.Hoofd;
 
+
 import controllers.Databank;
 
 import model.DocumentCMS;
@@ -44,7 +45,7 @@ public class ErfgoedPanel extends JPanel
 
 	public ErfgoedPanel(Model m, Databank d, Erfgoed e, Hoofd h)
 	{
-		setBackground(new Color(50,50,50));
+		setOpaque(false);
 		setLayout(new GridBagLayout());
 		
 		this.model = m;
@@ -60,7 +61,6 @@ public class ErfgoedPanel extends JPanel
 		types[4] = "Andere";
 		
 		//toonGroot();
-		toonKlein();
 	}
 	
 	public void toonKlein()
@@ -528,7 +528,7 @@ public class ErfgoedPanel extends JPanel
 		/**RECHTERKANT**/
 		c.gridx=7;
 		c.gridy=2;
-		c.gridwidth=1;
+		c.gridwidth=2;
 		add(new JLabelFactory().getMenuTitel("Documenten"),c);
 		
 		JPanel documentenPanel = new JPanel(new GridBagLayout());
@@ -536,6 +536,7 @@ public class ErfgoedPanel extends JPanel
 		
 		int x = 0;
 		int y = 1;
+		c.gridwidth=1;
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
@@ -552,10 +553,100 @@ public class ErfgoedPanel extends JPanel
 		
 		c.gridx=7;
 		c.gridy=3;
-		c.gridwidth=1;
-		c.gridheight=100;	//even overdrijven
+		c.gridwidth=2;
+		c.gridheight=10;
 		c.fill = GridBagConstraints.VERTICAL;
 		add(documentenPanel,c);
+		
+		//toevoegbutton
+		c.gridx=7;
+		c.gridy=11;
+		c.gridwidth=1;
+		c.gridheight=1;
+			toevoegen = new JLabelFactory().getMenuTitel("Document toevoegen");
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+			toevoegen.addMouseListener(new MouseListener() {
+						
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+				
+			@Override
+			public void mousePressed(MouseEvent e) {}
+				
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				toevoegen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+			}
+				
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				toevoegen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco_hover.png")));
+			}
+				
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				//content.quit();
+					
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
+			}
+			});
+			add(toevoegen,c);
+					
+			//pdf button
+			c.gridx=8;
+			c.gridy=11;
+			c.gridwidth=1;
+			c.gridheight=1;
+			
+			pdf = new JLabelFactory().getMenuTitel("Pdf maken");
+			pdf.setIcon(new ImageIcon(getClass().getResource("../views/imgs/pdf_zwartwit.png")));
+			pdf.addMouseListener(new MouseListener() {
+						
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+						
+				@Override
+				public void mousePressed(MouseEvent e) {}
+						
+				@Override
+				public void mouseExited(MouseEvent e)
+				{
+					pdf.setIcon(new ImageIcon(getClass().getResource("../views/imgs/pdf_zwartwit.png")));
+				}
+						
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					pdf.setIcon(new ImageIcon(getClass().getResource("../views/imgs/pdf.png")));
+				}
+						
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{			
+					JFileChooser chooser = new JFileChooser();
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					
+					File file = new File("");
+							
+					int resul = chooser.showSaveDialog(null);
+					if(resul == JFileChooser.APPROVE_OPTION)
+					{
+						file = chooser.getSelectedFile();
+					}
+					
+					//new PdfMaker(erfgoed, model, file);
+					
+					try
+					{
+						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
+					}
+					catch (IOException ioe){}
+				}
+			});
+			add(pdf,c);
 		
 		
 		//verkleinbutton
@@ -599,5 +690,19 @@ public class ErfgoedPanel extends JPanel
 	{
 		setPreferredSize(new Dimension(1000,210));
 		toonKlein();
+	}
+	
+	public static void main(String args[])
+	{
+		JFrame f = new JFrame();
+		Model m = new Model();
+		Databank d = new Databank(m);
+		d.laadDatabank();
+		
+		f.add(new ErfgoedPanel(m,d, m.getErfgoed().get(0),null));
+		f.pack();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+		
 	}
 }

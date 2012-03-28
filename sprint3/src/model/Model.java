@@ -98,6 +98,7 @@ public class Model
 		notifyListeners();
 	}
 	
+	
 	public void verwijderDocument(int id)		//deze methode verwijdert het document op basis van zijn databankId
 	{
 		for (int i=0; i<getDocumenten().size();i++)
@@ -110,7 +111,14 @@ public class Model
 		notifyListeners();
 	}
 	
-	public void bewerkDocument(DocumentCMS d, Erfgoed e)
+	public void verwijderErfgoed(Erfgoed e)
+	{
+		documenten.removeAll(e.getDocumenten());	
+		erfgoed.remove(e);
+		notifyListeners();
+	}
+	
+	public void bewerkDocument(DocumentCMS d)
 	{
 		//overloop de array list van documenten
 		for(int i =0; i<documenten.size(); i++)
@@ -121,8 +129,12 @@ public class Model
 				documenten.set(i,d);
 				i = documenten.size();
 			}
-		}
-		
+		}		
+		notifyListeners();
+	}
+	
+	public void bewerkErfgoed(Erfgoed e)
+	{
 		//overloop de array list van erfgoed
 		for(int i =0; i<erfgoed.size(); i++)
 		{

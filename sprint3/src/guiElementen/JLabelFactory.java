@@ -4,6 +4,7 @@ package guiElementen;
  *   gebruiken we een "JLabel-fabriek". Deze maakt voor ons de font voor de gewone tekst, voor de titel, ...
  */
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
@@ -32,6 +33,15 @@ public class JLabelFactory
 		if (s.length()>20)
 			s = s.substring(0,17) + "...";
 		
+		JLabel label = new JLabel(s);
+		label.setFont(new Font("Comic Sans", Font.BOLD, 13));
+		label.setForeground(Color.WHITE);
+		return label;
+	}
+	public JLabel getTegelTekst40(String s)
+	{	
+		if (s.length()>40)
+			s = s.substring(0,37) + "...";
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Comic Sans", Font.BOLD, 13));
 		label.setForeground(Color.WHITE);

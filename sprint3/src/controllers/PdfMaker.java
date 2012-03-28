@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.util.Date;
 
 import model.DocumentCMS;
+import model.Erfgoed;
 import model.Model;
 
 import com.itextpdf.text.Document;
@@ -19,13 +20,13 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class PdfMaker 
 { 
-	private DocumentCMS document;
+	private Erfgoed erfgoed;
 	private Font tussentitel = new Font(Font.FontFamily.COURIER,16,Font.ITALIC);
 	private Model model;
 	
-	public PdfMaker(DocumentCMS document, Model m, File f)
+	public PdfMaker(Erfgoed e, Model m, File f)
 	{
-		this.document = document;
+		this.erfgoed = e;
 		this.model = m;
 		
 		try
@@ -61,7 +62,7 @@ public class PdfMaker
 	private void Header(Document doc) throws DocumentException
 	{
 		Paragraph titel = new Paragraph();
-		titel.add(new Paragraph(document.getErfgoed().getNaam(), new Font(Font.FontFamily.COURIER, 22, Font.BOLD )));
+		titel.add(new Paragraph(erfgoed.getNaam(), new Font(Font.FontFamily.COURIER, 22, Font.BOLD )));
 		legeLijn(titel,1);
 		titel.add(new Paragraph("Document opgesteld door " + model.getBeheerder()+ " op " + new Date()));
 		legeLijn(titel,1);
@@ -72,7 +73,7 @@ public class PdfMaker
 	{
 		com.itextpdf.text.Image image = null;
 			
-		for(DocumentCMS c : document.getErfgoed().getDocumenten())
+		for(DocumentCMS c : erfgoed.getDocumenten())
 		{
 			if(c.getTypeDocument().equals("Afbeelding"))
 			{
