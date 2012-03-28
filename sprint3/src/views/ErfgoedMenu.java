@@ -141,6 +141,10 @@ public class ErfgoedMenu extends JPanel
 					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, model.getBeheerder().getId()),hoofd));
 				}
 			});
+			
+			if(m.getBeheerder().KanToevoegen() == false)
+				toevoegen.setVisible(false);
+			
 			add(toevoegen);
 		
 			// pdf button
@@ -219,6 +223,9 @@ public class ErfgoedMenu extends JPanel
 					}
 				}
 			});
+			
+			if(m.getBeheerder().KanVerwijderen() == false)
+				verwijderen.setVisible(false);
 			add(verwijderen);
 			
 			bewerken = new JLabel();
@@ -260,6 +267,9 @@ public class ErfgoedMenu extends JPanel
 					}
 				}
 			});
+			
+			if(m.getBeheerder().KanWijzigen() == false)
+				bewerken.setVisible(false);
 			add(bewerken);
 		}
 		else //het is een nieuw erfgoed

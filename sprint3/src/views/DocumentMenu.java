@@ -158,6 +158,10 @@ public class DocumentMenu extends JPanel
 				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, model.getBeheerder().getId()),hoofd));
 			}
 		});
+		
+		if (m.getBeheerder().KanToevoegen() == false)
+			toevoegen.setVisible(false);
+		
 		add(toevoegen);
 				
 		//toon andere documenten van het erfgoed

@@ -112,6 +112,10 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd));
 			}
 		});
+		
+		if (m.getBeheerder().KanToevoegen() == false)
+			toevoegen.setVisible(false);
+		
 		add(toevoegen);
 		
 		//switch tussen tegel- of lijstview 
