@@ -101,7 +101,6 @@ public class DocumentMenu extends JPanel
 		
 		add(overzicht);
 		
-		//terug button
 		erfgoed =new JLabelFactory().getMenuTitel("Bekijk erfgoedfiche");
 		//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
 		erfgoed.addMouseListener(new MouseListener()

@@ -47,7 +47,7 @@ public class ErfgoedMenu extends JPanel
 	private Databank databank;
 	private Hoofd hoofd;
 	private Erfgoed erfgoed;
-	private JLabel overzicht, bewerken, verwijderen;
+	private JLabel overzicht, bewerken, verwijderen, nieuwOpslaan;
 	private ErfgoedContent content;
 	private ErfgoedController controller;
 	
@@ -109,139 +109,180 @@ public class ErfgoedMenu extends JPanel
 		
 		add(overzicht);
 		
-		//toevoegbutton
-		toevoegen = new JLabelFactory().getMenuTitel("Document toevoegen");
-		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
-		toevoegen.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
-			}
-		});
-		add(toevoegen);
-		
-		// pdf button
-		pdf = new JLabelFactory().getMenuTitel("Pdf maken");
-		pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-		pdf.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
+		if (erfgoed.getId() != -1)//het is geen nieuw erfgoed
+		{
+			//toevoegbutton
+			toevoegen = new JLabelFactory().getMenuTitel("Document toevoegen");
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+			toevoegen.addMouseListener(new MouseListener() {
 				
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				@Override
+				public void mouseReleased(MouseEvent e) {}
 				
-				File file = new File("");
+				@Override
+				public void mousePressed(MouseEvent e) {}
 				
-				int resul = chooser.showSaveDialog(hoofd);
-				if(resul == JFileChooser.APPROVE_OPTION)
+				@Override
+				public void mouseExited(MouseEvent e)
 				{
-					file = chooser.getSelectedFile();
+					toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 				}
 				
-				new PdfMaker(erfgoed, model, file);
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+				}
 				
-				try
+				@Override
+				public void mouseClicked(MouseEvent e)
 				{
-					Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
+					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
 				}
-				catch (IOException ioe){}
-			}
-		});
-		add(pdf);
+			});
+			add(toevoegen);
 		
-		
-		verwijderen = new JLabel();
-		verwijderen.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/verwijderen.png")));
-		verwijderen.addMouseListener(new MouseListener()
-		{		
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				if (JOptionPane.showConfirmDialog(null, "Als u dit erfgoed verwijderd worden alle bijhorende documenten ook verwijderd. Weet u zeker dat u dit wilt doen?", "Opgelet!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+			// pdf button
+			pdf = new JLabelFactory().getMenuTitel("Pdf maken");
+			pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
+			pdf.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {}
+				
+				@Override
+				public void mouseExited(MouseEvent e)
 				{
-					controller.verwijder();
-					hoofd.laadOverzicht();
+					pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
 				}
-			}
-		});
-		add(verwijderen);
-		
-		bewerken = new JLabel();
-		bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));
-		bewerken.addMouseListener(new MouseListener()
-		{	
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e){}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) 
-			{
-				String[] s = content.bewerken();
-				if (s[0]==null)
-					bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
-				else
+				
+				@Override
+				public void mouseEntered(MouseEvent e)
 				{
+					pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					
+					JFileChooser chooser = new JFileChooser();
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					
+					File file = new File("");
+					
+					int resul = chooser.showSaveDialog(hoofd);
+					if(resul == JFileChooser.APPROVE_OPTION)
+					{
+						file = chooser.getSelectedFile();
+					}
+					
+					new PdfMaker(erfgoed, model, file);
+					
+					try
+					{
+						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
+					}
+					catch (IOException ioe){}
+				}
+			});
+			add(pdf);
+			
+			
+			verwijderen = new JLabel();
+			verwijderen.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/verwijderen.png")));
+			verwijderen.addMouseListener(new MouseListener()
+			{		
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if (JOptionPane.showConfirmDialog(null, "Als u dit erfgoed verwijderd worden alle bijhorende documenten ook verwijderd. Weet u zeker dat u dit wilt doen?", "Opgelet!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+					{
+						controller.verwijder();
+						hoofd.laadOverzicht();
+					}
+				}
+			});
+			add(verwijderen);
+			
+			bewerken = new JLabel();
+			bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));
+			bewerken.addMouseListener(new MouseListener()
+			{	
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				
+				@Override
+				public void mousePressed(MouseEvent e){}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) 
+				{
+					String[] s = content.bewerken();
+					if (s[0]==null)
+						bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+					else
+					{
+						controller.getVoorlopigErfgoed().setNaam(s[0]);
+						controller.getVoorlopigErfgoed().setStraat(s[1]);
+						controller.getVoorlopigErfgoed().setHuisnr(s[2]);
+						controller.getVoorlopigErfgoed().setPostcode(s[3]);
+						controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
+						controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
+						controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
+						controller.getVoorlopigErfgoed().setKenmerken(s[7]);
+						controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
+						controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
+						controller.update();
+						bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));					
+					}
+				}
+			});
+			add(bewerken);
+		}
+		else //het is een nieuw erfgoed
+		{
+			nieuwOpslaan = new JLabel();
+			nieuwOpslaan.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+			nieuwOpslaan.addMouseListener(new MouseListener()
+			{	
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				
+				@Override
+				public void mousePressed(MouseEvent e){}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) 
+				{
+					String[] s = content.bewerken();
 					controller.getVoorlopigErfgoed().setNaam(s[0]);
 					controller.getVoorlopigErfgoed().setStraat(s[1]);
 					controller.getVoorlopigErfgoed().setHuisnr(s[2]);
@@ -252,11 +293,12 @@ public class ErfgoedMenu extends JPanel
 					controller.getVoorlopigErfgoed().setKenmerken(s[7]);
 					controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
 					controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
-					controller.update();
-					bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));					
+					controller.toevoegen();
+						
+					hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd));
 				}
-			}
-		});
-		add(bewerken);
+			});
+			add(nieuwOpslaan);
+		}
 	}
 }

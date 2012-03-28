@@ -41,6 +41,11 @@ public class Erfgoed
 		this.setBurgerId(burgerId);
 	}
 	
+	public Erfgoed(Model m)
+	{
+		this (-1, "","","","","","","","","","","",m.getBeheerders().getId(),m);
+	}
+	
 	// ------- getters ------------
 	
 	public int getId()

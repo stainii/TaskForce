@@ -87,7 +87,7 @@ public class ErfgoedController
 		/*origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());*/
 		
-		origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
+		//origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
 		m.toevoegenErfgoed(origineelErfgoed);
 	}
 }

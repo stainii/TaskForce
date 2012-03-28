@@ -295,5 +295,4 @@ public class ErfgoedContent extends JPanel
 		
 		return s;
 	}
-
 }

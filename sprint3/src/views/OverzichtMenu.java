@@ -33,9 +33,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import controllers.Databank;
 import controllers.OverzichtController;
 
 import model.DocumentCMS;
+import model.Erfgoed;
 import model.Model;
 
 @SuppressWarnings("serial")
@@ -48,10 +50,13 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld/*, afbeelding, tekst, video*/;
 	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
-	private JLabel zoekBtn;
+	private JLabel zoekBtn, toevoegen;
 	
 	private OverzichtController c;
 	private OverzichtContent linkerscherm;
+	private Hoofd hoofd;
+	private Model model;
+	private Databank databank;
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -61,9 +66,12 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public OverzichtMenu(Model m, OverzichtController controller, OverzichtContent content)
+	public OverzichtMenu(Model m, Databank d, OverzichtController controller, OverzichtContent content, Hoofd h)
 	{
 		this.c = controller;
+		this.hoofd = h;
+		this.model = m;
+		this.databank = d;
 		this.linkerscherm = content;
 		
 		m.addListener(this);
@@ -74,6 +82,37 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
+		
+		//toevoegbutton
+		toevoegen = new JLabelFactory().getMenuTitel("Erfgoed toevoegen");
+		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+		toevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd));
+			}
+		});
+		add(toevoegen);
 
 		//switch tussen tegel- of lijstview 
 		add(new OverzichtKiezer(linkerscherm, controller));
@@ -85,7 +124,8 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		zoekTxt.setOpaque(true);
 		zoekTxt.setBorder(null);
 		zoekTxt.setColumns(12);
-		zoekTxt.addActionListener(new ActionListener() {
+		zoekTxt.addActionListener(new ActionListener()
+		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -94,8 +134,8 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 				goedgekeurd.grabFocus();
 			}
 		});
-		zoekTxt.addKeyListener(new KeyListener() {
-			
+		zoekTxt.addKeyListener(new KeyListener()
+		{	
 			@Override
 			public void keyTyped(KeyEvent arg0){}
 			
@@ -127,7 +167,6 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		});
 		add(zoekTxt);
 				
-
 		zoekBtn = new JLabel();
 		zoekBtn.setIcon(new ImageIcon(getClass().getResource("imgs/zoek.png")));
 		zoekBtn.addMouseListener(new MouseListener() {
