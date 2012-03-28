@@ -4,26 +4,31 @@ public class Beheerder
 {
 	private int id;
 	private String naam;
+	private String wachtwoord;
 	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen;
 	private Model m;
 	
-	public Beheerder(int id, String n, boolean kb ,boolean kw, boolean kv, boolean kt, Model model)
+	public Beheerder(int id, String n, String w, boolean kb ,boolean kw, boolean kv, boolean kt, Model model)
 	{
 		this.id=id;
 		this.naam=n;
+		this.wachtwoord = w;
 		this.KanToevoegen = kt;
 		this.KanBeoordelen = kb;
 		this.KanWijzigen = kw;
 		this.KanVerwijderen = kv;
 		this.m = model;
 	}
-
+	
 	public int getId() {
 		return id;
 	}
 
 	public String getNaam() {
 		return naam;
+	}
+	public String getWachtwoord() {
+		return wachtwoord;
 	}
 
 	public boolean KanToevoegen()
@@ -50,6 +55,9 @@ public class Beheerder
 	public void setNaam(String naam) {
 		this.naam = naam;
 		m.notifyListeners();
+	}
+	public void setWachtwoord(String wachtwoord) {
+		this.wachtwoord = wachtwoord;
 	}
 
 	public void setKanToevoegen(boolean kanToevoegen){
