@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.Array;
@@ -28,16 +30,20 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import views.Start;
 
 import model.Beheerder;
 import model.Burger;
 import model.Erfgoed;
 import model.Model;
 
+import controllers.Databank;
 import controllers.Login;
 
 
@@ -47,14 +53,18 @@ public class Administrator extends JPanel
 	private Image background = backgroundIcon.getImage();
 		
 	private final static String connectie = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
+	private Model m;
+	private Databank d;
 	private JFrame frame;
 	private JLabel uitlogLbl,toevoegenAdminLbl,toevoegenBeheerderLbl,opslaan;
-	private JCheckBox wijzigen, toevoegen, verwijderen;	
+	private JLabel opslaanNieuweBh, nieuweBh, terugBh;
+	private JCheckBox wijzigen, toevoegen, verwijderen, beoordelen;
+	private JCheckBox wijzigenNieuweBh, toevoegenNieuweBh, verwijderenNieuweBh, beoordelenNieuweBh;
 	private JComboBox beheerderCB;
-	private Beheerder beheerders;
+	private JTextField naamTxt, wachtwoordTxt;
 	private int geselecteerdeBeheerder;
-	private Model m;
 	private static String gebruiker;
+	private JPanel startpanel,toevoegBeheerderPanel;
 	
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
@@ -67,7 +77,12 @@ public class Administrator extends JPanel
 	public Administrator()
 	{
 		m = new Model();
+		d = new Databank(m);
 		//Labels
+		
+		startpanel = new JPanel();
+		startpanel.setOpaque(false);
+		
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/uitloggen.png")));
 		uitlogLbl.addMouseListener(new UitlogListener());
@@ -79,18 +94,21 @@ public class Administrator extends JPanel
 		toevoegenBeheerderLbl = new JLabelFactory().getNormaleTekst("Voeg beheerder toe");
 		toevoegenBeheerderLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
 		toevoegenBeheerderLbl.addMouseListener(new ToevoegenBeheerderListenener());
-		
+				
 		wijzigen = new JCheckBox("Wijzigen");
 		toevoegen = new JCheckBox("Toevoegen");
 		verwijderen = new JCheckBox("Verwijderen");
+		beoordelen = new JCheckBox("Beoordelen");
 		
 		wijzigen.setForeground(Color.white);
 		toevoegen.setForeground(Color.white);
 		verwijderen.setForeground(Color.white);
+		beoordelen.setForeground(Color.white);
 		
 		wijzigen.setOpaque(false);
 		toevoegen.setOpaque(false);
 		verwijderen.setOpaque(false);
+		beoordelen.setOpaque(false);
 		
 		beheerderCB = new JComboBox();
 		beheerderCB.addItem("<<Geen beheerder geselecteerd>>");
@@ -105,87 +123,183 @@ public class Administrator extends JPanel
 					{
 						geselecteerdeBeheerder = m.getBeheerderArrayList().get(i).getId();
 						opslaan.setVisible(true);
-						wijzigen.setSelected(m.getBeheerderArrayList().get(i).isKanWijzigen());
-						toevoegen.setSelected(m.getBeheerderArrayList().get(i).isKanBeoordelen());
-						verwijderen.setSelected(m.getBeheerderArrayList().get(i).isKanVerwijderen());
+						wijzigen.setSelected(m.getBeheerderArrayList().get(i).KanWijzigen());
+						toevoegen.setSelected(m.getBeheerderArrayList().get(i).KanToevoegen());
+						beoordelen.setSelected(m.getBeheerderArrayList().get(i).KanBeoordelen());
+						verwijderen.setSelected(m.getBeheerderArrayList().get(i).KanVerwijderen());
 					}
 					else if(beheerderCB.getSelectedIndex() == 0)
 					{
 						wijzigen.setSelected(false);
 						toevoegen.setSelected(false);
+						beoordelen.setSelected(false);
 						verwijderen.setSelected(false);
 						opslaan.setVisible(false);
 					}	
 				}
-				
 			}
 		});
 		
-		opslaan = new JLabelFactory().getTitel("Opslaan");
+		opslaan = new JLabel();
+		opslaan.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
 		opslaan.addMouseListener(new OpslaanListener());
 		
-		
-		getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
-		
+		d.getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
 		
 		for(Beheerder s : m.getBeheerderArrayList())		//overloopt de ArrayList en vult de JComboBox met de namen
 		{
 			beheerderCB.addItem(s.getNaam());
 		}
 		
-		setLayout(new GridBagLayout());
+		//_____StartPanel_________________________________________________________**
+		startpanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);
+		
 		c.gridx =1;
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(uitlogLbl,c);
+		startpanel.add(uitlogLbl,c);
 		
 		c.gridx = 2;
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		add(toevoegenAdminLbl,c);
+		startpanel.add(toevoegenAdminLbl,c);
 		
 		c.gridx = 2;
 		c.gridy = 2;
-		add(toevoegenBeheerderLbl,c);
+		startpanel.add(toevoegenBeheerderLbl,c);
 		
 		c.gridx = 1;
 		c.gridy = 2;
-		add(new JLabelFactory().getTitel("Welkom " + getGebruiker()),c);
+		startpanel.add(new JLabelFactory().getTitel("Welkom " + getGebruiker()),c);
 		
 		c.gridx = 1; 
 		c.gridy = 3;
-		add(new JLabelFactory().getNormaleTekst("Kies een beheerder: "),c);
+		startpanel.add(new JLabelFactory().getItalic("<html><u>Kies een beheerder: </u></html>"),c);
 		
 		c.gridx = 1; 
 		c.gridy = 4;
-		add(beheerderCB,c);
+		startpanel.add(beheerderCB,c);
 		
 		c.gridx = 1;
 		c.gridy = 5;
-		add(new JLabelFactory().getNormaleTekst("Wat mag deze gebruiker: "),c);
+		startpanel.add(new JLabelFactory().getItalic("<html><u>Wat mag deze gebruiker: </u></html>"),c);
 		
 		c.gridx = 1;
 		c.gridy = 6;
-		add(wijzigen,c);
+		startpanel.add(wijzigen,c);
 
 		c.gridx = 1;
 		c.gridy = 7;
-		add(toevoegen,c);
+		startpanel.add(toevoegen,c);
 		
 		c.gridx = 1;
 		c.gridy = 8;
-		add(verwijderen,c);
+		startpanel.add(beoordelen,c);
+		
+		c.gridx = 1;
+		c.gridy = 9;
+		startpanel.add(verwijderen,c);
 		
 		c.gridx = 2;
-		c.gridy = 8;
+		c.gridy = 9;
 		opslaan.setVisible(false);
-		add(opslaan, c);
+		startpanel.add(opslaan, c);
+		
+		add(startpanel);
+		//_______________________________________________________**
+		
+		//________________ToevoegPanel__________________________**
+		toevoegBeheerderPanel = new JPanel();
+		toevoegBeheerderPanel.setLayout(new GridBagLayout());
+		toevoegBeheerderPanel.setOpaque(false);
+		
+		wijzigenNieuweBh = new JCheckBox("Wijzigen");
+		toevoegenNieuweBh = new JCheckBox("Toevoegen");
+		verwijderenNieuweBh = new JCheckBox("Verwijderen");
+		beoordelenNieuweBh = new JCheckBox("Beoordelen");
+		
+		wijzigenNieuweBh.setOpaque(false);
+		toevoegenNieuweBh.setOpaque(false);
+		verwijderenNieuweBh.setOpaque(false);
+		beoordelenNieuweBh.setOpaque(false);
+		
+		wijzigenNieuweBh.setForeground(Color.white);
+		toevoegenNieuweBh.setForeground(Color.white);
+		verwijderenNieuweBh.setForeground(Color.white);
+		beoordelenNieuweBh.setForeground(Color.white);
+		
+		naamTxt = new JTextField();
+		wachtwoordTxt = new JTextField();
+				
+		opslaanNieuweBh = new JLabel();
+		opslaanNieuweBh.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+		opslaanNieuweBh.addMouseListener(new NieuweBeheerderListener());
+ 		
+		nieuweBh = new JLabel("Toegevoegd");
+		nieuweBh.setForeground(Color.white);
+		
+		terugBh =new JLabelFactory().getMenuTitel("Terug");
+		terugBh.setIcon(new ImageIcon(getClass().getResource("../views/imgs/terug.png")));
+		terugBh.addMouseListener(new TerugListener());
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		toevoegBeheerderPanel.add(new JLabelFactory().getTitel("Beheerder toevoegen"),c);
+		
+		c.gridx = 1; 
+		c.gridy = 3;
+		toevoegBeheerderPanel.add(new JLabelFactory().getItalic("<html><u>Geef een niewe beheerder: </u></html>"),c);
+				
+		c.gridx = 1;
+		c.gridy = 4;
+		toevoegBeheerderPanel.add(naamTxt,c);
+		
+		c.gridx = 1;
+		c.gridy = 5;
+		toevoegBeheerderPanel.add(wachtwoordTxt,c);
+		
+		c.gridx = 1; 
+		c.gridy = 6;
+		toevoegBeheerderPanel.add(new JLabelFactory().getItalic("<html><u>Wat mag deze beheerder: </u></html>"),c);
+		
+		c.gridx = 1;
+		c.gridy = 7;
+		toevoegBeheerderPanel.add(wijzigenNieuweBh,c);
+		
+		c.gridx = 1;
+		c.gridy = 8;
+		toevoegBeheerderPanel.add(toevoegenNieuweBh,c);
+		
+		c.gridx = 1;
+		c.gridy = 9;
+		toevoegBeheerderPanel.add(beoordelenNieuweBh,c);
+		
+		c.gridx = 1;
+		c.gridy = 10;
+		toevoegBeheerderPanel.add(verwijderenNieuweBh,c);
+		
+		c.gridx = 1;
+		c.gridy = 11;
+		toevoegBeheerderPanel.add(terugBh,c);
+		
+		c.gridx = 2;
+		c.gridy = 11;
+		toevoegBeheerderPanel.add(opslaanNieuweBh,c);
+		
+		c.gridx = 2;
+		c.gridy = 12;
+		nieuweBh.setVisible(false);
+		toevoegBeheerderPanel.add(nieuweBh,c);
+		
+		toevoegBeheerderPanel.setVisible(false);
+		add(toevoegBeheerderPanel);
+		//____________________***
 		
 		frame = new JFrame("Administratorpaneel");
 		frame.add(this);
-		frame.setSize(600,400);
+		frame.setSize(450,400);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 
@@ -196,61 +310,6 @@ public class Administrator extends JPanel
 	}
 
 	
-	/**
-	 * Mogen deze 2 onderstaande functies niet in Databank klasse gestoken worden? Zodat Databank methoden bij elkaar blijven staan?
-	 * Of wordt het dan te onoverzichtelijk? 
-	 */
-
-	
-	
-	public void updateBeheerdersDatabank(int b /*, boolean kt, boolean kw, boolean kv*/)
-	{
-		Connection c = null;
-		PreparedStatement s = null;
-		
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("UPDATE Beheerder SET KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ? WHERE BeheerderId = ?");
-			s.setBoolean(1, m.getBeheerders().isKanBeoordelen());
-			s.setBoolean(2, m.getBeheerders().isKanWijzigen());
-			s.setBoolean(3, m.getBeheerders().isKanVerwijderen());
-			s.setInt(4, b);
-			s.executeUpdate();
-			
-			
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public void getBeheerdersUitDatabank()
-	{
-		ArrayList<Beheerder> beheerder = new ArrayList<Beheerder>();
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT * FROM Beheerder WHERE IsAdministrator = 0");
-			rs = s.executeQuery();
-			
-			while(rs.next())
-			{
-				beheerder.add(new Beheerder(rs.getInt("BeheerderId"),rs.getString("Gebruikersnaam"),rs.getBoolean("KanBeoordelen"),rs.getBoolean("KanWijzigen"),rs.getBoolean("KanVerwijderen"),m));
-			}
-			m.setBeheerders(beheerder);
-			
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-	}
 	
 	public static boolean isAdministrator(String gebruikersnaam, String wachtwoord) 
 	{
@@ -284,7 +343,9 @@ public class Administrator extends JPanel
 	{
 
 		@Override
-		public void mouseClicked(MouseEvent e) {}
+		public void mouseClicked(MouseEvent e) {
+			
+		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -297,7 +358,11 @@ public class Administrator extends JPanel
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {
+			frame.dispose();
+			String[] args = new String[0];
+			Start.main(args);	
+		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}
@@ -321,49 +386,13 @@ public class Administrator extends JPanel
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) 
+		{
+			
+		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}
-		
-	}
-	private class OpslaanListener implements MouseListener
-	{
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) 
-		{
-			m.getBeheerders().setKanBeoordelen(toevoegen.isSelected());
-			m.getBeheerders().setKanWijzigen(wijzigen.isSelected());
-			m.getBeheerders().setKanVerwijderen(verwijderen.isSelected());
-				
-			updateBeheerdersDatabank(geselecteerdeBeheerder);
-			getBeheerdersUitDatabank();	// opnieuw alle gegevens verversen ! 
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
 		
 	}
 	private class ToevoegenBeheerderListenener implements MouseListener
@@ -371,8 +400,7 @@ public class Administrator extends JPanel
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -387,14 +415,100 @@ public class Administrator extends JPanel
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			
+
+			startpanel.setVisible(false);
+			toevoegBeheerderPanel.setVisible(true);		
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseReleased(MouseEvent e) {}
 	}
 	
+	private class OpslaanListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) 
+		{
+			m.getBeheerders().setKanWijzigen(wijzigen.isSelected());
+			m.getBeheerders().setKanToevoegen(toevoegen.isSelected());
+			m.getBeheerders().setKanVerwijderen(verwijderen.isSelected());
+			m.getBeheerders().setKanBeoordelen(beoordelen.isSelected());
+				
+			d.updateBeheerdersDatabank(geselecteerdeBeheerder);
+			d.getBeheerdersUitDatabank();	// opnieuw alle gegevens verversen ! Mss nog veranderen?? 
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	private class NieuweBeheerderListener implements MouseListener
+	{
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent e) 
+		{
+			if(naamTxt.getText().isEmpty() || wachtwoordTxt.getText().isEmpty())
+				JOptionPane.showMessageDialog(null,"Beide velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
+			else
+			{
+				d.voegBeheerderToeAanDatabank(naamTxt.getText(), wachtwoordTxt.getText(), beoordelenNieuweBh.isSelected(), wijzigenNieuweBh.isSelected(), verwijderenNieuweBh.isSelected(), toevoegenNieuweBh.isSelected());
+				naamTxt.setText("");
+				wachtwoordTxt.setText("");
+				beoordelenNieuweBh.setSelected(false);
+				wijzigenNieuweBh.setSelected(false);
+				verwijderenNieuweBh.setSelected(false);
+				toevoegenNieuweBh.setSelected(false);
+				nieuweBh.setVisible(true);
+			}	
+		}	
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {}
+	}
+	
+	private class TerugListener implements MouseListener
+	{
+		@Override
+		public void mouseReleased(MouseEvent arg0){}
+		
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			terugBh.setIcon(new ImageIcon(getClass().getResource("../views/imgs/terug.png")));
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent arg0) 
+		{
+			terugBh.setIcon(new ImageIcon(getClass().getResource("../views/imgs/terug_hover.png")));
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			toevoegBeheerderPanel.setVisible(false);
+			startpanel.setVisible(true);
+		}
+	}
 }

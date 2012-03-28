@@ -42,7 +42,7 @@ public class DocumentMenu extends JPanel
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private DocumentContent content;
-	private JLabel terug;
+	private JLabel overzicht, erfgoed;
 	
 
 	@Override
@@ -68,10 +68,10 @@ public class DocumentMenu extends JPanel
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
 				
-		//terug button
-		terug =new JLabelFactory().getMenuTitel("Terug");
-		terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
-		terug.addMouseListener(new MouseListener()
+		//overzicht button
+		overzicht =new JLabelFactory().getMenuTitel("Overzicht");
+		overzicht.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+		overzicht.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseReleased(MouseEvent arg0){}
@@ -82,13 +82,13 @@ public class DocumentMenu extends JPanel
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+				overzicht.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) 
 			{
-				terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+				overzicht.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
 			}
 			
 			@Override
@@ -99,7 +99,39 @@ public class DocumentMenu extends JPanel
 			}
 		});
 		
-		add(terug);
+		add(overzicht);
+		
+		//terug button
+		erfgoed =new JLabelFactory().getMenuTitel("Bekijk erfgoedfiche");
+		//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+		erfgoed.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseReleased(MouseEvent arg0){}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) 
+			{
+				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				content.quit();
+				hoofd.setContentPaneel(new ErfgoedView(model,databank,document.getErfgoed(),hoofd));
+			}
+		});
+		add(erfgoed);
 		
 		//toevoegbutton
 		toevoegen = new JLabelFactory().getMenuTitel("Document toevoegen");
@@ -171,7 +203,7 @@ public class DocumentMenu extends JPanel
 					file = chooser.getSelectedFile();
 				}
 				
-				new PdfMaker(document, model, file);
+				new PdfMaker(document.getErfgoed(), model, file);
 				
 				try
 				{

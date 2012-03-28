@@ -4,13 +4,14 @@ public class Beheerder
 {
 	private int id;
 	private String naam;
-	private boolean KanBeoordelen, KanWijzigen, KanVerwijderen;
+	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen;
 	private Model m;
 	
-	public Beheerder(int id, String n, boolean kb, boolean kw, boolean kv, Model model)
+	public Beheerder(int id, String n, boolean kt ,boolean kb, boolean kw, boolean kv, Model model)
 	{
 		this.id=id;
 		this.naam=n;
+		this.KanToevoegen = kt;
 		this.KanBeoordelen = kb;
 		this.KanWijzigen = kw;
 		this.KanVerwijderen = kv;
@@ -25,15 +26,19 @@ public class Beheerder
 		return naam;
 	}
 
-	public boolean isKanBeoordelen() {
+	public boolean KanToevoegen()
+	{
+		return KanToevoegen;
+	}
+	public boolean KanBeoordelen() {
 		return KanBeoordelen;
 	}
 
-	public boolean isKanWijzigen() {
+	public boolean KanWijzigen() {
 		return KanWijzigen;
 	}
 
-	public boolean isKanVerwijderen() {
+	public boolean KanVerwijderen() {
 		return KanVerwijderen;
 	}
 
@@ -47,6 +52,11 @@ public class Beheerder
 		m.notifyListeners();
 	}
 
+	public void setKanToevoegen(boolean kanToevoegen){
+		KanToevoegen = kanToevoegen;
+		m.notifyListeners();
+	}
+	
 	public void setKanBeoordelen(boolean kanBeoordelen) {
 		KanBeoordelen = kanBeoordelen;
 		m.notifyListeners();

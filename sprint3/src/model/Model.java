@@ -41,13 +41,23 @@ public class Model
 	}
 	public Beheerder getBeheerders()
 	{	
-		ArrayList<Beheerder> beheerder = beheerders;
-		for (Beheerder b: beheerder)
+		for (Beheerder b: beheerders)
 		{
 			return b;
 		}
 		return null;
 	}
+	public Beheerder getHuidigeBeheerder()
+	{
+		
+		for(Beheerder b : getBeheerderArrayList())
+		{
+			if(b.getNaam().equalsIgnoreCase(beheerder))
+				return b;
+		}
+		return null;
+	}
+	
 	public ArrayList<Beheerder> getBeheerderArrayList()
 	{
 		return beheerders;
@@ -127,6 +137,7 @@ public class Model
 		notifyListeners();
 	}
 	
+	// Getter en setter voor String beheerder : Naam dat wordt ingegeven in textfield bij login.
 	public String getBeheerder() 
 	{
 		return beheerder;

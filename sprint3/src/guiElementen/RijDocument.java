@@ -122,6 +122,8 @@ public class RijDocument extends JPanel implements MouseListener
 				repaint();
 			}
 		});
+		if(m.getHuidigeBeheerder().KanVerwijderen() == false)	//mag beheerder verwijderen?
+			verwijderen.setVisible(false);
 		
 		add(verwijderen);
 	}

@@ -252,6 +252,47 @@ public class Databank
 		}
 	}
 	
+	public void verwijderErfgoed(Erfgoed erf)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE Erfgoed SET Obsolete = 1 WHERE ErfgoedId=?");
+			s.setInt(1, erf.getId());
+			s.executeUpdate();
+			
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s.setInt(1, erf.getId());
+			s.setString(2,"Verwijderd");
+			s.setString(3, m.getBeheerder());
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verwijderen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	public void verwijderenOngedaanMaken(DocumentCMS doc)
 	{
 		Connection c = null;
@@ -413,8 +454,7 @@ public class Databank
 			if (goedgekeurd)
 				s.setString(2,"Goedgekeurd");
 			else
-				s.setString(2,"Af" +
-						"gekeurd");
+				s.setString(2,"Afgekeurd");
 			
 			s.setString(3, m.getBeheerder());
 			s.executeUpdate();
@@ -677,8 +717,8 @@ public class Databank
 					
 					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"),m);
 					doc.setImage(null);	//hierdoor wordt de afbeelding opnieuw ingeladen (moest ze upgedate zijn...)
-					m.bewerkDocument(doc, 
-							new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
+					m.bewerkDocument(doc); 
+					m.bewerkErfgoed(new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
 									rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getInt("BurgerId"),m));
 				}

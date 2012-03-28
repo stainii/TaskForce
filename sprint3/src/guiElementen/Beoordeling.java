@@ -18,6 +18,7 @@ import javax.swing.text.JTextComponent;
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
+import model.Beheerder;
 import model.DocumentCMS;
 import model.Model;
 import controllers.Databank;
@@ -41,6 +42,8 @@ public class Beoordeling extends JPanel
 	private MailThuis mail;
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
+	private Beheerder b;
+	
 	
 	public Beoordeling(Databank d, Model m , DocumentCMS doc, Hoofd h, DocumentContent dc, DocumentController cont)
 	{
@@ -64,6 +67,25 @@ public class Beoordeling extends JPanel
 		afwijzen.setIcon(new ImageIcon(getClass().getResource("imgs/afkeuren.png")));
 		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
+		
+		
+		//______Controleert de rechten van een beheerder: 
+		if(m.getHuidigeBeheerder().KanBeoordelen() == false)
+		{
+			nogNietBeoordeeld.setVisible(false);
+			goedkeuren.setVisible(false);
+			afwijzen.setVisible(false);
+		}
+		if(m.getHuidigeBeheerder().KanWijzigen() == false)
+		{
+			bewerken.setVisible(false);
+		}
+		if(m.getHuidigeBeheerder().KanVerwijderen() == false)
+		{
+			verwijderen.setVisible(false);
+		}
+		//______**
+		
 		
 		if(controller.getOrigineelDocument().getStatus().equals("Goedgekeurd"))
 		{
