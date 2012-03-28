@@ -92,6 +92,12 @@ public class Model
 		notifyListeners();
 	}
 	
+	public void toevoegenErfgoed(Erfgoed e)
+	{
+		erfgoed.add(e);
+		notifyListeners();
+	}
+	
 	public void verwijderDocument(DocumentCMS d)
 	{
 		documenten.remove(d);
