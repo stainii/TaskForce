@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -115,17 +117,23 @@ public class Administrator extends JPanel
 		
 		beheerderCB = new JComboBox();
 		beheerderCB.addItem("<<Geen beheerder geselecteerd>>");
-		beheerderCB.addActionListener(new ActionListener() {
+		
+		beheerderCB.addItemListener(new ItemListener() 
+		{
 			
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{		
+			public void itemStateChanged(ItemEvent e) 
+			{
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(beheerderCB.getSelectedItem().equals(b.getNaam()))
 					{
 						m.setBeheerder(beheerderCB.getSelectedItem().toString());
 						geselecteerdeBeheerder = b;
+						wijzigen.setVisible(true);
+						toevoegen.setVisible(true);
+						beoordelen.setVisible(true);
+						verwijderen.setVisible(true);
 						opslaan.setVisible(true);
 						wijzigen.setSelected(b.KanWijzigen());
 						toevoegen.setSelected(b.KanToevoegen());
@@ -134,19 +142,29 @@ public class Administrator extends JPanel
 					}
 					else if(beheerderCB.getSelectedIndex() == 0)
 					{
-						wijzigen.setSelected(false);
-						toevoegen.setSelected(false);
-						beoordelen.setSelected(false);
-						verwijderen.setSelected(false);
+						wijzigen.setVisible(false);
+						toevoegen.setVisible(false);
+						beoordelen.setVisible(false);
+						verwijderen.setVisible(false);
 						opslaan.setVisible(false);
 					}
 				}
 			}
 		});
+			
+
 		
 		opslaan = new JLabel();
 		opslaan.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
 		opslaan.addMouseListener(new OpslaanListener());
+		
+		
+		//zorgen dat ze in het begin onzichtbaar staan
+		wijzigen.setVisible(false);
+		toevoegen.setVisible(false);
+		beoordelen.setVisible(false);
+		verwijderen.setVisible(false);
+		
 		
 		for(Beheerder s : m.getBeheerders())		//overloopt de ArrayList en vult de JComboBox met de namen
 		{
