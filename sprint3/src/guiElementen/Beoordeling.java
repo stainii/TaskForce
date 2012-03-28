@@ -70,17 +70,17 @@ public class Beoordeling extends JPanel
 		
 		
 		//______Controleert de rechten van een beheerder: 
-		if(m.getHuidigeBeheerder().KanBeoordelen() == false)
+		if(m.getBeheerder().KanBeoordelen() == false)
 		{
 			nogNietBeoordeeld.setVisible(false);
 			goedkeuren.setVisible(false);
 			afwijzen.setVisible(false);
 		}
-		if(m.getHuidigeBeheerder().KanWijzigen() == false)
+		if(m.getBeheerder().KanWijzigen() == false)
 		{
 			bewerken.setVisible(false);
 		}
-		if(m.getHuidigeBeheerder().KanVerwijderen() == false)
+		if(m.getBeheerder().KanVerwijderen() == false)
 		{
 			verwijderen.setVisible(false);
 		}

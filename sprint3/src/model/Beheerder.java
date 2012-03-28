@@ -7,7 +7,7 @@ public class Beheerder
 	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen;
 	private Model m;
 	
-	public Beheerder(int id, String n, boolean kt ,boolean kb, boolean kw, boolean kv, Model model)
+	public Beheerder(int id, String n, boolean kb ,boolean kw, boolean kv, boolean kt, Model model)
 	{
 		this.id=id;
 		this.naam=n;

@@ -14,8 +14,7 @@ public class Model
 	private ArrayList<DocumentCMS> documenten;
 	private ArrayList<Beheerder> beheerders;
 	private ArrayList<ChangeListener> listeners;
-	private String beheerder;
-	
+	private Beheerder beheerder;
 
 	public Model()
 	{
@@ -39,30 +38,10 @@ public class Model
 	{
 		return documenten;
 	}
-	public Beheerder getBeheerders()
+	public ArrayList<Beheerder> getBeheerders()
 	{	
-		for (Beheerder b: beheerders)
-		{
-			return b;
-		}
-		return null;
-	}
-	public Beheerder getHuidigeBeheerder()
-	{
-		
-		for(Beheerder b : getBeheerderArrayList())
-		{
-			if(b.getNaam().equalsIgnoreCase(beheerder))
-				return b;
-		}
-		return null;
-	}
-	
-	public ArrayList<Beheerder> getBeheerderArrayList()
-	{
 		return beheerders;
 	}
-	
 	
 	//setters
 	public void setBurgers(ArrayList<Burger> burgers)
@@ -156,14 +135,18 @@ public class Model
 	}
 	
 	// Getter en setter voor String beheerder : Naam dat wordt ingegeven in textfield bij login.
-	public String getBeheerder() 
+	public Beheerder getBeheerder() 
 	{
 		return beheerder;
 	}
 
-	public void setBeheerder(String beheerder) 
+	public void setBeheerder(String naam) 
 	{
-		this.beheerder = beheerder;
+		for (Beheerder b : beheerders)
+		{
+			if (b.getNaam().equals(naam))
+				beheerder = b;
+		}
 	}
 	
 	//Listeners

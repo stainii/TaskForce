@@ -43,7 +43,7 @@ public class Erfgoed
 	
 	public Erfgoed(Model m)
 	{
-		this (-1, "","","","","","","","","","","",m.getBeheerders().getId(),m);
+		this (-1, "","","","","","","","","","","",m.getBeheerder().getId(),m);
 	}
 	
 	// ------- getters ------------

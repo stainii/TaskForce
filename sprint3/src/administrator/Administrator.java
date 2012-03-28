@@ -445,7 +445,7 @@ public class Administrator extends JPanel
 			m.getBeheerders().setKanBeoordelen(beoordelen.isSelected());
 				
 			d.updateBeheerdersDatabank(geselecteerdeBeheerder);
-			d.getBeheerdersUitDatabank();	// opnieuw alle gegevens verversen ! Mss nog veranderen?? 
+			d.laadDatabank();	// opnieuw alle gegevens verversen ! Mss nog veranderen?? 
 		}
 
 		@Override

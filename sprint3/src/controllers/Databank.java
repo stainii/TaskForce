@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import model.Actie;
+import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -39,6 +40,7 @@ public class Databank
 		ArrayList<DocumentCMS> documenten = new ArrayList<DocumentCMS>();
 		ArrayList<Burger> burgers = new ArrayList<Burger>();
 		ArrayList<Erfgoed> erfgoed = new ArrayList<Erfgoed>();
+		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
 		Connection c = null;
 		Statement s = null;
 		PreparedStatement s2 = null;
@@ -88,9 +90,13 @@ public class Databank
 				}
 			}
 			
-			//KEVIN
-			//get beheerders uit databank komt hier
+			//beheerders (en admins) laden
+			rs = s.executeQuery("SELECT * FROM Beheerder");
 			
+			while (rs.next())
+			{				
+				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+			}
 		}
 		catch (SQLException e)
 		{
@@ -118,6 +124,7 @@ public class Databank
 		m.setDocumenten(documenten);
 		m.setErfgoed(erfgoed);
 		m.setBurgers(burgers);
+		m.setBeheerders(beheerders);
 	}
 	
 	
@@ -176,7 +183,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, id);
 			s.setString(2,"Toegevoegd");
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -227,7 +234,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, doc.getId());
 			s.setString(2,"Verwijderd");
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException e)
@@ -267,7 +274,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, erf.getId());
 			s.setString(2,"Verwijderd");
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException e)
@@ -309,7 +316,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, doc.getId());
 			s.setString(2,"Toegevoegd");
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException e)
@@ -391,7 +398,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
 			s.setInt(1, id);
 			s.setString(2,"Gewijzigd");
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -456,7 +463,7 @@ public class Databank
 			else
 				s.setString(2,"Afgekeurd");
 			
-			s.setString(3, m.getBeheerder());
+			s.setString(3, m.getBeheerder().getNaam());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -589,7 +596,7 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE Gebruikersnaam <> ? AND GebruikerRol = 'Beheerder' ORDER BY DatumTijd DESC;");
-			s.setString(1, m.getBeheerder());
+			s.setString(1, m.getBeheerder().getNaam());
 			
 			rs = s.executeQuery();
 		
@@ -634,7 +641,7 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			s = c.prepareStatement("SELECT * FROM LOGBOEK WHERE Gebruikersnaam = ? AND GebruikerRol = 'Beheerder' ORDER BY DatumTijd DESC;");
-			s.setString(1, m.getBeheerder());
+			s.setString(1, m.getBeheerder().getNaam());
 			
 			rs = s.executeQuery();
 		
@@ -704,7 +711,7 @@ public class Databank
 			s = c.prepareStatement("SELECT logboek.Actie, document.*, erfgoed.* FROM LOGBOEK logboek, DOCUMENT document, ERFGOED erfgoed WHERE logboek.DocumentId = document.DocumentId AND erfgoed.ErfgoedId = document.ErfgoedId AND DatumTijd> ? AND Gebruikersnaam <> ? AND GebruikerRol = 'Beheerder';");
 			
 			s.setTimestamp(1,tijd);
-			s.setString(2, m.getBeheerder());
+			s.setString(2, m.getBeheerder().getNaam());
 			
 			rs = s.executeQuery();
 			

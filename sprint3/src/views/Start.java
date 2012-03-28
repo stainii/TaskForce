@@ -36,6 +36,7 @@ import systemTray.InSystemTray;
 import controllers.Databank;
 import controllers.Login;
 
+import model.Beheerder;
 import model.Model;
 @SuppressWarnings("serial")
 public class Start extends JPanel implements ActionListener
@@ -172,16 +173,17 @@ public class Start extends JPanel implements ActionListener
 class Laden extends SwingWorker<Void,Void>
 {
 	private JFrame frame;
-	private String beheerder;
+	private Beheerder beheerder;
+	private String beheerderNaam;
 	private JLabel laden;
 	private InSystemTray systemTray;
 	private boolean sysTrayAlIngeladen;
 	
-	public Laden(JFrame f, JLabel laden, String beheerder, boolean sysTrayAlIngeladen)
+	public Laden(JFrame f, JLabel laden, String beheerderNaam, boolean sysTrayAlIngeladen)
 	{
 		this.frame =f;
-		this.beheerder = beheerder;
 		this.laden = laden;
+		this.beheerderNaam = beheerderNaam;
 		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
 	}
 	
@@ -193,15 +195,15 @@ class Laden extends SwingWorker<Void,Void>
 		laden.setText("Bezig met laden databank...");
 		
 		Model m =new Model();
-		m.setBeheerder(beheerder);
 		Databank d = new Databank(m);
 		d.laadDatabank();
+		m.setBeheerder(beheerderNaam);
 		
 		//Interface (GUI) maken en eigenschappen instellen
 		laden.setText("Bezig met laden interface...");
 		JFrame f = new JFrame();
 		f.setTitle("Herzele Erfgoed CMS");
-		f.add(new Hoofd(m,d, f));
+		f.add(new Hoofd(m, d, f));
 		f.setSize(new Dimension(1005,720));
 		f.setMinimumSize(new Dimension(1005,700));
 		f.setLocationRelativeTo(null);
