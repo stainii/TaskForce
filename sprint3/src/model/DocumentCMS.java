@@ -3,6 +3,7 @@ package model;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import controllers.Databank;
 
@@ -23,10 +24,11 @@ public class DocumentCMS
 	private String redenAfwijzing;
 	private BufferedImage image;
 	private int mediaId;
-	private DocumentCMS laatsteWijziging;	
+	private DocumentCMS laatsteWijziging;
+	private int burgerId;
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -41,23 +43,30 @@ public class DocumentCMS
 		this.typeDocument = type;
 		this.redenAfwijzing = redenAfwijzing;
 		this.mediaId = mediaId;
+		this.burgerId = burgerId;
 	}
 	
 	//deze constructor wordt gebruikt hij het toevoegen van een nieuw document aan een erfgoed
-	public DocumentCMS(Erfgoed e, Model m, Databank d)
+	public DocumentCMS(Erfgoed e, Model m, Databank d, int burgerId)
 	{
 		this.m = m;
 		this.id = -1;		//moet later uit databank ingelezen worden
 		this.titel ="";
 		this.status = "Goedgekeurd";
 		this.verwijderd = false;
-		this.setErfgoedId(e.getId());
+		this.erfgoedId = e.getId();
 		this.datumToegevoegd = d.getDatabankTijd();
 		this.datumGewijzigd = d.getDatabankTijd();
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
 		this.redenAfwijzing = "";
+		this.burgerId = burgerId; 
+	}
+
+
+	public int getBurgerId() {
+		return burgerId;
 	}
 
 
@@ -85,7 +94,15 @@ public class DocumentCMS
 	
 	public Burger getEigenaar()
 	{
-		return getErfgoed().getEigenaar();
+		ArrayList<Burger> burgers = m.getBurgers();
+		for (Burger b: burgers)
+		{
+			if (b.getId()==burgerId)
+			{
+				return b;
+			}
+		}
+		return null;
 	}
 	
 	public Timestamp getDatumToegevoegd()
@@ -146,6 +163,10 @@ public class DocumentCMS
 
 
 	// setters
+	public void setBurgerId(int burgerId) {
+		this.burgerId = burgerId;
+	}
+	
 	public void setId(int id)
 	{
 		this.id = id;

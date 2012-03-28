@@ -1,10 +1,4 @@
 package controllers;
-
-import java.sql.Date;
-
-import javax.swing.JOptionPane;
-
-import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
 
@@ -22,7 +16,7 @@ public class ErfgoedController
 		this.origineelErfgoed = e;
 		this.voorlopigErfgoed = new Erfgoed(e.getId(), e.getNaam(), e.getPostcode(), e.getDeelgemeente(),
 				e.getStraat(), e.getHuisnr(), e.getOmschrijving(), e.getTypeErfgoed(), e.getKenmerken(),
-				e.getGeschiedenis(), e.getNuttigeInfo(), e.getLink(), e.getBurgerId(), m);
+				e.getGeschiedenis(), e.getNuttigeInfo(), e.getLink(),e.isVerwijderd(), e.getBurgerId(), m);
 		this.m = m;
 		this.d = d;
 	}
@@ -42,7 +36,7 @@ public class ErfgoedController
 
 	public void verwijder()
 	{
-		//d.verwijderErfgoed(origineelErfgoed);		
+		d.verwijderErfgoed(origineelErfgoed);
 		m.verwijderErfgoed(origineelErfgoed);
 	}
 	
@@ -64,8 +58,9 @@ public class ErfgoedController
 		origineelErfgoed.setPostcode(voorlopigErfgoed.getPostcode());
 		origineelErfgoed.setStraat(voorlopigErfgoed.getStraat());
 		origineelErfgoed.setTypeErfgoed(voorlopigErfgoed.getTypeErfgoed());
+		origineelErfgoed.setVerwijderd(voorlopigErfgoed.isVerwijderd());
 		
-		//d.updateErfgoed(origineelErfgoed);
+		d.updateErfgoed(origineelErfgoed);
 		m.bewerkErfgoed(origineelErfgoed);
 		
 	}
@@ -83,11 +78,12 @@ public class ErfgoedController
 		origineelErfgoed.setPostcode(voorlopigErfgoed.getPostcode());
 		origineelErfgoed.setStraat(voorlopigErfgoed.getStraat());
 		origineelErfgoed.setTypeErfgoed(voorlopigErfgoed.getTypeErfgoed());
+		origineelErfgoed.setVerwijderd(voorlopigErfgoed.isVerwijderd());
 
 		/*origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());*/
 		
-		//origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
+		origineelErfgoed.setId(d.toevoegenErfgoed(origineelErfgoed));
 		m.toevoegenErfgoed(origineelErfgoed);
 	}
 }

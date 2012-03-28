@@ -18,12 +18,13 @@ public class Erfgoed
 	private String geschiedenis;
 	private String nuttigeInfo;
 	private String link;
+	private boolean verwijderd; 
 	private int burgerId;
 	
 	public Erfgoed(int id, String naam, String postcode, String deelgemeente,
 			String straat, String huisnr, String omschrijving,
 			String typeErfgoed, String kenmerken, String geschiedenis,
-			String nuttigeInfo, String link, int burgerId, Model m)
+			String nuttigeInfo, String link, boolean verwijderd, int burgerId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -38,16 +39,18 @@ public class Erfgoed
 		this.geschiedenis = geschiedenis; 
 		this.nuttigeInfo = nuttigeInfo;
 		this.link = link;
-		this.setBurgerId(burgerId);
+		this.verwijderd = verwijderd;
+		this.burgerId = burgerId;
 	}
 	
 	public Erfgoed(Model m)
 	{
-		this (-1, "","","","","","","","","","","",m.getBeheerder().getId(),m);
+		this (-1, "","","","","","","","","","","",false,m.getBeheerder().getId(),m);
 	}
 	
 	// ------- getters ------------
 	
+
 	public int getId()
 	{
 		return id;
@@ -97,6 +100,10 @@ public class Erfgoed
 		return link;
 	}
 	
+	public boolean isVerwijderd() {
+		return verwijderd;
+	}
+	
 	public int getBurgerId()
 	{
 		return burgerId;
@@ -106,13 +113,9 @@ public class Erfgoed
 		ArrayList<Burger> burgers = m.getBurgers();
 		for (Burger b: burgers)
 		{
-			ArrayList<Erfgoed> erfgoed = b.getErfgoed();
-			for (Erfgoed e: erfgoed)
+			if (b.getId()==burgerId)
 			{
-				if (e.equals(this))
-				{
-					return b;
-				}
+				return b;
 			}
 		}
 		return null;
@@ -195,6 +198,10 @@ public class Erfgoed
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+	
+	public void setVerwijderd(boolean verwijderd) {
+		this.verwijderd = verwijderd;
 	}
 
 	public void setBurgerId(int burgerId)

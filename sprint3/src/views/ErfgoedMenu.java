@@ -31,6 +31,7 @@ import controllers.Databank;
 import controllers.ErfgoedController;
 import controllers.PdfMaker;
 
+import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
@@ -46,7 +47,7 @@ public class ErfgoedMenu extends JPanel
 	private Model model;
 	private Databank databank;
 	private Hoofd hoofd;
-	private Erfgoed erfgoed;
+	private Erfgoed erfgoed; 
 	private JLabel overzicht, bewerken, verwijderen, nieuwOpslaan;
 	private ErfgoedContent content;
 	private ErfgoedController controller;
@@ -137,7 +138,7 @@ public class ErfgoedMenu extends JPanel
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
+					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, model.getBeheerder().getId()),hoofd));
 				}
 			});
 			add(toevoegen);

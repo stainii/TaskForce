@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -170,10 +172,16 @@ public class ErfgoedContent extends JPanel
 		tekstvakken.add(omschrijving);
 		omschrijving.setText(erfgoed.getOmschrijving());
 		omschrijving.setEditable(false);
-		omschrijving.setBorder(null);
 		omschrijving.setOpaque(false);
+		omschrijving.setBorder(null);
 		omschrijving.setForeground(Color.WHITE);
-		add(omschrijving,c);
+		omschrijving.setLineWrap(true);
+		JScrollPane omschrijvingScroll = new JScrollPane(omschrijving);
+		omschrijvingScroll.setBorder(null);
+		omschrijvingScroll.getViewport().setBorder(null);
+		omschrijvingScroll.setOpaque(false);
+		omschrijvingScroll.getViewport().setOpaque(false);
+		add(omschrijvingScroll,c);
 		
 		
 		//nuttige info
@@ -189,10 +197,16 @@ public class ErfgoedContent extends JPanel
 		tekstvakken.add(nuttigeInfo);
 		nuttigeInfo.setText(erfgoed.getNuttigeInfo());
 		nuttigeInfo.setEditable(false);
-		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setOpaque(false);
+		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setForeground(Color.WHITE);
-		add(nuttigeInfo,c);
+		nuttigeInfo.setLineWrap(true);
+		JScrollPane nuttigeInfoScroll = new JScrollPane(nuttigeInfo);
+		nuttigeInfoScroll.setBorder(null);
+		nuttigeInfoScroll.getViewport().setBorder(null);
+		nuttigeInfoScroll.setOpaque(false);
+		nuttigeInfoScroll.getViewport().setOpaque(false);
+		add(nuttigeInfoScroll,c);
 		
 		//kenmerken
 		c.gridx=1;
@@ -210,7 +224,13 @@ public class ErfgoedContent extends JPanel
 		kenmerken.setBorder(null);
 		kenmerken.setOpaque(false);
 		kenmerken.setForeground(Color.WHITE);
-		add(kenmerken,c);
+		kenmerken.setLineWrap(true);
+		JScrollPane kenmerkenScroll = new JScrollPane(kenmerken);
+		kenmerkenScroll.setBorder(null);
+		kenmerkenScroll.getViewport().setBorder(null);
+		kenmerkenScroll.setOpaque(false);
+		kenmerkenScroll.getViewport().setOpaque(false);
+		add(kenmerkenScroll,c);
 		
 		//geschiedenis
 		c.gridx=1;
@@ -228,7 +248,13 @@ public class ErfgoedContent extends JPanel
 		geschiedenis.setBorder(null);
 		geschiedenis.setOpaque(false);
 		geschiedenis.setForeground(Color.WHITE);
-		add(geschiedenis,c);
+		geschiedenis.setLineWrap(true);
+		JScrollPane geschiedenisScroll = new JScrollPane(geschiedenis);
+		geschiedenisScroll.setBorder(null);
+		geschiedenisScroll.getViewport().setBorder(null);
+		geschiedenisScroll.setOpaque(false);
+		geschiedenisScroll.getViewport().setOpaque(false);
+		add(geschiedenisScroll,c);
 		
 		
 		/**RECHTERKANT**/
@@ -243,6 +269,9 @@ public class ErfgoedContent extends JPanel
 		int x = 0;
 		int y = 1;
 		c.gridwidth=1;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
@@ -254,16 +283,23 @@ public class ErfgoedContent extends JPanel
 			
 			c.gridx=x;
 			c.gridy=y;
-			documentenPanel.add(new DocumentThumbnail(model, databank, doc, hoofd, null), c);
+			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
+			documentenPanel.add(l, c);
 		}
-		documentenPanel.setBackground(Color.BLACK);
 		
 		c.gridx=7;
 		c.gridy=3;
 		c.gridwidth=2;
-		c.gridheight=10;
+		c.gridheight=11;
+		c.weightx = 0;
+		c.weighty = 0;
 		c.fill = GridBagConstraints.VERTICAL;
-		add(documentenPanel,c);				
+		add(documentenPanel,c);	
+		
+		
+		//als het een nieuw erfgoed is (m.a.w. een leeg erfgoed), dan worden alles editable gezet
+		if (tekstvakken.get(0).getText().equals(""))
+			bewerken();
 	}
 	
 	public String[] bewerken()

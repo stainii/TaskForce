@@ -30,6 +30,7 @@ import views.Hoofd;
 
 import controllers.Databank;
 
+import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
@@ -39,6 +40,7 @@ public class ErfgoedPanel extends JPanel
 	private Model model;
 	private Databank databank;
 	private Erfgoed erfgoed;
+	private Burger burger;
 	private Hoofd hoofd;
 	private String[] types;
 	private JLabel toevoegen, pdf, groei, verklein;
@@ -250,7 +252,7 @@ public class ErfgoedPanel extends JPanel
 		{
 			//content.quit();
 				
-			hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
+			hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
 		}
 		});
 		add(toevoegen,c);
@@ -590,7 +592,7 @@ public class ErfgoedPanel extends JPanel
 			{
 				//content.quit();
 					
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank),hoofd));
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
 			}
 			});
 			add(toevoegen,c);

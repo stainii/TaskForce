@@ -58,7 +58,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(10,10,10,10) );
-		setPreferredSize(new Dimension(300,160));
+		setPreferredSize(new Dimension(300,155));
 		
 		addMouseListener(this);
 		
@@ -83,7 +83,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		c.insets = new Insets(15,0,0,0);
 		c.gridx = 1;
 		c.gridy = 4;
-		add(new JLabelFactory().getTegelTekst40("bevat " + e.getDocumenten().size() + " documenten"),c);
+		add(new JLabelFactory().getTegelTekst40("bevat " + e.getDocumenten().size() + (e.getDocumenten().size()==1?" document":" documenten")),c);
 		
 		c.gridx = 1;
 		c.gridy = 5;

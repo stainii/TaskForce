@@ -14,17 +14,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controllers.Databank;
-import controllers.PdfMaker;
 
 import model.DocumentCMS;
 import model.Model;
@@ -36,7 +32,7 @@ public class DocumentMenu extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/transparantGrijs.png"));
 	private Image background = backgroundIcon.getImage();
 	
-	private JLabel toevoegen, pdf;
+	private JLabel toevoegen;
 	private Model model;
 	private Databank databank;
 	private Hoofd hoofd;
@@ -102,7 +98,7 @@ public class DocumentMenu extends JPanel
 		add(overzicht);
 		
 		erfgoed =new JLabelFactory().getMenuTitel("Bekijk erfgoedfiche");
-		//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+		erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin_zwartwit.png")));
 		erfgoed.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -114,13 +110,13 @@ public class DocumentMenu extends JPanel
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug.png")));
+				erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin_zwartwit.png")));
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) 
 			{
-				//terug.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+				erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin.png")));
 			}
 			
 			@Override
@@ -159,59 +155,10 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank),hoofd));
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, model.getBeheerder().getId()),hoofd));
 			}
 		});
 		add(toevoegen);
-		
-		// pdf button
-		pdf = new JLabelFactory().getMenuTitel("Pdf maken");
-		pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-		pdf.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				
-				File file = new File("");
-				
-				int resul = chooser.showSaveDialog(hoofd);
-				if(resul == JFileChooser.APPROVE_OPTION)
-				{
-					file = chooser.getSelectedFile();
-				}
-				
-				new PdfMaker(document.getErfgoed(), model, file);
-				
-				try
-				{
-					Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
-				}
-				catch (IOException ioe){}
-			}
-		});
-		add(pdf);
 				
 		//toon andere documenten van het erfgoed
 		add(new JLabelFactory().getMenuTitel("Andere documenten"));
