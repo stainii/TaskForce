@@ -1,6 +1,9 @@
 package guiElementen;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -21,9 +24,29 @@ import model.Model;
  *  van het erfgoed weergegeven. Deze klasse is zo één thumbnail.
  */
 
+
+
 @SuppressWarnings("serial")
 public class DocumentThumbnail extends JPanel implements MouseListener
 {
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		if (document!=null)
+		{
+			if (document.getStatus().equals("Afgekeurd"))
+					g2.setColor(Color.RED);
+			else if (document.getStatus().equals("Goedgekeurd"))
+					g2.setColor(Color.GREEN);
+			else
+				g2.setColor(Color.WHITE);
+			g2.fillRect(0, 0, 85, 3);
+		}
+			
+	}
+
 	private Model model;
 	private Databank databank;
 	private DocumentCMS document;

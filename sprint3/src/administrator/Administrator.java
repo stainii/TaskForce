@@ -60,7 +60,7 @@ public class Administrator extends JPanel
 	private Model m;
 	private Databank d;
 	private JFrame frame;
-	private JLabel uitlogLbl,toevoegenAdminLbl,toevoegenBeheerderLbl,opslaan;
+	private JLabel uitlogLbl,toevoegenAdminLbl,toevoegenBeheerderLbl,opslaan,wijzigingLbl;
 	private JLabel opslaanNieuweBh, nieuweBh, terugBh;
 	private JCheckBox wijzigen, toevoegen, verwijderen, beoordelen;
 	private JCheckBox wijzigenNieuweBh, toevoegenNieuweBh, verwijderenNieuweBh, beoordelenNieuweBh;
@@ -149,6 +149,8 @@ public class Administrator extends JPanel
 						opslaan.setVisible(false);
 					}
 				}
+				
+				wijzigingLbl.setVisible(false);
 			}
 		});
 			
@@ -164,6 +166,9 @@ public class Administrator extends JPanel
 		toevoegen.setVisible(false);
 		beoordelen.setVisible(false);
 		verwijderen.setVisible(false);
+		
+		wijzigingLbl = new JLabel("Wijziging opgeslagen");
+		wijzigingLbl.setForeground(Color.white);
 		
 		
 		for(Beheerder s : m.getBeheerders())		//overloopt de ArrayList en vult de JComboBox met de namen
@@ -226,6 +231,11 @@ public class Administrator extends JPanel
 		c.gridy = 9;
 		opslaan.setVisible(false);
 		startpanel.add(opslaan, c);
+		
+		c.gridx = 2;
+		c.gridy = 10; 
+		wijzigingLbl.setVisible(false);
+		startpanel.add(wijzigingLbl,c);
 		
 		add(startpanel);
 		//_______________________________________________________**
@@ -461,6 +471,8 @@ public class Administrator extends JPanel
 			m.getBeheerder().setKanToevoegen(toevoegen.isSelected());
 			m.getBeheerder().setKanVerwijderen(verwijderen.isSelected());
 			m.getBeheerder().setKanBeoordelen(beoordelen.isSelected());
+			
+			wijzigingLbl.setVisible(true);
 				
 			d.updateBeheerdersDatabank(geselecteerdeBeheerder);	
 		}

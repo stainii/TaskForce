@@ -245,8 +245,8 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		//sorteren
 		add(new JLabelFactory().getMenuTitel("    Sorteren             "));
 		
-		burger = new JRadioButton("Burger         ");
-		erfgoed = new JRadioButton("Erfgoed     ");
+		burger = new JRadioButton("Auteur         ");
+		erfgoed = new JRadioButton("Naam erfgoed     ");
 		datum = new JRadioButton("Laatst toegevoegd");
 		typeDoc = new JRadioButton("Type     ");
 		
