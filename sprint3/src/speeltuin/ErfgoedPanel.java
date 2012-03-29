@@ -252,7 +252,7 @@ public class ErfgoedPanel extends JPanel
 		{
 			//content.quit();
 				
-			hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
+			//hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
 		}
 		});
 		add(toevoegen,c);
@@ -592,7 +592,7 @@ public class ErfgoedPanel extends JPanel
 			{
 				//content.quit();
 					
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
+				//hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, burger),hoofd));
 			}
 			});
 			add(toevoegen,c);

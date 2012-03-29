@@ -132,7 +132,7 @@ public class OverzichtController
 				resultaat.add(d);
 			else if (d.getErfgoed().getGeschiedenis().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getErfgoed().getHuisnr().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getErfgoed().getHuisnr()!= null && d.getErfgoed().getHuisnr().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getErfgoed().getKenmerken().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
@@ -167,6 +167,8 @@ public class OverzichtController
 			else if (d.getDatumToegevoegd().toString().toLowerCase().contains(s.toLowerCase()))
 					resultaat.add(d);
 			else if (d.getDatumGewijzigd().toString().toLowerCase().contains(s.toLowerCase()))
+				resultaat.add(d);
+			else if (d.getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 		}
 		
