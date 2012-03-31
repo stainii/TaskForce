@@ -25,13 +25,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.JTextComponent;
 
 import controllers.Databank;
 import controllers.ErfgoedController;
 import controllers.PdfMaker;
 
-import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;

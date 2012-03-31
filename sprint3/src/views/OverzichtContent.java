@@ -78,7 +78,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.h = h;
 		this.controller = c;
 		this.view = "TegelView";
-		this.typeContent = "Documenten";
+		this.typeContent = "Erfgoed";
 		
 		addComponentListener(this);
 		//m.addListener(this);
@@ -161,8 +161,8 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			}
 		});
 		
-		typeContentKiezer.add(documentenTitel, BorderLayout.NORTH);
 		typeContentKiezer.add(erfgoedTitel, BorderLayout.NORTH);
+		typeContentKiezer.add(documentenTitel, BorderLayout.NORTH);
 		if (typeContent.equals("Documenten"))
 			erfgoedTitel.setForeground(new Color(120,120,120));			
 		else
