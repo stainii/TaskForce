@@ -39,7 +39,7 @@ public class Beoordeling extends JPanel
 	private Databank databank;
 	private DocumentContent documentContent;
 	private DocumentController controller;
-	private MailThuis mail;
+	private MailSchool mail;
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
 	private Beheerder b;
@@ -251,7 +251,7 @@ public class Beoordeling extends JPanel
 					controller.goedkeuren();
 
 					//mail versturen
-					mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", controller.getOrigineelDocument(), new GoedkeurMail(controller.getOrigineelDocument()));
+					mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", controller.getOrigineelDocument(), new GoedkeurMail(controller.getOrigineelDocument()));
 					ex.execute(mail);
 					
 					redenAfwijzing.setVisible(false);
@@ -280,7 +280,7 @@ public class Beoordeling extends JPanel
 					
 						controller.afkeuren(redenAfwijzing.getReden());
 					
-						mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", controller.getOrigineelDocument(), new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
+						mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", controller.getOrigineelDocument(), new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
 						ex.execute(mail);
 						
 						redenAfwijzing.setEditable(false);

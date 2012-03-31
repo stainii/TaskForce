@@ -120,7 +120,6 @@ public class Administrator extends JPanel
 		
 		beheerderCB.addItemListener(new ItemListener() 
 		{
-			
 			@Override
 			public void itemStateChanged(ItemEvent e) 
 			{

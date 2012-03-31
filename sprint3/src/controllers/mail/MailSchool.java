@@ -14,9 +14,10 @@ public class MailSchool implements Runnable
 	private String onderwerp;
 	private SoortMail mail;
 	
-	private static final String host = "mail-uit.hogent.be";
+	private static final String host = "mail-out.hogent.be";
 	private static final int port =25;
 	private static final String user = "095599kl";
+	
 	private static final String pwd ="+ypbej!";
 	
 	public MailSchool(String aan, String onderwerp, DocumentCMS doc, SoortMail mail)
@@ -48,6 +49,7 @@ public class MailSchool implements Runnable
 			
 		
 			trans.connect(host,port,user,pwd);
+			//trans.connect(host,user);
 		
 			trans.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			trans.close();
