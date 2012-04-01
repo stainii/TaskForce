@@ -95,7 +95,9 @@ public class Databank
 			
 			while (rs.next())
 			{				
-				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Wachtwoord"), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
+						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
 			}
 		}
 		catch (SQLException e)
@@ -906,11 +908,13 @@ public class Databank
 			c = DriverManager.getConnection(connectie);
 			s = c.createStatement();
 			
-			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0");
+			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0 ORDER BY Gebruikersnaam");
 			
 			while (rs.next())
 			{				
-				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Wachtwoord"), rs.getBoolean("KanBeoordelen"), rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
+						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
 			}
 			m.setBeheerders(beheerders);
 		
@@ -946,7 +950,7 @@ public class Databank
 		}
 	}
 	
-	public void voegBeheerderToeAanDatabank(String n, String w, boolean kb, boolean kw, boolean kv, boolean kt)
+	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -954,17 +958,19 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam, Wachtwoord,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,0)");
+			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam,Achternaam,Wachtwoord,Email,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,?,?,0)");
 			s.setString(1,n);
-			s.setString(2, w);
-			s.setBoolean(3, kb);
-			s.setBoolean(4,kw);
-			s.setBoolean(5,kv);
-			s.setBoolean(6,kt);
+			s.setString(2,a);
+			s.setString(3, w);
+			s.setString(4,em);
+			s.setBoolean(5, kb);
+			s.setBoolean(6,kw);
+			s.setBoolean(7,kv);
+			s.setBoolean(8,kt);
 			
 			s.executeUpdate();	
 			
-			m.toevoegenBeheerder(new Beheerder(-1,n, w, kb, kw, kv, kt,m));
+			m.toevoegenBeheerder(new Beheerder(-1,n,a, w,em, kb, kw, kv, kt,m));
 		}
 		catch (SQLException e)
 		{
