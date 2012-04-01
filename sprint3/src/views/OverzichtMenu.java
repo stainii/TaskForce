@@ -33,8 +33,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.net.httpserver.Filter;
+
 import controllers.Databank;
-import controllers.OverzichtController;
+import controllers.OverzichtDocumentenController;
+import controllers.OverzichtErfgoedController;
 
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -50,9 +53,10 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld/*, afbeelding, tekst, video*/;
 	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
-	private JLabel zoekBtn, toevoegen;
+	private JLabel zoekBtn, toevoegen, filteren;
 	
-	private OverzichtController c;
+	private OverzichtDocumentenController c1;
+	private OverzichtErfgoedController c2;
 	private OverzichtContent linkerscherm;
 	private Hoofd hoofd;
 	private Model model;
@@ -66,9 +70,10 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public OverzichtMenu(Model m, Databank d, OverzichtController controller, OverzichtContent content, Hoofd h)
+	public OverzichtMenu(Model m, Databank d, OverzichtDocumentenController controller1, OverzichtErfgoedController controller2, OverzichtContent content, Hoofd h)
 	{
-		this.c = controller;
+		this.c1 = controller1;
+		this.c2 = controller2;
 		this.hoofd = h;
 		this.model = m;
 		this.databank = d;
@@ -119,7 +124,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		add(toevoegen);
 		
 		//switch tussen tegel- of lijstview 
-		add(new OverzichtKiezer(linkerscherm, controller));
+		add(new OverzichtKiezer(linkerscherm, controller1));
 		
 		//zoeken
 		add(new JLabelFactory().getMenuTitel("    Zoekfunctie"));
@@ -194,53 +199,34 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			}
 		});
 		add(zoekBtn);
-
-
-		//filteren
-		add(new JLabelFactory().getMenuTitel("    Filter             "));
 		
+		//filteren
+		filteren = new JLabelFactory().getMenuTitel("    Filter             ");
+		add(filteren);
+	
 		goedgekeurd = new JCheckBox("Goedgekeurd");
 		afgekeurd = new JCheckBox("Afgekeurd");
 		nietBeoordeeld = new JCheckBox("Nog niet beoordeeld");
-		/*afbeelding = new JCheckBox("Afbeelding    "); 
-		tekst = new JCheckBox("Tekst            "); 
-		video = new JCheckBox("Video          ");*/ 
-		
+
 		goedgekeurd.setOpaque(false);
 		afgekeurd.setOpaque(false);
 		nietBeoordeeld.setOpaque(false);
-		/*afbeelding.setOpaque(false);
-		tekst.setOpaque(false);
-		video.setOpaque(false);*/
-		
+	
 		goedgekeurd.setForeground(Color.white);
 		afgekeurd.setForeground(Color.white);
 		nietBeoordeeld.setForeground(Color.white);		
-		/*afbeelding.setForeground(Color.white);
-		tekst.setForeground(Color.white);
-		video.setForeground(Color.white);*/
 		
 		goedgekeurd.setSelected(false);
 		afgekeurd.setSelected(false);
 		nietBeoordeeld.setSelected(true);
-		/*afbeelding.setSelected(false);
-		tekst.setSelected(false);
-		video.setSelected(false);*/
 		
 		goedgekeurd.addChangeListener(this);
 		afgekeurd.addChangeListener(this); 
 		nietBeoordeeld.addChangeListener(this); 
-		/*afbeelding.addChangeListener(this); 
-		tekst.addChangeListener(this); 
-		video.addChangeListener(this);*/ 
-		
+	
 		add(goedgekeurd);
 		add(afgekeurd);
 		add(nietBeoordeeld);
-		/*add(afbeelding);
-		add(tekst);
-		add(video);*/
-		
 		
 		//sorteren
 		add(new JLabelFactory().getMenuTitel("    Sorteren             "));
@@ -297,51 +283,74 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		add(typeDoc);
 		
 		goedgekeurd.grabFocus(); 	//zodat het zoekveld niet direct een rood icoontje heeft
+		
+		veranderType();
 		stateChanged(new ChangeEvent(this));
 	}
 
+	
+	public void veranderType()
+	{
+		if (linkerscherm.getTypeContent().equals("Erfgoed"))
+		{
+			goedgekeurd.setVisible(false);
+			afgekeurd.setVisible(false);
+			nietBeoordeeld.setVisible(false);
+			filteren.setVisible(false);
+		}
+		else
+		{
+			goedgekeurd.setVisible(true);
+			afgekeurd.setVisible(true);
+			nietBeoordeeld.setVisible(true);
+			filteren.setVisible(true);
+		}
+	}
+	
 	@Override
 	public void stateChanged(ChangeEvent e)
 	{	
+		veranderType();
+		
 		//werkt samen met de controller om te filteren en het resultaat te sorteren
-		ArrayList<DocumentCMS> gefilterd = new ArrayList<DocumentCMS>();
+		ArrayList<DocumentCMS> gefilterd1 = new ArrayList<DocumentCMS>();
+		ArrayList<Erfgoed> gefilterd2 = model.getErfgoed();
+		
 		if (goedgekeurd.isSelected())
-			gefilterd.addAll(c.filterOpStatus("Goedgekeurd"));
+			gefilterd1.addAll(c1.filterOpStatus("Goedgekeurd"));
 		if (afgekeurd.isSelected())
-			gefilterd.addAll(c.filterOpStatus("Afgekeurd"));
+			gefilterd1.addAll(c1.filterOpStatus("Afgekeurd"));
 		if (nietBeoordeeld.isSelected())
-			gefilterd.addAll(c.filterOpStatus("Nog niet beoordeeld"));
-		/*if (afbeelding.isSelected())
-			gefilterd.addAll(c.filterOpType("Afbeelding"));
-		if (tekst.isSelected())
-			gefilterd.addAll(c.filterOpType("Tekst"));
-		if (video.isSelected())
-			gefilterd.addAll(c.filterOpType("Video"));*/
+			gefilterd1.addAll(c1.filterOpStatus("Nog niet beoordeeld"));
 		
 		if (!zoekTxt.getText().equals("") && !zoekTxt.getText().equals("zoeken..."))
 		{
-			gefilterd = c.zoek(zoekTxt.getText(), gefilterd);
+			gefilterd1 = c1.zoek(zoekTxt.getText(), gefilterd1);
+			gefilterd2 = c2.zoek(zoekTxt.getText(), gefilterd2);
 		}
 		
-		c.setInTeLaden(gefilterd);
+		c1.setInTeLaden(gefilterd1);
+		c2.setInTeLaden(gefilterd2);
 		
 		if (burger.isSelected())
 		{
-			c.sorteerOpBurger();
+			c1.sorteerOpBurger();
+			c2.sorteerOpBurger();
 		}
 		else if (erfgoed.isSelected())
 		{
-			c.sorteerOpErfgoed(); 
+			c1.sorteerOpErfgoed();
+			c2.sorteerOpErfgoed();
 		}
 		else if (datum.isSelected())
 		{
-			c.sorteerOpLaatstToegevoegd();
+			c1.sorteerOpLaatstToegevoegd();
+			c2.sorteerOpLaatstToegevoegd();
 		}
 		else if (typeDoc.isSelected())
 		{
-			c.sorteerOpType();
+			c1.sorteerOpType();
+			c2.sorteerOpType();
 		}
-		
-		linkerscherm.stateChanged(e);
 	}
 }

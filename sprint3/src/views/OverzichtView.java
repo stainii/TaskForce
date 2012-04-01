@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 
 import controllers.Databank;
-import controllers.OverzichtController;
+import controllers.OverzichtDocumentenController;
+import controllers.OverzichtErfgoedController;
 
 import model.Model;
 
@@ -24,9 +25,10 @@ public class OverzichtView extends JPanel
 		setOpaque(false);		
 		setLayout(new BorderLayout());
 		
-		OverzichtController c = new OverzichtController(m,d);
-		content = new OverzichtContent(m, d, h, c);
-		menu = new OverzichtMenu(m, d, c, content, h);
+		OverzichtDocumentenController c1 = new OverzichtDocumentenController(m,d);
+		OverzichtErfgoedController c2 = new OverzichtErfgoedController(m,d);
+		content = new OverzichtContent(m, d, h, c1, c2);
+		menu = new OverzichtMenu(m, d, c1, c2, content, h);
 		
 		add(content, BorderLayout.CENTER);
 		add(menu,BorderLayout.EAST);

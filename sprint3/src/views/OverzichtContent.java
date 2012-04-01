@@ -9,7 +9,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 import guiElementen.JLabelFactory;
 import guiElementen.RijDocument;
@@ -22,7 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import controllers.Databank;
-import controllers.OverzichtController;
+import controllers.OverzichtDocumentenController;
+import controllers.OverzichtErfgoedController;
 import model.Model;
 
 /**Toont alle tegels of rijen. Is de linkerkant van OverzichtView.
@@ -59,7 +59,8 @@ import model.Model;
 @SuppressWarnings("serial")
 public class OverzichtContent extends JPanel implements ComponentListener, ChangeListener
 {
-	private OverzichtController controller;
+	private OverzichtDocumentenController controller1;
+	private OverzichtErfgoedController controller2;
 	private JPanel docPanel, scrollPanel;
 	private JLabel documentenTitel, erfgoedTitel;
 	private Model m;
@@ -71,18 +72,21 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	private String typeContent;
 		
 
-	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtController c)
+	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtDocumentenController c1, OverzichtErfgoedController c2)
 	{
 		this.m = m;
 		this.d = d;
 		this.h = h;
-		this.controller = c;
+		this.controller1 = c1;
+		this.controller2 = c2;
 		this.view = "TegelView";
 		this.typeContent = "Erfgoed";
 		
 		addComponentListener(this);
-		//m.addListener(this);
-		controller.addListener(this);
+		
+		controller1.addListener(this);
+		controller2.addListener(this);
+		
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
@@ -188,10 +192,13 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		add(scrollPanel, BorderLayout.SOUTH);
 		
 	}
+	public String getTypeContent() {
+		return typeContent;
+	}
 	public void setTypeContent(String string)
 	{
 		typeContent = string;
-		stateChanged(new ChangeEvent(this));
+		m.notifyListeners();
 	}
 	public String getView() {
 		return view;
@@ -226,44 +233,34 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				docPanel.setLayout(new GridLayout(bepaalAantalOpScherm(),1));
 			}
 			
-			ArrayList<Integer> gepasseerdeErfgoed = new ArrayList<Integer>();
 			
-			int maximum = ondergrens+aantalTegels;
-			
-			for (int i=ondergrens;i<maximum && i<controller.getInTeLaden().size() ;i++)
+			if (typeContent.equals("Documenten"))
 			{
-				if (view.equals("TegelView") && typeContent.equals("Documenten"))
+				for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller1.getInTeLaden().size() ;i++)
 				{
-					docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
-				}
-				else if (view.equals("TegelView") && typeContent.equals("Erfgoed"))
-				{
-					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					if (view.equals("TegelView"))
 					{
-						docPanel.add(new TegelErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
-						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+						docPanel.add(new TegelDocument(m,d,controller1.getInTeLaden().get(i),h));
 					}
-					else
+					else if (view.equals("LijstView"))
 					{
-						maximum++;	//tijdelijke oplossing
+						docPanel.add(new RijDocument(m,d,controller1.getInTeLaden().get(i),h));
 					}
 				}
-				else if (view.equals("LijstView") && typeContent.equals("Documenten"))
+			}
+			else
+			{
+				for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller2.getInTeLaden().size() ;i++)
 				{
-					docPanel.add(new RijDocument(m,d,controller.getInTeLaden().get(i),h));
-				}
-				else if (view.equals("LijstView") && typeContent.equals("Erfgoed"))
-				{
-					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					if (view.equals("TegelView"))
 					{
-						docPanel.add(new RijErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
-						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+						docPanel.add(new TegelErfgoed(m,d,controller2.getInTeLaden().get(i),h));
 					}
-					else
+					else if (view.equals("LijstView"))
 					{
-						maximum++;	//tijdelijke oplossing
+						docPanel.add(new RijErfgoed(m,d,controller2.getInTeLaden().get(i),h));
 					}
-				}
+				}				
 			}
 			
 			docPanel.setVisible(true);
@@ -550,7 +547,10 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	
 	public int bepaalAantalPaginas()
 	{
-		return (int)(Math.ceil(((double)(controller.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
+		if (typeContent.equals("Documenten"))
+			return (int)(Math.ceil(((double)(controller1.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
+		else
+			return (int)(Math.ceil(((double)(controller2.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
 	}
 	
 	public int bepaalAantalOpScherm()

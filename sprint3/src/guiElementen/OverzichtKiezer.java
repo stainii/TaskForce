@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 
 import views.OverzichtContent;
-import controllers.OverzichtController;
+import controllers.OverzichtDocumentenController;
 
 /** Zorgt voor de keuze tussen tabelview en lijstview in het overzichtscherm**/
 @SuppressWarnings("serial")
@@ -21,9 +21,9 @@ public class OverzichtKiezer extends JPanel
 {
 	private JLabel lijst, tegel;
 	private OverzichtContent content;
-	private OverzichtController controller;
+	private OverzichtDocumentenController controller;
 	
-	public OverzichtKiezer(OverzichtContent conte, OverzichtController contr)
+	public OverzichtKiezer(OverzichtContent conte, OverzichtDocumentenController contr)
 	{
 		this.content = conte;
 		this.controller = contr;
