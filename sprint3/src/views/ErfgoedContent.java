@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 
-import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

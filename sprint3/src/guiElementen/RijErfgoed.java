@@ -9,8 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
 import views.DocumentView;
@@ -59,7 +62,6 @@ public class RijErfgoed extends JPanel implements MouseListener
 		add(new JLabelFactory().getTegelTekst(e.getTypeErfgoed()));
 		add(new JLabelFactory().getTegelTekst(e.getDeelgemeente()));
 		add(new JLabelFactory().getTegelTekst(e.getEigenaar().getNaam()));
-		add(new JLabelFactory().getTegelTekst(e.getDocumenten().size() + " documenten"));
 		
 		JPanel documenten = new JPanel(new FlowLayout());
 		documenten.setBorder(new EmptyBorder(10,0,0,0));
@@ -68,6 +70,64 @@ public class RijErfgoed extends JPanel implements MouseListener
 		documenten.add(new JLabelFactory().getGoedgekeurd(e.getAantalDocumentenMetStatus("Goedgekeurd") + ""));
 		documenten.add(new JLabelFactory().getAfgekeurd(e.getAantalDocumentenMetStatus("Afgekeurd") + ""));
 		add(documenten);
+		
+		JLabel documentToevoegen = new JLabel();
+		documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/documentToevoegen.png")));
+		documentToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd));
+			}
+		});
+		if(m.getBeheerder().KanToevoegen() == false) // mag beheerder toevoegen?
+			documentToevoegen.setVisible(false);
+		
+		add(documentToevoegen);
+		
+		JLabel verwijderen = new JLabel();
+		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
+		verwijderen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (JOptionPane.showConfirmDialog(null, "Als u dit erfgoed verwijderd worden alle bijhorende documenten ook verwijderd. Weet u zeker dat u dit wilt doen?", "Opgelet!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+				{
+					model.verwijderErfgoed(erfgoed);
+					data.verwijderErfgoed(erfgoed);
+				}
+			}
+		});
+		if(m.getBeheerder().KanVerwijderen() == false) // mag beheerder verwijderen?
+			verwijderen.setVisible(false);
+		
+		add(verwijderen);
 	}
 	
 	@Override

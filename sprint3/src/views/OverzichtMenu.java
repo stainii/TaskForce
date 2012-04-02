@@ -53,7 +53,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private JCheckBox goedgekeurd, afgekeurd, nietBeoordeeld/*, afbeelding, tekst, video*/;
 	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
-	private JLabel zoekBtn, toevoegen, filteren;
+	private JLabel zoekBtn, filteren;
 	
 	private OverzichtDocumentenController c1;
 	private OverzichtErfgoedController c2;
@@ -86,42 +86,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
-		setLayout(f);		
-
-		//toevoegbutton
-		toevoegen = new JLabelFactory().getMenuTitel("Erfgoed toevoegen");
-		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
-		toevoegen.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd));
-			}
-		});
-		
-		if (m.getBeheerder().KanToevoegen() == false)
-			toevoegen.setVisible(false);
-		
-		add(toevoegen);
+		setLayout(f);
 		
 		//switch tussen tegel- of lijstview 
 		add(new OverzichtKiezer(linkerscherm, controller1));
@@ -199,6 +164,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			}
 		});
 		add(zoekBtn);
+
 		
 		//filteren
 		filteren = new JLabelFactory().getMenuTitel("    Filter             ");
