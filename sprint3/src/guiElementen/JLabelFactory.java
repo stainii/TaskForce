@@ -4,7 +4,6 @@ package guiElementen;
  *   gebruiken we een "JLabel-fabriek". Deze maakt voor ons de font voor de gewone tekst, voor de titel, ...
  */
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;

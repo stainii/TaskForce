@@ -24,6 +24,7 @@ import controllers.DocumentController;
 public class RedenAfwijzing extends JPanel
 {
 	private JTextField redenTxt;
+	@SuppressWarnings("rawtypes")
 	private JComboBox defaultRedenenCbx;
 	
 	private String[] defaultRedenen = new String[4];
@@ -61,6 +62,7 @@ public class RedenAfwijzing extends JPanel
 		}
 	}
 		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public RedenAfwijzing(DocumentController cont)
 	{		
 		//deze default redenen moeten uit settings gehaald worden

@@ -33,9 +33,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.net.httpserver.Filter;
-
-import controllers.Databank;
 import controllers.OverzichtDocumentenController;
 import controllers.OverzichtErfgoedController;
 
@@ -58,9 +55,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private OverzichtDocumentenController c1;
 	private OverzichtErfgoedController c2;
 	private OverzichtContent linkerscherm;
-	private Hoofd hoofd;
 	private Model model;
-	private Databank databank;
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -70,13 +65,11 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public OverzichtMenu(Model m, Databank d, OverzichtDocumentenController controller1, OverzichtErfgoedController controller2, OverzichtContent content, Hoofd h)
+	public OverzichtMenu(Model m, OverzichtDocumentenController controller1, OverzichtErfgoedController controller2, OverzichtContent content)
 	{
 		this.c1 = controller1;
 		this.c2 = controller2;
-		this.hoofd = h;
 		this.model = m;
-		this.databank = d;
 		this.linkerscherm = content;
 		
 		m.addListener(this);

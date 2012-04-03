@@ -36,7 +36,6 @@ import systemTray.InSystemTray;
 import controllers.Databank;
 import controllers.Login;
 
-import model.Beheerder;
 import model.Model;
 @SuppressWarnings("serial")
 public class Start extends JPanel implements ActionListener
@@ -173,7 +172,6 @@ public class Start extends JPanel implements ActionListener
 class Laden extends SwingWorker<Void,Void>
 {
 	private JFrame frame;
-	private Beheerder beheerder;
 	private String beheerderNaam;
 	private JLabel laden;
 	private InSystemTray systemTray;

@@ -18,7 +18,6 @@ import javax.swing.text.JTextComponent;
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
-import model.Beheerder;
 import model.DocumentCMS;
 import model.Model;
 import controllers.Databank;
@@ -26,7 +25,6 @@ import controllers.DocumentController;
 import controllers.mail.AfgekeurdMail;
 import controllers.mail.GoedkeurMail;
 import controllers.mail.MailSchool;
-import controllers.mail.MailThuis;
 
 /** Deel van de GUI waarin je een document goedkeurt of afkeurt. **/
 
@@ -42,7 +40,6 @@ public class Beoordeling extends JPanel
 	private MailSchool mail;
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
-	private Beheerder b;
 	
 	
 	public Beoordeling(Databank d, Model m , DocumentCMS doc, Hoofd h, DocumentContent dc, DocumentController cont)
@@ -251,7 +248,7 @@ public class Beoordeling extends JPanel
 					controller.goedkeuren();
 
 					//mail versturen
-					mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", controller.getOrigineelDocument(), new GoedkeurMail(controller.getOrigineelDocument()));
+					mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", new GoedkeurMail(controller.getOrigineelDocument()));
 					ex.execute(mail);
 					
 					redenAfwijzing.setVisible(false);
@@ -280,7 +277,7 @@ public class Beoordeling extends JPanel
 					
 						controller.afkeuren(redenAfwijzing.getReden());
 					
-						mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", controller.getOrigineelDocument(), new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
+						mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
 						ex.execute(mail);
 						
 						redenAfwijzing.setEditable(false);

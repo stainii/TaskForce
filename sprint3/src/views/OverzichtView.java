@@ -28,7 +28,7 @@ public class OverzichtView extends JPanel
 		OverzichtDocumentenController c1 = new OverzichtDocumentenController(m,d);
 		OverzichtErfgoedController c2 = new OverzichtErfgoedController(m,d);
 		content = new OverzichtContent(m, d, h, c1, c2);
-		menu = new OverzichtMenu(m, d, c1, c2, content, h);
+		menu = new OverzichtMenu(m, c1, c2, content);
 		
 		add(content, BorderLayout.CENTER);
 		add(menu,BorderLayout.EAST);

@@ -1,7 +1,5 @@
 package controllers;
 
-import java.sql.Date;
-
 import javax.swing.JOptionPane;
 
 import model.DocumentCMS;
