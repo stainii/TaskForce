@@ -3,13 +3,11 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import model.DocumentCMS;
 
 /**De instellingen voor het versturen van een mail in school*/
 
 public class MailSchool implements Runnable
 {
-	private DocumentCMS document;
 	private String aan;
 	private String onderwerp;
 	private SoortMail mail;
@@ -20,11 +18,10 @@ public class MailSchool implements Runnable
 	
 	private static final String pwd ="+ypbej!";
 	
-	public MailSchool(String aan, String onderwerp, DocumentCMS doc, SoortMail mail)
+	public MailSchool(String aan, String onderwerp, SoortMail mail)
 	{
 		this.aan=aan;
 		this.onderwerp=onderwerp;
-		this.document=doc;
 		this.mail=mail;
 	}
 

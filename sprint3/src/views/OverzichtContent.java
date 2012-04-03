@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 import guiElementen.JLabelFactory;
 import guiElementen.RijDocument;
@@ -17,12 +19,15 @@ import guiElementen.RijErfgoed;
 import guiElementen.TegelDocument;
 import guiElementen.TegelErfgoed;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import controllers.Databank;
-import controllers.OverzichtController;
+import controllers.OverzichtDocumentenController;
+import controllers.OverzichtErfgoedController;
+import model.Erfgoed;
 import model.Model;
 
 /**Toont alle tegels of rijen. Is de linkerkant van OverzichtView.
@@ -59,34 +64,41 @@ import model.Model;
 @SuppressWarnings("serial")
 public class OverzichtContent extends JPanel implements ComponentListener, ChangeListener
 {
-	private OverzichtController controller;
+	private OverzichtDocumentenController controller1;
+	private OverzichtErfgoedController controller2;
 	private JPanel docPanel, scrollPanel;
-	private JLabel documentenTitel, erfgoedTitel;
-	private Model m;
-	private Databank d;
-	private Hoofd h;
+	private JLabel documentenTitel, erfgoedTitel, documentToevoegen, erfgoedToevoegen;
+	private Model model;
+	private Databank databank;
+	private Hoofd hoofd;
 	private int ondergrens;
 	private int huidigePagina;
 	private String view;
 	private String typeContent;
 		
 
-	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtController c)
+	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtDocumentenController c1, OverzichtErfgoedController c2)
 	{
-		this.m = m;
-		this.d = d;
-		this.h = h;
-		this.controller = c;
+		this.model = m;
+		this.databank = d;
+		this.hoofd = h;
+		this.controller1 = c1;
+		this.controller2 = c2;
 		this.view = "TegelView";
 		this.typeContent = "Erfgoed";
 		
 		addComponentListener(this);
-		//m.addListener(this);
-		controller.addListener(this);
+		
+		controller1.addListener(this);
+		controller2.addListener(this);
+		
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		//titels
+		//titels en toevoegenlbl
+		JPanel bovenkant = new JPanel(new GridBagLayout());
+		bovenkant.setOpaque(false);
+		
 		JPanel typeContentKiezer = new JPanel();
 		FlowLayout f = new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
@@ -161,13 +173,96 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			}
 		});
 		
-		typeContentKiezer.add(erfgoedTitel, BorderLayout.NORTH);
-		typeContentKiezer.add(documentenTitel, BorderLayout.NORTH);
 		if (typeContent.equals("Documenten"))
 			erfgoedTitel.setForeground(new Color(120,120,120));			
 		else
 			documentenTitel.setForeground(new Color(120,120,120));
-		add(typeContentKiezer,BorderLayout.NORTH);
+		
+		typeContentKiezer.add(erfgoedTitel, BorderLayout.NORTH);
+		typeContentKiezer.add(documentenTitel, BorderLayout.NORTH);
+		
+		erfgoedToevoegen = new JLabelFactory().getMenuTitel("Erfgoed toevoegen");
+		erfgoedToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+		erfgoedToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				erfgoedToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				erfgoedToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd));
+			}
+		});
+		
+		documentToevoegen = new JLabelFactory().getMenuTitel("Document toevoegen");
+		documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+		documentToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				setTypeContent("Erfgoed");
+				documentenTitel.setForeground(new Color(120,120,120));
+				erfgoedTitel.setForeground(Color.WHITE);
+				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+			}
+		});
+		documentToevoegen.setVisible(false);
+		
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		bovenkant.add(typeContentKiezer, c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		c.insets = new Insets(0,10,0,10);
+		bovenkant.add(erfgoedToevoegen, c);
+		
+		c.gridx = 2;
+		bovenkant.add(documentToevoegen, c);
+		
+		add(bovenkant,BorderLayout.NORTH);
 		
 		
 		//paneel met de documenten
@@ -188,10 +283,27 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		add(scrollPanel, BorderLayout.SOUTH);
 		
 	}
+	public String getTypeContent() {
+		return typeContent;
+	}
 	public void setTypeContent(String string)
 	{
 		typeContent = string;
-		stateChanged(new ChangeEvent(this));
+		model.notifyListeners();
+		
+		if (model.getBeheerder().KanToevoegen())
+		{
+			if (string.equals("Documenten"))
+			{
+				documentToevoegen.setVisible(true);
+				erfgoedToevoegen.setVisible(false);
+			}
+			else
+			{
+				documentToevoegen.setVisible(false);
+				erfgoedToevoegen.setVisible(true);
+			}
+		}
 	}
 	public String getView() {
 		return view;
@@ -226,44 +338,34 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				docPanel.setLayout(new GridLayout(bepaalAantalOpScherm(),1));
 			}
 			
-			ArrayList<Integer> gepasseerdeErfgoed = new ArrayList<Integer>();
 			
-			int maximum = ondergrens+aantalTegels;
-			
-			for (int i=ondergrens;i<maximum && i<controller.getInTeLaden().size() ;i++)
+			if (typeContent.equals("Documenten"))
 			{
-				if (view.equals("TegelView") && typeContent.equals("Documenten"))
+				for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller1.getInTeLaden().size() ;i++)
 				{
-					docPanel.add(new TegelDocument(m,d,controller.getInTeLaden().get(i),h));
-				}
-				else if (view.equals("TegelView") && typeContent.equals("Erfgoed"))
-				{
-					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					if (view.equals("TegelView"))
 					{
-						docPanel.add(new TegelErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
-						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+						docPanel.add(new TegelDocument(model,databank,controller1.getInTeLaden().get(i),hoofd));
 					}
-					else
+					else if (view.equals("LijstView"))
 					{
-						maximum++;	//tijdelijke oplossing
+						docPanel.add(new RijDocument(model,databank,controller1.getInTeLaden().get(i),hoofd));
 					}
 				}
-				else if (view.equals("LijstView") && typeContent.equals("Documenten"))
+			}
+			else
+			{
+				for (int i=ondergrens;i<ondergrens+aantalTegels && i<controller2.getInTeLaden().size() ;i++)
 				{
-					docPanel.add(new RijDocument(m,d,controller.getInTeLaden().get(i),h));
-				}
-				else if (view.equals("LijstView") && typeContent.equals("Erfgoed"))
-				{
-					if (!gepasseerdeErfgoed.contains(controller.getInTeLaden().get(i).getErfgoedId()))
+					if (view.equals("TegelView"))
 					{
-						docPanel.add(new RijErfgoed(m,d,controller.getInTeLaden().get(i).getErfgoed(),h));
-						gepasseerdeErfgoed.add(controller.getInTeLaden().get(i).getErfgoedId());
+						docPanel.add(new TegelErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd));
 					}
-					else
+					else if (view.equals("LijstView"))
 					{
-						maximum++;	//tijdelijke oplossing
+						docPanel.add(new RijErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd));
 					}
-				}
+				}				
 			}
 			
 			docPanel.setVisible(true);
@@ -550,12 +652,15 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	
 	public int bepaalAantalPaginas()
 	{
-		return (int)(Math.ceil(((double)(controller.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
+		if (typeContent.equals("Documenten"))
+			return (int)(Math.ceil(((double)(controller1.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
+		else
+			return (int)(Math.ceil(((double)(controller2.getInTeLaden().size())) / ((double)bepaalAantalOpScherm())));
 	}
 	
 	public int bepaalAantalOpScherm()
 	{
-		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)(this.getHeight() / 150)) : (int) (this.getHeight() / 50));
+		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)(this.getHeight() / 150)) : (int) (this.getHeight() / 50) - 1);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package guiElementen;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -12,6 +11,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -20,8 +20,8 @@ import controllers.Databank;
 import views.DocumentView;
 import views.ErfgoedView;
 import views.Hoofd;
-import views.Start;
 
+import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
 
@@ -65,39 +65,100 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		c.insets = new Insets(12,0,0,0);
+		c.insets = new Insets(22,0,0,0);
 		c.gridx = 1;
 		c.gridy = 1;
-		c.gridwidth = 4;
+		c.gridwidth = 6;
 		add(new JLabelFactory().getTegelTitel(e.getNaam()),c);
 		
 		c.insets = new Insets(0,0,0,0);
 		c.gridy = 2;
-		c.gridwidth = 4;
+		c.gridwidth = 6;
 		add(new JLabelFactory().getTegelTekst40(e.getTypeErfgoed() + " in " + e.getDeelgemeente()),c);
 		
 		c.gridx = 1;
 		c.gridy = 3;
 		add(new JLabelFactory().getTegelTekst40(e.getEigenaar().getNaam()),c);
 		
-		c.insets = new Insets(15,0,0,0);
 		c.gridx = 1;
 		c.gridy = 4;
 		add(new JLabelFactory().getTegelTekst40("bevat " + e.getDocumenten().size() + (e.getDocumenten().size()==1?" document":" documenten")),c);
 		
 		c.gridx = 1;
 		c.gridy = 5;
-		c.gridwidth = 1;
-		c.insets = new Insets(5,10,0,10);
+		c.gridwidth = 2;
+		c.insets = new Insets(0,10,0,10);
 		add(new JLabelFactory().getNogNietBeoordeeld(e.getAantalDocumentenMetStatus("Nog niet beoordeeld") + ""),c);
-		
-		c.gridx = 2;
-		c.gridy = 5;
-		add(new JLabelFactory().getGoedgekeurd(e.getAantalDocumentenMetStatus("Goedgekeurd") + ""),c);
 		
 		c.gridx = 3;
 		c.gridy = 5;
+		add(new JLabelFactory().getGoedgekeurd(e.getAantalDocumentenMetStatus("Goedgekeurd") + ""),c);
+		
+		c.gridx = 5;
+		c.gridy = 5;
 		add(new JLabelFactory().getAfgekeurd(e.getAantalDocumentenMetStatus("Afgekeurd") + ""),c);
+		
+		c.gridx = 1;
+		c.gridy = 6;
+		c.insets = new Insets(0,0,0,0);
+		c.gridwidth = 3;
+		JLabel documentToevoegen = new JLabel();
+		documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/documentToevoegen.png")));
+		documentToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd));
+			}
+		});
+		if(m.getBeheerder().KanToevoegen() == false) // mag beheerder toevoegen?
+			documentToevoegen.setVisible(false);
+		add(documentToevoegen,c);
+		
+		c.gridx = 4;
+		JLabel verwijderen = new JLabel();
+		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
+		verwijderen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (JOptionPane.showConfirmDialog(null, "Als u dit erfgoed verwijderd worden alle bijhorende documenten ook verwijderd. Weet u zeker dat u dit wilt doen?", "Opgelet!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+				{
+					model.verwijderErfgoed(erfgoed);
+					data.verwijderErfgoed(erfgoed);
+				}
+			}
+		});
+		if(m.getBeheerder().KanVerwijderen() == false) // mag beheerder verwijderen?
+			verwijderen.setVisible(false);
+		
+		add(verwijderen,c);
 	}
 
 	@Override

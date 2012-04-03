@@ -1,16 +1,5 @@
 package speeltuin;
-/*
 
-Database Programming with JDBC and Java, Second Edition
-By George Reese
-ISBN: 1-56592-616-1
-
-Publisher: O'Reilly
-
-*/
-
-
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,9 +12,6 @@ import java.sql.SQLException;
 
 import javax.swing.JFileChooser;
 
-/**
- * Example 4.2.
- */
 public class TestVideoBLOB 
 {
 	private JFileChooser chooser;
@@ -48,26 +34,23 @@ public class TestVideoBLOB
 	      
 	      PreparedStatement stmt;
 	
-	      if (!f.exists())
-	      {
-	        // if the file does not exist
-	        // retrieve it from the database and write it to the named file
-	        ResultSet rs;
+	      // if the file does not exist
+	      // retrieve it from the database and write it to the named file
+	      ResultSet rs;
 	
-	        stmt = con.prepareStatement("SELECT BLOB FROM DOCUMENT WHERE DocumentId = 1");
-	        rs = stmt.executeQuery();
+	      stmt = con.prepareStatement("SELECT BLOB FROM MEDIA WHERE MediaId = 1");
+	      rs = stmt.executeQuery();
 	        
-	        rs.next();
-	        
-	        Blob b = rs.getBlob("BLOB");
-	        
-	        FileOutputStream os = new FileOutputStream(f);
-	        System.out.println("Bezig met schrijven");
-	        os.write(b.getBytes(0, (int) b.length()));
-	        System.out.println("Klaar");
-	        os.flush();
-	        os.close();
-	      }
+	      rs.next();
+	      
+	      Blob b = rs.getBlob("BLOB");
+	      
+	      FileOutputStream os = new FileOutputStream(f);
+	      System.out.println("Bezig met schrijven");
+	      os.write(b.getBytes(1, (int) b.length()));
+	      System.out.println("Klaar");
+	      os.flush();
+	      os.close();
 	  }
 	  catch(Exception e)
 	  {
@@ -120,7 +103,7 @@ public class TestVideoBLOB
         	FileInputStream data = new FileInputStream(f);
 	        
 	        System.out.println("Start wegschrijven");
-	        stmt = con.prepareStatement("UPDATE Document SET BLOB = ?, TypeDocument='Video' WHERE DocumentId=1");
+	        stmt = con.prepareStatement("UPDATE Media SET BLOB = ? WHERE MediaId=1");
 	        stmt.setObject(1, data);
 	        stmt.executeUpdate();
 	        System.out.println("Stop wegschrijven");
@@ -131,10 +114,12 @@ public class TestVideoBLOB
         }
         finally
         {
-        	try {
+        	try
+        	{
 				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+			}
+        	catch (SQLException e) 
+			{
 				e.printStackTrace();
 			}
         }

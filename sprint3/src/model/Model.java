@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -154,14 +155,22 @@ public class Model
 	// Getter en setter voor String beheerder : Naam dat wordt ingegeven in textfield bij login.
 	public Beheerder getBeheerder() 
 	{
-		return beheerder;
+		try
+		{
+			return beheerder;
+		}
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "Kan de beheerder niet ophalen!", "Fout beheerder", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
 	}
 
 	public void setBeheerder(String naam) 
 	{
 		for (Beheerder b : beheerders)
 		{
-			if (b.getNaam().equals(naam))
+			if (b.getNaam().equalsIgnoreCase(naam))
 				beheerder = b;
 		}
 	}

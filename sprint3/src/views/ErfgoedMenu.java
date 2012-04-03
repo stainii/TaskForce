@@ -5,10 +5,8 @@ package views;
  *   een document toevoegen aan het erfgoed, het maken van een pdf, ...
  **/
 
-import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -23,7 +21,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import controllers.Databank;

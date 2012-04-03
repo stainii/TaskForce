@@ -10,7 +10,7 @@ import javax.swing.event.ChangeListener;
 import model.DocumentCMS;
 import model.Model;
 
-public class OverzichtController
+public class OverzichtDocumentenController
 {
 	
 	/**Overzicht controller is de controller met functies specifiek voor OverzichtContent.
@@ -23,7 +23,7 @@ public class OverzichtController
 	private ArrayList<DocumentCMS> inTeLaden;
 	private ArrayList<ChangeListener> listeners;
 	
-	public OverzichtController(Model m, Databank d)
+	public OverzichtDocumentenController(Model m, Databank d)
 	{	
 		this.m = m;
 		this.d = d;
@@ -151,8 +151,6 @@ public class OverzichtController
 			else if (d.getErfgoed().getEigenaar().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getErfgoed().getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
-				resultaat.add(d);
-			else if (d.getErfgoed().getEigenaar().getEmail().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getTitel().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);

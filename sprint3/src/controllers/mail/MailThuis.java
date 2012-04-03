@@ -1,5 +1,4 @@
 package controllers.mail;
-import java.sql.Date;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -9,14 +8,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import model.DocumentCMS;
-import model.Model;
-
 /**De instellingen voor het versturen van een mail buiten school*/
 
 public class MailThuis implements Runnable
 {
-	private DocumentCMS document;
 	private String aan;
 	private String onderwerp;
 	private SoortMail mail;
@@ -26,11 +21,10 @@ public class MailThuis implements Runnable
 	private static final String user = "task.forceb2@gmail.com";
 	private static final String pwd ="azertyb2";
 	
-	public MailThuis(String aan, String onderwerp, DocumentCMS doc, SoortMail mail)
+	public MailThuis(String aan, String onderwerp, SoortMail mail)
 	{
 		this.aan=aan;
 		this.onderwerp=onderwerp;
-		this.document=doc;
 		this.mail=mail;
 	}
 		
