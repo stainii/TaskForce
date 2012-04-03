@@ -908,7 +908,7 @@ public class Databank
 			c = DriverManager.getConnection(connectie);
 			s = c.createStatement();
 			
-			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0 ORDER BY Gebruikersnaam");
+			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0");
 			
 			while (rs.next())
 			{				
@@ -961,7 +961,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam,Achternaam,Wachtwoord,Email,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,?,?,0)");
 			s.setString(1,n);
 			s.setString(2,a);
-			s.setString(3, w);
+			s.setString(3,w);
 			s.setString(4,em);
 			s.setBoolean(5, kb);
 			s.setBoolean(6,kw);
@@ -971,6 +971,27 @@ public class Databank
 			s.executeUpdate();	
 			
 			m.toevoegenBeheerder(new Beheerder(-1,n,a, w,em, kb, kw, kv, kt,m));
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteBeheerder(int id)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("DELETE FROM BEHEERDER WHERE BeheerderId = ?");
+			s.setInt(1, id);
+			
+			s.executeUpdate();
+			getBeheerdersUitDatabank();
 		}
 		catch (SQLException e)
 		{

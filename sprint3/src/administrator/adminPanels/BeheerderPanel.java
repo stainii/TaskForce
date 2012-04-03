@@ -1,17 +1,17 @@
 package administrator.adminPanels;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -19,11 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import controllers.Databank;
-import controllers.Login;
 import model.Beheerder;
 import model.Model;
 
@@ -33,15 +34,11 @@ public class BeheerderPanel extends JPanel
 	private Databank d;
 	private JList beheerderList;
 	private DefaultListModel beheerderModel;
-	private JPanel beheerderPnl;
+	private JPanel beheerderPnl,rechtenPnl;
 	private JTextField naamTxt, achternaamTxt, emailTxt;
-	private JLabel rechten, instellingen, opslaan,wijzigen,verwijderen,naamLbl,achternaamLbl,emailLbl,toevoegen;
-	
-	@Override
-	public void paint(Graphics g) 	
-	{
-		super.paintComponent(g);
-	}
+	private JLabel rechten, instellingen, opslaan,bewerken,verwijderen,naamLbl,achternaamLbl,emailLbl,toevoegen;
+	private JCheckBox wijzigenCb, toevoegenCb, verwijderenCb, beoordelenCb;
+	private GridBagConstraints c;
 	
 	public BeheerderPanel(Model model, Databank data )
 	{
@@ -70,11 +67,26 @@ public class BeheerderPanel extends JPanel
 		
 		rechten = new JLabel("Rechten");
 		rechten.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+		rechten.addMouseListener(new RechtenListener());
 		instellingen = new JLabel("Instellingen");
 		instellingen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
-		verwijderen = new JLabel("Verwijderen");
-		wijzigen = new JLabel("Wijzigen");
+		verwijderen = new JLabel();
+		verwijderen.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/verwijderen.png")));
 		
+		verwijderen.addMouseListener(new VerwijderenListener());
+		
+		bewerken = new JLabel();
+		bewerken.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/bewerken.png")));
+		bewerken.addMouseListener(new BewerkenListener());
+		
+		verwijderen.setEnabled(false);
+		bewerken.setEnabled(false);
+		
+		wijzigenCb = new JCheckBox("Wijzigen");
+		toevoegenCb = new JCheckBox("Toevoegen");
+		verwijderenCb = new JCheckBox("Verwijderen");
+		beoordelenCb = new JCheckBox("Beoordelen");
+				
 		opslaan = new JLabel();
 		opslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
 		opslaan.addMouseListener(new OpslaanListener());
@@ -93,6 +105,8 @@ public class BeheerderPanel extends JPanel
 					naamTxt.setText("");
 					achternaamTxt.setText("");
 					emailTxt.setText("");
+					verwijderen.setEnabled(false);
+					bewerken.setEnabled(false);
 				}
 				else
 				{
@@ -100,10 +114,18 @@ public class BeheerderPanel extends JPanel
 					achternaamTxt.setEditable(false);		// als men op Toevoegen klikt de tekstvakken terug on editable zetten
 					emailTxt.setEditable(false);
 					
+					verwijderen.setEnabled(true);
+					bewerken.setEnabled(true);
+					
 					rechten.setVisible(true);
-					verwijderen.setVisible(true);
+					
+					if(rechtenPnl.isVisible())
+						verwijderen.setVisible(false);
+					else
+						verwijderen.setVisible(true);
+					
 					instellingen.setVisible(true);
-					wijzigen.setVisible(true);
+					bewerken.setVisible(true);
 					opslaan.setVisible(false	);
 					
 					for(Beheerder b : m.getBeheerders())
@@ -114,6 +136,11 @@ public class BeheerderPanel extends JPanel
 							naamTxt.setText(m.getBeheerder().getNaam());
 							achternaamTxt.setText(m.getBeheerder().getAchternaam());
 							emailTxt.setText(m.getBeheerder().getEmail());
+							
+							wijzigenCb.setSelected(m.getBeheerder().KanWijzigen());
+							toevoegenCb.setSelected(m.getBeheerder().KanToevoegen());
+							beoordelenCb.setSelected(m.getBeheerder().KanBeoordelen());
+							verwijderenCb.setSelected(m.getBeheerder().KanVerwijderen());
 						}
 					}
 				}
@@ -124,6 +151,16 @@ public class BeheerderPanel extends JPanel
 		JScrollPane beheerderScroll = new JScrollPane(beheerderList);
 		beheerderScroll.setPreferredSize(new Dimension(150,200));
 		
+		c = new GridBagConstraints();
+		
+		rechtenPnl = new JPanel();
+		rechtenPnl.setLayout(new GridLayout(4,1));
+		
+		rechtenPnl.add(wijzigenCb);
+		rechtenPnl.add(toevoegenCb);
+		rechtenPnl.add(beoordelenCb);
+		rechtenPnl.add(verwijderenCb);
+		
 		naamLbl = new JLabel("Naam");
 		achternaamLbl = new JLabel("Achternaam");
 		emailLbl = new JLabel("E-mail");
@@ -132,7 +169,7 @@ public class BeheerderPanel extends JPanel
 		toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
 		toevoegen.addMouseListener(new ToevoegenListener());
 		
-		GridBagConstraints c = new GridBagConstraints();
+		
 		c.insets = new Insets(5,5,5,5);
 				
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -191,9 +228,15 @@ public class BeheerderPanel extends JPanel
 		c.gridy = 6;
 		beheerderPnl.add(verwijderen,c);		// deze laten veranderen naar Annuleren bij wijziging
 		
+		c.gridx = 2;
+		c.gridy = 6;
+		rechtenPnl.setVisible(false);
+		beheerderPnl.add(rechtenPnl,c);
+		
 		c.gridx = 3;
 		c.gridy = 6;
-		beheerderPnl.add(wijzigen,c);
+		beheerderPnl.add(bewerken,c);
+		
 	}
 	
 	public JPanel getBeheerPanel()
@@ -219,6 +262,7 @@ public class BeheerderPanel extends JPanel
 		@Override
 		public void mousePressed(MouseEvent e) {
 			
+			rechtenPnl.setVisible(false);
 			naamTxt.setText("");
 			achternaamTxt.setText("");
 			emailTxt.setText("");
@@ -229,7 +273,7 @@ public class BeheerderPanel extends JPanel
 			
 			rechten.setVisible(false);
 			verwijderen.setVisible(false);
-			wijzigen.setVisible(false);
+			bewerken.setVisible(false);
 			instellingen.setVisible(false);
 			opslaan.setVisible(true);
 			
@@ -243,28 +287,24 @@ public class BeheerderPanel extends JPanel
 	{
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseClicked(MouseEvent arg0) {}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
+
 			//controle of alle velden zijn ingevuld.
 			if(naamTxt.getText().isEmpty() || achternaamTxt.getText().isEmpty() || emailTxt.getText().isEmpty())
-				JOptionPane.showMessageDialog(null,"Beide velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Alle velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
 			else
 			{
 				d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),"test",emailTxt.getText(),true,true,true,true);
@@ -278,7 +318,6 @@ public class BeheerderPanel extends JPanel
 				{
 					beheerderModel.addElement(b.getNaam());
 				}
-
 			}
 				
 		}
@@ -287,7 +326,125 @@ public class BeheerderPanel extends JPanel
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
+		}	
+	}
+	private class VerwijderenListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(verwijderen.isEnabled() == true)
+			{
+				int resultaat = JOptionPane.showConfirmDialog(beheerderPnl, "Wilt u " +m.getBeheerder().getNaam().toString()+
+						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+				
+				if(resultaat == JOptionPane.YES_OPTION)
+				{
+					beheerderModel.remove(beheerderList.getSelectedIndex());
+					System.out.println(m.getBeheerder().getId());				// moet nog aangepast wordne !! 
+					d.deleteBeheerder(m.getBeheerder().getId());
+					m.verwijderBeheerder(m.getBeheerder().getId());
+		
+					for(Beheerder b : m.getBeheerders())
+					{
+						System.out.println(b.getNaam());
+					}
+				}
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
+	private class RechtenListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			verwijderen.setVisible(true);
+			rechtenPnl.setVisible(false);
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			rechten.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover.png")));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			rechten.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+	
+			verwijderen.setVisible(false);
+			rechtenPnl.setVisible(true);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+		
+	}
+	
+	private class BewerkenListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			bewerken.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
+			naamTxt.setEditable(true);
+			achternaamTxt.setEditable(true);
+			emailTxt.setEditable(true);
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
 }

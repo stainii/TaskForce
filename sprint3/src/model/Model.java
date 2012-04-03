@@ -89,6 +89,18 @@ public class Model
 		notifyListeners();
 	}
 	
+	public void verwijderBeheerder(int id)
+	{
+		for(int i=0; i<getBeheerders().size();i++)
+		{
+			if(getBeheerders().get(i).getId() == id)
+			{
+				getBeheerders().remove(i);
+			}
+		}
+		notifyListeners();
+	}
+	
 	public void verwijderDocument(int id)		//deze methode verwijdert het document op basis van zijn databankId
 	{
 		for (int i=0; i<getDocumenten().size();i++)
