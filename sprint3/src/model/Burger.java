@@ -11,7 +11,7 @@ public class Burger
 	private String familienaam;
 	private String email;
 	
-	public Burger(int id, String gebruikersnaam, String voornaam, String familienaam, String email, Model m)
+	public Burger(int id, String gebruikersnaam, String voornaam, String familienaam, String email,Model m)
 	{
 		this.m = m;
 		this.id = id;

@@ -5,10 +5,10 @@ public class Beheerder
 	private int id;
 	private String naam,achternaam,email;
 	private String wachtwoord;
-	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen;
+	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen,isAdmin;
 	private Model m;
 	
-	public Beheerder(int id, String n, String a,String w,String em, boolean kb ,boolean kw, boolean kv, boolean kt, Model model)
+	public Beheerder(int id, String n, String a,String w,String em, boolean kb ,boolean kw, boolean kv, boolean kt,boolean isAdmin, Model model)
 	{
 		this.id=id;
 		this.naam=n;
@@ -19,6 +19,7 @@ public class Beheerder
 		this.KanBeoordelen = kb;
 		this.KanWijzigen = kw;
 		this.KanVerwijderen = kv;
+		this.isAdmin = isAdmin;
 		this.m = model;
 	}
 	
@@ -52,6 +53,9 @@ public class Beheerder
 
 	public boolean KanVerwijderen() {
 		return KanVerwijderen;
+	}
+	public boolean isAdmin(){
+		return isAdmin;
 	}
 
 	public void setId(int id) {
@@ -90,6 +94,10 @@ public class Beheerder
 
 	public void setKanVerwijderen(boolean kanVerwijderen) {
 		KanVerwijderen = kanVerwijderen;
+		m.notifyListeners();
+	}
+	public void setIsAdmin(boolean isAdmin){
+		this.isAdmin = isAdmin;
 		m.notifyListeners();
 	}
 	

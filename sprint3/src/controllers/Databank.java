@@ -97,7 +97,7 @@ public class Databank
 			{				
 				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
-						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
 			}
 		}
 		catch (SQLException e)
@@ -908,13 +908,13 @@ public class Databank
 			c = DriverManager.getConnection(connectie);
 			s = c.createStatement();
 			
-			rs = s.executeQuery("SELECT * FROM Beheerder WHERE IsAdministrator = 0");
+			rs = s.executeQuery("SELECT * FROM Beheerder");		//WHERE IsAdministrator = 0
 			
 			while (rs.next())
 			{				
 				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
-						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"), m));
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
 			}
 			m.setBeheerders(beheerders);
 		
@@ -934,12 +934,17 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("UPDATE BEHEERDER SET KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ?, KanToevoegen = ? WHERE BeheerderId = ?");
-			s.setBoolean(1, b.KanBeoordelen());
-			s.setBoolean(2, b.KanWijzigen());
-			s.setBoolean(3, b.KanVerwijderen());
-			s.setBoolean(4, b.KanToevoegen());
-			s.setInt(5, b.getId());
+			s = c.prepareStatement("UPDATE BEHEERDER SET Gebruikersnaam = ?,Achternaam = ?,Wachtwoord = ?,Email = ?,KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ?, " +
+					"KanToevoegen = ? WHERE BeheerderId = ?");
+			s.setString(1,b.getNaam());
+			s.setString(2, b.getAchternaam());
+			s.setString(3,b.getWachtwoord());
+			s.setString(4, b.getEmail());
+			s.setBoolean(5, b.KanBeoordelen());
+			s.setBoolean(6, b.KanWijzigen());
+			s.setBoolean(7, b.KanVerwijderen());
+			s.setBoolean(8, b.KanToevoegen());
+			s.setInt(9, b.getId());
 			s.executeUpdate();
 					
 		}
@@ -950,7 +955,7 @@ public class Databank
 		}
 	}
 	
-	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt)
+	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -958,7 +963,7 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam,Achternaam,Wachtwoord,Email,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,?,?,0)");
+			s = c.prepareStatement("INSERT INTO BEHEERDER (Gebruikersnaam,Achternaam,Wachtwoord,Email,KanBeoordelen, KanWijzigen, KanVerwijderen, KanToevoegen,IsAdministrator) VALUES (?,?,?,?,?,?,?,?,?)");
 			s.setString(1,n);
 			s.setString(2,a);
 			s.setString(3,w);
@@ -967,10 +972,11 @@ public class Databank
 			s.setBoolean(6,kw);
 			s.setBoolean(7,kv);
 			s.setBoolean(8,kt);
+			s.setBoolean(9,isAdmin);
 			
 			s.executeUpdate();	
 			
-			m.toevoegenBeheerder(new Beheerder(-1,n,a, w,em, kb, kw, kv, kt,m));
+			m.toevoegenBeheerder(new Beheerder(-1,n,a, w,em, kb, kw, kv, kt,isAdmin,m));
 		}
 		catch (SQLException e)
 		{
@@ -992,6 +998,36 @@ public class Databank
 			
 			s.executeUpdate();
 			getBeheerdersUitDatabank();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void getBurgersUitDatabank()			
+	{
+		ArrayList<Burger> burgers = new ArrayList<Burger>();
+		Connection c = null;
+		Statement s = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.createStatement();
+			
+			rs = s.executeQuery("SELECT * FROM Burger");		
+			
+			while (rs.next())
+			{				
+				//(int id, String gebruikersnaam, String voornaam, String familienaam, String email,Model m)
+				burgers.add(new Burger(rs.getInt("BurgerId"),rs.getString("Gebruikersnaam"),rs.getString("Voornaam"),rs.getString("Familienaam")
+						,rs.getString("Email"),m));
+			}
+			m.setBurgers(burgers);
+		
 		}
 		catch (SQLException e)
 		{

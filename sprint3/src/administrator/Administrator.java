@@ -36,6 +36,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import administrator.adminPanels.AdminPanel;
 import administrator.adminPanels.BeheerderPanel;
 
 import views.Start;
@@ -60,12 +61,11 @@ public class Administrator extends JPanel
 	private JFrame frame;
 	private static String gebruiker;
 	private JLabel uitlogLbl,toevoegenBeheerderLbl;
-	private JPanel welkomPnl,gebruikerPnl,adminPnl;
+	private JPanel welkomPnl,gebruikerPnl;
 	private JTabbedPane tab;
 	private BeheerderPanel beheerderPnl;
-	
-	
-	
+	private AdminPanel adminPnl;
+		
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
 	{
@@ -80,6 +80,7 @@ public class Administrator extends JPanel
 		d = new Databank(m);
 				
 		d.getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
+		d.getBurgersUitDatabank();			// haalt burgers uit databank
 		
 		welkomPnl = new JPanel();	
 		welkomPnl.setSize(400,400);
@@ -87,6 +88,7 @@ public class Administrator extends JPanel
 		welkomPnl.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);
+		c.fill = GridBagConstraints.HORIZONTAL;
 
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/uitloggen.png")));
@@ -94,36 +96,26 @@ public class Administrator extends JPanel
 		
 		beheerderPnl = new BeheerderPanel(m,d);		// new BeheerderPanel
 		gebruikerPnl = new JPanel();
-		adminPnl = new JPanel();
+		adminPnl = new AdminPanel(m,d,getGebruiker());
 		
 		tab = new JTabbedPane();
 		tab.addTab("Beheerders", beheerderPnl.getBeheerPanel());
 		tab.addTab("Gebruikers", gebruikerPnl);
-		tab.addTab("Admins", adminPnl);
+		tab.addTab("Admins", adminPnl.getAdminPanel());
 		tab.setPreferredSize(new Dimension(500,300));
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		welkomPnl.add(new JLabelFactory().getTitel("Welkom " + getGebruiker()),c);
+		welkomPnl.add(new JLabelFactory().getTitel("Welkom " + getGebruiker()+ "                                   "),c);
 		
 		c.gridx = 2;
 		c.gridy = 1;
 		welkomPnl.add(uitlogLbl,c);
 		
-		c.gridx = 1;
-		c.gridy = 2;
-		c.weightx = 2;
-		welkomPnl.add(tab,c);
-		
-		
-		//__Beheerderspanel
-		
-
-		//__**
-		
 		
 		
 		add(welkomPnl);
+		add(tab,BorderLayout.CENTER);
 		frame = new JFrame("Administratorpaneel");
 		frame.add(this);
 		frame.setSize(600,400);
