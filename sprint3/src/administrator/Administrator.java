@@ -38,6 +38,7 @@ import javax.swing.event.ListSelectionListener;
 
 import administrator.adminPanels.AdminPanel;
 import administrator.adminPanels.BeheerderPanel;
+import administrator.adminPanels.BurgerPanel;
 
 import views.Start;
 
@@ -61,10 +62,11 @@ public class Administrator extends JPanel
 	private JFrame frame;
 	private static String gebruiker;
 	private JLabel uitlogLbl,toevoegenBeheerderLbl;
-	private JPanel welkomPnl,gebruikerPnl;
+	private JPanel welkomPnl;
 	private JTabbedPane tab;
 	private BeheerderPanel beheerderPnl;
 	private AdminPanel adminPnl;
+	private BurgerPanel gebruikerPnl;
 		
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
@@ -79,8 +81,7 @@ public class Administrator extends JPanel
 		m = new Model();
 		d = new Databank(m);
 				
-		d.getBeheerdersUitDatabank();		// haalt beheerders uit databank en steekt ze in ArrayList<Beheerder> 
-		d.getBurgersUitDatabank();			// haalt burgers uit databank
+		d.getBeheerdersEnBurgersUitDatabank();		// haalt beheerders en burgers uit databank en steekt ze in ArrayList<Beheerder> , ArrayList<Burger>
 		
 		welkomPnl = new JPanel();	
 		welkomPnl.setSize(400,400);
@@ -95,12 +96,12 @@ public class Administrator extends JPanel
 		uitlogLbl.addMouseListener(new UitlogListener());
 		
 		beheerderPnl = new BeheerderPanel(m,d);		// new BeheerderPanel
-		gebruikerPnl = new JPanel();
+		gebruikerPnl = new BurgerPanel(m,d);
 		adminPnl = new AdminPanel(m,d,getGebruiker());
 		
 		tab = new JTabbedPane();
 		tab.addTab("Beheerders", beheerderPnl.getBeheerPanel());
-		tab.addTab("Gebruikers", gebruikerPnl);
+		tab.addTab("Gebruikers", gebruikerPnl.getBurgerPanel());
 		tab.addTab("Admins", adminPnl.getAdminPanel());
 		tab.setPreferredSize(new Dimension(500,300));
 		

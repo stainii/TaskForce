@@ -896,9 +896,10 @@ public class Databank
 	
 	//___ Methoden voor klasse Administrator
 	
-	public void getBeheerdersUitDatabank()			// Deze methode wordt ENKEL door Administrator gebruikt! Enkel de beheerders worden ingeladen, niet de volledige databank moet voor deze klasse ingeladen worden
+	public void getBeheerdersEnBurgersUitDatabank()			// Deze methode wordt ENKEL door Administrator gebruikt! Enkel de beheerders worden ingeladen, niet de volledige databank moet voor deze klasse ingeladen worden
 	{
 		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
+		ArrayList<Burger> burgers = new ArrayList<Burger>();
 		Connection c = null;
 		Statement s = null;
 		ResultSet rs = null;
@@ -916,7 +917,17 @@ public class Databank
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
 						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
 			}
+			
 			m.setBeheerders(beheerders);
+			
+			rs = s.executeQuery("SELECT * FROM Burger");
+			
+			while (rs.next())
+			{				
+				burgers.add(new Burger(rs.getInt("BurgerId"),rs.getString("Gebruikersnaam"),rs.getString("Voornaam"),rs.getString("Familienaam")
+						,rs.getString("Email"),m));
+			}
+			m.setBurgers(burgers);
 		
 		}
 		catch (SQLException e)
@@ -997,37 +1008,7 @@ public class Databank
 			s.setInt(1, id);
 			
 			s.executeUpdate();
-			getBeheerdersUitDatabank();
-		}
-		catch (SQLException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
-	}
-	
-	public void getBurgersUitDatabank()			
-	{
-		ArrayList<Burger> burgers = new ArrayList<Burger>();
-		Connection c = null;
-		Statement s = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			s = c.createStatement();
-			
-			rs = s.executeQuery("SELECT * FROM Burger");		
-			
-			while (rs.next())
-			{				
-				//(int id, String gebruikersnaam, String voornaam, String familienaam, String email,Model m)
-				burgers.add(new Burger(rs.getInt("BurgerId"),rs.getString("Gebruikersnaam"),rs.getString("Voornaam"),rs.getString("Familienaam")
-						,rs.getString("Email"),m));
-			}
-			m.setBurgers(burgers);
-		
+			getBeheerdersEnBurgersUitDatabank();
 		}
 		catch (SQLException e)
 		{

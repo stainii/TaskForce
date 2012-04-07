@@ -224,7 +224,7 @@ public class InstellingenView extends JPanel
 		d.laadDatabank();
 		f.add(new InstellingenView(m));
 		
-		f.setSize(1000,500);
+		f.setSize(500,500);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 	}

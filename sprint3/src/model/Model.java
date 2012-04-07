@@ -16,6 +16,7 @@ public class Model
 	private ArrayList<Beheerder> beheerders;
 	private ArrayList<ChangeListener> listeners;
 	private Beheerder beheerder;
+	private Burger burger;
 
 	public Model()
 	{
@@ -172,6 +173,28 @@ public class Model
 		{
 			if (b.getNaam().equalsIgnoreCase(naam))
 				beheerder = b;
+		}
+	}
+	
+	public Burger getBurger()
+	{
+		try{
+			return burger;
+		}
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "Kan de beheerder niet ophalen!", "Fout beheerder", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		
+	}
+	
+	public void setBurger(String naam)
+	{
+		for (Burger b : burgers)
+		{
+			if(b.getNaam().equalsIgnoreCase(naam))
+				burger = b;
 		}
 	}
 	

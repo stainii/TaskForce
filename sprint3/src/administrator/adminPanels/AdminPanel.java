@@ -37,7 +37,7 @@ public class AdminPanel extends JPanel
 	private JPanel allesPanel, adminPanel;
 	private JList adminList;
 	private DefaultListModel adminModel;
-	private JLabel naamLbl,emailLbl, pw1Lbl, pw2Lbl,toevoegen,toevoegenOpslaan,verwijderen,bewerken, bewerkenOpslaan;
+	private JLabel naamLbl,emailLbl, pw1Lbl, pw2Lbl,toevoegen,toevoegenOpslaan,verwijderen,bewerken, bewerkenOpslaan,annuleren;
 	private JTextField naamTxt, emailTxt;
 	private JPasswordField password1Txt, password2Txt;
 	private int index;
@@ -103,6 +103,14 @@ public class AdminPanel extends JPanel
 		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
 		bewerkenOpslaan.addMouseListener(new BewerkenOpslaanListener());
 		
+		annuleren = new JLabel();
+		annuleren.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/annuleren.png")));
+		annuleren.addMouseListener(new AnnulerenListener());
+		
+		naamTxt.setEditable(false);
+		emailTxt.setEditable(false);
+		password1Txt.setEditable(false);
+		
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -149,6 +157,11 @@ public class AdminPanel extends JPanel
 		c.gridy = 6;
 		adminPanel.add(verwijderen,c);
 		
+		c.gridx = 1;
+		c.gridy = 6;
+		annuleren.setVisible(false);
+		adminPanel.add(annuleren,c);
+		
 		c.gridx = 2;
 		c.gridy = 6;
 		adminPanel.add(bewerken,c);
@@ -174,6 +187,24 @@ public class AdminPanel extends JPanel
 		return allesPanel;
 	}
 	
+	public void VulAdminList()
+	{
+		for(Beheerder b : m.getBeheerders())
+		{
+			if(adminList.getSelectedValue().equals(b.getNaam()))
+			{
+				if(b.isAdmin() == true)
+				{
+					m.setBeheerder(adminList.getSelectedValue().toString());
+					index = adminList.getSelectedIndex();
+					naamTxt.setText(b.getNaam());
+					password1Txt.setText("wachtwoord");			// voor elke admin hetzelfde wachtwoord laten zien ! MD5 string is veel te lang!
+					emailTxt.setText(b.getEmail());
+				}
+			}
+		}
+	}
+	
 	private class ListListener implements ListSelectionListener
 	{
 		@Override
@@ -192,25 +223,12 @@ public class AdminPanel extends JPanel
 				naamTxt.setEditable(false);
 				emailTxt.setEditable(false);
 				password1Txt.setEditable(false);
-				
+		
 				bewerken.setVisible(true);
 				verwijderen.setVisible(true);
 				toevoegenOpslaan.setVisible(false);
 				
-				for(Beheerder b : m.getBeheerders())
-				{
-					if(adminList.getSelectedValue().equals(b.getNaam()))
-					{
-						if(b.isAdmin() == true)
-						{
-							m.setBeheerder(adminList.getSelectedValue().toString());
-							index = adminList.getSelectedIndex();
-							naamTxt.setText(b.getNaam());
-							password1Txt.setText("wachtwoord");
-							emailTxt.setText(b.getEmail());
-						}
-					}
-				}
+				VulAdminList();
 			}
 		}
 		
@@ -234,6 +252,7 @@ public class AdminPanel extends JPanel
 		public void mousePressed(MouseEvent e) {
 			bewerken.setVisible(false);
 			verwijderen.setVisible(false);
+			annuleren.setVisible(true);
 			
 			naamTxt.setText("");
 			password1Txt.setText("");
@@ -247,6 +266,8 @@ public class AdminPanel extends JPanel
 			emailTxt.setEditable(true);
 			
 			toevoegenOpslaan.setVisible(true);
+			
+			adminList.setSelectedIndex(-1);
 		}
 
 		@Override
@@ -284,7 +305,7 @@ public class AdminPanel extends JPanel
 					password2Txt.setText("");
 				}
 				
-				d.getBeheerdersUitDatabank();
+				d.getBeheerdersEnBurgersUitDatabank();
 				
 				naamTxt.setText("");
 				password1Txt.setText("");
@@ -302,6 +323,7 @@ public class AdminPanel extends JPanel
 				
 				pw2Lbl.setVisible(false);
 				password2Txt.setVisible(false);
+				annuleren.setVisible(false);
 			}
 			
 		}
@@ -386,8 +408,17 @@ public class AdminPanel extends JPanel
 		public void mousePressed(MouseEvent arg0) {
 			
 			m.getBeheerder().setNaam(naamTxt.getText());
-			try {
-				m.getBeheerder().setWachtwoord(Login.convert(password1Txt.getText()));
+			try 
+			{
+				/*
+				 * Beetje smerig opgelost: Voor veiligheid gaan we MD5 niet terug naar String converteren ( wat denk ik zelfs niet mogelijk is)
+				 * krijgt het password1Txt een defaultweergave van "wachtwoord" Bij het bewerken wordt er dan eerst gekeken of het textfield zijn 
+				 * waarde veranderd is? Als het textfield nog steeds de waarde "wachtwoord" bevat gaat hij niets doen en dus ook het wachtwoord 
+				 * van de Beheerder(admin) NIET veranderen. Is het wel veranderd gaat hij het wachtwoord wel veranderen en encrypteren.
+				 */
+				if(!password1Txt.getText().equals("wachtwoord"))
+					m.getBeheerder().setWachtwoord(Login.convert(password1Txt.getText()));
+					
 			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {e.printStackTrace();}
 			
@@ -415,5 +446,54 @@ public class AdminPanel extends JPanel
 		}
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}		
+	}
+	
+	private class AnnulerenListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			naamTxt.setEditable(false);
+			emailTxt.setEditable(false);
+			password1Txt.setEditable(false);
+			pw2Lbl.setVisible(false);
+			password2Txt.setVisible(false);
+			
+			if(adminList.getSelectedIndex() == -1)
+			{
+				bewerken.setVisible(false);
+				verwijderen.setVisible(false);
+				annuleren.setVisible(false);
+				toevoegenOpslaan.setVisible(false);
+			}
+			else
+			{
+				bewerken.setVisible(true);
+				verwijderen.setVisible(true);
+				toevoegenOpslaan.setVisible(false);
+				
+				VulAdminList();
+			}
+				
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+		
 	}
 }
