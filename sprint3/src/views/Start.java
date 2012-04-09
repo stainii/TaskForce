@@ -203,7 +203,7 @@ class Laden extends SwingWorker<Void,Void>
 		f.setTitle("Herzele Erfgoed CMS");
 		f.add(new Hoofd(m, d, f));
 		f.setSize(new Dimension(1005,720));
-		f.setMinimumSize(new Dimension(1005,700));
+		f.setMinimumSize(new Dimension(1005,720));
 		f.setLocationRelativeTo(null);
 		
 		//system tray inladen

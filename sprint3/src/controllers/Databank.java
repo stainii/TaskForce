@@ -183,10 +183,10 @@ public class Databank
 			rs.next();
 			id = rs.getInt("DocumentId");
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, id);
 			s.setString(2,"Toegevoegd");
-			s.setString(3, m.getBeheerder().getNaam());
+			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -256,11 +256,11 @@ public class Databank
 			rs.next();
 			id = rs.getInt("ErfgoedId");
 			
-			/*s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (ErfgoedId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, id);
 			s.setString(2,"Toegevoegd");
-			s.setString(3, m.getBeheerder().getNaam());
-			s.executeUpdate();*/
+			s.setInt(3, m.getBeheerder().getId());
+			s.executeUpdate();
 		}
 		catch (SQLException sql)
 		{
@@ -302,10 +302,10 @@ public class Databank
 			s.setInt(2, doc.getId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, doc.getId());
 			s.setString(2,"Verwijderd");
-			s.setString(3, m.getBeheerder().getNaam());
+			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
 		}
 		catch (SQLException e)
@@ -343,16 +343,11 @@ public class Databank
 			s.setInt(1, erf.getId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("UPDATE Erfgoed SET Obsolete = 1 WHERE ErfgoedId=?");
-			s.setInt(1, erf.getId());
-			s.executeUpdate();
-			
-			
-			/*s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (ErfgoedId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, erf.getId());
 			s.setString(2,"Verwijderd");
-			s.setString(3, m.getBeheerder().getNaam());
-			s.executeUpdate();*/
+			s.setInt(3, m.getBeheerder().getId());
+			s.executeUpdate();
 		}
 		catch (SQLException e)
 		{
@@ -390,10 +385,10 @@ public class Databank
 			s.setInt(2, doc.getId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, doc.getId());
 			s.setString(2,"Toegevoegd");
-			s.setString(3, m.getBeheerder().getNaam());
+			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
 		}
 		catch (SQLException e)
@@ -473,10 +468,10 @@ public class Databank
 			rs.next();
 			id = rs.getInt("DocumentId");
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, id);
 			s.setString(2,"Gewijzigd");
-			s.setString(3, m.getBeheerder().getNaam());
+			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -534,6 +529,12 @@ public class Databank
 			s.setString(11, e.getLink());
 			s.setInt(12, e.getId());
 			s.executeUpdate();
+			
+			s = c.prepareStatement("INSERT INTO Logboek (ErfgoedId, Actie, BeheerderId) VALUES (?,?,?)");
+			s.setInt(1, e.getId());
+			s.setString(2,"Gewijzigd");
+			s.setInt(3, m.getBeheerder().getId());
+			s.executeUpdate();
 		}
 		catch (SQLException sql)
 		{
@@ -580,7 +581,7 @@ public class Databank
 			s.setInt(3, doc.getId());
 			s.executeUpdate();
 			
-			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, Gebruikersnaam, GebruikerRol) VALUES (?,?,?,'Beheerder')");
+			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, doc.getId());
 			
 			if (goedgekeurd)
@@ -588,7 +589,7 @@ public class Databank
 			else
 				s.setString(2,"Afgekeurd");
 			
-			s.setString(3, m.getBeheerder().getNaam());
+			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
 		}
 		catch (SQLException sql)
@@ -720,14 +721,13 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE Gebruikersnaam <> ? AND GebruikerRol = 'Beheerder' ORDER BY DatumTijd DESC;");
-			s.setString(1, m.getBeheerder().getNaam());
+			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE BeheerderId IS NOT NULL AND BeheerderId <> ? ORDER BY DatumTijd DESC;");
+			s.setInt(1, m.getBeheerder().getId());
 			
 			rs = s.executeQuery();
 		
 			if (rs.next())
 				t = rs.getTimestamp(1);
-
 		}
 		catch (SQLException e)
 		{
@@ -754,7 +754,7 @@ public class Databank
 		return t;
 	}
 	
-	public ArrayList<Actie> getActies()
+	/*public ArrayList<Actie> getActies()
 	{
 		ArrayList<Actie> acties = new ArrayList<Actie>();
 		
@@ -816,9 +816,9 @@ public class Databank
 		
 		
 		return acties;
-	}
+	}*/
 	
-	public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
+	/*public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
 	{													//aanpassingen in het logboek vanaf de meegegeven tijd.
 		int aantalWijzigingen = 0;
 		int aantalVerwijderd = 0;
@@ -833,7 +833,7 @@ public class Databank
 			
 			//query uitvoeren
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT logboek.Actie, document.*, erfgoed.* FROM LOGBOEK logboek, DOCUMENT document, ERFGOED erfgoed WHERE logboek.DocumentId = document.DocumentId AND erfgoed.ErfgoedId = document.ErfgoedId AND DatumTijd> ? AND Gebruikersnaam <> ? AND GebruikerRol = 'Beheerder';");
+			s = c.prepareStatement("SELECT logboek.Actie, document.*, erfgoed.* FROM LOGBOEK logboek, DOCUMENT document, ERFGOED erfgoed WHERE logboek.DocumentId = document.DocumentId AND erfgoed.ErfgoedId = document.ErfgoedId AND DatumTijd> ? AND (Gebruikersnaam <> ? OR GebruikerRol <> 'Beheerder');");
 			
 			s.setTimestamp(1,tijd);
 			s.setString(2, m.getBeheerder().getNaam());
@@ -853,6 +853,7 @@ public class Databank
 					m.bewerkErfgoed(new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
 									rs.getString("NuttigeInfo"), rs.getString("Link"),rs.getBoolean("Obsolete"), rs.getInt("BurgerId"),m));
+					
 				}
 				else if (actie.equals("Verwijderd"))
 				{
@@ -891,6 +892,139 @@ public class Databank
 		}
 		
 		return "Er zijn " + aantalWijzigingen + " documenten gewijzigd, " + aantalVerwijderd + " documenten verwijderd en " + aantalToegevoegd + " documenten toegevoegd.";
+	}*/
+	
+	public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
+	{													//aanpassingen in het logboek vanaf de meegegeven tijd.
+		int aantalWijzigingen = 0;
+		int aantalVerwijderd = 0;
+		int aantalToegevoegd = 0;
+		
+		Connection c = null;
+		PreparedStatement s = null, s2 = null;
+		ResultSet rs = null, rs2 = null;
+		
+		try
+		{
+				c = DriverManager.getConnection(connectie);
+				
+				//controle
+				s = c.prepareStatement("SELECT LogId, Actie FROM LOGBOEK WHERE DatumTijd > ? AND (BeheerderId IS NULL OR BeheerderId <> ?);");
+				
+				s.setTimestamp(1,tijd);
+				s.setInt(2, m.getBeheerder().getId());
+				
+				rs = s.executeQuery();
+				
+				while (rs.next())
+				{
+					s2 = c.prepareStatement("SELECT DocumentId, ErfgoedId FROM LOGBOEK WHERE LogId = ?;");
+					s2.setInt(1, rs.getInt("LogId"));
+					rs2 = s2.executeQuery();
+					rs2.next();
+										
+					int id = rs2.getInt("DocumentId");
+					
+					if (id != 0)	//het is een document
+					{
+						s2 = c.prepareStatement("SELECT * FROM DOCUMENT WHERE DocumentId = ?;");
+						s2.setInt(1, id);
+						rs2 = s2.executeQuery();
+						rs2.next();
+						
+						String actie = rs.getString("Actie");
+						if (actie.equals("Toegevoegd"))
+						{
+							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"),m));							
+						}
+						else if (actie.equals("Verwijderd"))
+						{
+							m.verwijderDocument(id);
+						}
+						else if (actie.equals("Gewijzigd"))
+						{
+							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"),m));
+						}
+						else if (actie.equals("Goedgekeurd"))
+						{
+							for (DocumentCMS d : m.getDocumenten())
+							{
+								if (d.getId() == id)
+								{
+									d.setStatus("Goedgekeurd");
+								}
+							}
+						}
+						else if (actie.equals("Afgekeurd"))
+						{
+							for (DocumentCMS d : m.getDocumenten())
+							{
+								if (d.getId() == id)
+								{
+									d.setStatus("Afgekeurd");
+									d.setRedenAfwijzing(rs2.getString("RedenAfwijzing"));
+								}
+							}
+						}
+							
+					}
+					else	//het is een erfgoed
+					{
+						id = rs2.getInt("ErfgoedId");
+						
+						s2 = c.prepareStatement("SELECT * FROM ERFGOED WHERE ErfgoedId = ?;");
+						s2.setInt(1, id);
+						rs2 = s2.executeQuery();
+						rs2.next();
+						
+						String actie = rs.getString("Actie");
+						if (actie.equals("Toegevoegd"))
+						{
+							m.getErfgoed().add(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
+									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));							
+						}
+						else if (actie.equals("Verwijderd"))
+						{
+							m.verwijderErfgoed(id);
+						}
+						else if (actie.equals("Gewijzigd"))
+						{
+							m.bewerkErfgoed(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
+									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));
+						}
+					}
+				}
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het synchroniseren)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (rs!=null)
+					rs.close();
+				if (rs2!=null)
+					rs2.close();
+				if (s!=null)
+					s.close();
+				if (s2!=null)
+					s2.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het synchroniseren, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		
+		return "Er zijn " + aantalWijzigingen + " documenten/fiches gewijzigd, " + aantalVerwijderd + " documenten/fiches verwijderd en " + aantalToegevoegd + " documenten/fiches toegevoegd.";
 	}
 	
 	

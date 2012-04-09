@@ -122,6 +122,18 @@ public class Model
 		notifyListeners();
 	}
 	
+	public void verwijderErfgoed(int id)
+	{
+		for (int i=0; i<getErfgoed().size();i++)
+		{
+			if (getErfgoed().get(i).getId() == id)
+			{
+				getErfgoed().remove(i);
+			}
+		}
+		notifyListeners();		
+	}
+	
 	public void bewerkDocument(DocumentCMS d)
 	{
 		//overloop de array list van documenten

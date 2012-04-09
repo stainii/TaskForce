@@ -7,6 +7,7 @@ public class Actie
 	private String actie;
 	private Timestamp datum;
 	private DocumentCMS document;
+	private Erfgoed erfgoed;
 	
 	public Actie(DocumentCMS document,String actie, Timestamp datum)
 	{
@@ -14,6 +15,13 @@ public class Actie
 		this.datum = datum;
 		this.document = document;
 	}
+	public Actie(Erfgoed erfgoed, String actie, Timestamp datum)
+	{
+		this.actie = actie;
+		this.datum = datum;
+		this.erfgoed = erfgoed;
+	}
+	
 	
 	public String getActie()
 	{
@@ -27,6 +35,10 @@ public class Actie
 	{
 		return document;
 	}
+	public Erfgoed getErfgoed()
+	{
+		return erfgoed;
+	}
 	
 	public void setActie(String actie)
 	{
@@ -39,5 +51,9 @@ public class Actie
 	public void setDocument(DocumentCMS document)
 	{
 		this.document = document;
+	}
+	public void setErfgoed(Erfgoed erfgoed)
+	{
+		this.erfgoed = erfgoed;
 	}
 }
