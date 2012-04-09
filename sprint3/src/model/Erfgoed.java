@@ -80,7 +80,8 @@ public class Erfgoed
 		return omschrijving;
 	}
 
-	public String getTypeErfgoed() {
+	public String getTypeErfgoed()
+	{
 		return typeErfgoed;
 	}
 

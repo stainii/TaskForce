@@ -183,7 +183,7 @@ public class Model
 	{
 		for (Beheerder b : beheerders)
 		{
-			if (b.getNaam().equalsIgnoreCase(naam))
+			if (b.getVoornaam().equalsIgnoreCase(naam))
 				beheerder = b;
 		}
 	}

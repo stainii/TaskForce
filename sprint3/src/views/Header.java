@@ -52,7 +52,7 @@ public class Header extends JPanel implements MouseListener
 		setOpaque(false);
 		setPreferredSize(new Dimension(1000,156));	//de breedte maakt niet uit, wordt overridden door de layoutmanager
 		
-		inlogLbl = new JLabelFactory().getBeheerderLogin(m.getBeheerder().getNaam());
+		inlogLbl = new JLabelFactory().getBeheerderLogin(m.getBeheerder().getVoornaam());
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen.png")));
 		uitlogLbl.addMouseListener(this);

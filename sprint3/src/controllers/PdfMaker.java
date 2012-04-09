@@ -12,8 +12,13 @@ import model.Model;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**Maakt een fiche van een erfgoed in PDF-formaat **/
@@ -21,7 +26,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class PdfMaker 
 { 
 	private Erfgoed erfgoed;
-	private Font tussentitel = new Font(Font.FontFamily.COURIER,16,Font.ITALIC);
+	private Font titelFont = new Font(Font.FontFamily.HELVETICA,18,Font.BOLD);
+	private Font tussentitelFont = new Font(Font.FontFamily.HELVETICA,14,Font.NORMAL);
+	private Font normaleFont = new Font(Font.FontFamily.HELVETICA,10,Font.NORMAL);
 	private Model model;
 	
 	public PdfMaker(Erfgoed e, Model m, File f)
@@ -34,9 +41,9 @@ public class PdfMaker
 			Document doc = new Document();
 			PdfWriter.getInstance(doc, new FileOutputStream(f));
 			doc.open();
-			MetaData(doc);
-			Header(doc);
-			Content(doc);
+			metaData(doc);
+			header(doc);
+			content(doc);
 			doc.close();
 		}
 		catch(DocumentException de)
@@ -50,41 +57,69 @@ public class PdfMaker
 			
 	}
 	
-	private void MetaData(Document doc)
+	private void metaData(Document doc)
 	{
-		doc.addTitle("Document Erfgoed");
-		doc.addSubject("Informatie over bepaald erfgoed");
+		doc.addTitle(erfgoed.getNaam());
+		doc.addSubject("Informatie over " + erfgoed.getNaam());
 		doc.addKeywords("Erfgoed");
-		doc.addAuthor("Gemeente Herzele");
-		doc.addCreator("Gemeente Herzele");
+		doc.addAuthor("Erfgoedbank Gemeente Herzele");
+		doc.addCreator("Erfgoedbank Gemeente Herzele");
 	}
 	
-	private void Header(Document doc) throws DocumentException
+	private void header(Document doc) throws DocumentException
 	{
 		Paragraph titel = new Paragraph();
-		titel.add(new Paragraph(erfgoed.getNaam(), new Font(Font.FontFamily.COURIER, 22, Font.BOLD )));
+		titel.add(new Paragraph(erfgoed.getNaam(), titelFont));
 		legeLijn(titel,1);
-		titel.add(new Paragraph("Document opgesteld door " + model.getBeheerder()+ " op " + new Date()));
+		titel.add(new Paragraph("Document opgesteld door " + model.getBeheerder().getNaam() + " op " + new Date()));
 		legeLijn(titel,1);
 		doc.add(titel);
 	}
 	
-	public void Content(Document doc) throws DocumentException, MalformedURLException, IOException
+	public void content(Document doc) throws DocumentException, MalformedURLException, IOException
 	{
+		//informatie over erfgoed
+		Paragraph e = new Paragraph();
+		PdfPTable tabel = new PdfPTable(2);
+		tabel.setWidthPercentage(100);
+		tabel.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+		tabel.addCell(erfgoed.getTypeErfgoed());
+		tabel.addCell(erfgoed.getEigenaar().getNaam());
+		tabel.addCell(erfgoed.getStraat() + " " + erfgoed.getHuisnr() + " \n"
+						+ erfgoed.getPostcode() + " " + erfgoed.getDeelgemeente());
+		tabel.addCell(erfgoed.getNuttigeInfo());
+		tabel.addCell(erfgoed.getKenmerken());
+		tabel.addCell(erfgoed.getGeschiedenis());
+	
+		e.add(tabel);
+		legeLijn(e,2);
+		doc.add(e);
+		
+		//alle documenten
 		com.itextpdf.text.Image image = null;
 			
 		for(DocumentCMS c : erfgoed.getDocumenten())
 		{
-			if(c.getTypeDocument().equals("Afbeelding"))
+			Paragraph linkerkant = new Paragraph();
+			Paragraph rechterkant = new Paragraph();
+			
+			linkerkant.add(new Paragraph(c.getTitel(), tussentitelFont));	
+			linkerkant.add(new Paragraph(c.getEigenaar().getNaam(), normaleFont));
+			linkerkant.add(new Paragraph("Datum ingediend: " + c.getDatumToegevoegd().toString(), normaleFont));
+			linkerkant.add(new Paragraph("Laatste wijziging: " + c.getDatumGewijzigd(), normaleFont));
+			linkerkant.add(new Paragraph("Opmerkingen: " + c.getOpmerkingen(), normaleFont));
+			
+			
+			PdfPTable docTabel = new PdfPTable(2);
+			docTabel.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+			docTabel.setWidthPercentage(100);
+			docTabel.addCell(linkerkant);
+			
+			
+			
+			//rechterkant
+			if (c.getTypeDocument().equals("Afbeelding"))
 			{
-
-				Paragraph afbeelding = new Paragraph();
-				afbeelding.add(new Paragraph("Afbeelding", tussentitel));
-				
-				Paragraph opmerking = new Paragraph();
-				opmerking.add(new Paragraph(c.getOpmerkingen(), new Font(Font.FontFamily.COURIER, 6,Font.ITALIC)));
-				
-				doc.add(afbeelding);
 				float factor;
 				
 				if (c.getImage().getWidth()>c.getImage().getHeight())
@@ -96,26 +131,21 @@ public class PdfMaker
 					factor = 250f / c.getImage().getHeight();
 				}
 				image = com.itextpdf.text.Image.getInstance(c.getImage().getScaledInstance((int)(c.getImage().getWidth()*factor), (int)(c.getImage().getHeight()*factor), 0), null);
-				
-				doc.add(image);
-				
-				legeLijn(opmerking,2);
-				doc.add(opmerking);
+				PdfPCell cel = new PdfPCell(image,false);
+				cel.setBorder(Rectangle.NO_BORDER);
+				docTabel.addCell(cel);
+			}
+			else if (c.getTypeDocument().equals("Tekst"))
+			{
+				PdfPCell cel = new PdfPCell(new Paragraph(c.getTekst(), normaleFont));
+				cel.setBorder(Rectangle.NO_BORDER);
+				docTabel.addCell(cel);
 			}
 			
-			if(c.getTypeDocument().equals("Tekst"))
-			{
-				Paragraph tekst = new Paragraph();
-				tekst.add(new Paragraph("Tekst",tussentitel));
-				
-				legeLijn(tekst,1);
-				doc.add(tekst);
-				
-				Paragraph docTekst = new Paragraph();
-				docTekst.add(new Paragraph(c.getTekst()));
-				
-				doc.add(docTekst);
-			}
+			legeLijn(linkerkant,2);
+			legeLijn(rechterkant,2);
+			
+			doc.add(docTabel);
 		}
 	}
 

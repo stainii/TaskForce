@@ -108,7 +108,7 @@ public class BeheerderPanel extends JPanel
 		for(Beheerder b : m.getBeheerders())			// BeheerderModel vullen met Beheerders uit de ArrayList<Beheerder>
 		{
 			if(b.isAdmin()==false)
-				beheerderModel.addElement(b.getNaam());
+				beheerderModel.addElement(b.getVoornaam());
 		}
 		
 		beheerderList = new JList(beheerderModel);
@@ -149,10 +149,10 @@ public class BeheerderPanel extends JPanel
 					
 					for(Beheerder b : m.getBeheerders())
 					{
-						if(beheerderList.getSelectedValue().equals(b.getNaam()))
+						if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
 						{
 							m.setBeheerder(beheerderList.getSelectedValue().toString());
-							naamTxt.setText(m.getBeheerder().getNaam());
+							naamTxt.setText(m.getBeheerder().getVoornaam());
 							achternaamTxt.setText(m.getBeheerder().getAchternaam());
 							emailTxt.setText(m.getBeheerder().getEmail());
 							
@@ -337,7 +337,7 @@ public class BeheerderPanel extends JPanel
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(b.isAdmin()==false)
-						beheerderModel.addElement(b.getNaam());
+						beheerderModel.addElement(b.getVoornaam());
 				}
 				
 				beheerderList.setSelectedIndex(beheerderList.getLastVisibleIndex());
@@ -392,7 +392,7 @@ public class BeheerderPanel extends JPanel
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			
-			m.getBeheerder().setNaam(naamTxt.getText());
+			m.getBeheerder().setVoornaam(naamTxt.getText());
 			m.getBeheerder().setAchternaam(achternaamTxt.getText());
 			m.getBeheerder().setEmail(emailTxt.getText());
 			m.getBeheerder().setKanBeoordelen(beoordelenCb.isSelected());
@@ -407,7 +407,7 @@ public class BeheerderPanel extends JPanel
 			for(Beheerder b : m.getBeheerders())
 			{
 				if(b.isAdmin()==false)
-					beheerderModel.addElement(b.getNaam());
+					beheerderModel.addElement(b.getVoornaam());
 			}
 			beheerderList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
 			
@@ -443,7 +443,7 @@ public class BeheerderPanel extends JPanel
 		public void mousePressed(MouseEvent e) {
 			if(verwijderen.isEnabled() == true)
 			{
-				int resultaat = JOptionPane.showConfirmDialog(beheerderPnl, "Wilt u " +m.getBeheerder().getNaam().toString()+
+				int resultaat = JOptionPane.showConfirmDialog(beheerderPnl, "Wilt u " +m.getBeheerder().getVoornaam().toString()+
 						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 				
 				if(resultaat == JOptionPane.YES_OPTION)

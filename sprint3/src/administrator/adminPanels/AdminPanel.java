@@ -59,7 +59,7 @@ public class AdminPanel extends JPanel
 		for(Beheerder b : m.getBeheerders())
 		{
 			if(b.isAdmin()==true)
-				adminModel.addElement(b.getNaam());
+				adminModel.addElement(b.getVoornaam());
 		}
 		
 		adminList = new JList(adminModel);
@@ -191,13 +191,13 @@ public class AdminPanel extends JPanel
 	{
 		for(Beheerder b : m.getBeheerders())
 		{
-			if(adminList.getSelectedValue().equals(b.getNaam()))
+			if(adminList.getSelectedValue().equals(b.getVoornaam()))
 			{
 				if(b.isAdmin() == true)
 				{
 					m.setBeheerder(adminList.getSelectedValue().toString());
 					index = adminList.getSelectedIndex();
-					naamTxt.setText(b.getNaam());
+					naamTxt.setText(b.getVoornaam());
 					password1Txt.setText("wachtwoord");			// voor elke admin hetzelfde wachtwoord laten zien ! MD5 string is veel te lang!
 					emailTxt.setText(b.getEmail());
 				}
@@ -316,7 +316,7 @@ public class AdminPanel extends JPanel
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(b.isAdmin()==true)
-						adminModel.addElement(b.getNaam());
+						adminModel.addElement(b.getVoornaam());
 				}
 				
 				adminList.setSelectedIndex(adminList.getLastVisibleIndex());
@@ -351,7 +351,7 @@ public class AdminPanel extends JPanel
 			}
 			else if(verwijderen.isEnabled() == true)
 			{
-				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +m.getBeheerder().getNaam().toString()+
+				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +m.getBeheerder().getVoornaam().toString()+
 						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 								
 				if(resultaat == JOptionPane.YES_OPTION)
@@ -407,7 +407,7 @@ public class AdminPanel extends JPanel
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			
-			m.getBeheerder().setNaam(naamTxt.getText());
+			m.getBeheerder().setVoornaam(naamTxt.getText());
 			try 
 			{
 				/*
@@ -431,7 +431,7 @@ public class AdminPanel extends JPanel
 			for(Beheerder b : m.getBeheerders())
 			{
 				if(b.isAdmin()==true)
-					adminModel.addElement(b.getNaam());
+					adminModel.addElement(b.getVoornaam());
 			}
 			adminList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
 			
