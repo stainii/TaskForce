@@ -25,6 +25,8 @@ import controllers.DocumentController;
 import controllers.mail.AfgekeurdMail;
 import controllers.mail.GoedkeurMail;
 import controllers.mail.MailSchool;
+import controllers.mail.MailThuis;
+import controllers.mail.WijzigingMail;
 
 /** Deel van de GUI waarin je een document goedkeurt of afkeurt. **/
 
@@ -37,7 +39,7 @@ public class Beoordeling extends JPanel
 	private Databank databank;
 	private DocumentContent documentContent;
 	private DocumentController controller;
-	private MailSchool mail;
+	private MailThuis mail;
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
 	
@@ -209,6 +211,11 @@ public class Beoordeling extends JPanel
 						
 						documentContent.setEditable(false);
 						controller.update();
+						
+						//mail versturen
+						mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", new WijzigingMail(controller.getOrigineelDocument()));
+						ex.execute(mail);						
+						
 						hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));
 					}
 					else
@@ -248,7 +255,7 @@ public class Beoordeling extends JPanel
 					controller.goedkeuren();
 
 					//mail versturen
-					mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", new GoedkeurMail(controller.getOrigineelDocument()));
+					mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", new GoedkeurMail(controller.getOrigineelDocument()));
 					ex.execute(mail);
 					
 					redenAfwijzing.setVisible(false);
@@ -277,7 +284,7 @@ public class Beoordeling extends JPanel
 					
 						controller.afkeuren(redenAfwijzing.getReden());
 					
-						mail = new MailSchool(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
+						mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is afgekeurd", new AfgekeurdMail(controller.getOrigineelDocument(),redenAfwijzing));
 						ex.execute(mail);
 						
 						redenAfwijzing.setEditable(false);

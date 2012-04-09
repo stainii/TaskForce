@@ -146,7 +146,7 @@ public class AfgekeurdMail implements SoortMail
 				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
 
 // 1ste titel		
-"<strong>"+document.getErfgoed().getNaam()+"</strong>"+
+"<strong>"+document.getTitel()+ " " + "(" + document.getErfgoed().getNaam() + ")" + "</strong>"+
 
 
 				"</singleline></p>" +
@@ -213,7 +213,7 @@ public class AfgekeurdMail implements SoortMail
 "<table border=\"0\">" +
 "<tr>"+
 	"<td>" + "<strong>Titel: </strong>" + "</td>" +
-	"<td>" + document.getErfgoed().getNaam() + "</td>" +
+	"<td>" + document.getTitel() + "</td>" +
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Eigenaar inzending: </strong>" + "</td>" +
