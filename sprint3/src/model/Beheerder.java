@@ -1,5 +1,10 @@
 package model;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
+import controllers.Login;
+
 public class Beheerder 
 {
 	private int id;
@@ -37,8 +42,8 @@ public class Beheerder
 	{
 		return voornaam + " " + achternaam;
 	}
-	public String getWachtwoord() {
-		return wachtwoord;
+	public String getWachtwoord() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		return Login.convert(wachtwoord);
 	}
 	public String getEmail(){
 		return email;
@@ -60,6 +65,42 @@ public class Beheerder
 	}
 	public boolean isAdmin(){
 		return isAdmin;
+	}
+	
+	public String getView()
+	{
+		for(Instellingen i : m.getInstellingen())
+		{
+			if(i.getBeheerderId()==m.getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("View"))
+				{
+					if(i.getInstellingenWaarde().equals("LijstView"))
+						return "LijstView";
+					else if(i.getInstellingenWaarde().equals("TegelView"))
+						return "TegelView";
+				}
+			}
+		}
+		return "";
+	}
+	
+	public String getTypeContent()
+	{
+		for(Instellingen i : m.getInstellingen())
+		{
+			if(i.getBeheerderId()==m.getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("TypeContent"))
+				{
+					if(i.getInstellingenWaarde().equals("Erfgoed"))
+						return "Erfgoed";
+					else if(i.getInstellingenWaarde().equals("Documenten"))
+						return "Documenten";
+				}
+			}
+		}
+		return "";
 	}
 
 	public void setId(int id) {

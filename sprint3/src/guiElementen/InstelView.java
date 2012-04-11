@@ -74,7 +74,7 @@ public class InstelView extends JPanel
 		c.gridx = 1;
 		c.gridx = 1;
 		c.gridwidth = 6;
-		add(jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getNaam()),c);
+		add(jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam()),c);
 		
 		
 		//overzicht
@@ -103,6 +103,7 @@ public class InstelView extends JPanel
 		erfgoed.setSelectedIcon(selected);		
 		erfgoed.setIcon(notSelected);
 		erfgoed.setRolloverIcon(hover);
+				
 		erfgoed.addActionListener(new ActionListener()
 		{
 			@Override
@@ -135,8 +136,7 @@ public class InstelView extends JPanel
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(erfgoed);
 		group1.add(documenten);
-		
-		
+
 		//tussentekst
 		c.gridx = 2;
 		c.gridy = 5;
@@ -150,12 +150,13 @@ public class InstelView extends JPanel
 		c.gridy = 4;
 		c.gridheight = 2;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		JRadioButton tegel = new JRadioButton("lijst van tegels");
+		JRadioButton tegel = new JRadioButton("Tegels");
 		tegel.setForeground(Color.white);
 		tegel.setOpaque(false);
 		tegel.setSelectedIcon(selected);		
 		tegel.setIcon(notSelected);
 		tegel.setRolloverIcon(hover);
+		
 		tegel.addActionListener(new ActionListener()
 		{
 			@Override
@@ -176,13 +177,6 @@ public class InstelView extends JPanel
 		tabel.setIcon(notSelected);
 		tabel.setRolloverIcon(hover);
 		
-		for(Instellingen i : m.getInstellingen())
-		{
-			if(i.getBeheerderId() == m.getBeheerder().getId())
-			{
-				System.out.println(i.getInstellingenSleutel());
-			}
-		}
 		tabel.addActionListener(new ActionListener()
 		{
 			@Override
@@ -254,9 +248,31 @@ public class InstelView extends JPanel
 		c.gridy = 11;
 		add(annuleren,c);
 		
+		//__Radiobuttons selected of niet
+		if(m.getBeheerder().getTypeContent().equals(""))
+		{
+			erfgoed.setSelected(false);
+			documenten.setSelected(false);
+		}
+		if(m.getBeheerder().getTypeContent().equals("Erfgoed"))
+			erfgoed.setSelected(true);
+		if(m.getBeheerder().getTypeContent().equals("Documenten"))
+			documenten.setSelected(true);
+		
+		/*if(m.getBeheerder().getView().equals(""))
+		{
+			tegel.setSelected(false);
+			tabel.setSelected(false);
+		}
+		if(m.getBeheerder().getView().equals("TegelView"))
+			tegel.setSelected(true);
+		if(m.getBeheerder().getView().equals("LijstView"))
+			tabel.setSelected(true);*/
+		
+		
 		box = new LightBox();
 		box.createLightBoxEffect(f,this);
-
+		
 	}
 	
 	public JPanel getInstelPanel()

@@ -231,9 +231,10 @@ public class Start extends JPanel implements ActionListener
 						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
 						
 						mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord);
+						ex.execute(mail);
 					}
 				}	
-				ex.execute(mail);		
+						
 			}
 		}
 

@@ -1092,7 +1092,7 @@ public class Databank
 			c = DriverManager.getConnection(connectie);
 			s = c.prepareStatement("UPDATE BEHEERDER SET Gebruikersnaam = ?,Achternaam = ?,Wachtwoord = ?,Email = ?,KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ?, " +
 					"KanToevoegen = ? WHERE BeheerderId = ?");
-			s.setString(1,b.getNaam());
+			s.setString(1,b.getVoornaam());
 			s.setString(2, b.getAchternaam());
 			s.setString(3,b.getWachtwoord());
 			s.setString(4, b.getEmail());

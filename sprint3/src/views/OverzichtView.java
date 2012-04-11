@@ -39,12 +39,6 @@ public class OverzichtView extends JPanel
 		return content;
 	}
 
-
-	public void setContent(OverzichtContent content) {
-		this.content = content;
-	}
-
-
 	public void refresh()	//vernieuwt alle tegels/rijen zodat de doorgevoerde wijzigingen zichtbaar worden
 	{
 		content.stateChanged(new ChangeEvent(this));		
