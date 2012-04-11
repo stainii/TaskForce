@@ -14,6 +14,7 @@ public class Model
 	private ArrayList<Erfgoed> erfgoed;
 	private ArrayList<DocumentCMS> documenten;
 	private ArrayList<Beheerder> beheerders;
+	private ArrayList<Instellingen> instellingen;
 	private ArrayList<ChangeListener> listeners;
 	private Beheerder beheerder;
 	private Burger burger;
@@ -25,6 +26,7 @@ public class Model
 		erfgoed = new ArrayList<Erfgoed>();
 		beheerders = new ArrayList<Beheerder>();
 		documenten = new ArrayList<DocumentCMS>();
+		instellingen = new ArrayList<Instellingen>();
 	}
 	
 	//getters
@@ -43,6 +45,11 @@ public class Model
 	public ArrayList<Beheerder> getBeheerders()
 	{	
 		return beheerders;
+	}
+	
+	public ArrayList<Instellingen> getInstellingen()
+	{
+		return instellingen;
 	}
 	
 	//setters
@@ -64,6 +71,11 @@ public class Model
 	public void setBeheerders(ArrayList<Beheerder> beheerders)
 	{
 		this.beheerders = beheerders;
+		notifyListeners();
+	}
+	public void setInstellingen(ArrayList<Instellingen> instel)
+	{
+		this.instellingen = instel;
 		notifyListeners();
 	}
 
@@ -131,7 +143,7 @@ public class Model
 				getErfgoed().remove(i);
 			}
 		}
-		notifyListeners();		
+		notifyListeners();
 	}
 	
 	public void bewerkDocument(DocumentCMS d)

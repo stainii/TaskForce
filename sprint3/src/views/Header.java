@@ -1,4 +1,5 @@
 package views;
+import guiElementen.InstelView;
 import guiElementen.JLabelFactory;
 
 import java.awt.Dimension;
@@ -15,6 +16,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JWindow;
+
 
 import model.Model;
 
@@ -33,8 +36,11 @@ public class Header extends JPanel implements MouseListener
 	private ImageIcon logoIcon = new ImageIcon(getClass().getResource("imgs/logoHeader.png"));
 	private Image logo = logoIcon.getImage();
 	
-	private JLabel inlogLbl, uitlogLbl;
+	private JLabel inlogLbl, uitlogLbl,instellingen;
+	
+	private Model m;
 	private JFrame frame;
+	private OverzichtView v;
 
 	@Override
 	protected void paintComponent(Graphics g) 		//headerachtergrond tekenen
@@ -46,16 +52,24 @@ public class Header extends JPanel implements MouseListener
 			g.drawImage(logo, 8,0,88,110,this);
 	}
 	
-	public Header(Model m, JFrame f)
+	public Header(Model model, JFrame f,OverzichtView view)
 	{
+		this.m = model;
 		this.frame =f;
+		this.v = view;
+		
 		setOpaque(false);
+		
 		setPreferredSize(new Dimension(1000,156));	//de breedte maakt niet uit, wordt overridden door de layoutmanager
 		
 		inlogLbl = new JLabelFactory().getBeheerderLogin(m.getBeheerder().getVoornaam());
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen.png")));
 		uitlogLbl.addMouseListener(this);
+		
+		instellingen = new JLabelFactory().getNormaleTekst("Instellingen");
+		instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+		instellingen.addMouseListener(new InstellingenListener());
 		
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
@@ -66,14 +80,19 @@ public class Header extends JPanel implements MouseListener
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.insets = new Insets(20,15,5,15);
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 1;		
 		p.add(inlogLbl, c);
 		
 		c.insets = new Insets(0,15,0,15);
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 2;
 		p.add(uitlogLbl,c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		p.add(instellingen,c);
+		
 		add(p);
 		
 	}
@@ -102,5 +121,37 @@ public class Header extends JPanel implements MouseListener
 		String[] args = new String[1];	//er wordt een argument meegegeven met de main-methode. Dit zorgt ervoor
 		Start.main(args);				//dat de system tray niet opnieuw gemaakt wordt
 		frame.dispose();
+	}
+
+	private class InstellingenListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco_hover.png")));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		/*	JFrame f = new JFrame();
+			if(f.isVisible())
+				System.out.println("bla");
+			f.setSize(200,200);
+			f.setLocationRelativeTo(frame);
+			f.setVisible(true);*/
+			
+			new InstelView(m,frame,v);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 	}
 }

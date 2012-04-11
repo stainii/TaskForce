@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +23,7 @@ import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
+import model.Instellingen;
 import model.Model;
 
 public class Databank
@@ -41,6 +44,7 @@ public class Databank
 		ArrayList<Burger> burgers = new ArrayList<Burger>();
 		ArrayList<Erfgoed> erfgoed = new ArrayList<Erfgoed>();
 		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
+		ArrayList<Instellingen> instellingen = new ArrayList<Instellingen>();
 		Connection c = null;
 		Statement s = null;
 		PreparedStatement s2 = null;
@@ -99,6 +103,13 @@ public class Databank
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
 						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
 			}
+			
+			rs= s.executeQuery("SELECT * FROM Instellingen");
+			
+			while(rs.next())
+			{
+				instellingen.add(new Instellingen(rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
+			}
 		}
 		catch (SQLException e)
 		{
@@ -127,6 +138,7 @@ public class Databank
 		m.setErfgoed(erfgoed);
 		m.setBurgers(burgers);
 		m.setBeheerders(beheerders);
+		m.setInstellingen(instellingen);
 	}
 	
 	
@@ -1027,7 +1039,6 @@ public class Databank
 		return "Er zijn " + aantalWijzigingen + " documenten/fiches gewijzigd, " + aantalVerwijderd + " documenten/fiches verwijderd en " + aantalToegevoegd + " documenten/fiches toegevoegd.";
 	}
 	
-	
 	//___ Methoden voor klasse Administrator
 	
 	public void getBeheerdersEnBurgersUitDatabank()			// Deze methode wordt ENKEL door Administrator gebruikt! Enkel de beheerders worden ingeladen, niet de volledige databank moet voor deze klasse ingeladen worden
@@ -1071,7 +1082,7 @@ public class Databank
 		}
 	}
 	
-	public void updateBeheerdersDatabank(Beheerder b)
+	public void updateBeheerdersDatabank(Beheerder b) throws NoSuchAlgorithmException, UnsupportedEncodingException
 	{	
 		Connection c = null;
 		PreparedStatement s = null;
@@ -1081,7 +1092,7 @@ public class Databank
 			c = DriverManager.getConnection(connectie);
 			s = c.prepareStatement("UPDATE BEHEERDER SET Gebruikersnaam = ?,Achternaam = ?,Wachtwoord = ?,Email = ?,KanBeoordelen = ?, KanWijzigen = ?, KanVerwijderen = ?, " +
 					"KanToevoegen = ? WHERE BeheerderId = ?");
-			s.setString(1,b.getVoornaam());
+			s.setString(1,b.getNaam());
 			s.setString(2, b.getAchternaam());
 			s.setString(3,b.getWachtwoord());
 			s.setString(4, b.getEmail());
@@ -1150,4 +1161,6 @@ public class Databank
 			e.printStackTrace();
 		}
 	}
+	
+	//____________instellingen
 }

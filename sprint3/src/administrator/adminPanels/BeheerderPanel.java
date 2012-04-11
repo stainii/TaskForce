@@ -1,7 +1,6 @@
 package administrator.adminPanels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -18,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
@@ -27,6 +27,7 @@ import controllers.Databank;
 import model.Beheerder;
 import model.Model;
 
+@SuppressWarnings("serial")
 public class BeheerderPanel extends JPanel
 {
 	private Model m;
@@ -35,8 +36,8 @@ public class BeheerderPanel extends JPanel
 	private DefaultListModel beheerderModel;
 	private JPanel allesPanel,beheerderPnl,rechtenPnl;
 	private JTextField naamTxt, achternaamTxt, emailTxt;
-	private JLabel rechtenPlus,rechtenMin ,instellingen, toevoegenOpslaan,bewerken,verwijderen,naamLbl,achternaamLbl,emailLbl
-		,toevoegen,bewerkenOpslaan,instellingenMin,instellingenPlus;
+	private JLabel rechtenPlus,rechtenMin , toevoegenOpslaan,bewerken,verwijderen,naamLbl,achternaamLbl,emailLbl
+		,toevoegen,bewerkenOpslaan,instellingenPlus;
 	private JCheckBox wijzigenCb, toevoegenCb, verwijderenCb, beoordelenCb;
 	private int index;
 	
@@ -64,7 +65,7 @@ public class BeheerderPanel extends JPanel
 		
 		rechtenMin = new JLabel("Rechten");
 		rechtenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_min.png")));
-		rechtenMin.addMouseListener(new RechtenMinListener());		// andere !!! 
+		rechtenMin.addMouseListener(new RechtenMinListener());		
 				
 		verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/verwijderen.png")));
@@ -95,10 +96,6 @@ public class BeheerderPanel extends JPanel
 		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
 		bewerkenOpslaan.addMouseListener(new BewerkenOpslaanListener());
 		
-		instellingenMin = new JLabel("Instellingen");
-		instellingenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_min.png")));
-		instellingenMin.addMouseListener(new InstellingenMinListener());
-		
 		instellingenPlus = new JLabel("Instellingen");
 		instellingenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
 		instellingenPlus.addMouseListener(new InstellingenPlusListener());
@@ -118,54 +115,7 @@ public class BeheerderPanel extends JPanel
 		beheerderScroll.setPreferredSize(new Dimension(150,200));
 		beheerderScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		beheerderList.addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if(beheerderList.getSelectedIndex() == -1)
-				{
-					naamTxt.setText("");
-					achternaamTxt.setText("");
-					emailTxt.setText("");
-
-				}
-				else
-				{
-					index = beheerderList.getSelectedIndex();
-					naamTxt.setEditable(false);
-					achternaamTxt.setEditable(false);		// als men op Toevoegen klikt de tekstvakken terug on editable zetten
-					emailTxt.setEditable(false);
-					
-					verwijderen.setVisible(true);
-					bewerken.setVisible(true);
-					
-					if(rechtenPnl.isVisible())
-						verwijderen.setVisible(false);
-					else
-						verwijderen.setVisible(true);
-					
-					bewerken.setVisible(true);
-					toevoegenOpslaan.setVisible(false);
-					
-					for(Beheerder b : m.getBeheerders())
-					{
-						if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
-						{
-							m.setBeheerder(beheerderList.getSelectedValue().toString());
-							naamTxt.setText(m.getBeheerder().getVoornaam());
-							achternaamTxt.setText(m.getBeheerder().getAchternaam());
-							emailTxt.setText(m.getBeheerder().getEmail());
-							
-							wijzigenCb.setSelected(m.getBeheerder().KanWijzigen());
-							toevoegenCb.setSelected(m.getBeheerder().KanToevoegen());
-							beoordelenCb.setSelected(m.getBeheerder().KanBeoordelen());
-							verwijderenCb.setSelected(m.getBeheerder().KanVerwijderen());
-						}
-					}
-				}
-					
-			}
-		});
+		beheerderList.addListSelectionListener(new ListListener());
 						
 		rechtenPnl = new JPanel();
 		rechtenPnl.setLayout(new GridLayout(4,1));
@@ -220,6 +170,7 @@ public class BeheerderPanel extends JPanel
 		
 		c.gridx = 1;
 		c.gridy = 5;
+		rechtenPlus.setVisible(false);
 		beheerderPnl.add(rechtenPlus,c);
 		
 		c.gridx = 1;
@@ -229,14 +180,9 @@ public class BeheerderPanel extends JPanel
 		
 		c.gridx = 2;
 		c.gridy = 5;
-		instellingenPlus.setVisible(true);
+		instellingenPlus.setVisible(false);
 		beheerderPnl.add(instellingenPlus,c);
-		
-		c.gridx = 2;
-		c.gridy = 5;
-		instellingenMin.setVisible(false);
-		beheerderPnl.add(instellingenMin,c);
-		
+				
 		c.gridx = 2;
 		c.gridy = 5;
 		toevoegenOpslaan.setVisible(false);
@@ -262,6 +208,7 @@ public class BeheerderPanel extends JPanel
 		
 		allesPanel.add(beheerderScroll,BorderLayout.LINE_START);
 		allesPanel.add(beheerderPnl,BorderLayout.CENTER);
+		
 	}
 	
 	public JPanel getBeheerPanel()
@@ -269,6 +216,48 @@ public class BeheerderPanel extends JPanel
 		return allesPanel;
 	}
 	
+	private class ListListener implements ListSelectionListener
+	{
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+
+			index = beheerderList.getSelectedIndex();
+
+			naamTxt.setEditable(false);
+			achternaamTxt.setEditable(false);	
+			emailTxt.setEditable(false);
+			
+			rechtenPlus.setVisible(true);
+			instellingenPlus.setVisible(true);
+			verwijderen.setVisible(true);
+			bewerken.setVisible(true);
+			
+			if(rechtenPnl.isVisible())
+				verwijderen.setVisible(false);
+			else
+				verwijderen.setVisible(true);
+			
+			bewerken.setVisible(true);
+			toevoegenOpslaan.setVisible(false);
+			
+			for(Beheerder b : m.getBeheerders())
+			{
+				if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
+				{
+					m.setBeheerder(beheerderList.getSelectedValue().toString());
+					naamTxt.setText(m.getBeheerder().getVoornaam());
+					achternaamTxt.setText(m.getBeheerder().getAchternaam());
+					emailTxt.setText(m.getBeheerder().getEmail());
+					
+					wijzigenCb.setSelected(m.getBeheerder().KanWijzigen());
+					toevoegenCb.setSelected(m.getBeheerder().KanToevoegen());
+					beoordelenCb.setSelected(m.getBeheerder().KanBeoordelen());
+					verwijderenCb.setSelected(m.getBeheerder().KanVerwijderen());
+				}
+			}
+			
+		}
+	}
 	private class ToevoegenListener implements MouseListener
 	{
 		@Override
@@ -400,7 +389,11 @@ public class BeheerderPanel extends JPanel
 			m.getBeheerder().setKanVerwijderen(verwijderenCb.isSelected());
 			m.getBeheerder().setKanWijzigen(wijzigenCb.isSelected());
 			
-			d.updateBeheerdersDatabank(m.getBeheerder());
+			try {
+				d.updateBeheerdersDatabank(m.getBeheerder());
+			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {e.printStackTrace();
+			}
 			
 			beheerderModel.removeAllElements();
 			
@@ -457,10 +450,7 @@ public class BeheerderPanel extends JPanel
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseReleased(MouseEvent e) {}
 		
 	}
 	private class RechtenPlusListener implements MouseListener
@@ -536,38 +526,15 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			instellingenMin.setVisible(true);
 			instellingenPlus.setVisible(false);
+			
+			beheerderPnl.setVisible(false);
+			//allesPanel.add(new InstelView(beheerderPnl,instellingenPlus,m).getInstelPanel(),BorderLayout.CENTER);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}	
 	}
 	
-	private class InstellingenMinListener implements MouseListener
-	{
-		@Override
-		public void mouseClicked(MouseEvent e) {}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			instellingenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover_min.png")));
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			instellingenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_min.png")));
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			instellingenMin.setVisible(false);
-			instellingenPlus.setVisible(true);
-		}	
-	}
+	
 }

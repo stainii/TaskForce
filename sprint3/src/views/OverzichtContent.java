@@ -311,6 +311,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 
 	public void setView(String view) {
 		this.view = view;
+		model.notifyListeners();
 	}
 
 	public int getOndergrens() {

@@ -6,6 +6,7 @@ package views;
 
 import guiElementen.JLabelFactory;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -15,8 +16,14 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,7 +42,10 @@ import systemTray.InSystemTray;
 
 import controllers.Databank;
 import controllers.Login;
+import controllers.mail.MailThuis;
+import controllers.mail.WachtwoordMail;
 
+import model.Beheerder;
 import model.Model;
 @SuppressWarnings("serial")
 public class Start extends JPanel implements ActionListener
@@ -45,9 +55,13 @@ public class Start extends JPanel implements ActionListener
 	
 	private JPasswordField wachtwoordTxt;
 	private JTextField gebruikersnaamTxt;
-	private JPanel voortgang, login;
-	private JLabel voortgangLbl, logo;
+	private JPanel voortgang, login, wachtwoordVergetenPnl;
+	private JLabel voortgangLbl, logo, wachtwoordVergeten;
 	private JFrame frame;
+	private MailThuis mail;
+	private ExecutorService ex;
+	private Databank d;
+	private Model m;
 	private boolean sysTrayAlIngeladen;	//is de system tray al ingeladen? zo ja, dan moet hij niet opnieuw gemaakt worden
 	
 	@Override
@@ -63,10 +77,16 @@ public class Start extends JPanel implements ActionListener
 		this.frame = fra;
 		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
 		
+		m = new Model();
+		d = new Databank(m);
+		d.laadDatabank();
+		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
+		
+		ex = Executors.newFixedThreadPool(1);
 		
 		logo = new JLabel();
 		logo.setIcon(new ImageIcon(getClass().getResource("imgs/logo.png")));
@@ -83,6 +103,10 @@ public class Start extends JPanel implements ActionListener
 		
 		voortgangLbl = new JLabelFactory().getMenuTitel("Bezig met laden");
 		voortgang.add(voortgangLbl);
+		
+		wachtwoordVergetenPnl = new JPanel();
+		wachtwoordVergetenPnl.setOpaque(false);
+		add(wachtwoordVergetenPnl);
 		
 		//layout login
 		login.setLayout(new GridBagLayout());
@@ -113,13 +137,21 @@ public class Start extends JPanel implements ActionListener
 		
 		c.gridx = 3;
 		c.gridy = 3;
+		wachtwoordVergeten = new JLabelFactory().getItalic("<html><u>Wachtwoord vergeten?</u></html>");
+		wachtwoordVergeten.setVisible(false);
+		login.add(wachtwoordVergeten,c);
+		wachtwoordVergeten.addMouseListener(new WachtwoordVergetenListener());
+		
+		c.gridx = 3;
+		c.gridy = 4;
 		c.fill = GridBagConstraints.NONE;
-		JButton inloggenBtn = new JButton("Inloggen");
+		JButton inloggenBtn = new JButton("    Inloggen    ");
 		login.add(inloggenBtn,c);
 		
 		inloggenBtn.addActionListener(this);
 		gebruikersnaamTxt.addActionListener(this);
 		wachtwoordTxt.addActionListener(this);
+		
 	}
 	
 	public static void main(String args[])
@@ -155,16 +187,58 @@ public class Start extends JPanel implements ActionListener
 		
 		else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 		{
-			new Laden(frame, voortgangLbl, gebruikersnaamTxt.getText(), sysTrayAlIngeladen).execute();	//laadt het programma in					
+			new Laden(frame, voortgangLbl, gebruikersnaamTxt.getText(), sysTrayAlIngeladen,m,d).execute();	//laadt het programma in					
 		}
 		else
 		{
+			wachtwoordVergeten.setVisible(true);
 			wachtwoordTxt.setText("");
 			JOptionPane.showMessageDialog(null, "U bent geen beheerder en niet gemachtigd om dit programma te gebruiken!","Beheerder niet gevonden of wachtwoord foutief",JOptionPane.ERROR_MESSAGE);
 			login.setVisible(true);
 			voortgang.setVisible(false);
 			wachtwoordTxt.grabFocus();
 		}	
+	}
+	
+	
+	private class WachtwoordVergetenListener implements MouseListener
+	{
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			int resultaat = JOptionPane.showConfirmDialog(null,"Om de veiligheid te blijven garanderen wordt het oud wachtwoord verwijderd \nen wordt er een nieuw " +
+					"wachtwoord gestuurd naar de gebruiker.\nBent u hiermee akkoord?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+			
+			if(resultaat == JOptionPane.YES_OPTION)
+			{
+				WachtwoordMail wachtwoord = new WachtwoordMail();
+				
+				for(Beheerder b : m.getBeheerders())
+				{
+					if(gebruikersnaamTxt.getText().equalsIgnoreCase(b.getVoornaam()))
+					{
+						b.setWachtwoord(wachtwoord.getWachtwoord());
+						try {
+							d.updateBeheerdersDatabank(b);
+						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
+						
+						mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord);
+					}
+				}	
+				ex.execute(mail);		
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 	}
 }
 
@@ -176,13 +250,17 @@ class Laden extends SwingWorker<Void,Void>
 	private JLabel laden;
 	private InSystemTray systemTray;
 	private boolean sysTrayAlIngeladen;
+	private Model m;
+	private Databank d;
 	
-	public Laden(JFrame f, JLabel laden, String beheerderNaam, boolean sysTrayAlIngeladen)
+	public Laden(JFrame f, JLabel laden, String beheerderNaam, boolean sysTrayAlIngeladen, Model model , Databank data)
 	{
 		this.frame =f;
 		this.laden = laden;
 		this.beheerderNaam = beheerderNaam;
 		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
+		this.m = model;
+		this.d = data;
 	}
 	
 
@@ -191,10 +269,7 @@ class Laden extends SwingWorker<Void,Void>
 	{
 		//databank inladen in model
 		laden.setText("Bezig met laden databank...");
-		
-		Model m =new Model();
-		Databank d = new Databank(m);
-		d.laadDatabank();
+		//d.laadDatabank();
 		m.setBeheerder(beheerderNaam);
 		
 		//Interface (GUI) maken en eigenschappen instellen
@@ -203,7 +278,7 @@ class Laden extends SwingWorker<Void,Void>
 		f.setTitle("Herzele Erfgoed CMS");
 		f.add(new Hoofd(m, d, f));
 		f.setSize(new Dimension(1005,720));
-		f.setMinimumSize(new Dimension(1005,720));
+		f.setMinimumSize(new Dimension(1005,700));
 		f.setLocationRelativeTo(null);
 		
 		//system tray inladen

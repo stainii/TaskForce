@@ -424,7 +424,11 @@ public class AdminPanel extends JPanel
 			
 			m.getBeheerder().setEmail(emailTxt.getText());
 			
-			d.updateBeheerdersDatabank(m.getBeheerder());
+			try {
+				d.updateBeheerdersDatabank(m.getBeheerder());
+			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {e.printStackTrace();
+			}
 			
 			adminModel.removeAllElements();
 			

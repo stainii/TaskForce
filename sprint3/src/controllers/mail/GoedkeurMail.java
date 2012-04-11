@@ -142,7 +142,7 @@ public class GoedkeurMail implements SoortMail
 				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
 
 // 1ste titel		
-"<strong>"+document.getTitel()+ " " + "(" + document.getErfgoed().getNaam() + ")" + "</strong>"+
+"<strong>"+document.getErfgoed().getNaam()+"</strong>"+
 
 
 				"</singleline></p>" +

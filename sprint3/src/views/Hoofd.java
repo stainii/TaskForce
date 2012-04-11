@@ -3,13 +3,10 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import controllers.Databank;
-
 import model.Model;
 
 /**Het beheerderspaneel waar de beheerder zijn ding kan doen met de documenten
@@ -29,6 +26,7 @@ public class Hoofd extends JPanel
 												// moeten we de view bijhouden, want als je steeds een nieuwe OverzichtView zou maken bij het
 												// terugkeren, dan kom je steeds op pagina 1 terecht met de standaard geselecteerde filters.
 
+	
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
 	{
@@ -40,14 +38,16 @@ public class Hoofd extends JPanel
 	public Hoofd(Model m, Databank d, JFrame f)
 	{		
 		setLayout(new BorderLayout());
-		add(new Header(m,f),BorderLayout.NORTH);
+		
+		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
+		add(new Header(m,f,ingeladenOverzicht),BorderLayout.NORTH);
 		
 		contentWrapper = new JPanel(new BorderLayout());
 		contentWrapper.setOpaque(false);
-		 
+		
 		add(contentWrapper, BorderLayout.CENTER);
 		
-		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
+		
 		content = ingeladenOverzicht;
 		contentWrapper.add(content);
 		

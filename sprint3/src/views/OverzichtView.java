@@ -33,6 +33,18 @@ public class OverzichtView extends JPanel
 		add(content, BorderLayout.CENTER);
 		add(menu,BorderLayout.EAST);
 	}
+	
+	
+	public OverzichtContent getContent() {
+		return content;
+	}
+
+
+	public void setContent(OverzichtContent content) {
+		this.content = content;
+	}
+
+
 	public void refresh()	//vernieuwt alle tegels/rijen zodat de doorgevoerde wijzigingen zichtbaar worden
 	{
 		content.stateChanged(new ChangeEvent(this));		
