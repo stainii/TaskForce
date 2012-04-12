@@ -40,7 +40,7 @@ public class Hoofd extends JPanel
 		setLayout(new BorderLayout());
 		
 		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
-		add(new Header(m,f,ingeladenOverzicht),BorderLayout.NORTH);
+		add(new Header(m,f,ingeladenOverzicht,d),BorderLayout.NORTH);
 		
 		contentWrapper = new JPanel(new BorderLayout());
 		contentWrapper.setOpaque(false);

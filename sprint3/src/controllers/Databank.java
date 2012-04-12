@@ -108,7 +108,7 @@ public class Databank
 			
 			while(rs.next())
 			{
-				instellingen.add(new Instellingen(rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
+				instellingen.add(new Instellingen(rs.getInt("InstellingId"),rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
 			}
 		}
 		catch (SQLException e)
@@ -1163,4 +1163,23 @@ public class Databank
 	}
 	
 	//____________instellingen
+	public void updateInstellingen(String iw, int id)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE INSTELLINGEN SET InstellingWaarde = ? WHERE InstellingId = ?");
+			s.setString(1,iw);
+			s.setInt(2, id);
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
 }

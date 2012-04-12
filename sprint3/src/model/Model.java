@@ -222,6 +222,19 @@ public class Model
 		}
 	}
 	
+	public int getInstellingenId(String instellingSleutel)
+	{
+		for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals(instellingSleutel))
+					return i.getInstellingId();
+			}
+		}
+		return 0;
+	}
+	
 	//Listeners
 	public void addListener(ChangeListener l)
 	{

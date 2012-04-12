@@ -2,17 +2,22 @@ package model;
 
 public class Instellingen 
 {
+	private int instellingId;
 	private String instellingenSleutel;
 	private String instellingenWaarde;
 	private int beheerderId;
 	
-	public Instellingen(String is, String iw, int bid)
+	public Instellingen(int inid, String is, String iw, int bid)
 	{
+		this.instellingId = inid;
 		this.instellingenSleutel = is;
 		this.instellingenWaarde = iw;
 		this.beheerderId = bid;
 	}
 
+	public int getInstellingId(){
+		return instellingId;
+	}
 	public String getInstellingenSleutel() {
 		return instellingenSleutel;
 	}
@@ -25,6 +30,9 @@ public class Instellingen
 		return beheerderId;
 	}
 
+	public void setInstellingId(int instellingId){
+		this.instellingId = instellingId;
+	}
 	public void setInstellingenSleutel(String instellingenSleutel) {
 		this.instellingenSleutel = instellingenSleutel;
 	}

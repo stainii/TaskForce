@@ -30,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import controllers.Databank;
+
 import views.OverzichtContent;
 import views.OverzichtView;
 
@@ -45,14 +47,16 @@ public class InstelView extends JPanel
 	private Model m;
 	private JFrame f;
 	private OverzichtView v;
+	private Databank d;
 	private JLabelFactory jLabelFactory;
 	private LightBox box;
 	
-	public InstelView(Model model,JFrame frame,OverzichtView view)
+	public InstelView(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
 		this.m = model;
 		this.f = frame;
 		this.v = view;
+		this.d = data;
 		
 		jLabelFactory = new JLabelFactory();
 		
@@ -110,7 +114,8 @@ public class InstelView extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				v.getContent().setTypeContent("Erfgoed"); //Scherm laten veranderen in gekozen keuze
-				
+				m.getBeheerder().setTypeContent(m.getBeheerder().getId(),"Erfgoed" );
+				d.updateInstellingen("Erfgoed", m.getInstellingenId("TypeContent"));
 			}
 		});
 		add(erfgoed, c);
@@ -128,6 +133,8 @@ public class InstelView extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				v.getContent().setTypeContent("Documenten");
+				m.getBeheerder().setTypeContent(m.getBeheerder().getId(),"Documenten" );
+				d.updateInstellingen("Documenten", m.getInstellingenId("TypeContent"));
 			}
 		});
 
@@ -163,6 +170,8 @@ public class InstelView extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				v.getContent().setView("TegelView");
+				m.getBeheerder().setView(m.getBeheerder().getId(),"TegelView" );
+				d.updateInstellingen("TegelView", m.getInstellingenId("View"));
 			}
 		});
 		add(tegel, c);
@@ -183,6 +192,8 @@ public class InstelView extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				v.getContent().setView("LijstView");
+				m.getBeheerder().setView(m.getBeheerder().getId(),"LijstView" );
+				d.updateInstellingen("LijstView", m.getInstellingenId("View"));
 			}
 		});
 		add(tabel, c);
@@ -259,7 +270,7 @@ public class InstelView extends JPanel
 		if(m.getBeheerder().getTypeContent().equals("Documenten"))
 			documenten.setSelected(true);
 		
-		/*if(m.getBeheerder().getView().equals(""))
+		if(m.getBeheerder().getView().equals(""))
 		{
 			tegel.setSelected(false);
 			tabel.setSelected(false);
@@ -267,7 +278,7 @@ public class InstelView extends JPanel
 		if(m.getBeheerder().getView().equals("TegelView"))
 			tegel.setSelected(true);
 		if(m.getBeheerder().getView().equals("LijstView"))
-			tabel.setSelected(true);*/
+			tabel.setSelected(true);
 		
 		
 		box = new LightBox();

@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 
+import controllers.Databank;
+
 
 import model.Model;
 
@@ -41,6 +43,7 @@ public class Header extends JPanel implements MouseListener
 	private Model m;
 	private JFrame frame;
 	private OverzichtView v;
+	private Databank d;
 
 	@Override
 	protected void paintComponent(Graphics g) 		//headerachtergrond tekenen
@@ -52,11 +55,12 @@ public class Header extends JPanel implements MouseListener
 			g.drawImage(logo, 8,0,88,110,this);
 	}
 	
-	public Header(Model model, JFrame f,OverzichtView view)
+	public Header(Model model, JFrame f,OverzichtView view,Databank data)
 	{
 		this.m = model;
 		this.frame =f;
 		this.v = view;
+		this.d = data;
 		
 		setOpaque(false);
 		
@@ -148,7 +152,7 @@ public class Header extends JPanel implements MouseListener
 			f.setLocationRelativeTo(frame);
 			f.setVisible(true);*/
 			
-			new InstelView(m,frame,v);
+			new InstelView(m,frame,v,d);
 		}
 
 		@Override

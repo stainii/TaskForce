@@ -146,5 +146,28 @@ public class Beheerder
 		m.notifyListeners();
 	}
 	
+	public void setView(int id, String view)
+	{
+		for(Instellingen i : m.getInstellingen())
+		{
+			if(i.getBeheerderId() == id)
+			{
+				if(i.getInstellingenSleutel().equals("View"))
+					i.setInstellingenWaarde(view);
+			}			
+		}
+		m.notifyListeners();
+	}
+	
+	public void setTypeContent(int id, String typeContent)
+	{
+		for(Instellingen i : m.getInstellingen())
+		{
+			if(i.getBeheerderId() == id)
+				if(i.getInstellingenSleutel().equals("TypeContent"))
+					i.setInstellingenWaarde(typeContent);
+		}
+	}
+	
 	
 }
