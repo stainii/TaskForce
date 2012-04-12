@@ -1,6 +1,8 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Erfgoed
@@ -18,13 +20,14 @@ public class Erfgoed
 	private String geschiedenis;
 	private String nuttigeInfo;
 	private String link;
+	private Timestamp datumToegevoegd;
 	private boolean verwijderd; 
 	private int burgerId;
 	
 	public Erfgoed(int id, String naam, String postcode, String deelgemeente,
 			String straat, String huisnr, String omschrijving,
 			String typeErfgoed, String kenmerken, String geschiedenis,
-			String nuttigeInfo, String link, boolean verwijderd, int burgerId, Model m)
+			String nuttigeInfo, String link, Timestamp datumToegevoegd, boolean verwijderd, int burgerId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -39,13 +42,14 @@ public class Erfgoed
 		this.geschiedenis = geschiedenis; 
 		this.nuttigeInfo = nuttigeInfo;
 		this.link = link;
+		this.datumToegevoegd = datumToegevoegd;
 		this.verwijderd = verwijderd;
 		this.burgerId = burgerId;
 	}
 	
 	public Erfgoed(Model m)
 	{
-		this (-1, "","","","","","","","","","","",false,m.getBeheerder().getId(),m);
+		this (-1, "","","","","","","","","","","",new Timestamp(new Date().getTime()), false,m.getBeheerder().getId(),m);
 	}
 	
 	// ------- getters ------------
@@ -99,6 +103,10 @@ public class Erfgoed
 	
 	public String getLink() {
 		return link;
+	}
+	public Timestamp getDatumToegevoegd()
+	{
+		return datumToegevoegd;
 	}
 	
 	public boolean isVerwijderd() {
@@ -193,15 +201,23 @@ public class Erfgoed
 		this.geschiedenis = geschiedenis;
 	}
 
-	public void setNuttigeInfo(String nuttigeInfo) {
+	public void setNuttigeInfo(String nuttigeInfo)
+	{
 		this.nuttigeInfo = nuttigeInfo;
 	}
 
-	public void setLink(String link) {
+	public void setLink(String link) 
+	{
 		this.link = link;
 	}
 	
-	public void setVerwijderd(boolean verwijderd) {
+	public void setDatumToegevoegd(Timestamp datumToegevoegd) 
+	{
+		this.datumToegevoegd = datumToegevoegd;
+	}
+	
+	public void setVerwijderd(boolean verwijderd)
+	{
 		this.verwijderd = verwijderd;
 	}
 

@@ -71,7 +71,7 @@ public class OverzichtErfgoedController
 			{
 				try
 				{
-					return -e1.getDocumenten().get(0).getDatumToegevoegd().toString().compareTo(e1.getDocumenten().get(0).getDatumToegevoegd().toString());					
+					return -e1.getDatumToegevoegd().compareTo(e2.getDatumToegevoegd());					
 				}
 				catch(IndexOutOfBoundsException i)
 				{

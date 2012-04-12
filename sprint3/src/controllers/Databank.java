@@ -78,7 +78,7 @@ public class Databank
 			{
 				erfgoed.add(new Erfgoed(rs.getInt("ErfgoedId"),rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 						rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), m));
+						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getTimestamp("DatumToegevoegd"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), m));
 			}
 			
 			
@@ -994,7 +994,7 @@ public class Databank
 						{
 							m.getErfgoed().add(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));							
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));							
 						}
 						else if (actie.equals("Verwijderd"))
 						{
@@ -1004,7 +1004,7 @@ public class Databank
 						{
 							m.bewerkErfgoed(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));
 						}
 					}
 				}
