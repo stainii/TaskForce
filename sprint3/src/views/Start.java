@@ -79,7 +79,7 @@ public class Start extends JPanel implements ActionListener
 		
 		m = new Model();
 		d = new Databank(m);
-		d.laadDatabank();
+		d.getBeheerdersEnBurgersUitDatabank();
 		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
@@ -270,7 +270,7 @@ class Laden extends SwingWorker<Void,Void>
 	{
 		//databank inladen in model
 		laden.setText("Bezig met laden databank...");
-		//d.laadDatabank();
+		d.laadDatabank();
 		m.setBeheerder(beheerderNaam);
 		
 		//Interface (GUI) maken en eigenschappen instellen

@@ -14,11 +14,14 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -50,6 +56,8 @@ public class InstelView extends JPanel
 	private Databank d;
 	private JLabelFactory jLabelFactory;
 	private LightBox box;
+	private JTextField nieuweRedenTxt;
+	private DefaultListModel redenModel;
 	
 	public InstelView(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
@@ -232,27 +240,103 @@ public class InstelView extends JPanel
 		c.gridwidth = 1;
 		c.gridheight = 2;
 		c.insets = new Insets(0,10,0,10);
-		ArrayList<String> redenen = new ArrayList<String>();
+		/*ArrayList<String> redenen = new ArrayList<String>();
 		redenen.add("test1");
 		redenen.add("test2");
-		redenen.add("test3");
-		JList standaardRedenen = new JList(redenen.toArray());
+		redenen.add("test3");*/
+		
+		redenModel = new DefaultListModel();
+		for(int i=0;i<m.getBeheerder().getStandaardReden().size();i++)
+		{
+			redenModel.addElement(m.getBeheerder().getStandaardReden().get(i));
+		}
+		
+		final JList standaardRedenen = new JList(redenModel);
+		standaardRedenen.setLayoutOrientation(JList.VERTICAL);
+		standaardRedenen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane redenScroll = new JScrollPane(standaardRedenen);
+		redenScroll.setPreferredSize(new Dimension(100,50));
+		redenScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		add(standaardRedenen,c);
 		
 		c.gridx = 2;
 		c.gridy = 10;
 		c.gridheight = 1;
-		JTextField nieuweRedenTxt = new JTextField("Typ hier een nieuwe reden...");
+		final String nieuweReden = "Typ hier een nieuwe reden...";
+		nieuweRedenTxt = new JTextField(nieuweReden);
+		nieuweRedenTxt.setForeground(Color.gray);
+		nieuweRedenTxt.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				nieuweRedenTxt.setForeground(Color.gray);
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				nieuweRedenTxt.setForeground(Color.black);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+		});
+		nieuweRedenTxt.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(nieuweRedenTxt.getText().isEmpty())
+				{
+					nieuweRedenTxt.setText(nieuweReden);
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if(nieuweRedenTxt.getText().equals(nieuweReden));
+				{
+					nieuweRedenTxt.setText("");
+					nieuweRedenTxt.setColumns(14);
+				}
+			}
+		});
 		add(nieuweRedenTxt,c);
 		
 		c.gridx = 3;
 		c.gridy = 10;
 		JButton nieuweRedenBtn = new JButton("Toevoegen");
 		add(nieuweRedenBtn,c);
+		nieuweRedenBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!nieuweRedenTxt.getText().equals(nieuweReden))
+				{
+					d.voegInstellingToe("StandaardReden",nieuweRedenTxt.getText() , m.getBeheerder().getId());
+					m.getBeheerder().getStandaardReden().add(nieuweRedenTxt.getText());
+					redenModel.addElement(nieuweRedenTxt.getText());
+					nieuweRedenTxt.setText(nieuweReden);
+				}
+			}
+		});
 		
 		c.gridx = 2;
 		c.gridy = 11;
 		JButton verwijderenBtn = new JButton("Verwijder geselecteerde reden");
+		verwijderenBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//redenModel.remove(standaardRedenen.getSelectedIndex());
+				//m.getBeheerder().verwijderStandaardReden(standaardRedenen.getSelectedValue().toString());
+				// nog uit databank laten verwijderen
+			}
+		});
 		add(verwijderenBtn, c);
 		
 		c.gridx = 3;

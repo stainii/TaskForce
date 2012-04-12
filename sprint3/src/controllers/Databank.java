@@ -1182,4 +1182,44 @@ public class Databank
 			e.printStackTrace();
 		}
 	}
+	
+	public void voegInstellingToe(String is, String iw, int id)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("INSERT INTO INSTELLINGEN (InstellingSleutel,InstellingWaarde,BeheerderId) VALUES (?,?,?)");
+			s.setString(1, is);
+			s.setString(2,iw);
+			s.setInt(3, id);
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteStandaardReden()
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("DELETE FROM INSTELLINGEN WHERE ");
+
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
 }
