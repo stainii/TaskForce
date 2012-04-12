@@ -88,6 +88,8 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.typeContent = "Erfgoed";
 		
 		addComponentListener(this);
+		
+		
 				
 		controller1.addListener(this);
 		controller2.addListener(this);
@@ -294,9 +296,14 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		if(model.getBeheerder().getTypeContent().equals(""))
 			setTypeContent("Erfgoed");
 		if(model.getBeheerder().getTypeContent().equals("Erfgoed"))
+		{
 			setTypeContent("Erfgoed");
+		}
 		if(model.getBeheerder().getTypeContent().equals("Documenten"))
+		{
 			setTypeContent("Documenten");
+		}
+	
 		
 	}
 	public String getTypeContent() {

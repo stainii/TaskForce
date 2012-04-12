@@ -283,7 +283,6 @@ public class InstelView extends JPanel
 		
 		box = new LightBox();
 		box.createLightBoxEffect(f,this);
-		
 	}
 	
 	public JPanel getInstelPanel()
