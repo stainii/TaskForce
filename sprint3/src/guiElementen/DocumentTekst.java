@@ -21,11 +21,14 @@ public class DocumentTekst extends JPanel implements DocumentMedia
 		this.controller = c;
 		setOpaque(false);
 		
-		tekst = new JTextArea(20,30);
+		tekst = new MooiTextArea("", "Tekst");
+		
 		if (!wijziging)
 			tekst.setText(c.getOrigineelDocument().getTekst());
 		else
 			tekst.setText(c.getOrigineelDocument().getLaatsteWijziging().getTekst());
+		tekst.setRows(20);
+		tekst.setColumns(30);
 		tekst.setEditable(false);
 		tekst.setBorder(null);
 		tekst.setOpaque(false);
