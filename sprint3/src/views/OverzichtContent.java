@@ -281,7 +281,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		scrollPanel = new JPanel();
 		scrollPanel.setLayout(new FlowLayout());
 		scrollPanel.setOpaque(false);
-		scrollPanel.setPreferredSize(new Dimension(0,30));
+		scrollPanel.setPreferredSize(new Dimension(0,22));
 		add(scrollPanel, BorderLayout.SOUTH);
 		
 		//View instellingen

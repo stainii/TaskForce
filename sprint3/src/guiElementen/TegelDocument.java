@@ -54,7 +54,7 @@ public class TegelDocument extends JPanel implements MouseListener
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(10,10,10,10) );
-		setPreferredSize(new Dimension(300,155));
+		setPreferredSize(new Dimension(300,152));
 		
 		addMouseListener(this);
 		

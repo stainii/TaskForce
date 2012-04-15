@@ -54,7 +54,7 @@ public class JLabelFactory
 			s = s.substring(0,15) + "...";
 		
 		JLabel label = new JLabel(s);
-		label.setFont(new Font("Comic Sans", Font.BOLD, 15));
+		label.setFont(new Font("Comic Sans", Font.BOLD, 14));
 		label.setForeground(new Color(50,50,50));
 		return label;
 	}
@@ -63,14 +63,14 @@ public class JLabelFactory
 	public JLabel getPaginaNummer(int s)
 	{
 		JLabel label = new JLabel(s + "");
-		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 16));
+		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 14));
 		label.setForeground(Color.GRAY);
 		return label;
 	}
 	public JLabel getPaginaNummerBlank()
 	{
 		JLabel label = new JLabel("...");
-		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 16));
+		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 14));
 		label.setForeground(Color.GRAY);
 		return label;
 	}
@@ -103,7 +103,7 @@ public class JLabelFactory
 	public JLabel getTitel(String s)
 	{
 		JLabel label = new JLabel(s);
-		label.setFont(new Font("Comic Sans", Font.BOLD, 20));
+		label.setFont(new Font("Comic Sans", Font.BOLD, 18));
 		label.setForeground(Color.WHITE);
 		return label;
 	}
@@ -111,7 +111,7 @@ public class JLabelFactory
 	public JLabel getBeheerderLogin(String s)
 	{
 		JLabel label = new JLabel("Welkom " + s);
-		label.setFont(new Font("Comic Sans", Font.ITALIC, 20));
+		label.setFont(new Font("Comic Sans", Font.ITALIC, 18));
 		label.setForeground(Color.WHITE);
 		return label;
 	}
@@ -126,7 +126,7 @@ public class JLabelFactory
 	public JLabel getMenuTitel(String s)
 	{
 		JLabel label = new JLabel(s);
-		label.setFont(new Font("Comic Sans", Font.BOLD, 15));
+		label.setFont(new Font("Comic Sans", Font.BOLD, 14));
 		label.setForeground(Color.WHITE);
 		return label;
 	}
