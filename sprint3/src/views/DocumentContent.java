@@ -16,6 +16,8 @@ import guiElementen.DocumentTekst;
 import guiElementen.DocumentVideo;
 import guiElementen.JLabelFactory;
 import guiElementen.DocumentAfbeelding;
+import guiElementen.MooiTextField;
+import guiElementen.MooiTextArea;
 import guiElementen.TypeKiezer;
 
 import javax.swing.JLabel;
@@ -79,9 +81,9 @@ public class DocumentContent extends JPanel
 		c.ipadx = 0;
 		c.ipady = 0;
 		
-		JTextField titel = new JTextField(20);
+		MooiTextField titel = new MooiTextField(document.getTitel(),"Titel",new JLabelFactory().getTitel("").getFont());
 		tekstvakken.add(titel);
-		titel.setText(document.getTitel());
+		titel.setColumns(20);
 		titel.setEditable(false);
 		titel.setBorder(null);
 		titel.setOpaque(false);
@@ -148,9 +150,10 @@ public class DocumentContent extends JPanel
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.VERTICAL;
 		
-		JTextArea opmerkingen = new JTextArea(5,30);
+		MooiTextArea opmerkingen = new MooiTextArea(document.getOpmerkingen(),"Opmerkingen",new JLabelFactory().getItalic("").getFont());
 		tekstvakken.add(opmerkingen);
-		opmerkingen.setText(document.getOpmerkingen());
+		opmerkingen.setRows(5);
+		opmerkingen.setColumns(30);
 		opmerkingen.setFont(new JLabelFactory().getItalic("").getFont());
 		opmerkingen.setEditable(false);
 		opmerkingen.setOpaque(false);

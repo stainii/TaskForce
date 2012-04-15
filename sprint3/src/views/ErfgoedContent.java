@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
+import guiElementen.MooiTextField;
+import guiElementen.MooiTextArea;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -72,14 +74,14 @@ public class ErfgoedContent extends JPanel
 		c.ipady = 0;
 		c.gridwidth = 6;
 		
-		JTextField titel = new JTextField(20);
+		MooiTextField titel = new MooiTextField(erfgoed.getNaam(),"Titel",new JLabelFactory().getTitel("").getFont());
 		tekstvakken.add(titel);
-		titel.setText(erfgoed.getNaam());
 		titel.setEditable(false);
 		titel.setBorder(null);
 		titel.setOpaque(false);
 		titel.setForeground(Color.WHITE);
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
+		titel.setColumns(20);
 		add(titel,c);
 		
 		c.gridx=1;
@@ -121,9 +123,9 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=5;
 		c.gridwidth=3;
-		JTextField straat = new JTextField(25);
+		MooiTextField straat = new MooiTextField(erfgoed.getStraat(),"Straat");
 		tekstvakken.add(straat);
-		straat.setText(erfgoed.getStraat());
+		straat.setColumns(25);
 		straat.setEditable(false);
 		straat.setBorder(null);
 		straat.setOpaque(false);
@@ -132,9 +134,9 @@ public class ErfgoedContent extends JPanel
 		
 		c.gridx=4;
 		c.gridwidth=2;
-		JTextField huisNr = new JTextField(4);
+		MooiTextField huisNr = new MooiTextField(erfgoed.getHuisnr(),"Nr");
 		tekstvakken.add(huisNr);
-		huisNr.setText(erfgoed.getHuisnr());
+		huisNr.setColumns(4);
 		huisNr.setEditable(false);
 		huisNr.setBorder(null);
 		huisNr.setOpaque(false);
@@ -144,9 +146,9 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=6;
 		c.gridwidth=1;
-		JTextField postcode = new JTextField(4);
+		MooiTextField postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
 		tekstvakken.add(postcode);
-		postcode.setText(erfgoed.getPostcode());
+		postcode.setColumns(4);
 		postcode.setEditable(false);
 		postcode.setBorder(null);
 		postcode.setOpaque(false);
@@ -155,9 +157,9 @@ public class ErfgoedContent extends JPanel
 		
 		c.gridx=2;
 		c.gridwidth = 5;
-		JTextField deelgemeente = new JTextField(25);
+		MooiTextField deelgemeente = new MooiTextField(erfgoed.getDeelgemeente(),"Deelgemeente");
 		tekstvakken.add(deelgemeente);
-		deelgemeente.setText(erfgoed.getDeelgemeente());
+		deelgemeente.setColumns(25);
 		deelgemeente.setEditable(false);
 		deelgemeente.setBorder(null);
 		deelgemeente.setOpaque(false);
@@ -167,9 +169,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=7;
 		c.gridwidth = 6;
-		JTextArea omschrijving = new JTextArea(3,30);
+		MooiTextArea omschrijving = new MooiTextArea(erfgoed.getOmschrijving(),"Omschrijving");
 		tekstvakken.add(omschrijving);
-		omschrijving.setText(erfgoed.getOmschrijving());
+		omschrijving.setRows(3);
+		omschrijving.setColumns(30);
 		omschrijving.setEditable(false);
 		omschrijving.setOpaque(false);
 		omschrijving.setBorder(null);
@@ -192,9 +195,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=9;
 		c.gridwidth = 6;
-		JTextArea nuttigeInfo = new JTextArea(5,30);
+		MooiTextArea nuttigeInfo = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
 		tekstvakken.add(nuttigeInfo);
-		nuttigeInfo.setText(erfgoed.getNuttigeInfo());
+		nuttigeInfo.setRows(5);
+		nuttigeInfo.setColumns(30);
 		nuttigeInfo.setEditable(false);
 		nuttigeInfo.setOpaque(false);
 		nuttigeInfo.setBorder(null);
@@ -216,9 +220,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=11;
 		c.gridwidth = 6;
-		JTextArea kenmerken = new JTextArea(5,30);
+		MooiTextArea kenmerken = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
 		tekstvakken.add(kenmerken);
-		kenmerken.setText(erfgoed.getKenmerken());
+		kenmerken.setRows(5);
+		kenmerken.setColumns(30);
 		kenmerken.setEditable(false);
 		kenmerken.setBorder(null);
 		kenmerken.setOpaque(false);
@@ -240,9 +245,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=13;
 		c.gridwidth = 6;
-		JTextArea geschiedenis = new JTextArea(5,30);
+		MooiTextArea geschiedenis = new MooiTextArea(erfgoed.getGeschiedenis(),"Geschiedenis");
 		tekstvakken.add(geschiedenis);
-		geschiedenis.setText(erfgoed.getGeschiedenis());
+		geschiedenis.setRows(5);
+		geschiedenis.setColumns(30);
 		geschiedenis.setEditable(false);
 		geschiedenis.setBorder(null);
 		geschiedenis.setOpaque(false);
@@ -254,7 +260,6 @@ public class ErfgoedContent extends JPanel
 		geschiedenisScroll.setOpaque(false);
 		geschiedenisScroll.getViewport().setOpaque(false);
 		add(geschiedenisScroll,c);
-		
 		
 		/**RECHTERKANT**/
 		c.gridx=7;
