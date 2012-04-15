@@ -82,10 +82,20 @@ public class RijErfgoed extends JPanel implements MouseListener
 			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
-			
+			public void mouseEntered(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+				backgroundTegel = backgroundIcon.getImage();
+				repaint();	
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseExited(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+				backgroundTegel = backgroundIcon.getImage();
+				repaint();	
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -109,11 +119,20 @@ public class RijErfgoed extends JPanel implements MouseListener
 			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
-			
+			public void mouseEntered(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+				backgroundTegel = backgroundIcon.getImage();
+				repaint();	
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
+			public void mouseExited(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+				backgroundTegel = backgroundIcon.getImage();
+				repaint();	
+			}
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
@@ -136,9 +155,20 @@ public class RijErfgoed extends JPanel implements MouseListener
 		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd));
 	}
 	@Override
-	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseEntered(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+		backgroundTegel = backgroundIcon.getImage();
+		repaint();	
+	}
+
 	@Override
-	public void mouseExited(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+		backgroundTegel = backgroundIcon.getImage();
+		repaint();	
+	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {}
 	@Override

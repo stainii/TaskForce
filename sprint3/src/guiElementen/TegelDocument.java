@@ -121,10 +121,20 @@ public class TegelDocument extends JPanel implements MouseListener
 			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
-			
+			public void mouseEntered(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile_hover.png"));
+				background = backgroundIcon.getImage();
+				repaint();	
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseExited(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
+				background = backgroundIcon.getImage();
+				repaint();	
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -147,10 +157,20 @@ public class TegelDocument extends JPanel implements MouseListener
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0){}
+	public void mouseEntered(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile_hover.png"));
+		background = backgroundIcon.getImage();
+		repaint();	
+	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
+		background = backgroundIcon.getImage();
+		repaint();	
+	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {}

@@ -47,6 +47,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		super.paintComponent(g);
 		if (background != null)
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		
 	}
 	
 	public TegelErfgoed(Model m, Databank d, Erfgoed e, Hoofd h)
@@ -113,10 +114,20 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+				background = backgroundIcon.getImage();
+				repaint();				
+			}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+				background = backgroundIcon.getImage();
+				repaint();				
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -140,10 +151,20 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+				background = backgroundIcon.getImage();
+				repaint();				
+			}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e)
+			{
+				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+				background = backgroundIcon.getImage();
+				repaint();				
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -168,10 +189,20 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0){}
+	public void mouseEntered(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+		background = backgroundIcon.getImage();
+		repaint();
+	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent e)
+	{
+		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+		background = backgroundIcon.getImage();
+		repaint();
+	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {}
