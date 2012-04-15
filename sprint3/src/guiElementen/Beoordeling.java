@@ -104,7 +104,7 @@ public class Beoordeling extends JPanel
 		}
 		
 		//als document afgekeurd is/wordt, verschijnt het panel RedenAfwijzing
-		redenAfwijzing = new RedenAfwijzing(controller);
+		redenAfwijzing = new RedenAfwijzing(controller,m);
 		redenAfwijzing.setReden(doc.getRedenAfwijzing());
 		if (controller.getOrigineelDocument().getStatus().equals("Nog niet beoordeeld") || controller.getOrigineelDocument().getStatus().equals("Goedgekeurd"))
 			redenAfwijzing.setVisible(false);

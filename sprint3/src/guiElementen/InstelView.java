@@ -35,6 +35,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import controllers.Databank;
 
@@ -58,6 +60,8 @@ public class InstelView extends JPanel
 	private LightBox box;
 	private JTextField nieuweRedenTxt;
 	private DefaultListModel redenModel;
+	private JList standaardRedenen;
+	private ArrayList<String> reden;
 	
 	public InstelView(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
@@ -65,12 +69,29 @@ public class InstelView extends JPanel
 		this.f = frame;
 		this.v = view;
 		this.d = data;
+		reden = new ArrayList<String>();
 		
 		jLabelFactory = new JLabelFactory();
 		
 		setSize(new Dimension(550,300));
 		setLayout(new GridBagLayout());
 		setBackground(Color.GRAY);
+		
+		
+		// deze lus gaat de ArrayList vullen met de standaardreden afhankelijk welke gebruiker het is.
+		// Dit staat hier omdat ik steeds een foutmelding kreeg als ik de arraylist declareerde in het model?? 
+		// Foutmelding was : java.lang.OutOfMemoryError: Java heap space ( dit misschien eens navragen aan Van Impe? )
+		for(Instellingen i : m.getInstellingen())					
+		{
+			if(i.getBeheerderId() == m.getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("StandaardReden"))
+				{
+					reden.add(i.getInstellingenWaarde());
+				}
+			}
+		}
+		m.setStandaardReden(reden);		//ArrayList<String> reden gaat geset worden in model.
 		
 		annuleren = new JLabel();
 		annuleren.setIcon(new ImageIcon(getClass().getResource("imgs/annuleren.png")));
@@ -240,25 +261,27 @@ public class InstelView extends JPanel
 		c.gridwidth = 1;
 		c.gridheight = 2;
 		c.insets = new Insets(0,10,0,10);
-		/*ArrayList<String> redenen = new ArrayList<String>();
-		redenen.add("test1");
-		redenen.add("test2");
-		redenen.add("test3");*/
 		
 		redenModel = new DefaultListModel();
-		for(int i=0;i<m.getBeheerder().getStandaardReden().size();i++)
+		for(int i=0;i<m.getStandaardReden().size();i++)
 		{
-			redenModel.addElement(m.getBeheerder().getStandaardReden().get(i));
+			redenModel.addElement(m.getStandaardReden().get(i));
 		}
 		
-		final JList standaardRedenen = new JList(redenModel);
+		standaardRedenen = new JList(redenModel);
 		standaardRedenen.setLayoutOrientation(JList.VERTICAL);
 		standaardRedenen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane redenScroll = new JScrollPane(standaardRedenen);
 		redenScroll.setPreferredSize(new Dimension(100,50));
 		redenScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		standaardRedenen.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				//m.setInstelling(standaardRedenen.getSelectedValue().toString());
+			}
+		});
 		add(standaardRedenen,c);
-		
+				
 		c.gridx = 2;
 		c.gridy = 10;
 		c.gridheight = 1;
@@ -290,6 +313,7 @@ public class InstelView extends JPanel
 			
 			@Override
 			public void focusLost(FocusEvent arg0) {
+				nieuweRedenTxt.setForeground(Color.gray);
 				if(nieuweRedenTxt.getText().isEmpty())
 				{
 					nieuweRedenTxt.setText(nieuweReden);
@@ -298,6 +322,7 @@ public class InstelView extends JPanel
 			
 			@Override
 			public void focusGained(FocusEvent arg0) {
+				nieuweRedenTxt.setForeground(Color.black);
 				if(nieuweRedenTxt.getText().equals(nieuweReden));
 				{
 					nieuweRedenTxt.setText("");
@@ -317,9 +342,9 @@ public class InstelView extends JPanel
 			public void actionPerformed(ActionEvent arg0) {
 				if(!nieuweRedenTxt.getText().equals(nieuweReden))
 				{
-					d.voegInstellingToe("StandaardReden",nieuweRedenTxt.getText() , m.getBeheerder().getId());
-					m.getBeheerder().getStandaardReden().add(nieuweRedenTxt.getText());
-					redenModel.addElement(nieuweRedenTxt.getText());
+					m.toevoegenInstelling(new Instellingen(0,"StandaardReden",nieuweRedenTxt.getText(),m.getBeheerder().getId()));
+					d.voegInstellingToe("StandaardReden",nieuweRedenTxt.getText() , m.getBeheerder().getId());		//toevoegen aan databank
+					redenModel.addElement(nieuweRedenTxt.getText());			// toevoegen aan JList
 					nieuweRedenTxt.setText(nieuweReden);
 				}
 			}
@@ -332,9 +357,10 @@ public class InstelView extends JPanel
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//redenModel.remove(standaardRedenen.getSelectedIndex());
-				//m.getBeheerder().verwijderStandaardReden(standaardRedenen.getSelectedValue().toString());
-				// nog uit databank laten verwijderen
+				m.setInstelling(standaardRedenen.getSelectedValue().toString());
+				d.verwijderStandaardReden(m.getInstelling());
+				m.verwijderStandaardReden(standaardRedenen.getSelectedValue().toString());
+				redenModel.remove(standaardRedenen.getSelectedIndex());
 			}
 		});
 		add(verwijderenBtn, c);

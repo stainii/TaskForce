@@ -18,6 +18,8 @@ public class Model
 	private ArrayList<ChangeListener> listeners;
 	private Beheerder beheerder;
 	private Burger burger;
+	private ArrayList<String> reden;
+	private Instellingen instelling;
 
 	public Model()
 	{
@@ -27,6 +29,7 @@ public class Model
 		beheerders = new ArrayList<Beheerder>();
 		documenten = new ArrayList<DocumentCMS>();
 		instellingen = new ArrayList<Instellingen>();
+		reden = new ArrayList<String>() ;
 	}
 	
 	//getters
@@ -100,6 +103,12 @@ public class Model
 	public void toevoegenBeheerder(Beheerder b)
 	{
 		beheerders.add(b);
+		notifyListeners();
+	}
+	
+	public void toevoegenInstelling(Instellingen i)
+	{
+		instellingen.add(i);
 		notifyListeners();
 	}
 	
@@ -234,6 +243,71 @@ public class Model
 		}
 		return 0;
 	}
+	public ArrayList<String> getStandaardReden()		// bevat de ArrayList met de Standaard Redenen van afwijzing
+	{		
+		/*for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("StandaardReden"))
+				{
+					System.out.println(i.getInstellingenWaarde());
+					reden.add(i.getInstellingenWaarde());
+				}
+			}
+			//reden.add(i.getInstellingenWaarde());
+		}*/
+		return reden;
+	}
+	public void setStandaardReden(ArrayList<String> sr)
+	{
+		this.reden = sr;
+	}
+	
+	public void toevoegenStandaardReden(String sr)
+	{
+		getStandaardReden().add(sr);
+		notifyListeners();
+	}
+	
+	public void verwijderStandaardReden(String sr)
+	{		
+		for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("StandaardReden"))
+				{
+					if(i.getInstellingenWaarde().equals(sr))
+					{
+						reden.remove(sr);
+					}
+				}
+			}
+		}
+	}
+	
+	public Instellingen getInstelling()
+	{
+		return instelling;
+	}
+	
+	public void setInstelling(String instellingwaarde)
+	{
+		for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals("StandaardReden"))
+				{
+					if(i.getInstellingenWaarde().equals(instellingwaarde))
+						instelling = i;
+				}
+			}
+					
+		}
+	}
+
 	
 	//Listeners
 	public void addListener(ChangeListener l)

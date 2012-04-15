@@ -1163,6 +1163,36 @@ public class Databank
 	}
 	
 	//____________instellingen
+	
+	public void getInstellingen()
+	{
+		ArrayList<Instellingen> instel = new ArrayList<Instellingen>();
+		Connection c = null;
+		Statement s = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.createStatement();
+			
+			rs = s.executeQuery("SELECT * FROM Instellingen");
+			
+			while (rs.next())
+			{				
+				instel.add(new Instellingen(rs.getInt("InstellingId"),rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
+			}
+			
+			m.setInstellingen(instel);
+		
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
 	public void updateInstellingen(String iw, int id)
 	{
 		Connection c = null;
@@ -1183,7 +1213,7 @@ public class Databank
 		}
 	}
 	
-	public void voegInstellingToe(String is, String iw, int id)
+	public void voegInstellingToe(String is, String iw, int id)		//Instellingen i
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -1204,7 +1234,7 @@ public class Databank
 		}
 	}
 	
-	public void deleteStandaardReden()
+	public void verwijderStandaardReden(Instellingen i )
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -1212,9 +1242,12 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("DELETE FROM INSTELLINGEN WHERE ");
-
+			s = c.prepareStatement("DELETE FROM INSTELLINGEN WHERE InstellingSleutel=? AND InstellingWaarde = ? AND BeheerderId = ?");
+			s.setString(1,i.getInstellingenSleutel());
+			s.setString(2, i.getInstellingenWaarde());
+			s.setInt(3, i.getBeheerderId());
 			s.executeUpdate();
+			
 		}
 		catch (SQLException e)
 		{

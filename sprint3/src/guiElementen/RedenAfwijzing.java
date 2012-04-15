@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.Model;
+
 import controllers.DocumentController;
 
 /** Hoort bij Beoordeling. Als er afgewezen is wordt dit zichtbaar. Deze klasse toont de reden
@@ -26,8 +28,59 @@ public class RedenAfwijzing extends JPanel
 	private JTextField redenTxt;
 	@SuppressWarnings("rawtypes")
 	private JComboBox defaultRedenenCbx;
+	private Model m;
 	
-	private String[] defaultRedenen = new String[4];
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public RedenAfwijzing(DocumentController cont,Model model)
+	{		
+		this.m = model;
+		//deze default redenen moeten uit settings gehaald worden
+				
+		setLayout(new GridBagLayout());
+		GridBagConstraints c =new GridBagConstraints();
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		JLabel l = new JLabelFactory().getNormaleTekst("   Reden afwijzing: ");
+		add(l, c);
+		
+		c.gridx = 2;
+		redenTxt = new JTextField(20);
+		add(redenTxt,c);
+		
+		c.gridy = 2;
+		c.gridwidth = 1;
+		defaultRedenenCbx = new JComboBox(m.getStandaardReden().toArray());
+		add(defaultRedenenCbx, c);
+		
+		redenTxt.addKeyListener(new KeyListener()
+		{	
+			@Override
+			public void keyTyped(KeyEvent arg0) {}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0){}
+			
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				defaultRedenenCbx.setSelectedIndex(0);
+			}
+		});
+		
+		defaultRedenenCbx.setMaximumRowCount(3);
+		defaultRedenenCbx.addItemListener(new ItemListener()
+		{	
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if (((JComboBox)(e.getSource())).getSelectedIndex() !=0) 
+					redenTxt.setText(((JComboBox)(e.getSource())).getSelectedItem().toString());
+			}
+		});
+		
+		setOpaque(false);
+	}
 	
 	public String getReden()
 	{
@@ -62,58 +115,5 @@ public class RedenAfwijzing extends JPanel
 		}
 	}
 		
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public RedenAfwijzing(DocumentController cont)
-	{		
-		//deze default redenen moeten uit settings gehaald worden
-		defaultRedenen[0] = "Kies hier een reden of vul zelf iets in";
-		defaultRedenen[1] = "Foto te lage kwaliteit";
-		defaultRedenen[2] = "Foutieve gegevens";
-		defaultRedenen[3] = "Beheerder is gewoon ambetant";
 
-		setLayout(new GridBagLayout());
-		GridBagConstraints c =new GridBagConstraints();
-		
-		c.gridx = 1;
-		c.gridy = 1;
-		JLabel l = new JLabelFactory().getNormaleTekst("   Reden afwijzing: ");
-		add(l, c);
-		
-		c.gridx = 2;
-		redenTxt = new JTextField(20);
-		add(redenTxt,c);
-		
-		c.gridy = 2;
-		c.gridwidth = 1;
-		defaultRedenenCbx = new JComboBox(defaultRedenen);
-		add(defaultRedenenCbx, c);
-		
-		redenTxt.addKeyListener(new KeyListener()
-		{	
-			@Override
-			public void keyTyped(KeyEvent arg0) {}
-			
-			@Override
-			public void keyReleased(KeyEvent arg0){}
-			
-			@Override
-			public void keyPressed(KeyEvent e)
-			{
-				defaultRedenenCbx.setSelectedIndex(0);
-			}
-		});
-		
-		defaultRedenenCbx.setMaximumRowCount(3);
-		defaultRedenenCbx.addItemListener(new ItemListener()
-		{	
-			@Override
-			public void itemStateChanged(ItemEvent e)
-			{
-				if (((JComboBox)(e.getSource())).getSelectedIndex() !=0) 
-					redenTxt.setText(((JComboBox)(e.getSource())).getSelectedItem().toString());
-			}
-		});
-		
-		setOpaque(false);
-	}
 }

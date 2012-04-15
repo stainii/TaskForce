@@ -103,35 +103,6 @@ public class Beheerder
 		}
 		return "";
 	}
-	public ArrayList<String> getStandaardReden()
-	{
-		ArrayList<String> standaardReden  = new ArrayList<String>() ;
-		for(Instellingen i : m.getInstellingen())
-		{
-			if(i.getBeheerderId() == m.getBeheerder().getId())
-			{
-				if(i.getInstellingenSleutel().equals("StandaardReden"))
-				{
-					standaardReden.add(i.getInstellingenWaarde());
-				}
-			}
-		}
-		return standaardReden;
-	}
-	public void verwijderStandaardReden(String sr)
-	{
-		for(Instellingen i : m.getInstellingen())
-		{
-			if(i.getBeheerderId() == m.getBeheerder().getId())
-			{
-				if(i.getInstellingenSleutel().equals("StandaardReden"))
-				{
-					getStandaardReden().remove(sr);
-				}
-			}
-		}
-	}
-	
 
 	public void setId(int id) {
 		this.id = id;

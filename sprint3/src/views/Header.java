@@ -83,17 +83,17 @@ public class Header extends JPanel implements MouseListener
 		p.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		c.insets = new Insets(20,15,5,15);
+		c.insets = new Insets(7,15,5,15);
 		c.gridx = 2;
 		c.gridy = 1;		
 		p.add(inlogLbl, c);
 		
-		c.insets = new Insets(0,15,0,15);
+		c.insets = new Insets(0,13,5,15);
 		c.gridx = 2;
-		c.gridy = 2;
+		c.gridy = 3;
 		p.add(uitlogLbl,c);
 		
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 2;
 		p.add(instellingen,c);
 		
