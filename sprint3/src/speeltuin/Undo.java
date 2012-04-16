@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import controllers.Databank;
 
@@ -31,10 +32,8 @@ public class Undo extends JFrame
 		this.model = m;
 		this.databank = d;
 		
-		
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		add(panel);
 		
 		leesUitDatabank();		
 
@@ -57,28 +56,48 @@ public class Undo extends JFrame
 			c.gridy = y;
 			
 			c.gridx = 1;
-			panel.add(new JLabel(a.getDocument().getTitel()),c);
+			if (a.getDocument()!=null)
+				panel.add(new JLabel(a.getDocument().getTitel() + " (document)"),c);
+			else
+				panel.add(new JLabel(a.getErfgoed().getNaam() + " (erfgoed)"),c);
 			
 			c.gridx = 2;
 			panel.add(new JLabel(a.getActie()),c);
 			
 			c.gridx = 3;
-			panel.add(new JLabel(a.getDatum().toString()),c);
+			panel.add(new JLabel(a.getDatum().toString().substring(0,19)),c);
 			
 			c.gridx = 4;
 			JButton button = new JButton("Ongedaan maken");
 			
 			if (a.getActie().equals("Verwijderd"))
+			{
 				button.addActionListener(new VerwijderdActionListener(a));
+			}
 			else if (a.getActie().equals("Toegevoegd"))
+			{
 				button.addActionListener(new ToegevoegdActionListener(a));
+			}
+			else if (a.getActie().equals("Gewijzigd"))
+			{
+				button.setVisible(false);
+			}
+			else if (a.getActie().equals("Afgekeurd"))
+			{
+				button.addActionListener(new BeoordelingActionListener(a,true));
+			}
+			else if (a.getActie().equals("Goedgekeurd"))
+			{
+				button.addActionListener(new BeoordelingActionListener(a,false));
+			}
 			
 			panel.add(button,c);
 			y++;
 		}
 		
 		panel.setVisible(true);
-		pack();
+		JScrollPane scroll = new JScrollPane(panel);
+		add(scroll);
 	}
 	
 	public static void main(String[] args)
@@ -86,9 +105,10 @@ public class Undo extends JFrame
 		Model m = new Model();
 		Databank d = new Databank(m);
 		d.laadDatabank();
-		//m.setBeheerder("Kevin");
+		m.setBeheerder("Stijn");
 		
-        new Undo(m,d);
+        JFrame f = new Undo(m,d);
+        f.setSize(600,400);
     }
 	
 	class VerwijderdActionListener implements ActionListener
@@ -103,7 +123,10 @@ public class Undo extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			databank.verwijderenOngedaanMaken(actie.getDocument());
+			if (actie.getDocument()!=null)
+				databank.verwijderenOngedaanMaken(actie.getDocument());
+			else
+				databank.verwijderenOngedaanMaken(actie.getErfgoed());
 			leesUitDatabank();
 		}
 	}
@@ -120,7 +143,28 @@ public class Undo extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			databank.verwijderDocument(actie.getDocument());
+			if (actie.getDocument()!=null)
+				databank.verwijderDocument(actie.getDocument());
+			else
+				databank.verwijderErfgoed(actie.getErfgoed());
+			leesUitDatabank();
+		}
+	}
+	class BeoordelingActionListener implements ActionListener
+	{
+		private Actie actie;
+		private boolean goedgekeurd;
+		
+		public BeoordelingActionListener(Actie a, boolean goedgekeurd)
+		{
+			this.actie = a;
+			this.goedgekeurd = goedgekeurd;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			databank.beoordeelDocument(actie.getDocument(),goedgekeurd);
 			leesUitDatabank();
 		}
 	}

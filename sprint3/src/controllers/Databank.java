@@ -345,21 +345,43 @@ public class Databank
 	public void verwijderErfgoed(Erfgoed erf)
 	{
 		Connection c = null;
-		PreparedStatement s = null;
+		PreparedStatement s = null, s2 = null;
+		ResultSet rs = null;
 		
 		try
 		{
 			c = DriverManager.getConnection(connectie);
 			
+			//erfgoed obsolete maken
+			s = c.prepareStatement("UPDATE Erfgoed SET Obsolete = 1 WHERE ErfgoedId=?");
+			s.setInt(1, erf.getId());
+			s.executeUpdate();
+			
+			//documenten obsolete maken
 			s = c.prepareStatement("UPDATE Document SET Obsolete = 1 WHERE ErfgoedId=?");
 			s.setInt(1, erf.getId());
 			s.executeUpdate();
 			
+			//erfgoed in logboek
 			s = c.prepareStatement("INSERT INTO Logboek (ErfgoedId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, erf.getId());
 			s.setString(2,"Verwijderd");
 			s.setInt(3, m.getBeheerder().getId());
 			s.executeUpdate();
+			
+			//documenten in logboek
+			s = c.prepareStatement("SELECT DocumentId FROM Document WHERE ErfgoedId=?");
+			s.setInt(1, erf.getId());
+			rs = s.executeQuery();
+			
+			while (rs.next())
+			{
+				s2 = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
+				s2.setInt(1, rs.getInt("DocumentId"));
+				s2.setString(2,"Verwijderd");
+				s2.setInt(3, m.getBeheerder().getId());
+				s2.executeUpdate();				
+			}
 		}
 		catch (SQLException e)
 		{
@@ -420,6 +442,46 @@ public class Databank
 			catch (SQLException e)
 			{
 				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ongedaan maken van het verwijderen van een document, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void verwijderenOngedaanMaken(Erfgoed erf)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE Erfgoed SET Obsolete = 0 WHERE ErfgoedId=?");
+			s.setInt(1, erf.getId());
+			s.executeUpdate();
+			
+			s = c.prepareStatement("INSERT INTO Logboek (ErfgoedId, Actie, BeheerderId) VALUES (?,?,?)");
+			s.setInt(1, erf.getId());
+			s.setString(2,"Toegevoegd");
+			s.setInt(3, m.getBeheerder().getId());
+			s.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het ongedaan maken van het verwijderen van een erfgoed!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ongedaan maken van het verwijderen van een erfgoed, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}
@@ -766,7 +828,7 @@ public class Databank
 		return t;
 	}
 	
-	/*public ArrayList<Actie> getActies()
+	public ArrayList<Actie> getActies()
 	{
 		ArrayList<Actie> acties = new ArrayList<Actie>();
 		
@@ -777,24 +839,44 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT * FROM LOGBOEK WHERE Gebruikersnaam = ? AND GebruikerRol = 'Beheerder' ORDER BY DatumTijd DESC;");
-			s.setString(1, m.getBeheerder().getNaam());
+			s = c.prepareStatement("SELECT * FROM LOGBOEK WHERE BeheerderId=? ORDER BY DatumTijd DESC;");
+			s.setInt(1, m.getBeheerder().getId());
 			
 			rs = s.executeQuery();
 		
 			while (rs.next())
 			{
-				int documentId = rs.getInt("DocumentId");
-				s2 = c.prepareStatement("SELECT * FROM DOCUMENT WHERE DocumentId = ?;");
-				s2.setInt(1, documentId);
-				rs2 = s2.executeQuery();
-				DocumentCMS doc = null;
-				if (rs2.next())
+				int id = rs.getInt("DocumentId");
+				if (id!=0)	//het is een document
 				{
-					doc = new DocumentCMS(documentId,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(),rs2.getTimestamp("DatumToegevoegd"),rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),rs2.getInt("ErfgoedId"),rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"),m);
-				}
+					s2 = c.prepareStatement("SELECT * FROM DOCUMENT WHERE DocumentId = ?;");
+					s2.setInt(1, id);
+					rs2 = s2.executeQuery();
+					DocumentCMS doc = null;
+					if (rs2.next())
+					{
+						doc = new DocumentCMS(id,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"),m);
+					}
 				
-				acties.add(new Actie(doc,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
+					acties.add(new Actie(doc,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
+				}
+				else	//het is een erfgoed
+				{
+					id = rs.getInt("ErfgoedId");
+					
+					s2 = c.prepareStatement("SELECT * FROM ERFGOED WHERE ErfgoedId = ?;");
+					s2.setInt(1, id);
+					rs2 = s2.executeQuery();
+					Erfgoed erf = null;
+					if (rs2.next())
+					{
+						erf = new Erfgoed(id,rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
+								rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
+								rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m);
+					}
+				
+					acties.add(new Actie(erf,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
+				}
 			}
 				
 
@@ -826,85 +908,8 @@ public class Databank
 			}
 		}
 		
-		
 		return acties;
-	}*/
-	
-	/*public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
-	{													//aanpassingen in het logboek vanaf de meegegeven tijd.
-		int aantalWijzigingen = 0;
-		int aantalVerwijderd = 0;
-		int aantalToegevoegd = 0;
-		
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			
-			//query uitvoeren
-			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT logboek.Actie, document.*, erfgoed.* FROM LOGBOEK logboek, DOCUMENT document, ERFGOED erfgoed WHERE logboek.DocumentId = document.DocumentId AND erfgoed.ErfgoedId = document.ErfgoedId AND DatumTijd> ? AND (Gebruikersnaam <> ? OR GebruikerRol <> 'Beheerder');");
-			
-			s.setTimestamp(1,tijd);
-			s.setString(2, m.getBeheerder().getNaam());
-			
-			rs = s.executeQuery();
-			
-			while (rs.next())
-			{
-				String actie = rs.getString("Actie").trim();
-				if (actie.equals("Gewijzigd") || actie.equals("Goedgekeurd") || actie.equals("Afgekeurd"))
-				{
-					aantalWijzigingen++;
-					
-					DocumentCMS doc = new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"),m);
-					doc.setImage(null);	//hierdoor wordt de afbeelding opnieuw ingeladen (moest ze upgedate zijn...)
-					m.bewerkDocument(doc); 
-					m.bewerkErfgoed(new Erfgoed(rs.getInt("ErfgoedId"), rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
-									rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-									rs.getString("NuttigeInfo"), rs.getString("Link"),rs.getBoolean("Obsolete"), rs.getInt("BurgerId"),m));
-					
-				}
-				else if (actie.equals("Verwijderd"))
-				{
-					aantalVerwijderd++;
-					m.verwijderDocument(rs.getInt("DocumentId"));
-				}
-				
-				else if (actie.equals("Toegevoegd"))
-				{
-					aantalToegevoegd++;
-					m.toevoegenDocument(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel"),rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"),rs.getString("Opmerkingen"),rs.getString("Tekst"),rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"),rs.getTimestamp("DatumLaatsteWijziging"),rs.getInt("MediaId"),rs.getInt("BurgerId"),m));
-				}
-			}
-		}
-		catch (SQLException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het synchroniseren)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				if (rs!=null)
-					rs.close();
-				if (s !=null)
-					s.close();
-				if (c!=null)
-					c.close();
-			}
-			catch (SQLException e)
-			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het synchroniseren, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
-		}
-		
-		return "Er zijn " + aantalWijzigingen + " documenten gewijzigd, " + aantalVerwijderd + " documenten verwijderd en " + aantalToegevoegd + " documenten toegevoegd.";
-	}*/
+	}
 	
 	public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
 	{													//aanpassingen in het logboek vanaf de meegegeven tijd.
