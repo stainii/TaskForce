@@ -42,6 +42,24 @@ public class BurgerPanel extends JPanel
 		burgerPanel = new JPanel();
 		burgerPanel.setLayout(new GridBagLayout());
 		
+		gebruikersnaam = new JLabel("Gebruikersnaam");
+		voornaam = new JLabel("Voornaam");
+		familienaam = new JLabel("Familienaam");
+		email = new JLabel("E-mail");
+		
+		gebruikerTxt = new JTextField();
+		gebruikerTxt.setColumns(17);
+		gebruikerTxt.setEditable(false);
+		naamTxt = new JTextField();
+		naamTxt.setColumns(17);
+		naamTxt.setEditable(false);
+		familienaamTxt = new JTextField();
+		familienaamTxt.setColumns(17);
+		familienaamTxt.setEditable(false);
+		emailTxt = new JTextField();
+		emailTxt.setColumns(17);
+		emailTxt.setEditable(false);
+		
 		burgerModel = new DefaultListModel();
 		
 		for(Burger b : m.getBurgers())
@@ -56,16 +74,9 @@ public class BurgerPanel extends JPanel
 		adminScroll.setPreferredSize(new Dimension(150,100));
 		adminScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		burgerList.addListSelectionListener(new ListListener());
+		burgerList.setSelectedIndex(0);
 		
-		gebruikersnaam = new JLabel("Gebruikersnaam");
-		voornaam = new JLabel("Voornaam");
-		familienaam = new JLabel("Familienaam");
-		email = new JLabel("E-mail");
 		
-		gebruikerTxt = new JTextField();
-		naamTxt = new JTextField();
-		familienaamTxt = new JTextField();
-		emailTxt = new JTextField();
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		

@@ -23,6 +23,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import administrator.Administrator;
 import controllers.Databank;
@@ -53,22 +56,6 @@ public class AdminPanel extends JPanel
 		
 		adminPanel = new JPanel();
 		adminPanel.setLayout(new GridBagLayout());
-		
-		adminModel = new DefaultListModel();
-		
-		for(Beheerder b : m.getBeheerders())
-		{
-			if(b.isAdmin()==true)
-				adminModel.addElement(b.getVoornaam());
-		}
-		
-		adminList = new JList(adminModel);
-		adminList.setLayoutOrientation(JList.VERTICAL);
-		adminList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane adminScroll = new JScrollPane(adminList);
-		adminScroll.setPreferredSize(new Dimension(150,100));
-		adminScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		adminList.addListSelectionListener(new ListListener());
 		
 		naamLbl = new JLabel("Naam");
 		pw1Lbl = new JLabel("Wachtwoord");
@@ -107,9 +94,48 @@ public class AdminPanel extends JPanel
 		annuleren.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/annuleren.png")));
 		annuleren.addMouseListener(new AnnulerenListener());
 		
+		
 		naamTxt.setEditable(false);
+		naamTxt.setColumns(15);
+		MaxLengthTextDocument maxLength = new MaxLengthTextDocument();
+		maxLength.setMaxChars(20);//50 is a maximum number of character
+		naamTxt.setDocument(maxLength);
+		
 		emailTxt.setEditable(false);
+		emailTxt.setColumns(15);
+		MaxLengthTextDocument maxLength2 = new MaxLengthTextDocument();
+		maxLength2.setMaxChars(60);//50 is a maximum number of character
+		emailTxt.setDocument(maxLength2);
+		
 		password1Txt.setEditable(false);
+		password1Txt.setColumns(15);
+		MaxLengthTextDocument maxLength3 = new MaxLengthTextDocument();
+		maxLength3.setMaxChars(60);//50 is a maximum number of character
+		password1Txt.setDocument(maxLength3);
+		
+		password2Txt.setColumns(15);
+		MaxLengthTextDocument maxLength4 = new MaxLengthTextDocument();
+		maxLength4.setMaxChars(60);//50 is a maximum number of character
+		password2Txt.setDocument(maxLength4);
+		
+		adminModel = new DefaultListModel();
+		
+		for(Beheerder b : m.getBeheerders())
+		{
+			if(b.isAdmin()==true)
+				adminModel.addElement(b.getVoornaam());
+		}
+		
+		adminList = new JList(adminModel);
+		adminList.setLayoutOrientation(JList.VERTICAL);
+		adminList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane adminScroll = new JScrollPane(adminList);
+		adminScroll.setPreferredSize(new Dimension(150,100));
+		adminScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		adminList.addListSelectionListener(new ListListener());
+		adminList.setSelectedIndex(0);
+		
+		
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		
@@ -290,15 +316,20 @@ public class AdminPanel extends JPanel
 			else
 			{
 				if(password1Txt.getText().equals(password2Txt.getText()))
-					try {
+				{
+					try
+					{
 						d.voegBeheerderToeAanDatabank(naamTxt.getText(),naamTxt.getText(),Login.convert(password2Txt.getText()),emailTxt.getText(),false,false,false,false,true);
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
+					}
+					catch (NoSuchAlgorithmException e)
+					{
 						e.printStackTrace();
 					}
+					catch (UnsupportedEncodingException e)
+					{
+						e.printStackTrace();
+					}
+				}
 				else
 				{
 					JOptionPane.showMessageDialog(null,"Wachtwoorden komen niet overeen" ,"Fout",JOptionPane.ERROR_MESSAGE);
@@ -408,26 +439,31 @@ public class AdminPanel extends JPanel
 		public void mousePressed(MouseEvent arg0) {
 			
 			m.getBeheerder().setVoornaam(naamTxt.getText());
-			try 
+			/*
+			 * Beetje smerig opgelost: Voor veiligheid gaan we MD5 niet terug naar String converteren ( wat denk ik zelfs niet mogelijk is)
+			 * krijgt het password1Txt een defaultweergave van "wachtwoord" Bij het bewerken wordt er dan eerst gekeken of het textfield zijn 
+			 * waarde veranderd is? Als het textfield nog steeds de waarde "wachtwoord" bevat gaat hij niets doen en dus ook het wachtwoord 
+			 * van de Beheerder(admin) NIET veranderen. Is het wel veranderd gaat hij het wachtwoord wel veranderen en encrypteren.
+			 */
+			if(!password1Txt.getText().equals("wachtwoord"))
 			{
-				/*
-				 * Beetje smerig opgelost: Voor veiligheid gaan we MD5 niet terug naar String converteren ( wat denk ik zelfs niet mogelijk is)
-				 * krijgt het password1Txt een defaultweergave van "wachtwoord" Bij het bewerken wordt er dan eerst gekeken of het textfield zijn 
-				 * waarde veranderd is? Als het textfield nog steeds de waarde "wachtwoord" bevat gaat hij niets doen en dus ook het wachtwoord 
-				 * van de Beheerder(admin) NIET veranderen. Is het wel veranderd gaat hij het wachtwoord wel veranderen en encrypteren.
-				 */
-				if(!password1Txt.getText().equals("wachtwoord"))
-					m.getBeheerder().setWachtwoord(Login.convert(password1Txt.getText()));
-					
-			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {e.printStackTrace();}
+				m.getBeheerder().setWachtwoord(password1Txt.getText());
+			}
+			
 			
 			m.getBeheerder().setEmail(emailTxt.getText());
 			
-			try {
+			try
+			{
 				d.updateBeheerdersDatabank(m.getBeheerder());
-			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {e.printStackTrace();
+			}
+			catch (NoSuchAlgorithmException e)
+			{
+				e.printStackTrace();
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				e.printStackTrace();
 			}
 			
 			adminModel.removeAllElements();
@@ -446,7 +482,6 @@ public class AdminPanel extends JPanel
 			
 			bewerken.setVisible(true);
 			bewerkenOpslaan.setVisible(false);
-			
 		}
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}		
@@ -459,19 +494,14 @@ public class AdminPanel extends JPanel
 		public void mouseClicked(MouseEvent e) {}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(MouseEvent e){}
 
 		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseExited(MouseEvent e) {}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
+		public void mousePressed(MouseEvent e)
+		{
 			naamTxt.setEditable(false);
 			emailTxt.setEditable(false);
 			password1Txt.setEditable(false);
@@ -500,4 +530,31 @@ public class AdminPanel extends JPanel
 		public void mouseReleased(MouseEvent e) {}
 		
 	}
+
+	public class MaxLengthTextDocument extends PlainDocument	//beperkt aantal tekens in tekstveld
+	{
+		private static final long serialVersionUID = 1L;
+		//Store maximum characters permitted
+		private int maxChars;
+		
+		@Override
+		public void insertString(int offs, String str, AttributeSet a)
+				throws BadLocationException
+		{
+			if(str != null && (getLength() + str.length() < maxChars))
+			{
+				super.insertString(offs, str, a);
+			}
+		}
+		
+		public int getMaxChars()
+		{
+			return maxChars;
+		}
+		public void setMaxChars(int m)
+		{
+			maxChars = m;
+		}
+}
+
 }

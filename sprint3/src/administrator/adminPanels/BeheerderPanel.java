@@ -37,7 +37,7 @@ public class BeheerderPanel extends JPanel
 	private JPanel allesPanel,beheerderPnl,rechtenPnl;
 	private JTextField naamTxt, achternaamTxt, emailTxt;
 	private JLabel rechtenPlus,rechtenMin , toevoegenOpslaan,bewerken,verwijderen,naamLbl,achternaamLbl,emailLbl
-		,toevoegen,bewerkenOpslaan,instellingenPlus;
+		,toevoegen,bewerkenOpslaan;
 	private JCheckBox wijzigenCb, toevoegenCb, verwijderenCb, beoordelenCb;
 	private int index;
 	
@@ -56,8 +56,11 @@ public class BeheerderPanel extends JPanel
 		emailTxt = new JTextField();
 		
 		naamTxt.setEditable(false);
+		naamTxt.setColumns(17);
 		achternaamTxt.setEditable(false);
+		achternaamTxt.setColumns(17);
 		emailTxt.setEditable(false);
+		emailTxt.setColumns(17);
 		
 		rechtenPlus = new JLabel("Rechten");
 		rechtenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
@@ -95,27 +98,6 @@ public class BeheerderPanel extends JPanel
 		bewerkenOpslaan = new JLabel();
 		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
 		bewerkenOpslaan.addMouseListener(new BewerkenOpslaanListener());
-		
-		instellingenPlus = new JLabel("Instellingen");
-		instellingenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
-		instellingenPlus.addMouseListener(new InstellingenPlusListener());
-		
-		beheerderModel = new DefaultListModel();
-		
-		for(Beheerder b : m.getBeheerders())			// BeheerderModel vullen met Beheerders uit de ArrayList<Beheerder>
-		{
-			if(b.isAdmin()==false)
-				beheerderModel.addElement(b.getVoornaam());
-		}
-		
-		beheerderList = new JList(beheerderModel);
-		beheerderList.setLayoutOrientation(JList.VERTICAL);
-		beheerderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane beheerderScroll = new JScrollPane(beheerderList);
-		beheerderScroll.setPreferredSize(new Dimension(150,200));
-		beheerderScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
-		beheerderList.addListSelectionListener(new ListListener());
 						
 		rechtenPnl = new JPanel();
 		rechtenPnl.setLayout(new GridLayout(4,1));
@@ -132,6 +114,23 @@ public class BeheerderPanel extends JPanel
 		toevoegen = new JLabel("Voeg beheerder toe");
 		toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
 		toevoegen.addMouseListener(new ToevoegenListener());
+		
+		beheerderModel = new DefaultListModel();
+		
+		for(Beheerder b : m.getBeheerders())			// BeheerderModel vullen met Beheerders uit de ArrayList<Beheerder>
+		{
+			if(b.isAdmin()==false)
+				beheerderModel.addElement(b.getVoornaam());
+		}
+		
+		beheerderList = new JList(beheerderModel);
+		beheerderList.setLayoutOrientation(JList.VERTICAL);
+		beheerderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane beheerderScroll = new JScrollPane(beheerderList);
+		beheerderScroll.setPreferredSize(new Dimension(150,200));
+		beheerderScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		beheerderList.addListSelectionListener(new ListListener());
+		beheerderList.setSelectedIndex(0);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		
@@ -170,18 +169,12 @@ public class BeheerderPanel extends JPanel
 		
 		c.gridx = 1;
 		c.gridy = 5;
-		rechtenPlus.setVisible(false);
 		beheerderPnl.add(rechtenPlus,c);
 		
 		c.gridx = 1;
 		c.gridy = 5;
 		rechtenMin.setVisible(false);
 		beheerderPnl.add(rechtenMin,c);
-		
-		c.gridx = 2;
-		c.gridy = 5;
-		instellingenPlus.setVisible(false);
-		beheerderPnl.add(instellingenPlus,c);
 				
 		c.gridx = 2;
 		c.gridy = 5;
@@ -208,7 +201,7 @@ public class BeheerderPanel extends JPanel
 		
 		allesPanel.add(beheerderScroll,BorderLayout.LINE_START);
 		allesPanel.add(beheerderPnl,BorderLayout.CENTER);
-		
+		verwijderen.setVisible(true);
 	}
 	
 	public JPanel getBeheerPanel()
@@ -219,43 +212,42 @@ public class BeheerderPanel extends JPanel
 	private class ListListener implements ListSelectionListener
 	{
 		@Override
-		public void valueChanged(ListSelectionEvent e) {
-
-			index = beheerderList.getSelectedIndex();
-
-			naamTxt.setEditable(false);
-			achternaamTxt.setEditable(false);	
-			emailTxt.setEditable(false);
-			
-			rechtenPlus.setVisible(true);
-			instellingenPlus.setVisible(true);
-			verwijderen.setVisible(true);
-			bewerken.setVisible(true);
-			
-			if(rechtenPnl.isVisible())
-				verwijderen.setVisible(false);
-			else
-				verwijderen.setVisible(true);
-			
-			bewerken.setVisible(true);
-			toevoegenOpslaan.setVisible(false);
-			
-			for(Beheerder b : m.getBeheerders())
+		public void valueChanged(ListSelectionEvent e)
+		{
+			if (beheerderList.getSelectedIndex()!=-1)
 			{
-				if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
+				naamTxt.setEditable(false);
+				achternaamTxt.setEditable(false);	
+				emailTxt.setEditable(false);
+				
+				rechtenPlus.setVisible(true);
+				verwijderen.setVisible(true);
+				bewerken.setVisible(true);
+				
+				if(rechtenPnl.isVisible())
+					verwijderen.setVisible(false);
+				else
+					verwijderen.setVisible(true);
+				
+				bewerken.setVisible(true);
+				toevoegenOpslaan.setVisible(false);
+				
+				for(Beheerder b : m.getBeheerders())
 				{
-					m.setBeheerder(beheerderList.getSelectedValue().toString());
-					naamTxt.setText(m.getBeheerder().getVoornaam());
-					achternaamTxt.setText(m.getBeheerder().getAchternaam());
-					emailTxt.setText(m.getBeheerder().getEmail());
-					
-					wijzigenCb.setSelected(m.getBeheerder().KanWijzigen());
-					toevoegenCb.setSelected(m.getBeheerder().KanToevoegen());
-					beoordelenCb.setSelected(m.getBeheerder().KanBeoordelen());
-					verwijderenCb.setSelected(m.getBeheerder().KanVerwijderen());
+					if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
+					{
+						m.setBeheerder(beheerderList.getSelectedValue().toString());
+						naamTxt.setText(m.getBeheerder().getVoornaam());
+						achternaamTxt.setText(m.getBeheerder().getAchternaam());
+						emailTxt.setText(m.getBeheerder().getEmail());
+						
+						wijzigenCb.setSelected(m.getBeheerder().KanWijzigen());
+						toevoegenCb.setSelected(m.getBeheerder().KanToevoegen());
+						beoordelenCb.setSelected(m.getBeheerder().KanBeoordelen());
+						verwijderenCb.setSelected(m.getBeheerder().KanVerwijderen());
+					}
 				}
 			}
-			
 		}
 	}
 	private class ToevoegenListener implements MouseListener
@@ -290,7 +282,6 @@ public class BeheerderPanel extends JPanel
 			rechtenPlus.setVisible(false);
 			verwijderen.setVisible(false);
 			bewerken.setVisible(false);
-			instellingenPlus.setVisible(false);
 			toevoegenOpslaan.setVisible(true);
 			
 		}
@@ -507,34 +498,5 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}	
-	}
-	
-	private class InstellingenPlusListener implements MouseListener
-	{
-		@Override
-		public void mouseClicked(MouseEvent e) {}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			instellingenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover.png")));
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			instellingenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			instellingenPlus.setVisible(false);
-			
-			beheerderPnl.setVisible(false);
-			//allesPanel.add(new InstelView(beheerderPnl,instellingenPlus,m).getInstelPanel(),BorderLayout.CENTER);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}	
-	}
-	
-	
+	}	
 }
