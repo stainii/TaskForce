@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ import model.Instellingen;
 import model.Model;
 
 @SuppressWarnings("serial")
-public class InstelView extends JPanel 
+public class InstelView extends JPanel
 {
 
 	private JPanel instelPanel;
@@ -62,6 +64,7 @@ public class InstelView extends JPanel
 	private DefaultListModel redenModel;
 	private JList standaardRedenen;
 	private ArrayList<String> reden;
+	private boolean inPanel = false;
 	
 	public InstelView(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
@@ -393,6 +396,52 @@ public class InstelView extends JPanel
 		
 		box = new LightBox();
 		box.createLightBoxEffect(f,this);
+		box.grabFocus();
+		box.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == 27)			// 27 is de keycode voor Esc
+					box.closeLightBox(f, getInstelView());
+			}
+		});
+		this.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				inPanel = false;
+				System.out.println(inPanel);
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				inPanel = true;
+				System.out.println(inPanel);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(inPanel = false)
+					System.out.println("jep");
+			}
+		});
 	}
 	
 	public JPanel getInstelPanel()

@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,6 +23,7 @@ public class OverzichtKiezer extends JPanel
 	private JLabel lijst, tegel;
 	private OverzichtContent content;
 	private OverzichtDocumentenController controller;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	public OverzichtKiezer(OverzichtContent conte, OverzichtDocumentenController contr)
 	{
@@ -68,6 +70,7 @@ public class OverzichtKiezer extends JPanel
 			public void mouseEntered(MouseEvent e)
 			{
 				lijst.setIcon(new ImageIcon(getClass().getResource("imgs/tabelview_hover.png")));
+				lijst.setCursor(hand);
 			}
 			
 			@Override
@@ -97,6 +100,7 @@ public class OverzichtKiezer extends JPanel
 			public void mouseEntered(MouseEvent e)
 			{
 				tegel.setIcon(new ImageIcon(getClass().getResource("imgs/tegelview_hover.png")));
+				tegel.setCursor(hand);
 			}
 			
 			@Override

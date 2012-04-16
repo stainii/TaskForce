@@ -8,6 +8,7 @@ package views;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -39,6 +40,7 @@ public class DocumentMenu extends JPanel
 	private DocumentCMS document;
 	private DocumentContent content;
 	private JLabel overzicht, erfgoed;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 
 	@Override
@@ -85,6 +87,7 @@ public class DocumentMenu extends JPanel
 			public void mouseEntered(MouseEvent arg0) 
 			{
 				overzicht.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+				overzicht.setCursor(hand);
 			}
 			
 			@Override
@@ -117,6 +120,7 @@ public class DocumentMenu extends JPanel
 			public void mouseEntered(MouseEvent arg0) 
 			{
 				erfgoed.setIcon(new ImageIcon(getClass().getResource("imgs/erfgoedpin.png")));
+				erfgoed.setCursor(hand);
 			}
 			
 			@Override
@@ -149,6 +153,7 @@ public class DocumentMenu extends JPanel
 			public void mouseEntered(MouseEvent e)
 			{
 				toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+				toevoegen.setCursor(hand);
 			}
 			
 			@Override

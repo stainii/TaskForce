@@ -1,6 +1,7 @@
 package guiElementen;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -52,6 +53,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	private DocumentCMS document;
 	private Hoofd hoofd;
 	private DocumentContent content;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	public DocumentThumbnail(Model m, Databank d, DocumentCMS doc, Hoofd h, DocumentContent cont)
 	{
@@ -97,7 +99,9 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	public void mouseExited(MouseEvent arg0) {}
 	
 	@Override
-	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseEntered(MouseEvent arg0) {
+		this.setCursor(hand);
+	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e)

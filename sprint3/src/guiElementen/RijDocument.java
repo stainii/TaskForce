@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -26,6 +27,7 @@ public class RijDocument extends JPanel implements MouseListener
 	private Databank data;
 	private Hoofd hoofd;
 	private DocumentCMS document;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	/**Dit is een rij in de lijstview, vergelijkbaar met een Tegel in de tegelview.
 	 * Toont info over een document en is aanklikbaar **/
@@ -98,7 +100,7 @@ public class RijDocument extends JPanel implements MouseListener
 		else
 			add(new JLabelFactory().getNogNietBeoordeeld(document.getStatus()));
 		
-		JLabel verwijderen = new JLabel();
+		final JLabel verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new MouseListener() {
 			
@@ -114,6 +116,7 @@ public class RijDocument extends JPanel implements MouseListener
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
+				verwijderen.setCursor(hand);
 			}
 
 			@Override

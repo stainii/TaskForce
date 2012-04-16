@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -39,8 +40,9 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	private Databank data;
 	private Hoofd hoofd;
 	private Erfgoed erfgoed;
+	private JLabel documentToevoegen;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
-
 	@Override
 	protected void paintComponent(Graphics g)		//achtergrond tekenen
 	{
@@ -103,7 +105,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		c.gridy = 6;
 		c.insets = new Insets(0,0,0,0);
 		c.gridwidth = 3;
-		JLabel documentToevoegen = new JLabel();
+		documentToevoegen = new JLabel();
 		documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/documentToevoegen.png")));
 		documentToevoegen.addMouseListener(new MouseListener() {
 			
@@ -126,7 +128,9 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			{
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
 				background = backgroundIcon.getImage();
-				repaint();				
+				repaint();	
+				Cursor cu = new Cursor(Cursor.HAND_CURSOR);
+				documentToevoegen.setCursor(cu);
 			}
 			
 			@Override
@@ -140,7 +144,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		add(documentToevoegen,c);
 		
 		c.gridx = 4;
-		JLabel verwijderen = new JLabel();
+		final JLabel verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new MouseListener() {
 			
@@ -163,7 +167,8 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			{
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
 				background = backgroundIcon.getImage();
-				repaint();				
+				repaint();	
+				verwijderen.setCursor(hand);
 			}
 			
 			@Override

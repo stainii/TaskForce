@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -35,6 +36,7 @@ public class TegelDocument extends JPanel implements MouseListener
 	private Databank data;
 	private Hoofd hoofd;
 	private DocumentCMS document;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 
 	@Override
@@ -110,7 +112,7 @@ public class TegelDocument extends JPanel implements MouseListener
 				
 		c.gridy = 7;
 		
-		JLabel verwijderen = new JLabel();
+		final JLabel verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new MouseListener() {
 			
@@ -126,6 +128,7 @@ public class TegelDocument extends JPanel implements MouseListener
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile_hover.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
+				verwijderen.setCursor(hand);
 			}
 
 			@Override

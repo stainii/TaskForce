@@ -8,6 +8,7 @@ import guiElementen.JLabelFactory;
 import guiElementen.OverzichtKiezer;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -51,6 +52,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private JRadioButton burger, erfgoed, datum, typeDoc;
 	private JTextField zoekTxt;
 	private JLabel zoekBtn, filteren;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	private OverzichtDocumentenController c1;
 	private OverzichtErfgoedController c2;
@@ -148,7 +150,9 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			public void mouseExited(MouseEvent e){}
 			
 			@Override
-			public void mouseEntered(MouseEvent e){}
+			public void mouseEntered(MouseEvent e){
+				zoekBtn.setCursor(hand);
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -182,6 +186,10 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		goedgekeurd.addChangeListener(this);
 		afgekeurd.addChangeListener(this); 
 		nietBeoordeeld.addChangeListener(this); 
+		
+		goedgekeurd.setCursor(hand);
+		afgekeurd.setCursor(hand);
+		nietBeoordeeld.setCursor(hand);
 	
 		add(goedgekeurd);
 		add(afgekeurd);
@@ -229,6 +237,11 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		erfgoed.addChangeListener(this);
 		datum.addChangeListener(this);
 		typeDoc.addChangeListener(this);
+		
+		burger.setCursor(hand);
+		erfgoed.setCursor(hand);
+		datum.setCursor(hand);
+		typeDoc.setCursor(hand);
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(burger);

@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -31,6 +32,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	private Databank data;
 	private Hoofd hoofd;
 	private Erfgoed erfgoed;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	/**Dit is een rij in de lijstview, vergelijkbaar met een Tegel in de tegelview.
 	 * Toont info over een document en is aanklikbaar **/
@@ -71,7 +73,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 		documenten.add(new JLabelFactory().getAfgekeurd(e.getAantalDocumentenMetStatus("Afgekeurd") + ""));
 		add(documenten);
 		
-		JLabel documentToevoegen = new JLabel();
+		final JLabel documentToevoegen = new JLabel();
 		documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/documentToevoegen.png")));
 		documentToevoegen.addMouseListener(new MouseListener() {
 			
@@ -87,6 +89,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
+				documentToevoegen.setCursor(hand);
 			}
 
 			@Override
@@ -108,7 +111,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 		
 		add(documentToevoegen);
 		
-		JLabel verwijderen = new JLabel();
+		final JLabel verwijderen = new JLabel();
 		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new MouseListener() {
 			
@@ -124,6 +127,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
+				verwijderen.setCursor(hand);
 			}
 
 			@Override

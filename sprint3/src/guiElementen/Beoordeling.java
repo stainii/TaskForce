@@ -1,6 +1,7 @@
 package guiElementen;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
@@ -42,6 +43,7 @@ public class Beoordeling extends JPanel
 	private MailThuis mail;
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	
 	public Beoordeling(Databank d, Model m , DocumentCMS doc, Hoofd h, DocumentContent dc, DocumentController cont)
@@ -130,7 +132,9 @@ public class Beoordeling extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e) {
+					verwijderen.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e)
@@ -156,7 +160,9 @@ public class Beoordeling extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e) {
+					bewerken.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) 
@@ -184,7 +190,9 @@ public class Beoordeling extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e) {
+					bewerken.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) 
@@ -243,7 +251,9 @@ public class Beoordeling extends JPanel
 			@Override
 			public void mouseExited(MouseEvent arg0) {}
 			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {
+				goedkeuren.setCursor(hand);
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0)
@@ -271,7 +281,9 @@ public class Beoordeling extends JPanel
 			@Override
 			public void mouseExited(MouseEvent arg0) {}
 			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {
+				afwijzen.setCursor(hand);
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) 

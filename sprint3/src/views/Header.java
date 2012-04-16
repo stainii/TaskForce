@@ -2,6 +2,7 @@ package views;
 import guiElementen.InstelView;
 import guiElementen.JLabelFactory;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -39,6 +40,7 @@ public class Header extends JPanel implements MouseListener
 	private Image logo = logoIcon.getImage();
 	
 	private JLabel inlogLbl, uitlogLbl,instellingen;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	private Model m;
 	private JFrame frame;
@@ -108,6 +110,7 @@ public class Header extends JPanel implements MouseListener
 	public void mouseEntered(MouseEvent e) 
 	{
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen_hover.png")));
+		uitlogLbl.setCursor(hand);
 	}
 
 	@Override
@@ -136,6 +139,7 @@ public class Header extends JPanel implements MouseListener
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco_hover.png")));
+			instellingen.setCursor(hand);
 		}
 
 		@Override

@@ -2,6 +2,7 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -75,7 +76,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	private int huidigePagina;
 	private String view;
 	private String typeContent;
-		
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);	
 
 	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtDocumentenController c1, OverzichtErfgoedController c2)
 	{
@@ -88,8 +89,6 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.typeContent = "Erfgoed";
 		
 		addComponentListener(this);
-		
-		
 				
 		controller1.addListener(this);
 		controller2.addListener(this);
@@ -128,6 +127,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
+				documentenTitel.setCursor(hand);
 				if (typeContent.equals("Erfgoed"))
 					((JLabel)e.getSource()).setForeground(new Color(200,200,200));
 			}
@@ -162,6 +162,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
+				erfgoedTitel.setCursor(hand);
 				if (typeContent.equals("Documenten"))
 					((JLabel)e.getSource()).setForeground(new Color(200,200,200));
 			}
@@ -203,6 +204,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			public void mouseEntered(MouseEvent e)
 			{
 				erfgoedToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+				erfgoedToevoegen.setCursor(hand);
 			}
 			
 			@Override
@@ -227,6 +229,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			public void mouseExited(MouseEvent e)
 			{
 				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
+				documentToevoegen.setCursor(hand);
 			}
 			
 			@Override
