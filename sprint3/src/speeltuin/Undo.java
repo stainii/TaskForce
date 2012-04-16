@@ -105,7 +105,7 @@ public class Undo extends JFrame
 		Model m = new Model();
 		Databank d = new Databank(m);
 		d.laadDatabank();
-		m.setBeheerder("Stijn");
+		m.setBeheerder("Kevin");
 		
         JFrame f = new Undo(m,d);
         f.setSize(600,400);

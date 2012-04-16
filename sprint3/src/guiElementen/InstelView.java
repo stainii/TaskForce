@@ -3,6 +3,8 @@ package guiElementen;
 import harsh.p.raval.lightbox.LightBox;
 
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -51,7 +53,8 @@ import model.Model;
 @SuppressWarnings("serial")
 public class InstelView extends JPanel
 {
-
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelview.png"));
+	private Image background = backgroundIcon.getImage();
 	private JPanel instelPanel;
 	private JLabel annuleren;
 	private Model m;
@@ -65,6 +68,16 @@ public class InstelView extends JPanel
 	private JList standaardRedenen;
 	private ArrayList<String> reden;
 	private boolean inPanel = false;
+	private JLabel nieuweRedenBtn, verwijderenBtn ;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	
+	@Override
+	protected void paintComponent(Graphics g) 
+	{
+		super.paintComponent(g);
+		if (background != null)
+			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	}
 	
 	public InstelView(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
@@ -76,8 +89,9 @@ public class InstelView extends JPanel
 		
 		jLabelFactory = new JLabelFactory();
 		
-		setSize(new Dimension(550,300));
-		setLayout(new GridBagLayout());
+		setSize(new Dimension(510,420));
+		setOpaque(false);
+		setLayout(null);
 		setBackground(Color.GRAY);
 		
 		
@@ -100,40 +114,26 @@ public class InstelView extends JPanel
 		annuleren.setIcon(new ImageIcon(getClass().getResource("imgs/annuleren.png")));
 		annuleren.addMouseListener(new AnnulerenListener());
 	
-		GridBagConstraints c = new GridBagConstraints();
-
-		//titel
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.gridx = 1;
-		c.gridx = 1;
-		c.gridwidth = 6;
-		add(jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam()),c);
+		// Absolute positionering 
+		JLabel titel = jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam());
+		Dimension sizeTitel = titel.getPreferredSize();
+		titel.setBounds(10,5,sizeTitel.width,sizeTitel.height);
 		
+		JLabel overzicht = jLabelFactory.getMenuTitel("Overzicht");
+		Dimension sizeOverzicht = overzicht.getPreferredSize();
+		overzicht.setBounds(10, 35, sizeOverzicht.width, sizeOverzicht.height);
 		
-		//overzicht
-		c.gridx = 1;
-		c.gridy = 2;
-		c.insets = new Insets(10,0,0,0);
-		c.gridwidth = 1;
-		add(jLabelFactory.getMenuTitel("Overzicht"),c);
-		
-		c.gridx = 1;
-		c.gridy = 3;
-		c.insets = new Insets(0,0,0,0);
-		add(jLabelFactory.getNormaleTekst("Bij het opstarten wil ik "),c);
+		JLabel ikWil = jLabelFactory.getNormaleTekst("Bij het opstarten wil ik ");
+		Dimension sizeIkWil = ikWil.getPreferredSize();
+		ikWil.setBounds(15, 55, sizeIkWil.width, sizeIkWil.height);
 		
 		//eerste groep radiobuttons
 		ImageIcon selected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_selected.png"));
 		ImageIcon notSelected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_normal.png"));
 		ImageIcon hover = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_hover.png"));
 		
-		c.gridx = 1;
-		c.gridy = 4;
-		c.gridheight = 2;
-		JRadioButton erfgoed = new JRadioButton("erfgoed");
+		// Erfgoed
+		JRadioButton erfgoed = new JRadioButton("Erfgoeden");
 		erfgoed.setForeground(Color.white);
 		erfgoed.setOpaque(false);
 		erfgoed.setSelectedIcon(selected);		
@@ -150,12 +150,11 @@ public class InstelView extends JPanel
 				d.updateInstellingen("Erfgoed", m.getInstellingenId("TypeContent"));
 			}
 		});
-		add(erfgoed, c);
+		Dimension sizeErfgoed = erfgoed.getPreferredSize();
+		erfgoed.setBounds(16, 75, sizeErfgoed.width, sizeErfgoed.height);
 		
-		c.gridx = 1;
-		c.gridy = 6;
-		c.gridheight = 2;
-		JRadioButton documenten = new JRadioButton("documenten");
+		// Documenten
+		JRadioButton documenten = new JRadioButton("Documenten");
 		documenten.setForeground(Color.white);
 		documenten.setOpaque(false);
 		documenten.setSelectedIcon(selected);		
@@ -169,27 +168,20 @@ public class InstelView extends JPanel
 				d.updateInstellingen("Documenten", m.getInstellingenId("TypeContent"));
 			}
 		});
-
-		add(documenten, c);
+		Dimension sizeDocumenten = documenten.getPreferredSize();
+		documenten.setBounds(16, 95,sizeDocumenten.width, sizeDocumenten.height);
 		
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(erfgoed);
 		group1.add(documenten);
-
-		//tussentekst
-		c.gridx = 2;
-		c.gridy = 5;
-		c.gridheight = 2;
-		c.anchor = GridBagConstraints.CENTER;
-		add(jLabelFactory.getNormaleTekst("in een"),c);		
 		
+		// in een
+		JLabel inEen = jLabelFactory.getNormaleTekst("in een");
+		Dimension sizeInEen = inEen.getPreferredSize();
+		inEen.setBounds(190, 89, sizeInEen.width, sizeInEen.height);
 		
-		//tweede groep radiobuttons
-		c.gridx = 3;
-		c.gridy = 4;
-		c.gridheight = 2;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		JRadioButton tegel = new JRadioButton("Tegels");
+		// tweede groep radiobuttons
+		JRadioButton tegel = new JRadioButton("lijst van tegels");
 		tegel.setForeground(Color.white);
 		tegel.setOpaque(false);
 		tegel.setSelectedIcon(selected);		
@@ -206,11 +198,9 @@ public class InstelView extends JPanel
 				d.updateInstellingen("TegelView", m.getInstellingenId("View"));
 			}
 		});
-		add(tegel, c);
-				
-		c.gridx = 3;
-		c.gridy = 6;
-		c.gridheight = 2;
+		Dimension sizeTegel = tegel.getPreferredSize();
+		tegel.setBounds(290, 75, sizeTegel.width, sizeTegel.height);
+		
 		JRadioButton tabel = new JRadioButton("tabel");
 		tabel.setForeground(Color.white);
 		tabel.setOpaque(false);
@@ -228,43 +218,28 @@ public class InstelView extends JPanel
 				d.updateInstellingen("LijstView", m.getInstellingenId("View"));
 			}
 		});
-		add(tabel, c);
-				
+		Dimension sizeTabel = tabel.getPreferredSize();
+		tabel.setBounds(290, 95, sizeTabel.width, sizeTabel.height);
+		
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(tegel);
 		group2.add(tabel);
 		
+		// zien
+		JLabel zien = jLabelFactory.getNormaleTekst("zien.");
+		Dimension sizeZien = zien.getPreferredSize();
+		zien.setBounds(440, 89, sizeZien.width, sizeZien.height);
 		
-		//tussentekst
-		c.anchor = GridBagConstraints.CENTER;
-		c.gridx = 4;
-		c.gridy = 5;
-		c.gridheight = 2;
-		add(jLabelFactory.getNormaleTekst("zien."),c);
+		// titel documenten
+		JLabel documentenLbl = jLabelFactory.getMenuTitel("Document");
+		Dimension sizeDocumentenLbl = documentenLbl.getPreferredSize();
+		documentenLbl.setBounds(10, 130, sizeDocumentenLbl.width, sizeDocumentenLbl.height);
 		
-	
-		//documenten
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-		c.gridy = 8;
-		c.insets = new Insets(10,0,0,0);
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		add(jLabelFactory.getMenuTitel("Document"),c);
+		JLabel reden = jLabelFactory.getNormaleTekst("Standaard redenen voor afwijzing");
+		Dimension sizeStandaardReden = reden.getPreferredSize();
+		reden.setBounds(15, 150, sizeStandaardReden.width, sizeStandaardReden.height);
 		
-		//afwijzing
-		c.gridx = 1;
-		c.gridy = 9;
-		c.insets = new Insets(0,0,0,0);
-		c.gridwidth = 3;
-		add(jLabelFactory.getNormaleTekst("Standaard redenen voor afwijzing"), c);
-		
-		c.gridx = 1;
-		c.gridy = 10;
-		c.gridwidth = 1;
-		c.gridheight = 2;
-		c.insets = new Insets(0,10,0,10);
-		
+		// Standaardreden
 		redenModel = new DefaultListModel();
 		for(int i=0;i<m.getStandaardReden().size();i++)
 		{
@@ -275,19 +250,11 @@ public class InstelView extends JPanel
 		standaardRedenen.setLayoutOrientation(JList.VERTICAL);
 		standaardRedenen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane redenScroll = new JScrollPane(standaardRedenen);
-		redenScroll.setPreferredSize(new Dimension(100,50));
+		redenScroll.setPreferredSize(new Dimension(150,130));
 		redenScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		standaardRedenen.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				//m.setInstelling(standaardRedenen.getSelectedValue().toString());
-			}
-		});
-		add(standaardRedenen,c);
-				
-		c.gridx = 2;
-		c.gridy = 10;
-		c.gridheight = 1;
+		redenScroll.setBounds(35,170,redenScroll.getPreferredSize().width,redenScroll.getPreferredSize().height);
+		
+		// Textfield voor nieuwe reden
 		final String nieuweReden = "Typ hier een nieuwe reden...";
 		nieuweRedenTxt = new JTextField(nieuweReden);
 		nieuweRedenTxt.setForeground(Color.gray);
@@ -333,16 +300,19 @@ public class InstelView extends JPanel
 				}
 			}
 		});
-		add(nieuweRedenTxt,c);
+		Dimension sizeNieuweRedenTxt = nieuweRedenTxt.getPreferredSize();
+		nieuweRedenTxt.setBounds(220, 190, sizeNieuweRedenTxt.width, sizeNieuweRedenTxt.height);
 		
-		c.gridx = 3;
-		c.gridy = 10;
-		JButton nieuweRedenBtn = new JButton("Toevoegen");
-		add(nieuweRedenBtn,c);
-		nieuweRedenBtn.addActionListener(new ActionListener() {
+		// Toevoegen nieuwe reden 
+		final JLabel nieuweRedenBtn = new JLabel();
+		nieuweRedenBtn.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegen.png")));
+		nieuweRedenBtn.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
 				if(!nieuweRedenTxt.getText().equals(nieuweReden))
 				{
 					m.toevoegenInstelling(new Instellingen(0,"StandaardReden",nieuweRedenTxt.getText(),m.getBeheerder().getId()));
@@ -351,26 +321,86 @@ public class InstelView extends JPanel
 					nieuweRedenTxt.setText(nieuweReden);
 				}
 			}
-		});
-		
-		c.gridx = 2;
-		c.gridy = 11;
-		JButton verwijderenBtn = new JButton("Verwijder geselecteerde reden");
-		verwijderenBtn.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				m.setInstelling(standaardRedenen.getSelectedValue().toString());
-				d.verwijderStandaardReden(m.getInstelling());
-				m.verwijderStandaardReden(standaardRedenen.getSelectedValue().toString());
-				redenModel.remove(standaardRedenen.getSelectedIndex());
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				nieuweRedenBtn.setCursor(hand);
 			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
 		});
-		add(verwijderenBtn, c);
 		
-		c.gridx = 3;
-		c.gridy = 11;
-		add(annuleren,c);
+		Dimension sizeNieuweRedenBtn = nieuweRedenBtn.getPreferredSize();
+		nieuweRedenBtn.setBounds(240,215,sizeNieuweRedenBtn.width,sizeNieuweRedenBtn.height);
+
+		// verwijderen reden
+		final JLabel verwijderenBtn = new JLabel();
+		verwijderenBtn.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
+		verwijderenBtn.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+					
+					m.setInstelling(standaardRedenen.getSelectedValue().toString());
+					d.verwijderStandaardReden(m.getInstelling());
+					m.verwijderStandaardReden(standaardRedenen.getSelectedValue().toString());
+					redenModel.remove(standaardRedenen.getSelectedIndex());
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				verwijderenBtn.setCursor(hand);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+		});
+		Dimension sizeVerwijderenBtn = verwijderenBtn.getPreferredSize();
+		verwijderenBtn.setBounds(240, 250, sizeVerwijderenBtn.width, sizeVerwijderenBtn.height);
+		
+		// Email
+		JLabel emailLbl = jLabelFactory.getMenuTitel("E-mail voorkeuren");
+		Dimension sizeEmailLbl = emailLbl.getPreferredSize();
+		emailLbl.setBounds(10, 310, sizeEmailLbl.width, sizeEmailLbl.height);
+		
+		JLabel emailzin = jLabelFactory.getNormaleTekst("Geef hieronder uw E-mail instellingen");
+		Dimension sizeEmailzin = emailzin.getPreferredSize();
+		emailzin.setBounds(15,330,sizeEmailzin.width,sizeEmailzin.height);
+		
+		JLabel emailIn = jLabelFactory.getNormaleTekst("Email-In");
+		Dimension sizeEmailIn = emailIn.getPreferredSize();
+		emailIn.setBounds(20,352,sizeEmailIn.width,sizeEmailIn.height);
+		
+		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out");
+		Dimension sizeEmailOut = emailOut.getPreferredSize();
+		emailOut.setBounds(20,375,sizeEmailOut.width,sizeEmailOut.height);
+		
+		JTextField emailInTxt = new JTextField("Nog implementeren");
+		emailInTxt.setColumns(15);
+		Dimension sizeEmailInTxt = emailInTxt.getPreferredSize();
+		emailInTxt.setBounds(80, 350, sizeEmailInTxt.width, sizeEmailInTxt.height);
+		
+		JTextField emailOutTxt = new JTextField("Nog implementeren");
+		emailOutTxt.setColumns(15);
+		Dimension sizeEmailOutTxt = emailOutTxt.getPreferredSize();
+		emailOutTxt.setBounds(80, 375, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
+		
+		JLabel bewerken = new JLabel();
+		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
+		Dimension sizeBewerken = bewerken.getPreferredSize();
+		bewerken.setBounds(270, 355, sizeBewerken.width, sizeBewerken.height);
+		
 		
 		//__Radiobuttons selected of niet
 		if(m.getBeheerder().getTypeContent().equals(""))
@@ -393,7 +423,31 @@ public class InstelView extends JPanel
 		if(m.getBeheerder().getView().equals("LijstView"))
 			tabel.setSelected(true);
 		
+		// alles toevoegen aan InstelView panel
+		add(titel);
+		add(overzicht);
+		add(ikWil);
+		add(erfgoed);
+		add(documenten);
+		add(inEen);
+		add(tegel);
+		add(tabel);
+		add(zien);
+		add(documentenLbl);
+		add(reden);
+		add(redenScroll);
+		add(nieuweRedenTxt);
+		add(nieuweRedenBtn);
+		add(verwijderenBtn);
+		add(emailLbl);
+		add(emailzin);
+		add(emailIn);
+		add(emailOut);
+		add(emailInTxt);
+		add(emailOutTxt);
+		add(bewerken);
 		
+		// LightBox maken met nodige listeners om te sluiten
 		box = new LightBox();
 		box.createLightBoxEffect(f,this);
 		box.grabFocus();
@@ -411,37 +465,28 @@ public class InstelView extends JPanel
 					box.closeLightBox(f, getInstelView());
 			}
 		});
-		this.addMouseListener(new MouseListener() {
+		box.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				if(!inPanel)
+					box.closeLightBox(f,getInstelView());
 			}
 			
 			@Override
-			public void mouseExited(MouseEvent arg0) {
-				inPanel = false;
-				System.out.println(inPanel);
-			}
+			public void mouseExited(MouseEvent e) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				inPanel = true;
-				System.out.println(inPanel);
-			}
+			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(inPanel = false)
-					System.out.println("jep");
-			}
+			public void mouseClicked(MouseEvent e) {}
 		});
+		
+		this.addMouseListener(new InstelViewListener());
 	}
 	
 	public JPanel getInstelPanel()
@@ -478,4 +523,30 @@ public class InstelView extends JPanel
 		@Override
 		public void mouseClicked(MouseEvent arg0) {}
 	}
+
+	
+	// MouseListener voor InstelView
+	
+	private class InstelViewListener implements MouseListener
+	{
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			inPanel = true;
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			inPanel = false;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+	}
+	
 }
