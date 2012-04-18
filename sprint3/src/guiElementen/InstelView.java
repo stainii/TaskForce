@@ -16,12 +16,16 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -45,6 +49,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import controllers.Databank;
+import controllers.Login;
 
 import views.OverzichtContent;
 import views.OverzichtView;
@@ -58,7 +63,7 @@ public class InstelView extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelview.png"));
 	private Image background = backgroundIcon.getImage();
 	private JPanel instelPanel;
-	private JLabel bewerken,opslaan,close;
+	private JLabel bewerken,opslaan,close,wachtwoordBtn;
 	private Model m;
 	private JFrame f;
 	private OverzichtView v;
@@ -66,7 +71,7 @@ public class InstelView extends JPanel
 	private JLabelFactory jLabelFactory;
 	private LightBox box;
 	private JTextField nieuweRedenTxt, emailOutTxt, poortTxt, userTxt;
-	private JPasswordField pwdTxt;
+	private JPasswordField pwdTxt,oudW, nieuwW1,nieuwW2;
 	private DefaultListModel redenModel;
 	private JList standaardRedenen;
 	private ArrayList<String> reden;
@@ -92,27 +97,10 @@ public class InstelView extends JPanel
 		
 		jLabelFactory = new JLabelFactory();
 		
-		setSize(new Dimension(510,460));
+		setSize(new Dimension(510,570));
 		setOpaque(false);
 		setLayout(null);
 		setBackground(Color.GRAY);
-		
-		
-		// deze lus gaat de ArrayList vullen met de standaardreden afhankelijk welke gebruiker het is.
-		// Dit staat hier omdat ik steeds een foutmelding kreeg als ik de arraylist declareerde in het model?? 
-		// Foutmelding was : java.lang.OutOfMemoryError: Java heap space ( dit misschien eens navragen aan Van Impe? )
-		// Het adden aan ArrayList<String> gebeurt in oneindige lus terwijl met een System.out.println dit niet gebeurd? 
-		for(Instellingen i : m.getInstellingen())					
-		{
-			if(i.getBeheerderId() == m.getBeheerder().getId())
-			{
-				if(i.getInstellingenSleutel().equals("StandaardReden"))
-				{
-					reden.add(i.getInstellingenWaarde());
-				}
-			}
-		}
-		m.setStandaardReden(reden);		//ArrayList<String> reden gaat geset worden in model.
 	
 		// Absolute positionering 
 		JLabel titel = jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam());
@@ -379,50 +367,93 @@ public class InstelView extends JPanel
 		Dimension sizeVerwijderenBtn = verwijderenBtn.getPreferredSize();
 		verwijderenBtn.setBounds(240, 250, sizeVerwijderenBtn.width, sizeVerwijderenBtn.height);
 		
+		//Wachtwoord
+		JLabel wachtwoordLbl = jLabelFactory.getMenuTitel("Wachtwoord wijzigen");
+		Dimension sizeWachtwoord = wachtwoordLbl.getPreferredSize();
+		wachtwoordLbl.setBounds(10,310,sizeWachtwoord.width,sizeWachtwoord.height);
+		
+		JLabel oudwLbl = jLabelFactory.getNormaleTekst("Oud wachtwoord");
+		Dimension sizeoudwLbl = oudwLbl.getPreferredSize();
+		oudwLbl.setBounds(20,330,sizeoudwLbl.width,sizeoudwLbl.height);
+		
+		oudW = new JPasswordField();
+		oudW.addKeyListener(new OudwachtwoordListener());
+		oudW.setColumns(15);
+		Dimension sizeOudW = oudW.getPreferredSize();
+		oudW.setBounds(140,330,sizeOudW.width,sizeOudW.height);
+		
+		JLabel nieuwW1Lbl = jLabelFactory.getNormaleTekst("Nieuw wachtwoord");
+		Dimension sizenieuwW1Lbl = nieuwW1Lbl.getPreferredSize();
+		nieuwW1Lbl.setBounds(20,352,sizenieuwW1Lbl.width,sizenieuwW1Lbl.height);
+		
+		nieuwW1 = new JPasswordField();
+		nieuwW1.setColumns(15);
+		nieuwW1.setEnabled(false);
+		Dimension sizenieuwW1 = nieuwW1.getPreferredSize();
+		nieuwW1.setBounds(140,352,sizenieuwW1.width,sizenieuwW1.height);
+		
+		JLabel herhaalLbl = jLabelFactory.getNormaleTekst("Herhaal wachtwoord");
+		Dimension sizeherhaalLbl = herhaalLbl.getPreferredSize();
+		herhaalLbl.setBounds(20,374,sizeherhaalLbl.width,sizeherhaalLbl.height);
+		
+		nieuwW2 = new JPasswordField();
+		nieuwW2.setColumns(15);
+		nieuwW2.setEnabled(false);
+		Dimension sizenieuwW2 = nieuwW2.getPreferredSize();
+		nieuwW2.setBounds(140,374,sizenieuwW2.width,sizenieuwW2.height);
+		
+		wachtwoordBtn = new JLabel();
+		wachtwoordBtn.addMouseListener(new WachtwoordOpslaanListener());
+		wachtwoordBtn.setVisible(false);
+		wachtwoordBtn.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
+		Dimension sizeWbtn = wachtwoordBtn.getPreferredSize();
+		wachtwoordBtn.setBounds(320,350, sizeWbtn.width, sizeWbtn.height);
+		
+		
 		// Email
 		JLabel emailLbl = jLabelFactory.getMenuTitel("E-mail voorkeuren");
 		Dimension sizeEmailLbl = emailLbl.getPreferredSize();
-		emailLbl.setBounds(10, 310, sizeEmailLbl.width, sizeEmailLbl.height);
+		emailLbl.setBounds(10, 400, sizeEmailLbl.width, sizeEmailLbl.height);
 		
 		JLabel emailzin = jLabelFactory.getNormaleTekst("Geef hieronder uw E-mail instellingen");
 		Dimension sizeEmailzin = emailzin.getPreferredSize();
-		emailzin.setBounds(15,330,sizeEmailzin.width,sizeEmailzin.height);
+		emailzin.setBounds(15,420,sizeEmailzin.width,sizeEmailzin.height);
 		
 		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out (smtp)");
 		Dimension sizeEmailOut = emailOut.getPreferredSize();
-		emailOut.setBounds(20,352,sizeEmailOut.width,sizeEmailOut.height);
+		emailOut.setBounds(20,452,sizeEmailOut.width,sizeEmailOut.height);
 		
 		JLabel poortLbl = jLabelFactory.getNormaleTekst("Poort");
 		Dimension sizePoortLbl = poortLbl.getPreferredSize();
-		poortLbl.setBounds(20,375,sizePoortLbl.width,sizePoortLbl.height);
+		poortLbl.setBounds(20,475,sizePoortLbl.width,sizePoortLbl.height);
 		
 		emailOutTxt = new JTextField();
 		emailOutTxt.setColumns(15);
 		Dimension sizeEmailOutTxt = emailOutTxt.getPreferredSize();
-		emailOutTxt.setBounds(130, 350, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
+		emailOutTxt.setBounds(130, 450, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
 		
 		poortTxt = new JTextField();
 		poortTxt.setColumns(15);
 		Dimension sizePoortTxt = poortTxt.getPreferredSize();
-		poortTxt.setBounds(130, 375, sizePoortTxt.width, sizePoortTxt.height);
+		poortTxt.setBounds(130, 475, sizePoortTxt.width, sizePoortTxt.height);
 		
 		JLabel userLbl =  jLabelFactory.getNormaleTekst("Gebruikersnaam");
 		Dimension sizeUserLbl = userLbl.getPreferredSize();
-		userLbl.setBounds(20,402,sizeUserLbl.width,sizeUserLbl.height);
+		userLbl.setBounds(20,500,sizeUserLbl.width,sizeUserLbl.height);
 		
 		userTxt = new JTextField();
 		userTxt.setColumns(15);
 		Dimension sizeUserTxt = userTxt.getPreferredSize();
-		userTxt.setBounds(130,400,sizeUserTxt.width,sizeUserTxt.height);
+		userTxt.setBounds(130,500,sizeUserTxt.width,sizeUserTxt.height);
 		
 		JLabel pwdLbl =  jLabelFactory.getNormaleTekst("Wachtwoord");
 		Dimension sizePwdLbl = pwdLbl.getPreferredSize();
-		pwdLbl.setBounds(20,427,sizePwdLbl.width,sizePwdLbl.height);
+		pwdLbl.setBounds(20,525,sizePwdLbl.width,sizePwdLbl.height);
 		
 		pwdTxt = new JPasswordField();
 		pwdTxt.setColumns(15);
 		Dimension sizePwdTxt = pwdTxt.getPreferredSize();
-		pwdTxt.setBounds(130,425,sizePwdTxt.width,sizePwdTxt.height);
+		pwdTxt.setBounds(130,525,sizePwdTxt.width,sizePwdTxt.height);
 		
 		
 		// bewerken button
@@ -430,13 +461,13 @@ public class InstelView extends JPanel
 		bewerken.addMouseListener(new BewerkenListener());
 		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		Dimension sizeBewerken = bewerken.getPreferredSize();
-		bewerken.setBounds(320, 370, sizeBewerken.width, sizeBewerken.height);
+		bewerken.setBounds(320, 480, sizeBewerken.width, sizeBewerken.height);
 		
 		opslaan = new JLabel();
 		opslaan.addMouseListener(new OpslaanListener());
 		opslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		Dimension sizeOpslaan = opslaan.getPreferredSize();
-		opslaan.setBounds(320,370, sizeOpslaan.width,sizeOpslaan.height);
+		opslaan.setBounds(320,480, sizeOpslaan.width,sizeOpslaan.height);
 		opslaan.setVisible(false);
 		
 		
@@ -490,6 +521,14 @@ public class InstelView extends JPanel
 		add(nieuweRedenTxt);
 		add(nieuweRedenBtn);
 		add(verwijderenBtn);
+		add(wachtwoordLbl);
+		add(oudwLbl);
+		add(oudW);
+		add(nieuwW1Lbl);
+		add(nieuwW1);
+		add(herhaalLbl);
+		add(nieuwW2);
+		add(wachtwoordBtn);
 		add(emailLbl);
 		add(emailzin);
 		add(emailOut);
@@ -542,6 +581,26 @@ public class InstelView extends JPanel
 			public void mouseClicked(MouseEvent e) {}
 		});
 		
+		f.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent arg0) {}
+			
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				//Lightbox wegsmijten en een nieuwe maken bij het resizen.
+				box.closeLightBox(f, getInstelView());
+				box.createLightBoxEffect(f, getInstelView());
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent arg0) {}
+			
+			@Override
+			public void componentHidden(ComponentEvent arg0) {}
+		});
+		
+		// listener voor InstelView 
 		this.addMouseListener(new InstelViewListener());
 	}
 	
@@ -648,6 +707,82 @@ public class InstelView extends JPanel
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {}
+	}
+	
+	private class OudwachtwoordListener implements KeyListener
+	{
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			nieuwW1.setEnabled(true);
+			nieuwW2.setEnabled(true);
+			wachtwoordBtn.setVisible(true);
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+
+		@Override
+		public void keyTyped(KeyEvent e) {}
+		
+	}
+	
+	private class WachtwoordOpslaanListener implements MouseListener
+	{
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			wachtwoordBtn.setCursor(hand);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+			try {
+				if(Login.convert(oudW.getText()).equals(m.getBeheerder().getWachtwoord()))
+				{
+					if(nieuwW1.getText().equals(nieuwW2.getText()))
+					{
+						m.getBeheerder().setWachtwoord(Login.convert(nieuwW2.getText()));
+						d.updateBeheerdersDatabank(m.getBeheerder());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Wachtwoorden komen niet overeen", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
+						oudW.setText("");
+						nieuwW1.setText("");
+						nieuwW2.setText("");
+					}
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Verkeerde wachtwoord", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
+					nieuwW1.setText("");
+					nieuwW2.setText("");
+				}
+					
+				
+			} catch (NoSuchAlgorithmException e1) {
+				e1.printStackTrace();
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}	
+			finally
+			{
+				wachtwoordBtn.setVisible(false);
+				oudW.setText("");
+				nieuwW1.setEnabled(false);
+				nieuwW2.setEnabled(false);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 	}
 
 	

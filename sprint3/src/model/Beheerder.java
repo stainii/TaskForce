@@ -43,8 +43,9 @@ public class Beheerder
 	{
 		return voornaam + " " + achternaam;
 	}
-	public String getWachtwoord() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		return Login.convert(wachtwoord);
+	public String getWachtwoord()  
+	{
+		return wachtwoord;
 	}
 	public String getEmail(){
 		return email;

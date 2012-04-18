@@ -244,19 +244,18 @@ public class Model
 		return 0;
 	}
 	public ArrayList<String> getStandaardReden()		// bevat de ArrayList met de Standaard Redenen van afwijzing
-	{		
-		/*for(Instellingen i : getInstellingen())
+	{
+		reden.clear();
+		for(Instellingen i : getInstellingen())
 		{
 			if(i.getBeheerderId() == getBeheerder().getId())
 			{
 				if(i.getInstellingenSleutel().equals("StandaardReden"))
 				{
-					System.out.println(i.getInstellingenWaarde());
 					reden.add(i.getInstellingenWaarde());
 				}
 			}
-			//reden.add(i.getInstellingenWaarde());
-		}*/
+		}
 		return reden;
 	}
 	public void setStandaardReden(ArrayList<String> sr)
@@ -316,12 +315,7 @@ public class Model
 			{
 				if(i.getInstellingenSleutel().equals(instellingSleutel))
 					return i.getInstellingenWaarde();
-				else if(i.getInstellingenSleutel().equals(instellingSleutel))
-					return i.getInstellingenWaarde();
-				else if(i.getInstellingenSleutel().equals(instellingSleutel))
-					return i.getInstellingenWaarde();
-				else if(i.getInstellingenSleutel().equals(instellingSleutel))
-					return i.getInstellingenWaarde();
+
 			}
 		}
 		return "";

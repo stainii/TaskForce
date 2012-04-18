@@ -82,6 +82,7 @@ public class Start extends JPanel implements ActionListener
 		m = new Model();
 		d = new Databank(m);
 		d.getBeheerdersEnBurgersUitDatabank();
+		d.getInstellingen();
 		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
@@ -229,6 +230,7 @@ public class Start extends JPanel implements ActionListener
 				{
 					if(gebruikersnaamTxt.getText().equalsIgnoreCase(b.getVoornaam()))
 					{
+						m.setBeheerder(gebruikersnaamTxt.getText());
 						b.setWachtwoord(wachtwoord.getWachtwoord());
 						try {
 							d.updateBeheerdersDatabank(b);

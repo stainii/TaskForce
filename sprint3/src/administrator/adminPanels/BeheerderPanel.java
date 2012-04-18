@@ -131,7 +131,7 @@ public class BeheerderPanel extends JPanel
 		beheerderScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		beheerderList.addListSelectionListener(new ListListener());
 		beheerderList.setSelectedIndex(0);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		
 		c.fill = GridBagConstraints.HORIZONTAL;

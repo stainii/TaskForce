@@ -104,6 +104,7 @@ public class Databank
 						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
 			}
 			
+			
 			rs= s.executeQuery("SELECT * FROM Instellingen");
 			
 			while(rs.next())
@@ -139,7 +140,7 @@ public class Databank
 		m.setErfgoed(erfgoed);
 		m.setBurgers(burgers);
 		m.setBeheerders(beheerders);
-		m.setInstellingen(instellingen);
+		m.setInstellingen(instellingen);		
 	}
 	
 	
