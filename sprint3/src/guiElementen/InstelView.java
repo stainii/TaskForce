@@ -60,7 +60,7 @@ import model.Model;
 @SuppressWarnings("serial")
 public class InstelView extends JPanel
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelview.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelviewLang.png"));
 	private Image background = backgroundIcon.getImage();
 	private JPanel instelPanel;
 	private JLabel bewerken,opslaan,close,wachtwoordBtn;
