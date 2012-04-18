@@ -110,6 +110,7 @@ public class Databank
 			{
 				instellingen.add(new Instellingen(rs.getInt("InstellingId"),rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
 			}
+
 		}
 		catch (SQLException e)
 		{
@@ -1119,7 +1120,7 @@ public class Databank
 	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
-		PreparedStatement s = null;
+		PreparedStatement s = null, s2 = null;
 		
 		try
 		{
@@ -1134,6 +1135,7 @@ public class Databank
 			s.setBoolean(7,kv);
 			s.setBoolean(8,kt);
 			s.setBoolean(9,isAdmin);
+			
 			
 			s.executeUpdate();	
 			

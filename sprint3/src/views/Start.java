@@ -7,6 +7,7 @@ package views;
 import guiElementen.JLabelFactory;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -62,6 +63,7 @@ public class Start extends JPanel implements ActionListener
 	private ExecutorService ex;
 	private Databank d;
 	private Model m;
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	private boolean sysTrayAlIngeladen;	//is de system tray al ingeladen? zo ja, dan moet hij niet opnieuw gemaakt worden
 	
 	@Override
@@ -207,7 +209,9 @@ public class Start extends JPanel implements ActionListener
 		public void mouseClicked(MouseEvent e) {}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+			wachtwoordVergeten.setCursor(hand);
+		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {}
@@ -230,7 +234,7 @@ public class Start extends JPanel implements ActionListener
 							d.updateBeheerdersDatabank(b);
 						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
 						
-						mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord);
+						mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord,m);
 						ex.execute(mail);
 					}
 				}	

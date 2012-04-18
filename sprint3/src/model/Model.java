@@ -231,9 +231,9 @@ public class Model
 		}
 	}
 	
-	public int getInstellingenId(String instellingSleutel)
-	{
-		for(Instellingen i : getInstellingen())
+	public int getInstellingenId(String instellingSleutel)		// deze methode gaat Id teruggeven van de mee te geven InstellingenSleutel
+	{															// Voor EmailOut, EmailPoort, .. kan er maar 1 overeenkomen met de BeheerderId
+		for(Instellingen i : getInstellingen())					// omdat er maar 1 instelling van kan zijn. 
 		{
 			if(i.getBeheerderId() == getBeheerder().getId())
 			{
@@ -307,7 +307,36 @@ public class Model
 					
 		}
 	}
-
+	
+	public String getEmailVoorkeur(String instellingSleutel)
+	{
+		for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals(instellingSleutel))
+					return i.getInstellingenWaarde();
+				else if(i.getInstellingenSleutel().equals(instellingSleutel))
+					return i.getInstellingenWaarde();
+				else if(i.getInstellingenSleutel().equals(instellingSleutel))
+					return i.getInstellingenWaarde();
+				else if(i.getInstellingenSleutel().equals(instellingSleutel))
+					return i.getInstellingenWaarde();
+			}
+		}
+		return "";
+	}
+	public void setEmailVoorkeur(String instellingWaarde, String instellingSleutel)
+	{
+		for(Instellingen i : getInstellingen())
+		{
+			if(i.getBeheerderId() == getBeheerder().getId())
+			{
+				if(i.getInstellingenSleutel().equals(instellingSleutel))
+					i.setInstellingenWaarde(instellingWaarde);
+			}
+		}
+	}
 	
 	//Listeners
 	public void addListener(ChangeListener l)

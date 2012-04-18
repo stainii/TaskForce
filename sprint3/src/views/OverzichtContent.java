@@ -86,7 +86,8 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.controller1 = c1;
 		this.controller2 = c2;
 		this.view = "TegelView";
-		this.typeContent = "Erfgoed";
+		this.typeContent = m.getBeheerder().getTypeContent();
+		
 		
 		addComponentListener(this);
 				
@@ -286,27 +287,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		scrollPanel.setOpaque(false);
 		scrollPanel.setPreferredSize(new Dimension(0,22));
 		add(scrollPanel, BorderLayout.SOUTH);
-		
-		//View instellingen
-		if(model.getBeheerder().getView().equals(""))		//defaultwaarde wanneer er geen instellingen zijn
-			setView("TegelView");
-		if(model.getBeheerder().getView().equals("TegelView"))
-			setView("TegelView");
-		if(model.getBeheerder().getView().equals("LijstView"))
-			setView("LijstView");
-		
-		//TypeContent instellingen
-		if(model.getBeheerder().getTypeContent().equals(""))
-			setTypeContent("Erfgoed");
-		if(model.getBeheerder().getTypeContent().equals("Erfgoed"))
-		{
-			setTypeContent("Erfgoed");
-		}
-		if(model.getBeheerder().getTypeContent().equals("Documenten"))
-		{
-			setTypeContent("Documenten");
-		}
-	
+			
 		
 	}
 	public String getTypeContent() {
@@ -317,12 +298,12 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		typeContent = string;
 		model.notifyListeners();
 		
-		if(model.getBeheerder().getTypeContent().equals("Erfgoed"))
+		if(string.equals("Erfgoed"))
 		{
 			erfgoedTitel.setForeground(Color.WHITE);
 			documentenTitel.setForeground(new Color(120,120,120));
 		}
-		if(model.getBeheerder().getTypeContent().equals("Documenten"))
+		else if(string.equals("Documenten"))
 		{
 			documentenTitel.setForeground(Color.WHITE);
 			erfgoedTitel.setForeground(new Color(120,120,120));

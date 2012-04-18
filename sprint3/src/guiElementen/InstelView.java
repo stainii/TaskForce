@@ -31,7 +31,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -56,19 +58,20 @@ public class InstelView extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelview.png"));
 	private Image background = backgroundIcon.getImage();
 	private JPanel instelPanel;
-	private JLabel annuleren;
+	private JLabel bewerken,opslaan,close;
 	private Model m;
 	private JFrame f;
 	private OverzichtView v;
 	private Databank d;
 	private JLabelFactory jLabelFactory;
 	private LightBox box;
-	private JTextField nieuweRedenTxt;
+	private JTextField nieuweRedenTxt, emailOutTxt, poortTxt, userTxt;
+	private JPasswordField pwdTxt;
 	private DefaultListModel redenModel;
 	private JList standaardRedenen;
 	private ArrayList<String> reden;
 	private boolean inPanel = false;
-	private JLabel nieuweRedenBtn, verwijderenBtn ;
+	String nieuweReden = "Typ hier een nieuwe reden...";
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	@Override
@@ -89,7 +92,7 @@ public class InstelView extends JPanel
 		
 		jLabelFactory = new JLabelFactory();
 		
-		setSize(new Dimension(510,420));
+		setSize(new Dimension(510,460));
 		setOpaque(false);
 		setLayout(null);
 		setBackground(Color.GRAY);
@@ -98,6 +101,7 @@ public class InstelView extends JPanel
 		// deze lus gaat de ArrayList vullen met de standaardreden afhankelijk welke gebruiker het is.
 		// Dit staat hier omdat ik steeds een foutmelding kreeg als ik de arraylist declareerde in het model?? 
 		// Foutmelding was : java.lang.OutOfMemoryError: Java heap space ( dit misschien eens navragen aan Van Impe? )
+		// Het adden aan ArrayList<String> gebeurt in oneindige lus terwijl met een System.out.println dit niet gebeurd? 
 		for(Instellingen i : m.getInstellingen())					
 		{
 			if(i.getBeheerderId() == m.getBeheerder().getId())
@@ -109,15 +113,17 @@ public class InstelView extends JPanel
 			}
 		}
 		m.setStandaardReden(reden);		//ArrayList<String> reden gaat geset worden in model.
-		
-		annuleren = new JLabel();
-		annuleren.setIcon(new ImageIcon(getClass().getResource("imgs/annuleren.png")));
-		annuleren.addMouseListener(new AnnulerenListener());
 	
 		// Absolute positionering 
 		JLabel titel = jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam());
 		Dimension sizeTitel = titel.getPreferredSize();
-		titel.setBounds(10,5,sizeTitel.width,sizeTitel.height);
+		titel.setBounds(20,5,sizeTitel.width,sizeTitel.height);
+		
+		close = new JLabel();
+		close.addMouseListener(new CloseListener());
+		close.setIcon(new ImageIcon(getClass().getResource("imgs/close.png")));
+		Dimension sizeClose = close.getPreferredSize();
+		close.setBounds(482, 3, sizeClose.width, sizeClose.height);
 		
 		JLabel overzicht = jLabelFactory.getMenuTitel("Overzicht");
 		Dimension sizeOverzicht = overzicht.getPreferredSize();
@@ -255,7 +261,6 @@ public class InstelView extends JPanel
 		redenScroll.setBounds(35,170,redenScroll.getPreferredSize().width,redenScroll.getPreferredSize().height);
 		
 		// Textfield voor nieuwe reden
-		final String nieuweReden = "Typ hier een nieuwe reden...";
 		nieuweRedenTxt = new JTextField(nieuweReden);
 		nieuweRedenTxt.setForeground(Color.gray);
 		nieuweRedenTxt.addMouseListener(new MouseListener() {
@@ -264,16 +269,20 @@ public class InstelView extends JPanel
 			public void mouseReleased(MouseEvent e) {}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {
+				nieuweRedenTxt.setText("");
+			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				nieuweRedenTxt.setForeground(Color.gray);
+				if(nieuweRedenTxt.getText().equals(nieuweReden))
+					nieuweRedenTxt.setForeground(Color.gray);
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				nieuweRedenTxt.setForeground(Color.black);
+				if(nieuweRedenTxt.getText().equals(nieuweReden))
+					nieuweRedenTxt.setForeground(Color.black);
 			}
 			
 			@Override
@@ -300,6 +309,7 @@ public class InstelView extends JPanel
 				}
 			}
 		});
+
 		Dimension sizeNieuweRedenTxt = nieuweRedenTxt.getPreferredSize();
 		nieuweRedenTxt.setBounds(220, 190, sizeNieuweRedenTxt.width, sizeNieuweRedenTxt.height);
 		
@@ -378,28 +388,68 @@ public class InstelView extends JPanel
 		Dimension sizeEmailzin = emailzin.getPreferredSize();
 		emailzin.setBounds(15,330,sizeEmailzin.width,sizeEmailzin.height);
 		
-		JLabel emailIn = jLabelFactory.getNormaleTekst("Email-In");
-		Dimension sizeEmailIn = emailIn.getPreferredSize();
-		emailIn.setBounds(20,352,sizeEmailIn.width,sizeEmailIn.height);
-		
-		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out");
+		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out (smtp)");
 		Dimension sizeEmailOut = emailOut.getPreferredSize();
-		emailOut.setBounds(20,375,sizeEmailOut.width,sizeEmailOut.height);
+		emailOut.setBounds(20,352,sizeEmailOut.width,sizeEmailOut.height);
 		
-		JTextField emailInTxt = new JTextField("Nog implementeren");
-		emailInTxt.setColumns(15);
-		Dimension sizeEmailInTxt = emailInTxt.getPreferredSize();
-		emailInTxt.setBounds(80, 350, sizeEmailInTxt.width, sizeEmailInTxt.height);
+		JLabel poortLbl = jLabelFactory.getNormaleTekst("Poort");
+		Dimension sizePoortLbl = poortLbl.getPreferredSize();
+		poortLbl.setBounds(20,375,sizePoortLbl.width,sizePoortLbl.height);
 		
-		JTextField emailOutTxt = new JTextField("Nog implementeren");
+		emailOutTxt = new JTextField();
 		emailOutTxt.setColumns(15);
 		Dimension sizeEmailOutTxt = emailOutTxt.getPreferredSize();
-		emailOutTxt.setBounds(80, 375, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
+		emailOutTxt.setBounds(130, 350, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
 		
-		JLabel bewerken = new JLabel();
+		poortTxt = new JTextField();
+		poortTxt.setColumns(15);
+		Dimension sizePoortTxt = poortTxt.getPreferredSize();
+		poortTxt.setBounds(130, 375, sizePoortTxt.width, sizePoortTxt.height);
+		
+		JLabel userLbl =  jLabelFactory.getNormaleTekst("Gebruikersnaam");
+		Dimension sizeUserLbl = userLbl.getPreferredSize();
+		userLbl.setBounds(20,402,sizeUserLbl.width,sizeUserLbl.height);
+		
+		userTxt = new JTextField();
+		userTxt.setColumns(15);
+		Dimension sizeUserTxt = userTxt.getPreferredSize();
+		userTxt.setBounds(130,400,sizeUserTxt.width,sizeUserTxt.height);
+		
+		JLabel pwdLbl =  jLabelFactory.getNormaleTekst("Wachtwoord");
+		Dimension sizePwdLbl = pwdLbl.getPreferredSize();
+		pwdLbl.setBounds(20,427,sizePwdLbl.width,sizePwdLbl.height);
+		
+		pwdTxt = new JPasswordField();
+		pwdTxt.setColumns(15);
+		Dimension sizePwdTxt = pwdTxt.getPreferredSize();
+		pwdTxt.setBounds(130,425,sizePwdTxt.width,sizePwdTxt.height);
+		
+		
+		// bewerken button
+		bewerken = new JLabel();
+		bewerken.addMouseListener(new BewerkenListener());
 		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		Dimension sizeBewerken = bewerken.getPreferredSize();
-		bewerken.setBounds(270, 355, sizeBewerken.width, sizeBewerken.height);
+		bewerken.setBounds(320, 370, sizeBewerken.width, sizeBewerken.height);
+		
+		opslaan = new JLabel();
+		opslaan.addMouseListener(new OpslaanListener());
+		opslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
+		Dimension sizeOpslaan = opslaan.getPreferredSize();
+		opslaan.setBounds(320,370, sizeOpslaan.width,sizeOpslaan.height);
+		opslaan.setVisible(false);
+		
+		
+		// Jtextfields bij email niet editable zetten !! Dit gebeurt pas wanneer er op "Bewerken" wordt geklikt
+		emailOutTxt.setEnabled(false);
+		poortTxt.setEnabled(false);
+		userTxt.setEnabled(false);
+		pwdTxt.setEnabled(false);
+		
+		emailOutTxt.setText(m.getEmailVoorkeur("EmailOut"));
+		poortTxt.setText(m.getEmailVoorkeur("EmailPoort"));
+		userTxt.setText(m.getEmailVoorkeur("EmailGebruikernaam"));
+		pwdTxt.setText(m.getEmailVoorkeur("EmailWachtwoord"));
 		
 		
 		//__Radiobuttons selected of niet
@@ -425,6 +475,7 @@ public class InstelView extends JPanel
 		
 		// alles toevoegen aan InstelView panel
 		add(titel);
+		add(close);
 		add(overzicht);
 		add(ikWil);
 		add(erfgoed);
@@ -441,11 +492,16 @@ public class InstelView extends JPanel
 		add(verwijderenBtn);
 		add(emailLbl);
 		add(emailzin);
-		add(emailIn);
 		add(emailOut);
-		add(emailInTxt);
 		add(emailOutTxt);
+		add(poortLbl);
+		add(poortTxt);
 		add(bewerken);
+		add(opslaan);
+		add(userLbl);
+		add(userTxt);
+		add(pwdLbl);
+		add(pwdTxt);
 		
 		// LightBox maken met nodige listeners om te sluiten
 		box = new LightBox();
@@ -499,29 +555,99 @@ public class InstelView extends JPanel
 		return this;
 	}
 	
-	private class AnnulerenListener implements MouseListener
+	private class BewerkenListener implements MouseListener
 	{
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 		
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			box.closeLightBox(f, getInstelView());
+			int resultaat = JOptionPane.showConfirmDialog(null,"Bent u zeker dat u wijzigingen wilt aanbrengen?\n" +
+					"Foutieve gegevens kunnen ervoor zorgen dat het mailsysteem niet meer werkt!","Bewerken",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+			
+			if(resultaat == JOptionPane.YES_OPTION)
+			{
+				emailOutTxt.setEnabled(true);
+				poortTxt.setEnabled(true);
+				userTxt.setEnabled(true);
+				pwdTxt.setEnabled(true);
 				
+				bewerken.setVisible(false);
+				opslaan.setVisible(true);
+
+			}
 		}
 		
 		@Override
-		public void mouseExited(MouseEvent arg0) {
-			
-		}
+		public void mouseExited(MouseEvent arg0) {}
 		
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
+			bewerken.setCursor(hand);
+		}
+		@Override
+		public void mouseClicked(MouseEvent arg0) {}
+	}
+	
+	private class OpslaanListener implements MouseListener
+	{
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+		@Override
+		public void mousePressed(MouseEvent arg0) {
 			
+			m.setEmailVoorkeur(emailOutTxt.getText(), "EmailOut");
+			m.setEmailVoorkeur(poortTxt.getText(), "EmailPoort");
+			m.setEmailVoorkeur(userTxt.getText(), "EmailGebruikernaam");
+			m.setEmailVoorkeur(pwdTxt.getText(), "EmailWachtwoord");
+				
+			d.updateInstellingen(emailOutTxt.getText(),m.getInstellingenId("EmailOut"));
+			d.updateInstellingen(poortTxt.getText(),m.getInstellingenId("EmailPoort"));
+			d.updateInstellingen(userTxt.getText(),m.getInstellingenId("EmailGebruikernaam"));
+			d.updateInstellingen(pwdTxt.getText(),m.getInstellingenId("EmailWachtwoord"));
+			
+			emailOutTxt.setEnabled(false);
+			poortTxt.setEnabled(false);
+			userTxt.setEnabled(false);
+			pwdTxt.setEnabled(false);
+			
+			opslaan.setVisible(false);
+			bewerken.setVisible(true);
 		}
 		
 		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			bewerken.setCursor(hand);
+		}
+		@Override
 		public void mouseClicked(MouseEvent arg0) {}
+	}
+	
+	private class CloseListener implements MouseListener
+	{
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+				box.closeLightBox(f,getInstelView());
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			close.setCursor(hand);
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {}
 	}
 
 	

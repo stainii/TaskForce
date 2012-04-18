@@ -8,6 +8,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import model.Model;
+
 /**De instellingen voor het versturen van een mail buiten school*/
 
 public class MailThuis implements Runnable
@@ -15,17 +17,25 @@ public class MailThuis implements Runnable
 	private String aan;
 	private String onderwerp;
 	private SoortMail mail;
+	private Model m;
 	
-	private static final String host = "smtp.gmail.com";
-	private static final int port =587;
-	private static final String user = "task.forceb2@gmail.com";
-	private static final String pwd ="azertyb2";
+	private static String host;		// "smtp.gmail.com"
+	private static int port;		// 587
+	private static String user; 		//= "task.forceb2@gmail.com";
+	private static String pwd; 		//="azertyb2";
 	
-	public MailThuis(String aan, String onderwerp, SoortMail mail)
+	public MailThuis(String aan, String onderwerp, SoortMail mail, Model model)
 	{
 		this.aan=aan;
 		this.onderwerp=onderwerp;
 		this.mail=mail;
+		this.m = model;
+		
+		host = m.getEmailVoorkeur("EmailOut");
+		port = Integer.parseInt(m.getEmailVoorkeur("EmailPoort"));
+		user = m.getEmailVoorkeur("EmailGebruikernaam");
+		pwd = m.getEmailVoorkeur("EmailWachtwoord");
+		
 	}
 		
 	public void sendMail()

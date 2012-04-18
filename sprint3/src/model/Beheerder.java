@@ -168,6 +168,7 @@ public class Beheerder
 				if(i.getInstellingenSleutel().equals("TypeContent"))
 					i.setInstellingenWaarde(typeContent);
 		}
+		m.notifyListeners();
 	}
 	
 	
