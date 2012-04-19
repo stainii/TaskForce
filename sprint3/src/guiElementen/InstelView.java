@@ -750,6 +750,7 @@ public class InstelView extends JPanel
 					{
 						m.getBeheerder().setWachtwoord(Login.convert(nieuwW2.getText()));
 						d.updateBeheerdersDatabank(m.getBeheerder());
+
 					}
 					else
 					{
@@ -778,6 +779,8 @@ public class InstelView extends JPanel
 				oudW.setText("");
 				nieuwW1.setEnabled(false);
 				nieuwW2.setEnabled(false);
+				nieuwW1.setText("");
+				nieuwW2.setText("");
 			}
 		}
 

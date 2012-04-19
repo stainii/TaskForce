@@ -221,7 +221,7 @@ public class Beoordeling extends JPanel
 						controller.update();
 						
 						//mail versturen
-						mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is goedgekeurd", new WijzigingMail(controller.getOrigineelDocument()),model);
+						mail = new MailThuis(controller.getOrigineelDocument().getEigenaar().getEmail(),"Document is gewijzigd", new WijzigingMail(controller.getOrigineelDocument()),model);
 						ex.execute(mail);						
 						
 						hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));

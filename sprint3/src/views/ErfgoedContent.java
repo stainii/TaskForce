@@ -273,13 +273,14 @@ public class ErfgoedContent extends JPanel
 		int x = 0;
 		int y = 1;
 		c.gridwidth=1;
-		c.weightx = 1;
-		c.weighty = 1;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
-			if (x>5)
+			if (x>4)
 			{
 				x=1;
 				y++;
