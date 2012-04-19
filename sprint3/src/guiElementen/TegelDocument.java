@@ -96,7 +96,7 @@ public class TegelDocument extends JPanel implements MouseListener
 		c.gridy = 2;
 		add(new JLabelFactory().getTegelTekst("Voor " + doc.getErfgoed().getNaam()),c);
 		c.gridy = 3;
-		add(new JLabelFactory().getTegelTekst(doc.getEigenaar().getNaam()),c);
+		add(new JLabelFactory().getTegelTekst(doc.getBurger()!=null?doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
 		c.gridy = 4;
 		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
 		c.gridy = 5;

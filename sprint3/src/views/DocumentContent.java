@@ -102,7 +102,7 @@ public class DocumentContent extends JPanel
 		c.gridx = 1;
 		c.gridy = 3;
 		c.gridwidth = 4;
-		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getEigenaar().getGebruikersnaam() + " - " + doc.getEigenaar().getNaam()),c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getBurger()!=null?doc.getBurger().getGebruikersnaam() + " - " + doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridy =4;

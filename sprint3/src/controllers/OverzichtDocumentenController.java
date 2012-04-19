@@ -74,8 +74,8 @@ public class OverzichtDocumentenController
 		{
 			@Override
 			public int compare(DocumentCMS doc1, DocumentCMS doc2)
-			{
-				return doc1.getEigenaar().getNaam().compareTo(doc2.getEigenaar().getNaam());
+			{	
+				return (doc1.getBurger()!=null?doc1.getBurger().getNaam():doc1.getBeheerder().getNaam()).compareTo((doc2.getBurger()!=null?doc2.getBurger().getNaam():doc2.getBeheerder().getNaam()));
 			}
 		});
 		notifyListeners();
@@ -166,7 +166,7 @@ public class OverzichtDocumentenController
 					resultaat.add(d);
 			else if (d.getDatumGewijzigd().toString().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
+			else if ((d.getBurger()!=null?d.getBurger().getNaam():d.getBeheerder().getNaam()).toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 		}
 		

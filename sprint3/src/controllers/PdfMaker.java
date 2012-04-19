@@ -104,7 +104,7 @@ public class PdfMaker
 			Paragraph rechterkant = new Paragraph();
 			
 			linkerkant.add(new Paragraph(c.getTitel(), tussentitelFont));	
-			linkerkant.add(new Paragraph(c.getEigenaar().getNaam(), normaleFont));
+			linkerkant.add(new Paragraph((c.getBurger()!=null?c.getBurger().getNaam():c.getBeheerder().getNaam()), normaleFont));
 			linkerkant.add(new Paragraph("Datum ingediend: " + c.getDatumToegevoegd().toString(), normaleFont));
 			linkerkant.add(new Paragraph("Laatste wijziging: " + c.getDatumGewijzigd(), normaleFont));
 			linkerkant.add(new Paragraph("Opmerkingen: " + c.getOpmerkingen(), normaleFont));

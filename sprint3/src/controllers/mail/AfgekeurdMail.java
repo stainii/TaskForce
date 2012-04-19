@@ -154,7 +154,7 @@ public class AfgekeurdMail implements SoortMail
 				"<multiline label=\"Description\">" +
 				
 // Tekst
-"Geachte " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + 
+"Geachte Mr./Mevr." + (document.getBurger()!=null?document.getBurger().getFamilienaam():document.getBeheerder().getAchternaam()) +","+ "<br/>" + 
 "<p>Er werd besloten u document " + "<em>" +document.getTitel() +"</em>" + " voor " + 
 "<em>" +document.getErfgoed().getNaam() +"</em>"+" niet te gebruiken op onze site wegens volgende reden: " + "<br/>" +
 "<b>" + reden.getReden() +"</b>" +"<br/>" +
@@ -217,7 +217,7 @@ public class AfgekeurdMail implements SoortMail
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Eigenaar inzending: </strong>" + "</td>" +
-	"<td>" + document.getEigenaar().getNaam() + "</td>" +
+	"<td>" + (document.getBurger()!=null?document.getBurger().getNaam():document.getBeheerder().getNaam()) + "</td>" +
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Locatie erfgoed: </strong>" + "</td>" +

@@ -25,9 +25,10 @@ public class DocumentCMS
 	private int mediaId;
 	private DocumentCMS laatsteWijziging;
 	private int burgerId;
+	private int beheerderId;
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -43,10 +44,11 @@ public class DocumentCMS
 		this.redenAfwijzing = redenAfwijzing;
 		this.mediaId = mediaId;
 		this.burgerId = burgerId;
+		this.beheerderId = beheerderId;
 	}
 	
 	//deze constructor wordt gebruikt hij het toevoegen van een nieuw document aan een erfgoed
-	public DocumentCMS(Erfgoed e, Model m, Databank d, int burgerId)
+	public DocumentCMS(Erfgoed e, Model m, Databank d, int beheerderId)
 	{
 		this.m = m;
 		this.id = -1;		//moet later uit databank ingelezen worden
@@ -60,20 +62,27 @@ public class DocumentCMS
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
 		this.redenAfwijzing = "";
-		this.burgerId = burgerId; 
+		this.beheerderId = beheerderId;
 	}
 
 
-	public int getBurgerId() {
+	public int getBurgerId()
+	{
 		return burgerId;
 	}
+	
+	public int getBeheerderId()
+	{
+		return beheerderId;
+	}
 
-
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 	
-	public String getTitel() {
+	public String getTitel()
+	{
 		return titel;
 	}
 
@@ -91,12 +100,24 @@ public class DocumentCMS
 		return null;
 	}
 	
-	public Burger getEigenaar()
+	public Burger getBurger()
 	{
 		ArrayList<Burger> burgers = m.getBurgers();
 		for (Burger b: burgers)
 		{
 			if (b.getId()==burgerId)
+			{
+				return b;
+			}
+		}
+		return null;
+	}
+	public Beheerder getBeheerder()
+	{
+		ArrayList<Beheerder> beheerder = m.getBeheerders();
+		for (Beheerder b: beheerder)
+		{
+			if (b.getId()==beheerderId)
 			{
 				return b;
 			}
@@ -162,8 +183,13 @@ public class DocumentCMS
 
 
 	// setters
-	public void setBurgerId(int burgerId) {
+	public void setBurgerId(int burgerId)
+	{
 		this.burgerId = burgerId;
+	}
+	public void setBeheerderId(int beheerderId)
+	{
+		this.beheerderId = beheerderId;
 	}
 	
 	public void setId(int id)
