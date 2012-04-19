@@ -148,9 +148,9 @@ public class OverzichtDocumentenController
 				resultaat.add(d);
 			else if (d.getErfgoed().getTypeErfgoed().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getErfgoed().getEigenaar().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getBurger()!=null && d.getErfgoed().getBurger().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getErfgoed().getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
+			else if ((d.getErfgoed().getBurger()!=null?d.getErfgoed().getBurger().getNaam():d.getErfgoed().getBeheerder().getNaam()).toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getTitel().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);

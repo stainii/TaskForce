@@ -78,7 +78,7 @@ public class Databank
 			{
 				erfgoed.add(new Erfgoed(rs.getInt("ErfgoedId"),rs.getString("Naam"), rs.getString("Postcode"), rs.getString("Deelgemeente"), rs.getString("Straat"),
 						rs.getString("Huisnr"), rs.getString("Omschrijving"), rs.getString("TypeErfgoed"), rs.getString("Kenmerken"), rs.getString("Geschiedenis"),
-						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getTimestamp("DatumToegevoegd"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), m));
+						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getTimestamp("DatumToegevoegd"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"), m));
 			}
 			
 			
@@ -172,7 +172,7 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BurgerId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -188,16 +188,7 @@ public class Databank
 					s.setNull(11, Types.INTEGER);
 			else 
 				s.setInt(11, doc.getMediaId());
-			if (doc.getBurgerId()!=0)
-			{
-				s.setInt(12,doc.getBurgerId());
-				s.setNull(13, Types.INTEGER);
-			}
-			else
-			{
-				s.setNull(12, Types.INTEGER);
-				s.setInt(13,doc.getBeheerderId());
-			}
+			s.setInt(12,doc.getBeheerderId());
 				
 			s.executeUpdate();
 			
@@ -257,7 +248,7 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			s = c.prepareStatement("INSERT INTO Erfgoed(Naam, Postcode, Deelgemeente, Straat, Huisnr, Omschrijving, TypeErfgoed, Kenmerken, Geschiedenis, NuttigeInfo, Link, Obsolete, BurgerId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Erfgoed(Naam, Postcode, Deelgemeente, Straat, Huisnr, Omschrijving, TypeErfgoed, Kenmerken, Geschiedenis, NuttigeInfo, Link, Obsolete, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, e.getNaam());
 			s.setString(2, e.getPostcode());
@@ -271,7 +262,7 @@ public class Databank
 			s.setString(10,e.getNuttigeInfo());
 			s.setString(11,e.getLink());
 			s.setBoolean(12,false);
-			s.setInt(13,e.getBurgerId());
+			s.setInt(13,e.getBeheerderId());
 			s.executeUpdate();
 			
 			
@@ -893,7 +884,7 @@ public class Databank
 					{
 						erf = new Erfgoed(id,rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 								rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-								rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m);
+								rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"), m);
 					}
 				
 					acties.add(new Actie(erf,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
@@ -1020,7 +1011,7 @@ public class Databank
 						{
 							m.getErfgoed().add(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));							
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"), m));							
 						}
 						else if (actie.equals("Verwijderd"))
 						{
@@ -1030,7 +1021,7 @@ public class Databank
 						{
 							m.bewerkErfgoed(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), m));
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
 						}
 					}
 				}
@@ -1140,7 +1131,7 @@ public class Databank
 	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
-		PreparedStatement s = null, s2 = null;
+		PreparedStatement s = null;
 		
 		try
 		{
@@ -1155,7 +1146,6 @@ public class Databank
 			s.setBoolean(7,kv);
 			s.setBoolean(8,kt);
 			s.setBoolean(9,isAdmin);
-			
 			
 			s.executeUpdate();	
 			

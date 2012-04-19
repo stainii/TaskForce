@@ -43,7 +43,7 @@ public class OverzichtErfgoedController
 			@Override
 			public int compare(Erfgoed e1, Erfgoed e2)
 			{
-				return e1.getEigenaar().getNaam().compareTo(e2.getEigenaar().getNaam());
+				return (e1.getBurger()!=null?e1.getBurger().getNaam():e1.getBeheerder().getNaam()).compareTo((e2.getBurger()!=null?e2.getBurger().getNaam():e2.getBeheerder().getNaam()));
 			}
 		});
 		notifyListeners();
@@ -124,11 +124,11 @@ public class OverzichtErfgoedController
 				resultaat.add(e);
 			else if (e.getTypeErfgoed().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(e);
-			else if (e.getEigenaar().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
+			else if (e.getBurger()!=null && e.getBurger().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(e);
-			else if (e.getEigenaar().getNaam().toLowerCase().contains(s.toLowerCase()))
+			else if ((e.getBurger()!=null?e.getBurger().getNaam():e.getBeheerder().getNaam()).toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(e);
-			else if (e.getEigenaar().getEmail().toLowerCase().contains(s.toLowerCase()))
+			else if ((e.getBurger()!=null?e.getBurger().getEmail():e.getBeheerder().getEmail()).toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(e);
 		}
 		

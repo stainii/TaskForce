@@ -106,7 +106,7 @@ public class ErfgoedContent extends JPanel
 		c.gridx = 3;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		add(new JLabelFactory().getNormaleTekst(erfgoed.getEigenaar().getGebruikersnaam() + " - " + erfgoed.getEigenaar().getNaam()),c);
+		add(new JLabelFactory().getNormaleTekst(erfgoed.getBurger()!=null?erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridx=1;
