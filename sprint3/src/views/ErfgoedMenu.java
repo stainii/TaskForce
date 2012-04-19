@@ -7,6 +7,7 @@ package views;
 
 import guiElementen.JLabelFactory;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -46,7 +47,7 @@ public class ErfgoedMenu extends JPanel
 	private JLabel overzicht, bewerken, verwijderen, nieuwOpslaan;
 	private ErfgoedContent content;
 	private ErfgoedController controller;
-	
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);	
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -94,6 +95,7 @@ public class ErfgoedMenu extends JPanel
 			public void mouseEntered(MouseEvent arg0) 
 			{
 				overzicht.setIcon(new ImageIcon(getClass().getResource("imgs/terug_hover.png")));
+				overzicht.setCursor(hand);
 			}
 			
 			@Override
@@ -128,6 +130,7 @@ public class ErfgoedMenu extends JPanel
 				public void mouseEntered(MouseEvent e)
 				{
 					toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
+					toevoegen.setCursor(hand);
 				}
 				
 				@Override
@@ -163,6 +166,7 @@ public class ErfgoedMenu extends JPanel
 				public void mouseEntered(MouseEvent e)
 				{
 					pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
+					pdf.setCursor(hand);
 				}
 				
 				@Override
@@ -206,7 +210,10 @@ public class ErfgoedMenu extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e)
+				{
+					verwijderen.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e)
@@ -237,7 +244,10 @@ public class ErfgoedMenu extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e)
+				{
+					bewerken.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) 
@@ -283,7 +293,10 @@ public class ErfgoedMenu extends JPanel
 				public void mouseExited(MouseEvent e) {}
 				
 				@Override
-				public void mouseEntered(MouseEvent e) {}
+				public void mouseEntered(MouseEvent e)
+				{
+					nieuwOpslaan.setCursor(hand);
+				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) 
