@@ -75,7 +75,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		else if (doc.getTypeDocument().equals("Video"))
 		{
 			JLabel video = new JLabel();
-			video.setIcon(new ImageIcon(getClass().getResource("../views/imgs/video.png")));
+			video.setIcon(new ImageIcon(getClass().getResource("imgs/video.png")));
 			video.addMouseListener(this);
 			add(video);
 			
@@ -83,7 +83,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		else
 		{
 			JLabel tekst = new JLabel();
-			tekst.setIcon(new ImageIcon(getClass().getResource("../views/imgs/tekst.png")));
+			tekst.setIcon(new ImageIcon(getClass().getResource("imgs/tekst.png")));
 			tekst.addMouseListener(this);
 			add(tekst);
 		}

@@ -198,7 +198,7 @@ public class ErfgoedMenu extends JPanel
 			
 			
 			verwijderen = new JLabel();
-			verwijderen.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/verwijderen.png")));
+			verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 			verwijderen.addMouseListener(new MouseListener()
 			{		
 				@Override
@@ -232,7 +232,7 @@ public class ErfgoedMenu extends JPanel
 			add(verwijderen);
 			
 			bewerken = new JLabel();
-			bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));
+			bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 			bewerken.addMouseListener(new MouseListener()
 			{	
 				@Override
@@ -257,7 +257,7 @@ public class ErfgoedMenu extends JPanel
 					if (s!=null)
 					{
 						if (s[0]==null)
-							bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 						else
 						{
 							controller.getVoorlopigErfgoed().setNaam(s[0]);
@@ -271,7 +271,7 @@ public class ErfgoedMenu extends JPanel
 							controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
 							controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
 							controller.update();
-							bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));
+							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 						}
 					}
 				}
@@ -284,7 +284,7 @@ public class ErfgoedMenu extends JPanel
 		else //het is een nieuw erfgoed
 		{
 			nieuwOpslaan = new JLabel();
-			nieuwOpslaan.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+			nieuwOpslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 			nieuwOpslaan.addMouseListener(new MouseListener()
 			{	
 				@Override

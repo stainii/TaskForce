@@ -1,4 +1,4 @@
-package administrator.adminPanels;
+package administrator;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -63,19 +63,19 @@ public class BeheerderPanel extends JPanel
 		emailTxt.setColumns(17);
 		
 		rechtenPlus = new JLabel("Rechten");
-		rechtenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+		rechtenPlus.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		rechtenPlus.addMouseListener(new RechtenPlusListener());
 		
 		rechtenMin = new JLabel("Rechten");
-		rechtenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_min.png")));
+		rechtenMin.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_min.png")));
 		rechtenMin.addMouseListener(new RechtenMinListener());		
 				
 		verwijderen = new JLabel();
-		verwijderen.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/verwijderen.png")));
+		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new VerwijderenListener());
 		
 		bewerken = new JLabel();
-		bewerken.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/bewerken.png")));
+		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		bewerken.addMouseListener(new BewerkenListener());
 		
 		verwijderen.setVisible(false);
@@ -92,11 +92,11 @@ public class BeheerderPanel extends JPanel
 		beoordelenCb.setEnabled(false);
 		
 		toevoegenOpslaan = new JLabel();
-		toevoegenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
+		toevoegenOpslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		toevoegenOpslaan.addMouseListener(new ToevoegenOpslaanListener());
 		
 		bewerkenOpslaan = new JLabel();
-		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
+		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		bewerkenOpslaan.addMouseListener(new BewerkenOpslaanListener());
 						
 		rechtenPnl = new JPanel();
@@ -112,7 +112,7 @@ public class BeheerderPanel extends JPanel
 		emailLbl = new JLabel("E-mail");
 		
 		toevoegen = new JLabel("Voeg beheerder toe");
-		toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		toevoegen.addMouseListener(new ToevoegenListener());
 		
 		beheerderModel = new DefaultListModel();
@@ -257,12 +257,12 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover.png")));
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		}
 
 		@Override
@@ -451,12 +451,12 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			rechtenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover.png")));
+			rechtenPlus.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			rechtenPlus.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+			rechtenPlus.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		}
 
 		@Override
@@ -478,12 +478,12 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			rechtenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover_min.png")));
+			rechtenMin.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover_min.png")));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			rechtenMin.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_min.png")));
+			rechtenMin.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_min.png")));
 		}
 
 		@Override

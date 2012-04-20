@@ -122,9 +122,9 @@ public class InstelView extends JPanel
 		ikWil.setBounds(15, 55, sizeIkWil.width, sizeIkWil.height);
 		
 		//eerste groep radiobuttons
-		ImageIcon selected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_selected.png"));
-		ImageIcon notSelected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_normal.png"));
-		ImageIcon hover = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_hover.png"));
+		ImageIcon selected = new ImageIcon(getClass().getResource("imgs/radiobutton_selected.png"));
+		ImageIcon notSelected = new ImageIcon(getClass().getResource("imgs/radiobutton_normal.png"));
+		ImageIcon hover = new ImageIcon(getClass().getResource("imgs/radiobutton_hover.png"));
 		
 		// Erfgoed
 		JRadioButton erfgoed = new JRadioButton("Erfgoeden");

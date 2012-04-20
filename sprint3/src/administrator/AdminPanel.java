@@ -1,4 +1,4 @@
-package administrator.adminPanels;
+package administrator;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -27,7 +27,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import administrator.Administrator;
 import controllers.Databank;
 import controllers.Login;
 import model.Beheerder;
@@ -68,30 +67,30 @@ public class AdminPanel extends JPanel
 		emailTxt = new JTextField();
 		
 		toevoegen = new JLabel("Voeg admin toe");
-		toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+		toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		toevoegen.addMouseListener(new ToevoegenListener());
 		
 		toevoegenOpslaan = new JLabel();
-		toevoegenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
+		toevoegenOpslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		toevoegenOpslaan.addMouseListener(new ToevoegenOpslaanListener());
 		
 		verwijderen = new JLabel();
-		verwijderen.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/verwijderen.png")));
+		verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));
 		verwijderen.addMouseListener(new VerwijderenListener());
 		
 		bewerken = new JLabel();
-		bewerken.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/bewerken.png")));
+		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		bewerken.addMouseListener(new BewerkenListener());
 		
 		verwijderen.setVisible(false);
 		bewerken.setVisible(false);
 		
 		bewerkenOpslaan = new JLabel();
-		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/opslaan.png")));
+		bewerkenOpslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		bewerkenOpslaan.addMouseListener(new BewerkenOpslaanListener());
 		
 		annuleren = new JLabel();
-		annuleren.setIcon(new ImageIcon(getClass().getResource("../../guiElementen/imgs/annuleren.png")));
+		annuleren.setIcon(new ImageIcon(getClass().getResource("imgs/annuleren.png")));
 		annuleren.addMouseListener(new AnnulerenListener());
 		
 		
@@ -266,12 +265,12 @@ public class AdminPanel extends JPanel
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco_hover.png")));
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco_hover.png")));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			toevoegen.setIcon(new ImageIcon(getClass().getResource("../../views/imgs/toevoegenIco.png")));
+			toevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
 		}
 
 		@Override

@@ -80,7 +80,7 @@ public class JLabelFactory
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Comic Sans", Font.BOLD, 13));
 		label.setForeground(new Color(0,200,0));
-		label.setIcon(new ImageIcon(getClass().getResource("../views/imgs/goedgekeurdIco.png")));
+		label.setIcon(new ImageIcon(getClass().getResource("imgs/goedgekeurdIco.png")));
 		return label;
 	}
 	public JLabel getAfgekeurd(String s)
@@ -88,7 +88,7 @@ public class JLabelFactory
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Comic Sans", Font.BOLD, 13));
 		label.setForeground(new Color(230,0,0));
-		label.setIcon(new ImageIcon(getClass().getResource("../views/imgs/afgekeurdIco.png")));
+		label.setIcon(new ImageIcon(getClass().getResource("imgs/afgekeurdIco.png")));
 		return label;
 	}
 	public JLabel getNogNietBeoordeeld(String s)
@@ -96,7 +96,7 @@ public class JLabelFactory
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Comic Sans", Font.BOLD, 13));
 		label.setForeground(Color.WHITE);
-		label.setIcon(new ImageIcon(getClass().getResource("../views/imgs/nogNietBeoordeeldIco.png")));
+		label.setIcon(new ImageIcon(getClass().getResource("imgs/nogNietBeoordeeldIco.png")));
 		return label;
 	}
 	

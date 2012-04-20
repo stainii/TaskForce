@@ -26,7 +26,7 @@ import controllers.Databank;
 @SuppressWarnings("serial")
 public class RijErfgoed extends JPanel implements MouseListener
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 	private Image backgroundTegel = backgroundIcon.getImage();
 	private Model model;
 	private Databank data;
@@ -86,7 +86,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 				documentToevoegen.setCursor(hand);
@@ -95,7 +95,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 			}
@@ -124,7 +124,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 				verwijderen.setCursor(hand);
@@ -133,7 +133,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 			}
@@ -161,7 +161,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst_hover.png"));
 		backgroundTegel = backgroundIcon.getImage();
 		repaint();	
 	}
@@ -169,7 +169,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 		backgroundTegel = backgroundIcon.getImage();
 		repaint();	
 	}

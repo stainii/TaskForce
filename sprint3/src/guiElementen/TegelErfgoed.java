@@ -33,7 +33,7 @@ import model.Model;
 public class TegelErfgoed extends JPanel implements MouseListener
 {
 	//achtergrond
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder.png"));
 	private Image background = backgroundIcon.getImage();
 	
 	private Model model;
@@ -118,7 +118,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder.png"));
 				background = backgroundIcon.getImage();
 				repaint();				
 			}
@@ -126,7 +126,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder_hover.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
 				Cursor cu = new Cursor(Cursor.HAND_CURSOR);
@@ -157,7 +157,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder.png"));
 				background = backgroundIcon.getImage();
 				repaint();				
 			}
@@ -165,7 +165,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder_hover.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
 				verwijderen.setCursor(hand);
@@ -196,7 +196,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder_hover.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder_hover.png"));
 		background = backgroundIcon.getImage();
 		repaint();
 	}
@@ -204,7 +204,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/folder.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder.png"));
 		background = backgroundIcon.getImage();
 		repaint();
 	}
