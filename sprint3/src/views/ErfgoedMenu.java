@@ -7,6 +7,7 @@ package views;
 
 import guiElementen.JLabelFactory;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -253,22 +254,25 @@ public class ErfgoedMenu extends JPanel
 				public void mouseClicked(MouseEvent e) 
 				{
 					String[] s = content.bewerken();
-					if (s[0]==null)
-						bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
-					else
+					if (s!=null)
 					{
-						controller.getVoorlopigErfgoed().setNaam(s[0]);
-						controller.getVoorlopigErfgoed().setStraat(s[1]);
-						controller.getVoorlopigErfgoed().setHuisnr(s[2]);
-						controller.getVoorlopigErfgoed().setPostcode(s[3]);
-						controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
-						controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
-						controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
-						controller.getVoorlopigErfgoed().setKenmerken(s[7]);
-						controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
-						controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
-						controller.update();
-						bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));					
+						if (s[0]==null)
+							bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/opslaan.png")));
+						else
+						{
+							controller.getVoorlopigErfgoed().setNaam(s[0]);
+							controller.getVoorlopigErfgoed().setStraat(s[1]);
+							controller.getVoorlopigErfgoed().setHuisnr(s[2]);
+							controller.getVoorlopigErfgoed().setPostcode(s[3]);
+							controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
+							controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
+							controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
+							controller.getVoorlopigErfgoed().setKenmerken(s[7]);
+							controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
+							controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
+							controller.update();
+							bewerken.setIcon(new ImageIcon(getClass().getResource("../guiElementen/imgs/bewerken.png")));
+						}
 					}
 				}
 			});
@@ -302,19 +306,22 @@ public class ErfgoedMenu extends JPanel
 				public void mouseClicked(MouseEvent e) 
 				{
 					String[] s = content.bewerken();
-					controller.getVoorlopigErfgoed().setNaam(s[0]);
-					controller.getVoorlopigErfgoed().setStraat(s[1]);
-					controller.getVoorlopigErfgoed().setHuisnr(s[2]);
-					controller.getVoorlopigErfgoed().setPostcode(s[3]);
-					controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
-					controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
-					controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
-					controller.getVoorlopigErfgoed().setKenmerken(s[7]);
-					controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
-					controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
-					controller.toevoegen();
+					if (s!=null)
+					{
+						controller.getVoorlopigErfgoed().setNaam(s[0]);
+						controller.getVoorlopigErfgoed().setStraat(s[1]);
+						controller.getVoorlopigErfgoed().setHuisnr(s[2]);
+						controller.getVoorlopigErfgoed().setPostcode(s[3]);
+						controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
+						controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
+						controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
+						controller.getVoorlopigErfgoed().setKenmerken(s[7]);
+						controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
+						controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
+						controller.toevoegen();
 						
-					hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd));
+						hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd));
+					}
 				}
 			});
 			add(nieuwOpslaan);

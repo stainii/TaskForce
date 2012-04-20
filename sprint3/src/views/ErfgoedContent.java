@@ -13,6 +13,7 @@ import guiElementen.MooiTextArea;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -313,6 +314,21 @@ public class ErfgoedContent extends JPanel
 		
 		if (tekstvakken.get(0).isEditable())
 		{
+			if (tekstvakken.get(0).getText().equals("") && tekstvakken.get(4).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een titel en een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			if (tekstvakken.get(0).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een titel in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			if (tekstvakken.get(4).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
 			for (int i = 0; i<tekstvakken.size(); i++)
 			{
 				tekstvakken.get(i).setEditable(false);

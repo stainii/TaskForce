@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -167,12 +168,26 @@ public class Beoordeling extends JPanel
 				@Override
 				public void mouseClicked(MouseEvent e) 
 				{	
-					controller.getVoorlopigDocument().setTitel(documentContent.getTekstvakken().get(0).getText());
-					controller.getVoorlopigDocument().setOpmerkingen(documentContent.getTekstvakken().get(1).getText());
-					documentContent.setEditable(false);
-					controller.toevoegen();
-					//maak een nieuw DocumentView van het net gemaakte document
-					hoofd.setContentPaneel(new DocumentView(model,databank,controller.getOrigineelDocument(),hoofd));
+					if (!documentContent.getTekstvakken().get(0).getText().equals(""))
+					{
+						if(!controller.getVoorlopigDocument().getTypeDocument().equals("Onbekend"))
+						{
+							controller.getVoorlopigDocument().setTitel(documentContent.getTekstvakken().get(0).getText());
+							controller.getVoorlopigDocument().setOpmerkingen(documentContent.getTekstvakken().get(1).getText());
+							documentContent.setEditable(false);
+							controller.toevoegen();
+							//maak een nieuw DocumentView van het net gemaakte document
+							hoofd.setContentPaneel(new DocumentView(model,databank,controller.getOrigineelDocument(),hoofd));
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,"Gelieve een type document te kiezen","Foutieve invoer", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Gelieve een titel in te vullen","Foutieve invoer", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			});
 		}
@@ -201,30 +216,38 @@ public class Beoordeling extends JPanel
 					//Zijn ze al bewerkbaar? Sla dan hun inhoud op (opslaan).
 					if (documentContent.getTekstvakken().get(0).isEditable())
 					{
-						for(int i = 0; i<documentContent.getTekstvakken().size();i++)
+						if (!documentContent.getTekstvakken().get(0).getText().equals(""))
 						{
-							JTextComponent t= documentContent.getTekstvakken().get(i);
-							t.setOpaque(false);
-							t.setEditable(false);
-							t.setForeground(Color.white);
-							t.setBorder(null);
-							
-							switch (i)
+							for(int i = 0; i<documentContent.getTekstvakken().size();i++)
 							{
-								case 0: controller.getVoorlopigDocument().setTitel(t.getText()); break;
-								case 1: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
+								JTextComponent t= documentContent.getTekstvakken().get(i);
+								t.setOpaque(false);
+								t.setEditable(false);
+								t.setForeground(Color.white);
+								t.setBorder(null);
+								
+								switch (i)
+								{
+									case 0: controller.getVoorlopigDocument().setTitel(t.getText()); break;
+									case 1: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
+								}
+								
 							}
 							
+							documentContent.setEditable(false);
+							controller.update();
+							
+							//mail versturen
+							mail = new MailThuis((controller.getOrigineelDocument().getBurger()!=null?controller.getOrigineelDocument().getBurger().getEmail():controller.getOrigineelDocument().getBeheerder().getEmail()),"Document is gewijzigd", new WijzigingMail(controller.getOrigineelDocument()),model);
+							ex.execute(mail);						
+							
+							hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));
 						}
-						
-						documentContent.setEditable(false);
-						controller.update();
-						
-						//mail versturen
-						mail = new MailThuis((controller.getOrigineelDocument().getBurger()!=null?controller.getOrigineelDocument().getBurger().getEmail():controller.getOrigineelDocument().getBeheerder().getEmail()),"Document is gewijzigd", new WijzigingMail(controller.getOrigineelDocument()),model);
-						ex.execute(mail);						
-						
-						hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));
+						else
+						{
+							JOptionPane.showMessageDialog(null,"Gelieve een titel in te vullen","Foutieve invoer", JOptionPane.ERROR_MESSAGE);
+							documentContent.getTekstvakken().get(0).setBackground(new Color(200,0,0));							
+						}
 					}
 					else
 					{
