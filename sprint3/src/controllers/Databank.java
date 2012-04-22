@@ -31,7 +31,7 @@ public class Databank
 	private Model m;
 	private final String online = "jdbc:sqlserver://Projecten2.mssql.somee.com;database=Projecten2;user=JDBC;password=TaskForceB2";
 	private final String offline = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
-	private final String connectie = offline; 
+	private final String connectie = online; 
 	
 	public Databank(Model m)
 	{
