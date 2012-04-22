@@ -82,6 +82,12 @@ public class TegelDocument extends JPanel implements MouseListener
 			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/tekst.png")));
 			add(icoon,c);
 		}
+		else if (document.getTypeDocument().equals("Link"))
+		{
+			JLabel icoon = new JLabel();
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/link.png")));
+			add(icoon,c);
+		}
 		else
 		{
 			JLabel icoon = new JLabel();

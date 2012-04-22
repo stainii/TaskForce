@@ -136,6 +136,11 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 						image = ImageIO.read(chooser.getSelectedFile());
 						controller.getVoorlopigDocument().setImage(image);
 						
+						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+						System.out.println(positie);
+						System.out.println(controller.getVoorlopigDocument().getExtensieDocument());
+						
 						//gui veranderen: de oude afbeelding wegdoen en de nieuwe afbeelding tonen
 						setVisible(false);
 						remove(afb);
@@ -185,9 +190,9 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 					if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
 						if (!wijziging)
-							ImageIO.write(controller.getVoorlopigDocument().getImage(),"jpg", chooser.getSelectedFile());
+							ImageIO.write(controller.getVoorlopigDocument().getImage(),controller.getVoorlopigDocument().getExtensieDocument(), chooser.getSelectedFile());
 						else
-							ImageIO.write(controller.getOrigineelDocument().getLaatsteWijziging().getImage(),"jpg", chooser.getSelectedFile());
+							ImageIO.write(controller.getOrigineelDocument().getLaatsteWijziging().getImage(),controller.getOrigineelDocument().getExtensieDocument(), chooser.getSelectedFile());
 					}
 				}
 				catch (IOException e1)

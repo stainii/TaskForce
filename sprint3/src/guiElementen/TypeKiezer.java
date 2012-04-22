@@ -23,7 +23,7 @@ import controllers.DocumentController;
 @SuppressWarnings("serial")
 public class TypeKiezer extends JPanel implements DocumentMedia
 {
-	private JLabel afbeeldingToevoegen, tekstvakToevoegen, videoToevoegen;
+	private JLabel afbeeldingToevoegen, tekstvakToevoegen, videoToevoegen, linkToevoegen, andereToevoegen;
 	private DocumentController controller; 
 	private DocumentContent content; 
 	private JFileChooser chooser;
@@ -66,6 +66,10 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 						//lees de afbeelding in en sla ze op in het voorlopige document. Toon daarna de afbeelding.
 						controller.getVoorlopigDocument().setImage(ImageIO.read(chooser.getSelectedFile()));
 						controller.getVoorlopigDocument().setTypeDocument("Afbeelding");
+
+						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+						
 						content.setMedia(new DocumentAfbeelding(controller,databank,false));
 					} 
 					catch (IOException e1) 
@@ -119,16 +123,89 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e)
+			{
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					controller.getVoorlopigDocument().setTemp(chooser.getSelectedFile().getAbsolutePath());
+					controller.getVoorlopigDocument().setTypeDocument("Video");
+
+					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+					controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+						
+					content.setMedia(new DocumentVideo(controller.getVoorlopigDocument(),databank));
+				}
+				
+			}
+		});
+		andereToevoegen = new JLabel();
+		andereToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					controller.getVoorlopigDocument().setTemp(chooser.getSelectedFile().getAbsolutePath());
+					controller.getVoorlopigDocument().setTypeDocument("Andere");
+
+					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+					controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+						
+					content.setMedia(new DocumentAndere(controller.getVoorlopigDocument(),databank));
+				}
+				
+			}
+		});
+		//tekstvak toevoegen
+		linkToevoegen = new JLabel();
+		linkToevoegen.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) 
+			{
+				controller.getVoorlopigDocument().setTypeDocument("Link");
+				DocumentLink doclink = new DocumentLink(controller);
+				content.setMedia(doclink);
+				doclink.setEditable(true);
+			}
 		});
 
 		afbeeldingToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/afbeeldingToevoegen.png")));
 		videoToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/videoToevoegen.png")));
 		tekstvakToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/tekstToevoegen.png")));
+		andereToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/andereToevoegen.png")));
+		linkToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/linkToevoegen.png")));
 
 		add(afbeeldingToevoegen);
 		add(videoToevoegen);
 		add(tekstvakToevoegen);
+		add(andereToevoegen);
+		add(linkToevoegen);
 	}
 
 	@Override

@@ -75,7 +75,7 @@ public class Afbeelding extends JPanel
 			//als er nog geen afbeelding voor het document is opgeslagen, haal het uit de databank en sla het op
 			if (doc.getImage() == null)
 			{
-				image = db.getBlob(doc.getId());
+				image = db.getBlobImage(doc.getId());
 				doc.setImage(image);
 			}
 			

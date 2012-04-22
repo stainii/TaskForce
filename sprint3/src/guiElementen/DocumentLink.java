@@ -1,47 +1,56 @@
 package guiElementen;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import controllers.DocumentController;
 
 /** Deze klasse wordt gebruikt om de tekst van een document met type Tekst in DocumentView weer te geven **/
 
 @SuppressWarnings("serial")
-public class DocumentTekst extends JPanel implements DocumentMedia
+public class DocumentLink extends JPanel implements DocumentMedia
 {
-	private JTextArea tekst;
+	private JTextField tekst;
+	private JLabel wijziging;
 	private DocumentController controller;
 	
-	public DocumentTekst(DocumentController c, boolean wijziging)
+	public DocumentLink(DocumentController c)
 	{
 		this.controller = c;
 		setOpaque(false);
 		
-		tekst = new MooiTextArea("", "Tekst");
 		
-		if (!wijziging)
-			tekst.setText(c.getOrigineelDocument().getTekst());
-		else
-			tekst.setText(c.getOrigineelDocument().getLaatsteWijziging().getTekst());
-		tekst.setRows(20);
+		tekst = new MooiTextField("", "http://www.voorbeeld.be");
+		tekst.setText(c.getOrigineelDocument().getTekst());
+		
+		wijziging = new JLabelFactory().getWijziging("");
+		if(c.getOrigineelDocument().getLaatsteWijziging()!=null)
+			wijziging.setText("Wijziging: " + c.getOrigineelDocument().getLaatsteWijziging().getTekst());
+		
 		tekst.setColumns(30);
 		tekst.setEditable(false);
 		tekst.setBorder(null);
 		tekst.setOpaque(false);
 		tekst.setForeground(Color.WHITE);
-		tekst.setLineWrap(true);
 		
-		JScrollPane scroll = new JScrollPane(tekst);
-		scroll.getViewport().setOpaque(false);
-		scroll.getViewport().setBorder(null);
-		scroll.setOpaque(false);
-		scroll.setBorder(null);
+		setLayout(new GridBagLayout());
+		GridBagConstraints con= new GridBagConstraints();
+		con.anchor = GridBagConstraints.FIRST_LINE_START;
+		con.weightx=1.0;
+		con.weighty=1.0;
+		con.fill = GridBagConstraints.NONE;
 		
-		add(scroll);
+		con.gridy=1;
+		add(tekst,con);
+		con.gridy=2;
+		add(wijziging,con);
 	}
 
 	@Override
@@ -57,7 +66,7 @@ public class DocumentTekst extends JPanel implements DocumentMedia
 		else
 		{
 			controller.getVoorlopigDocument().setTekst(tekst.getText());
-			controller.getVoorlopigDocument().setExtensieDocument("txt");
+			controller.getVoorlopigDocument().setExtensieDocument("url");
 			tekst.setBorder(null);
 			tekst.setOpaque(false);
 			tekst.setForeground(Color.WHITE);

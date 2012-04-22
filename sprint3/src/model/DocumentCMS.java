@@ -19,16 +19,18 @@ public class DocumentCMS
 	private Timestamp datumGewijzigd;
 	private String opmerkingen; 
 	private String tekst; 
-	private String typeDocument;  
+	private String typeDocument; 
+	private String extensieDocument;
 	private String redenAfwijzing;
 	private BufferedImage image;
 	private int mediaId;
+	private String temp;
 	private DocumentCMS laatsteWijziging;
 	private int burgerId;
 	private int beheerderId;
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, String extensie, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -41,6 +43,7 @@ public class DocumentCMS
 		this.opmerkingen = opmerkingen;
 		this.tekst = tekst; 
 		this.typeDocument = type;
+		this.setExtensieDocument(extensie);
 		this.redenAfwijzing = redenAfwijzing;
 		this.mediaId = mediaId;
 		this.burgerId = burgerId;
@@ -61,6 +64,7 @@ public class DocumentCMS
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
+		this.setExtensieDocument("Onbekend");
 		this.redenAfwijzing = "";
 		this.beheerderId = beheerderId;
 	}
@@ -271,6 +275,22 @@ public class DocumentCMS
 	public void setLaatsteWijziging(DocumentCMS doc)
 	{
 		laatsteWijziging = doc;
+	}
+
+	public String getExtensieDocument() {
+		return extensieDocument;
+	}
+
+	public void setExtensieDocument(String extensieDocument) {
+		this.extensieDocument = extensieDocument;
+	}
+
+	public String getTemp() {
+		return temp;
+	}
+
+	public void setTemp(String temp) {
+		this.temp = temp;
 	}
 
 	@Override

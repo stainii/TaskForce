@@ -74,11 +74,18 @@ public class RijDocument extends JPanel implements MouseListener
 			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/tekst_lijst.png")));
 			add(icoon);
 		}
+		else  if (document.getTypeDocument().equals("Link"))
+		{
+			JLabel icoon = new JLabel();
+			icoon.setHorizontalAlignment(JLabel.CENTER);
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/linkLijst.png")));
+			add(icoon);
+		}
 		else
 		{
 			JLabel icoon = new JLabel();
 			icoon.setHorizontalAlignment(JLabel.CENTER);
-			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/onbekendType_lijst.png")));
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/onbekendTypeLijst.png")));
 			add(icoon);
 		}
 		

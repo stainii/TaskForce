@@ -1,6 +1,9 @@
 package controllers;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +19,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import model.Actie;
@@ -60,7 +65,7 @@ public class Databank
 		
 			while (rs.next())
 			{
-				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),m));
+				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(), rs.getString("ExtensieDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),m));
 			}
 			
 			//burgers laden
@@ -90,7 +95,7 @@ public class Databank
 				rs = s2.executeQuery();
 				if (rs.next())
 				{
-					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),m));
+					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(), rs.getString("ExtensieDocument").trim(), rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),m));
 				}
 			}
 			
@@ -160,7 +165,7 @@ public class Databank
 			{
 				Blob afbBlob = c.createBlob();
 				OutputStream afbStream = afbBlob.setBinaryStream(1);
-				ImageIO.write(doc.getImage(), "jpg", afbStream);
+				ImageIO.write(doc.getImage(), doc.getExtensieDocument(), afbStream);
 				
 				s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
 				s.setBlob(1,afbBlob);
@@ -171,8 +176,21 @@ public class Databank
 				rs.next();
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
+			else if (doc.getTypeDocument().equals("Video") || doc.getTypeDocument().equals("Andere"))
+			{
+				FileInputStream data = new FileInputStream(doc.getTemp());
+		        
+		        s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
+		        s.setObject(1, data);
+		        s.executeUpdate();
+		        
+		        s2 = c.createStatement();
+				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
+				rs.next();
+				doc.setMediaId(rs.getInt("MediaId"));
+			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,'Actief', ?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,?,'Actief', ?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -181,14 +199,15 @@ public class Databank
 			s.setString(5, doc.getOpmerkingen());
 			s.setString(6, doc.getTekst());
 			s.setString(7, doc.getTypeDocument());
-			s.setString(8, doc.getRedenAfwijzing());
-			s.setTimestamp(9, doc.getDatumGewijzigd());
-			s.setInt(10,doc.getErfgoedId());
-			if (doc.getTypeDocument().equals("Tekst"))
-					s.setNull(11, Types.INTEGER);
+			s.setString(8, doc.getExtensieDocument());
+			s.setString(9, doc.getRedenAfwijzing());
+			s.setTimestamp(10, doc.getDatumGewijzigd());
+			s.setInt(11,doc.getErfgoedId());
+			if (doc.getTypeDocument().equals("Tekst") || doc.getTypeDocument().equals("Link"))
+					s.setNull(12, Types.INTEGER);
 			else 
-				s.setInt(11, doc.getMediaId());
-			s.setInt(12,doc.getBeheerderId());
+				s.setInt(12, doc.getMediaId());
+			s.setInt(13,doc.getBeheerderId());
 				
 			s.executeUpdate();
 			
@@ -517,8 +536,21 @@ public class Databank
 				rs.next();
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
+			else if (doc.getTypeDocument().equals("Video"))
+			{
+				FileInputStream data = new FileInputStream(doc.getTemp());
+		        
+		        s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
+		        s.setObject(1, data);
+		        s.executeUpdate();
+		        
+		        s2 = c.createStatement();
+				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
+				rs.next();
+				doc.setMediaId(rs.getInt("MediaId"));
+			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId) VALUES (?,?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -527,25 +559,25 @@ public class Databank
 			s.setString(5, doc.getOpmerkingen());
 			s.setString(6, doc.getTekst());
 			s.setString(7, doc.getTypeDocument());
-			s.setString(8, doc.getRedenAfwijzing());
-			s.setTimestamp(9, doc.getDatumGewijzigd());
-			s.setInt(10,doc.getErfgoedId());
-			s.setInt(11, doc.getMediaId());
-			s.setInt(12, doc.getId());
+			s.setString(8, doc.getExtensieDocument());
+			s.setString(9, doc.getRedenAfwijzing());
+			s.setTimestamp(10, doc.getDatumGewijzigd());
+			s.setInt(11,doc.getErfgoedId());
+			s.setInt(13, doc.getId());
 			if (doc.getBurgerId()!=0)
 			{
-				s.setInt(13,doc.getBurgerId());
-				s.setNull(14, Types.INTEGER);
+				s.setInt(14,doc.getBurgerId());
+				s.setNull(15, Types.INTEGER);
 			}
 			else
 			{
-				s.setNull(13, Types.INTEGER);
-				s.setInt(14,doc.getBeheerderId());
+				s.setNull(14, Types.INTEGER);
+				s.setInt(15,doc.getBeheerderId());
 			}
-			if (doc.getTypeDocument().equals("Tekst"))
-				s.setNull(11, Types.INTEGER);
+			if (doc.getTypeDocument().equals("Tekst") || doc.getTypeDocument().equals("Link") )
+				s.setNull(12, Types.INTEGER);
 			else 
-				s.setInt(11, doc.getMediaId());
+				s.setInt(12, doc.getMediaId());
 			s.executeUpdate();
 			
 			
@@ -700,7 +732,7 @@ public class Databank
 		}
 	}
 	
-	public BufferedImage getBlob(int docId)
+	public BufferedImage getBlobImage(int docId)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -756,7 +788,69 @@ public class Databank
 		return image;
 	}
 	
+	public String getBlobFile(int docId)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet rs = null;
+		String pad = "";
 
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			
+			s = c.prepareStatement("SELECT BLOB, ExtensieDocument FROM MEDIA m, DOCUMENT d WHERE d.MediaId= m.MediaId AND d.DocumentId = ?");
+			s.setInt(1, docId);
+			
+			try
+			{
+				rs = s.executeQuery();
+				if(rs.next())
+				{
+					Blob b = rs.getBlob("BLOB");
+				      
+					String ext = "." + rs.getString("ExtensieDocument").trim();
+					File temp = File.createTempFile("erfgoedbank_", ext);
+					temp.deleteOnExit();
+					pad = temp.getAbsolutePath();
+					
+				    FileOutputStream os = new FileOutputStream(temp);
+				    os.write(b.getBytes(1, (int) b.length()));
+				    os.flush();
+				    os.close();
+				}
+				else
+					System.out.println("Video niet gevonden");
+			}
+			catch(IOException ioe)
+			{
+				ioe.printStackTrace();
+			}
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het opvragen van een bestand!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+		}
+		finally
+		{
+			try
+			{
+				if (rs!=null)
+					rs.close();
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het opvragen van een bestand)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		return pad;
+	}
+	
 	public Timestamp getDatabankTijd()	//omdat de systeemtijd verschillend kan zijn van de databanktijd,
 	{									//gebruiken we steeds de databanktijd
 		Connection c = null;
@@ -867,7 +961,7 @@ public class Databank
 					DocumentCMS doc = null;
 					if (rs2.next())
 					{
-						doc = new DocumentCMS(id,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m);
+						doc = new DocumentCMS(id,rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m);
 					}
 				
 					acties.add(new Actie(doc,rs.getString("Actie"),rs.getTimestamp("DatumTijd")));
@@ -964,7 +1058,7 @@ public class Databank
 						String actie = rs.getString("Actie");
 						if (actie.equals("Toegevoegd"))
 						{
-							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));							
+							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));							
 						}
 						else if (actie.equals("Verwijderd"))
 						{
@@ -972,7 +1066,7 @@ public class Databank
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
-							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
+							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
 						}
 						else if (actie.equals("Goedgekeurd"))
 						{

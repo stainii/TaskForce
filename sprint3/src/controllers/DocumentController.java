@@ -21,9 +21,10 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
 		voorlopigDocument.setImage(doc.getImage());
+		voorlopigDocument.setTemp(doc.getTemp());
 		this.m = m;
 		this.d = d;
 	}
@@ -62,12 +63,14 @@ public class DocumentController
 		origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
 		origineelDocument.setTekst(voorlopigDocument.getTekst());
 		origineelDocument.setTypeDocument(voorlopigDocument.getTypeDocument());
+		origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
 		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
 		origineelDocument.setImage(voorlopigDocument.getImage());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
 		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
 		origineelDocument.setBeheerderId(voorlopigDocument.getBeheerderId());
+		origineelDocument.setTemp(voorlopigDocument.getTemp());
 		
 		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
