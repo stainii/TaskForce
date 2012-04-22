@@ -21,7 +21,7 @@ import controllers.Databank;
 @SuppressWarnings("serial")
 public class RijDocument extends JPanel implements MouseListener
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 	private Image backgroundTegel = backgroundIcon.getImage();
 	private Model model;
 	private Databank data;
@@ -74,11 +74,18 @@ public class RijDocument extends JPanel implements MouseListener
 			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/tekst_lijst.png")));
 			add(icoon);
 		}
+		else  if (document.getTypeDocument().equals("Link"))
+		{
+			JLabel icoon = new JLabel();
+			icoon.setHorizontalAlignment(JLabel.CENTER);
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/linkLijst.png")));
+			add(icoon);
+		}
 		else
 		{
 			JLabel icoon = new JLabel();
 			icoon.setHorizontalAlignment(JLabel.CENTER);
-			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/onbekendType_lijst.png")));
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/onbekendTypeLijst.png")));
 			add(icoon);
 		}
 		
@@ -87,7 +94,7 @@ public class RijDocument extends JPanel implements MouseListener
 		
 		add(new JLabelFactory().getTegelTekst("Voor " + document.getErfgoed().getNaam()));
 		
-		add(new JLabelFactory().getTegelTekst(document.getEigenaar().getNaam()));
+		add(new JLabelFactory().getTegelTekst(document.getBurger()!=null?document.getBurger().getNaam():document.getBeheerder().getNaam()));
 		
 		add(new JLabelFactory().getTegelTekst(document.getErfgoed().getDeelgemeente()));
 		
@@ -113,7 +120,7 @@ public class RijDocument extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst_hover.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 				verwijderen.setCursor(hand);
@@ -122,7 +129,7 @@ public class RijDocument extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 				backgroundTegel = backgroundIcon.getImage();
 				repaint();	
 			}
@@ -149,7 +156,7 @@ public class RijDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst_hover.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst_hover.png"));
 		backgroundTegel = backgroundIcon.getImage();
 		repaint();	
 	}
@@ -157,7 +164,7 @@ public class RijDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/lijst.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/lijst.png"));
 		backgroundTegel = backgroundIcon.getImage();
 		repaint();	
 	}

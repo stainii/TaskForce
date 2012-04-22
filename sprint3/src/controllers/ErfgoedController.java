@@ -16,7 +16,7 @@ public class ErfgoedController
 		this.origineelErfgoed = e;
 		this.voorlopigErfgoed = new Erfgoed(e.getId(), e.getNaam(), e.getPostcode(), e.getDeelgemeente(),
 				e.getStraat(), e.getHuisnr(), e.getOmschrijving(), e.getTypeErfgoed(), e.getKenmerken(),
-				e.getGeschiedenis(), e.getNuttigeInfo(), e.getLink(), e.getDatumToegevoegd(), e.isVerwijderd(), e.getBurgerId(), m);
+				e.getGeschiedenis(), e.getNuttigeInfo(), e.getLink(), e.getDatumToegevoegd(), e.isVerwijderd(), e.getBurgerId(), e.getBeheerderId(), m);
 		this.m = m;
 		this.d = d;
 	}
@@ -47,6 +47,7 @@ public class ErfgoedController
 		origineelDocument.setLaatsteWijziging(voorlopigDocument);*/
 		
 		origineelErfgoed.setBurgerId(voorlopigErfgoed.getBurgerId());
+		origineelErfgoed.setBeheerderId(voorlopigErfgoed.getBeheerderId());
 		origineelErfgoed.setDeelgemeente(voorlopigErfgoed.getDeelgemeente());
 		origineelErfgoed.setGeschiedenis(voorlopigErfgoed.getGeschiedenis());
 		origineelErfgoed.setHuisnr(voorlopigErfgoed.getHuisnr());

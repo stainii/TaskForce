@@ -74,7 +74,7 @@ public class Header extends JPanel implements MouseListener
 		uitlogLbl.addMouseListener(this);
 		
 		instellingen = new JLabelFactory().getNormaleTekst("Instellingen");
-		instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+		instellingen.setIcon(new ImageIcon(getClass().getResource("imgs/instellingen.png")));
 		instellingen.addMouseListener(new InstellingenListener());
 		
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -138,13 +138,13 @@ public class Header extends JPanel implements MouseListener
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco_hover.png")));
+			instellingen.setIcon(new ImageIcon(getClass().getResource("imgs/instellingen_hover.png")));
 			instellingen.setCursor(hand);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			instellingen.setIcon(new ImageIcon(getClass().getResource("../views/imgs/toevoegenIco.png")));
+			instellingen.setIcon(new ImageIcon(getClass().getResource("imgs/instellingen.png")));
 		}
 
 		@Override

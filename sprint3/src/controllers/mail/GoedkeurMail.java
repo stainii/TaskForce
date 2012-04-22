@@ -150,7 +150,7 @@ public class GoedkeurMail implements SoortMail
 				"<multiline label=\"Description\">" +
 				
 // Tekst
-"Geachte " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + "<p>Hierbij hebben wij het genoegen u mee te delen dat uw document " + "<p>Er werd besloten u document " + "<em>" + document.getTitel() +"</em>" + " voor " +
+"Geachte Mr./Mevr." + (document.getBurger()!=null?document.getBurger().getFamilienaam():document.getBeheerder().getAchternaam()) +","+ "<br/>" + "<p>Hierbij hebben wij het genoegen u mee te delen dat uw document " + "<p>Er werd besloten u document " + "<em>" + document.getTitel() +"</em>" + " voor " +
 "<em>" +document.getErfgoed().getNaam() +"</em>"+" is goedgekeurd" +
 " en dat deze snel op onze website zal beschikbaar zijn.</p> "+
 "<p>Wij danken u vriendelijk voor uw inzending</p>"+
@@ -212,7 +212,7 @@ public class GoedkeurMail implements SoortMail
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Eigenaar inzending: </strong>" + "</td>" +
-	"<td>" + document.getEigenaar().getNaam() + "</td>" +
+	"<td>" + (document.getBurger()!=null?document.getBurger().getNaam():document.getBeheerder().getNaam()) + "</td>" +
 "</tr>"+
 "<tr>"+
 	"<td>" + "<strong>Locatie erfgoed: </strong>" + "</td>" +

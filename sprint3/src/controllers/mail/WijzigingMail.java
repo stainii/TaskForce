@@ -150,7 +150,7 @@ public class WijzigingMail implements SoortMail
 				"<multiline label=\"Description\">" +
 				
 // Tekst
-"Geachte Mr./Mevr. " + document.getEigenaar().getFamilienaam() +","+ "<br/>" + "<p>Er werd een wijziging voorgesteld voor uw document. Gelieve deze goedkeuring goed- of af te keuren.</p> "+
+"Geachte Mr./Mevr. " + (document.getBurger()!=null?document.getBurger().getFamilienaam():document.getBeheerder().getAchternaam()) +","+ "<br/>" + "<p>Er werd een wijziging voorgesteld voor uw document. Gelieve deze goedkeuring goed- of af te keuren.</p> "+
 "<p>Wij danken u vriendelijk voor uw bijdrage.</p>"+
 "Met vriendelijke groet" +
 "<p>Gemeente Herzele</p>"+

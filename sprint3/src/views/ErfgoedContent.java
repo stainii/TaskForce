@@ -13,6 +13,7 @@ import guiElementen.MooiTextArea;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -106,7 +107,7 @@ public class ErfgoedContent extends JPanel
 		c.gridx = 3;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		add(new JLabelFactory().getNormaleTekst(erfgoed.getEigenaar().getGebruikersnaam() + " - " + erfgoed.getEigenaar().getNaam()),c);
+		add(new JLabelFactory().getNormaleTekst(erfgoed.getBurger()!=null?erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridx=1;
@@ -273,13 +274,14 @@ public class ErfgoedContent extends JPanel
 		int x = 0;
 		int y = 1;
 		c.gridwidth=1;
-		c.weightx = 1;
-		c.weighty = 1;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
-			if (x>5)
+			if (x>4)
 			{
 				x=1;
 				y++;
@@ -312,6 +314,21 @@ public class ErfgoedContent extends JPanel
 		
 		if (tekstvakken.get(0).isEditable())
 		{
+			if (tekstvakken.get(0).getText().equals("") && tekstvakken.get(4).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een titel en een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			if (tekstvakken.get(0).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een titel in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			if (tekstvakken.get(4).getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
 			for (int i = 0; i<tekstvakken.size(); i++)
 			{
 				tekstvakken.get(i).setEditable(false);

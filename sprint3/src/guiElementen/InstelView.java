@@ -122,9 +122,9 @@ public class InstelView extends JPanel
 		ikWil.setBounds(15, 55, sizeIkWil.width, sizeIkWil.height);
 		
 		//eerste groep radiobuttons
-		ImageIcon selected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_selected.png"));
-		ImageIcon notSelected = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_normal.png"));
-		ImageIcon hover = new ImageIcon(getClass().getResource("../views/imgs/radiobutton_hover.png"));
+		ImageIcon selected = new ImageIcon(getClass().getResource("imgs/radiobutton_selected.png"));
+		ImageIcon notSelected = new ImageIcon(getClass().getResource("imgs/radiobutton_normal.png"));
+		ImageIcon hover = new ImageIcon(getClass().getResource("imgs/radiobutton_hover.png"));
 		
 		// Erfgoed
 		JRadioButton erfgoed = new JRadioButton("Erfgoeden");
@@ -750,6 +750,7 @@ public class InstelView extends JPanel
 					{
 						m.getBeheerder().setWachtwoord(Login.convert(nieuwW2.getText()));
 						d.updateBeheerdersDatabank(m.getBeheerder());
+
 					}
 					else
 					{
@@ -778,6 +779,8 @@ public class InstelView extends JPanel
 				oudW.setText("");
 				nieuwW1.setEnabled(false);
 				nieuwW2.setEnabled(false);
+				nieuwW1.setText("");
+				nieuwW2.setText("");
 			}
 		}
 

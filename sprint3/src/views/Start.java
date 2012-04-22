@@ -231,7 +231,15 @@ public class Start extends JPanel implements ActionListener
 					if(gebruikersnaamTxt.getText().equalsIgnoreCase(b.getVoornaam()))
 					{
 						m.setBeheerder(gebruikersnaamTxt.getText());
-						b.setWachtwoord(wachtwoord.getWachtwoord());
+						try {
+							b.setWachtwoord(Login.convert(wachtwoord.getWachtwoord()));
+							
+							
+						} catch (NoSuchAlgorithmException
+								| UnsupportedEncodingException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						try {
 							d.updateBeheerdersDatabank(b);
 						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}

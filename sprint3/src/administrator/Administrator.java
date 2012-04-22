@@ -36,9 +36,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import administrator.adminPanels.AdminPanel;
-import administrator.adminPanels.BeheerderPanel;
-import administrator.adminPanels.BurgerPanel;
 
 import views.Start;
 
@@ -53,7 +50,7 @@ import controllers.Login;
 
 public class Administrator extends JPanel
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/ladenBackground.jpg"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/ladenBackground.jpg"));
 	private Image background = backgroundIcon.getImage();
 		
 	private final static String connectie = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
@@ -92,7 +89,7 @@ public class Administrator extends JPanel
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
-		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/uitloggen.png")));
+		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen.png")));
 		uitlogLbl.addMouseListener(new UitlogListener());
 		
 		beheerderPnl = new BeheerderPanel(m,d);		// new BeheerderPanel
@@ -167,12 +164,12 @@ public class Administrator extends JPanel
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			uitlogLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/uitloggen_hover.png")));
+			uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen_hover.png")));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			uitlogLbl.setIcon(new ImageIcon(getClass().getResource("../views/imgs/uitloggen.png")));
+			uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen.png")));
 		}
 
 		@Override

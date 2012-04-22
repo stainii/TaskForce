@@ -23,11 +23,12 @@ public class Erfgoed
 	private Timestamp datumToegevoegd;
 	private boolean verwijderd; 
 	private int burgerId;
+	private int beheerderId;
 	
 	public Erfgoed(int id, String naam, String postcode, String deelgemeente,
 			String straat, String huisnr, String omschrijving,
 			String typeErfgoed, String kenmerken, String geschiedenis,
-			String nuttigeInfo, String link, Timestamp datumToegevoegd, boolean verwijderd, int burgerId, Model m)
+			String nuttigeInfo, String link, Timestamp datumToegevoegd, boolean verwijderd, int burgerId, int beheerderId, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -45,11 +46,12 @@ public class Erfgoed
 		this.datumToegevoegd = datumToegevoegd;
 		this.verwijderd = verwijderd;
 		this.burgerId = burgerId;
+		this.beheerderId = beheerderId;
 	}
 	
 	public Erfgoed(Model m)
 	{
-		this (-1, "","","","","","","","","","","",new Timestamp(new Date().getTime()), false,m.getBeheerder().getId(),m);
+		this (-1, "","","","","","","","","","","",new Timestamp(new Date().getTime()), false,0,m.getBeheerder().getId(),m);
 	}
 	
 	// ------- getters ------------
@@ -117,7 +119,11 @@ public class Erfgoed
 	{
 		return burgerId;
 	}
-	public Burger getEigenaar()
+	public int getBeheerderId()
+	{
+		return beheerderId;
+	}
+	public Burger getBurger()
 	{
 		ArrayList<Burger> burgers = m.getBurgers();
 		for (Burger b: burgers)
@@ -129,6 +135,19 @@ public class Erfgoed
 		}
 		return null;
 	}
+	public Beheerder getBeheerder()
+	{
+		ArrayList<Beheerder> beheerder = m.getBeheerders();
+		for (Beheerder b: beheerder)
+		{
+			if (b.getId()==beheerderId)
+			{
+				return b;
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<DocumentCMS> getDocumenten()
 	{
 			ArrayList<DocumentCMS> returnArray = new ArrayList<DocumentCMS>();
@@ -226,17 +245,39 @@ public class Erfgoed
 		this.burgerId = burgerId;
 		m.notifyListeners();
 	}
+	public void setBeheerderId(int beheerderId)
+	{
+		this.beheerderId = beheerderId;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + beheerderId;
+		result = prime * result + burgerId;
+		result = prime * result
+				+ ((datumToegevoegd == null) ? 0 : datumToegevoegd.hashCode());
 		result = prime * result
 				+ ((deelgemeente == null) ? 0 : deelgemeente.hashCode());
+		result = prime * result
+				+ ((geschiedenis == null) ? 0 : geschiedenis.hashCode());
 		result = prime * result + ((huisnr == null) ? 0 : huisnr.hashCode());
+		result = prime * result + id;
+		result = prime * result
+				+ ((kenmerken == null) ? 0 : kenmerken.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
+		result = prime * result + ((naam == null) ? 0 : naam.hashCode());
+		result = prime * result
+				+ ((nuttigeInfo == null) ? 0 : nuttigeInfo.hashCode());
+		result = prime * result
+				+ ((omschrijving == null) ? 0 : omschrijving.hashCode());
 		result = prime * result
 				+ ((postcode == null) ? 0 : postcode.hashCode());
 		result = prime * result + ((straat == null) ? 0 : straat.hashCode());
+		result = prime * result
+				+ ((typeErfgoed == null) ? 0 : typeErfgoed.hashCode());
+		result = prime * result + (verwijderd ? 1231 : 1237);
 		return result;
 	}
 
@@ -249,15 +290,56 @@ public class Erfgoed
 		if (getClass() != obj.getClass())
 			return false;
 		Erfgoed other = (Erfgoed) obj;
+		if (beheerderId != other.beheerderId)
+			return false;
+		if (burgerId != other.burgerId)
+			return false;
+		if (datumToegevoegd == null) {
+			if (other.datumToegevoegd != null)
+				return false;
+		} else if (!datumToegevoegd.equals(other.datumToegevoegd))
+			return false;
 		if (deelgemeente == null) {
 			if (other.deelgemeente != null)
 				return false;
 		} else if (!deelgemeente.equals(other.deelgemeente))
 			return false;
+		if (geschiedenis == null) {
+			if (other.geschiedenis != null)
+				return false;
+		} else if (!geschiedenis.equals(other.geschiedenis))
+			return false;
 		if (huisnr == null) {
 			if (other.huisnr != null)
 				return false;
 		} else if (!huisnr.equals(other.huisnr))
+			return false;
+		if (id != other.id)
+			return false;
+		if (kenmerken == null) {
+			if (other.kenmerken != null)
+				return false;
+		} else if (!kenmerken.equals(other.kenmerken))
+			return false;
+		if (link == null) {
+			if (other.link != null)
+				return false;
+		} else if (!link.equals(other.link))
+			return false;
+		if (naam == null) {
+			if (other.naam != null)
+				return false;
+		} else if (!naam.equals(other.naam))
+			return false;
+		if (nuttigeInfo == null) {
+			if (other.nuttigeInfo != null)
+				return false;
+		} else if (!nuttigeInfo.equals(other.nuttigeInfo))
+			return false;
+		if (omschrijving == null) {
+			if (other.omschrijving != null)
+				return false;
+		} else if (!omschrijving.equals(other.omschrijving))
 			return false;
 		if (postcode == null) {
 			if (other.postcode != null)
@@ -268,6 +350,13 @@ public class Erfgoed
 			if (other.straat != null)
 				return false;
 		} else if (!straat.equals(other.straat))
+			return false;
+		if (typeErfgoed == null) {
+			if (other.typeErfgoed != null)
+				return false;
+		} else if (!typeErfgoed.equals(other.typeErfgoed))
+			return false;
+		if (verwijderd != other.verwijderd)
 			return false;
 		return true;
 	}

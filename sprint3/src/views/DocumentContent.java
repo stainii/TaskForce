@@ -11,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import guiElementen.Beoordeling;
+import guiElementen.DocumentAndere;
+import guiElementen.DocumentLink;
 import guiElementen.DocumentMedia;
 import guiElementen.DocumentTekst;
 import guiElementen.DocumentVideo;
@@ -102,7 +104,7 @@ public class DocumentContent extends JPanel
 		c.gridx = 1;
 		c.gridy = 3;
 		c.gridwidth = 4;
-		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getEigenaar().getGebruikersnaam() + " - " + doc.getEigenaar().getNaam()),c);
+		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getBurger()!=null?doc.getBurger().getGebruikersnaam() + " - " + doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridy =4;
@@ -203,7 +205,15 @@ public class DocumentContent extends JPanel
 		}
 		else if (doc.getTypeDocument().equals("Video"))
 		{
-			media = new DocumentVideo();
+			media = new DocumentVideo(controller.getOrigineelDocument(),databank);
+		}
+		else if (doc.getTypeDocument().equals("Link"))
+		{
+			media = new DocumentLink(controller);
+		}
+		else if (doc.getTypeDocument().equals("Andere"))
+		{
+			media = new DocumentAndere(controller.getOrigineelDocument(),databank);	
 		}
 		else
 		{
@@ -323,7 +333,7 @@ public class DocumentContent extends JPanel
 					@Override
 					public void mouseClicked(MouseEvent e)
 					{
-						setMedia(new DocumentVideo());						
+						setMedia(new DocumentVideo(controller.getOrigineelDocument(), databank));						
 					}
 				});
 				add(wijzigingMedia,c);

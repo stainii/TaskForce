@@ -12,10 +12,8 @@ import model.Model;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -84,7 +82,7 @@ public class PdfMaker
 		tabel.setWidthPercentage(100);
 		tabel.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 		tabel.addCell(erfgoed.getTypeErfgoed());
-		tabel.addCell(erfgoed.getEigenaar().getNaam());
+		tabel.addCell(erfgoed.getBurger()!=null?erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam());
 		tabel.addCell(erfgoed.getStraat() + " " + erfgoed.getHuisnr() + " \n"
 						+ erfgoed.getPostcode() + " " + erfgoed.getDeelgemeente());
 		tabel.addCell(erfgoed.getNuttigeInfo());
@@ -104,7 +102,7 @@ public class PdfMaker
 			Paragraph rechterkant = new Paragraph();
 			
 			linkerkant.add(new Paragraph(c.getTitel(), tussentitelFont));	
-			linkerkant.add(new Paragraph(c.getEigenaar().getNaam(), normaleFont));
+			linkerkant.add(new Paragraph((c.getBurger()!=null?c.getBurger().getNaam():c.getBeheerder().getNaam()), normaleFont));
 			linkerkant.add(new Paragraph("Datum ingediend: " + c.getDatumToegevoegd().toString(), normaleFont));
 			linkerkant.add(new Paragraph("Laatste wijziging: " + c.getDatumGewijzigd(), normaleFont));
 			linkerkant.add(new Paragraph("Opmerkingen: " + c.getOpmerkingen(), normaleFont));

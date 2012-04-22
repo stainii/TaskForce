@@ -29,7 +29,7 @@ import model.Model;
 public class TegelDocument extends JPanel implements MouseListener
 {
 	//achtergrond
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/backgroundTile.png"));
 	private Image background = backgroundIcon.getImage();
 	
 	private Model model;
@@ -73,13 +73,19 @@ public class TegelDocument extends JPanel implements MouseListener
 		else if (document.getTypeDocument().equals("Video"))
 		{
 			JLabel icoon = new JLabel();
-			icoon.setIcon(new ImageIcon(getClass().getResource("../views/imgs/video.png")));
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/video.png")));
 			add(icoon,c);
 		}
 		else if (document.getTypeDocument().equals("Tekst"))
 		{
 			JLabel icoon = new JLabel();
-			icoon.setIcon(new ImageIcon(getClass().getResource("../views/imgs/tekst.png")));
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/tekst.png")));
+			add(icoon,c);
+		}
+		else if (document.getTypeDocument().equals("Link"))
+		{
+			JLabel icoon = new JLabel();
+			icoon.setIcon(new ImageIcon(getClass().getResource("imgs/link.png")));
 			add(icoon,c);
 		}
 		else
@@ -96,7 +102,7 @@ public class TegelDocument extends JPanel implements MouseListener
 		c.gridy = 2;
 		add(new JLabelFactory().getTegelTekst("Voor " + doc.getErfgoed().getNaam()),c);
 		c.gridy = 3;
-		add(new JLabelFactory().getTegelTekst(doc.getEigenaar().getNaam()),c);
+		add(new JLabelFactory().getTegelTekst(doc.getBurger()!=null?doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
 		c.gridy = 4;
 		add(new JLabelFactory().getTegelTekst(doc.getErfgoed().getDeelgemeente()),c);
 		c.gridy = 5;
@@ -125,7 +131,7 @@ public class TegelDocument extends JPanel implements MouseListener
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile_hover.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/backgroundTile_hover.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
 				verwijderen.setCursor(hand);
@@ -134,7 +140,7 @@ public class TegelDocument extends JPanel implements MouseListener
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
+				backgroundIcon = new ImageIcon(getClass().getResource("imgs/backgroundTile.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
 			}
@@ -162,7 +168,7 @@ public class TegelDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile_hover.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/backgroundTile_hover.png"));
 		background = backgroundIcon.getImage();
 		repaint();	
 	}
@@ -170,7 +176,7 @@ public class TegelDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		backgroundIcon = new ImageIcon(getClass().getResource("../views/imgs/backgroundTile.png"));
+		backgroundIcon = new ImageIcon(getClass().getResource("imgs/backgroundTile.png"));
 		background = backgroundIcon.getImage();
 		repaint();	
 	}
