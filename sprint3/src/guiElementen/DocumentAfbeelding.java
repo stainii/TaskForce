@@ -138,8 +138,6 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 						
 						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
 						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
-						System.out.println(positie);
-						System.out.println(controller.getVoorlopigDocument().getExtensieDocument());
 						
 						//gui veranderen: de oude afbeelding wegdoen en de nieuwe afbeelding tonen
 						setVisible(false);
