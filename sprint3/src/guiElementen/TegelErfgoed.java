@@ -129,8 +129,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 				backgroundIcon = new ImageIcon(getClass().getResource("imgs/folder_hover.png"));
 				background = backgroundIcon.getImage();
 				repaint();	
-				Cursor cu = new Cursor(Cursor.HAND_CURSOR);
-				documentToevoegen.setCursor(cu);
+				documentToevoegen.setCursor(hand);
 			}
 			
 			@Override
