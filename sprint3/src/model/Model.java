@@ -15,6 +15,7 @@ public class Model
 	private ArrayList<DocumentCMS> documenten;
 	private ArrayList<Beheerder> beheerders;
 	private ArrayList<Instellingen> instellingen;
+	private ArrayList<Gemeenten> gemeente;
 	private ArrayList<ChangeListener> listeners;
 	private Beheerder beheerder;
 	private Burger burger;
@@ -29,6 +30,7 @@ public class Model
 		beheerders = new ArrayList<Beheerder>();
 		documenten = new ArrayList<DocumentCMS>();
 		instellingen = new ArrayList<Instellingen>();
+		gemeente = new ArrayList<Gemeenten>();
 		reden = new ArrayList<String>() ;
 	}
 	
@@ -53,6 +55,10 @@ public class Model
 	public ArrayList<Instellingen> getInstellingen()
 	{
 		return instellingen;
+	}
+	public ArrayList<Gemeenten> getGemeenten()
+	{
+		return gemeente;
 	}
 	
 	//setters
@@ -79,6 +85,11 @@ public class Model
 	public void setInstellingen(ArrayList<Instellingen> instel)
 	{
 		this.instellingen = instel;
+		notifyListeners();
+	}
+	public void setGemeenten(ArrayList<Gemeenten> gemeente)
+	{
+		this.gemeente = gemeente;
 		notifyListeners();
 	}
 

@@ -19,8 +19,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import model.Actie;
@@ -28,6 +26,7 @@ import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
+import model.Gemeenten;
 import model.Instellingen;
 import model.Model;
 
@@ -36,7 +35,7 @@ public class Databank
 	private Model m;
 	private final String online = "jdbc:sqlserver://Projecten2.mssql.somee.com;database=Projecten2;user=JDBC;password=TaskForceB2";
 	private final String offline = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
-	private final String connectie = online; 
+	private final String connectie = offline; 
 	
 	public Databank(Model m)
 	{
@@ -50,6 +49,7 @@ public class Databank
 		ArrayList<Erfgoed> erfgoed = new ArrayList<Erfgoed>();
 		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
 		ArrayList<Instellingen> instellingen = new ArrayList<Instellingen>();
+		ArrayList<Gemeenten> gemeente = new ArrayList<Gemeenten>();
 		Connection c = null;
 		Statement s = null;
 		PreparedStatement s2 = null;
@@ -116,6 +116,12 @@ public class Databank
 			{
 				instellingen.add(new Instellingen(rs.getInt("InstellingId"),rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
 			}
+			
+			rs = s.executeQuery("SELECT * FROM Gemeenten");
+			while(rs.next())
+			{
+				gemeente.add(new Gemeenten(rs.getInt("Postcode"),rs.getString("NaamGemeente")));
+			}
 
 		}
 		catch (SQLException e)
@@ -145,7 +151,8 @@ public class Databank
 		m.setErfgoed(erfgoed);
 		m.setBurgers(burgers);
 		m.setBeheerders(beheerders);
-		m.setInstellingen(instellingen);		
+		m.setInstellingen(instellingen);
+		m.setGemeenten(gemeente);
 	}
 	
 	

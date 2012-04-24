@@ -4,9 +4,14 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import guiElementen.DocumentThumbnail;
+import guiElementen.DropDownGemeenten;
 import guiElementen.JLabelFactory;
 import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
@@ -21,9 +26,12 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
+import com.itextpdf.text.log.SysoLogger;
+
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
+import model.Gemeenten;
 import model.Model;
 
 /**De linkerkant van DocumentView. Toont alle details van een document en haar erfgoed. Geeft ook de
@@ -42,7 +50,7 @@ public class ErfgoedContent extends JPanel
 	private String[] types;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ErfgoedContent(Model m, Databank db, Hoofd h, Erfgoed e)
+	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
 	{
 		this.model = m;
 		this.databank = db;
@@ -147,7 +155,9 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=6;
 		c.gridwidth=1;
-		MooiTextField postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
+		final MooiTextField postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
+		//DropDownGemeenten postcode2 = new DropDownGemeenten(m);
+
 		tekstvakken.add(postcode);
 		postcode.setColumns(4);
 		postcode.setEditable(false);
@@ -155,6 +165,25 @@ public class ErfgoedContent extends JPanel
 		postcode.setOpaque(false);
 		postcode.setForeground(Color.WHITE);
 		add(postcode,c);
+
+		postcode.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				
+			}
+		});
 		
 		c.gridx=2;
 		c.gridwidth = 5;
