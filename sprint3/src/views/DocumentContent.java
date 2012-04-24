@@ -27,7 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.PlainDocument;
 
 import controllers.Databank;
 import controllers.DocumentController;
@@ -64,8 +67,6 @@ public class DocumentContent extends JPanel
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		//add(new ErfgoedPanel(model, databank, doc.getErfgoed(), hoofd), BorderLayout.NORTH);
-		
 		documentPanel = new JPanel(new GridBagLayout());
 		documentPanel.setOpaque(false);
 		add(documentPanel, BorderLayout.CENTER);
@@ -83,7 +84,9 @@ public class DocumentContent extends JPanel
 		c.ipadx = 0;
 		c.ipady = 0;
 		
-		MooiTextField titel = new MooiTextField(document.getTitel(),"Titel",new JLabelFactory().getTitel("").getFont());
+		MooiTextField titel = new MooiTextField("","Titel",new JLabelFactory().getTitel("").getFont());
+		titel.setDocument(new JTextFieldLimit(50));
+		titel.setText(document.getTitel());
 		tekstvakken.add(titel);
 		titel.setColumns(20);
 		titel.setEditable(false);
@@ -395,3 +398,26 @@ public class DocumentContent extends JPanel
 		
 	}
 }
+
+
+class JTextFieldLimit extends PlainDocument {
+	  private int limit;
+	  JTextFieldLimit(int limit) {
+	    super();
+	    this.limit = limit;
+	  }
+
+	  JTextFieldLimit(int limit, boolean upper) {
+	    super();
+	    this.limit = limit;
+	  }
+
+	  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+	    if (str == null)
+	      return;
+
+	    if ((getLength() + str.length()) <= limit) {
+	      super.insertString(offset, str, attr);
+	    }
+	  }
+	}
