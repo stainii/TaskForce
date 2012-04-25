@@ -1,12 +1,6 @@
 package speeltuin;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -14,22 +8,18 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import model.Gemeenten;
-import model.Model;
-
-public class AutoaanvullendeCombobox extends JComboBox
+@SuppressWarnings("serial")
+public class AutoaanvullendeCombobox<T> extends JComboBox  
 {
-	
-	private Model m;
 	private JTextField txt = new JTextField(); 
-	private ArrayList<String> gemeente = new ArrayList<String>();
+	private ArrayList<T> lijst;
 	private boolean hide_flag;
-	private JComboBox combo = new JComboBox();
+	private String object;
 	
-	public AutoaanvullendeCombobox(Model model)
+	public AutoaanvullendeCombobox(ArrayList<T> l, String ob)
 	{
-		this.m = model;
-		combo = this;
+		this.lijst = l;
+		this.object = ob;
 		setEditable(true);
 		txt = (JTextField) this.getEditor().getEditorComponent();
 		
@@ -47,11 +37,11 @@ public class AutoaanvullendeCombobox extends JComboBox
 						if(tekst.length()==0)
 						{
 							getAutoCombo().hidePopup();
-							setModel(new DefaultComboBoxModel(gemeente.toArray()),"");
+							setModel(new DefaultComboBoxModel(lijst.toArray()),"");
 						}
 						else
 						{
-							DefaultComboBoxModel m = getSuggestedModel(gemeente,tekst);
+							DefaultComboBoxModel m = getSuggestedModel(lijst,tekst,object);
 							
 							if(m.getSize()==0 || hide_flag) 
             				{
@@ -85,9 +75,9 @@ public class AutoaanvullendeCombobox extends JComboBox
 		        }
 				else if(code==KeyEvent.VK_RIGHT) 
 				{
-		            for(int i=0;i<gemeente.size();i++) 
+		            for(int i=0;i<lijst.size();i++) 
 		            {
-		                String str =  gemeente.get(i);
+		                String str =  (String) lijst.get(i);
 		            
 		                if(str.startsWith(tekst)) 
 		                {
@@ -103,15 +93,14 @@ public class AutoaanvullendeCombobox extends JComboBox
 			public void keyReleased(KeyEvent e) {}
 		});
 		
-		for(Gemeenten g : m.getGemeenten())
+		setModel(new DefaultComboBoxModel(lijst.toArray()), "");
+		
+		if(ob.equals("Integer"))
 		{
-			gemeente.add(g.getGemeente());
+			this.setPrototypeDisplayValue("XXXX");
 		}
-		
-		setModel(new DefaultComboBoxModel(gemeente.toArray()), "");
-		
-		this.setPrototypeDisplayValue("XXXXXXXXXXXXXXXXXXXXX");
-		
+		else
+			this.setPrototypeDisplayValue("XXXXXXXXXXXXXXXXXXXXX");
 	}
 	
 	public JComboBox getAutoCombo()
@@ -119,15 +108,28 @@ public class AutoaanvullendeCombobox extends JComboBox
 		return this;
 	}
 	
-	private static DefaultComboBoxModel getSuggestedModel(ArrayList<String> list, String text) 
+	private DefaultComboBoxModel getSuggestedModel(ArrayList<T> list, String text,String welkObject) 
 	{
         DefaultComboBoxModel m = new DefaultComboBoxModel();
-        for(String s: list) 
-        {
-            if(s.startsWith(text)) 
-            	m.addElement(s);
-        }
-        return m;
+       
+    	if( welkObject.equals("Integer"))
+    	{
+    		for(T s : list)
+    		{
+    			if( ((Integer) s).toString().startsWith(text) )
+    				m.addElement(s);
+    		}
+    		return m;
+    	}
+    	else
+    	{
+            for(T s: list) 
+            {
+            	if(((String) s).startsWith(text)) 
+                	m.addElement(s);
+            }
+            return m;
+    	}
     }
     private void setModel(DefaultComboBoxModel mdl, String str) 
     {

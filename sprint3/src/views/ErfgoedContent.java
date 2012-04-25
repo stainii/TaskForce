@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -47,8 +49,8 @@ public class ErfgoedContent extends JPanel
 	@SuppressWarnings("rawtypes")
 	private JComboBox type;
 	private String[] types;
-	private MooiTextField postcode;
-	private AutoaanvullendeCombobox deelgemeente;
+	//private MooiTextField postcode;
+	private AutoaanvullendeCombobox deelgemeente,postcode;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -156,18 +158,58 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=6;
 		c.gridwidth=1;
-		postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
-		tekstvakken.add(postcode);
-		postcode.setColumns(4);
-		postcode.setEditable(false);
+		
+		ArrayList<Integer> post = new ArrayList<Integer>();
+
+		for(Gemeenten g : m.getGemeenten())
+		{
+			if(!post.contains(g.getPostcode()))
+				post.add(g.getPostcode());	
+		}
+		
+		final ArrayList<String> gemeente = new ArrayList<String>();
+		for(Gemeenten g : m.getGemeenten())
+		{
+			gemeente.add(g.getGemeente());
+		}
+		postcode = new AutoaanvullendeCombobox(post,"Integer");
+		//postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
+		//tekstvakken.add(postcode);
+		//postcode.setColumns(4);
+		//postcode.setEditable(false);
 		postcode.setBorder(null);
-		postcode.setOpaque(false);
-		postcode.setForeground(Color.WHITE);
+		//postcode.setOpaque(false);
+		//postcode.setForeground(Color.WHITE);
 		add(postcode,c);
+		
+		postcode.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				for(Gemeenten g : m.getGemeenten())
+				{
+					if(postcode.getSelectedItem() == null)
+					{
+						deelgemeente.setSelectedItem("");
+						return;
+					}
+					else if(postcode.getSelectedItem().equals(g.getPostcode()))
+						if(postcode.getSelectedItem().equals(9550))
+						{
+							deelgemeente.setSelectedItem("-- Kies een gemeente --");
+						}
+						else
+							deelgemeente.setSelectedItem(g.getGemeente());
+				}
+			}
+		});
+		
 		
 		c.gridx=2;
 		c.gridwidth = 5;
-		deelgemeente = new AutoaanvullendeCombobox(m);
+				
+		deelgemeente = new AutoaanvullendeCombobox(gemeente,"String");
 		//tekstvakken.add(deelgemeente);
 		//deelgemeente.setColumns(25);
 	//	deelgemeente.setEditable(false);
@@ -175,6 +217,25 @@ public class ErfgoedContent extends JPanel
 	//	deelgemeente.setOpaque(false);
 	//	deelgemeente.setForeground(Color.WHITE);
 		add(deelgemeente,c);
+		
+		/*deelgemeente.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(Gemeenten g : m.getGemeenten())
+				{
+					if(deelgemeente.getSelectedItem() == null)
+					{
+						return;
+					}
+					else if(deelgemeente.getSelectedItem().equals(g.getGemeente()))
+					{
+						deelgemeente.setSelectedItem(g.getGemeente());
+						postcode.setSelectedItem(g.getPostcode());
+					}
+						
+				}
+			}
+		});*/
 		
 		c.gridx=1;
 		c.gridy=7;
