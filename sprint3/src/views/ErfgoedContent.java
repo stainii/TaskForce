@@ -4,30 +4,29 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import guiElementen.DocumentThumbnail;
-import guiElementen.DropDownGemeenten;
 import guiElementen.JLabelFactory;
 import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
-import com.itextpdf.text.log.SysoLogger;
-
+import speeltuin.AutoaanvullendeCombobox;
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -48,6 +47,8 @@ public class ErfgoedContent extends JPanel
 	@SuppressWarnings("rawtypes")
 	private JComboBox type;
 	private String[] types;
+	private MooiTextField postcode;
+	private AutoaanvullendeCombobox deelgemeente;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -155,9 +156,7 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=6;
 		c.gridwidth=1;
-		final MooiTextField postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
-		//DropDownGemeenten postcode2 = new DropDownGemeenten(m);
-
+		postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
 		tekstvakken.add(postcode);
 		postcode.setColumns(4);
 		postcode.setEditable(false);
@@ -165,35 +164,16 @@ public class ErfgoedContent extends JPanel
 		postcode.setOpaque(false);
 		postcode.setForeground(Color.WHITE);
 		add(postcode,c);
-
-		postcode.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				
-			}
-		});
 		
 		c.gridx=2;
 		c.gridwidth = 5;
-		MooiTextField deelgemeente = new MooiTextField(erfgoed.getDeelgemeente(),"Deelgemeente");
-		tekstvakken.add(deelgemeente);
-		deelgemeente.setColumns(25);
-		deelgemeente.setEditable(false);
+		deelgemeente = new AutoaanvullendeCombobox(m);
+		//tekstvakken.add(deelgemeente);
+		//deelgemeente.setColumns(25);
+	//	deelgemeente.setEditable(false);
 		deelgemeente.setBorder(null);
-		deelgemeente.setOpaque(false);
-		deelgemeente.setForeground(Color.WHITE);
+	//	deelgemeente.setOpaque(false);
+	//	deelgemeente.setForeground(Color.WHITE);
 		add(deelgemeente,c);
 		
 		c.gridx=1;
