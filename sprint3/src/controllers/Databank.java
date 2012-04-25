@@ -1229,10 +1229,13 @@ public class Databank
 		}
 	}
 	
-	public void voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
+	public int voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
+		Statement s2 = null;
+		ResultSet rs = null;
+		int id=-1;
 		
 		try
 		{
@@ -1250,13 +1253,49 @@ public class Databank
 			
 			s.executeUpdate();	
 			
-			m.toevoegenBeheerder(new Beheerder(-1,n,a, w,em, kb, kw, kv, kt,isAdmin,m));
+			s2 = c.createStatement();
+			rs = s2.executeQuery(("SELECT BeheerderId FROM Beheerder ORDER BY BeheerderId DESC"));
+			rs.next();
+			id = rs.getInt("BeheerderId");
+			
+			m.toevoegenBeheerder(new Beheerder(id,n,a, w,em, kb, kw, kv, kt,isAdmin,m));
 		}
 		catch (SQLException e)
 		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het toevoegen van een beheerder)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
+		finally
+		{
+			try
+			{
+				if (rs!=null)	
+					rs.close();
+				if (s!=null)
+					s.close();
+				if (s2!=null)
+					s2.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het toevoegen van een beheerder, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		
+		
+		//standaardinstellingen
+		if (id!=-1)
+		{
+			voegInstellingToe("StandaardReden", "Kwalitieit van document is te laag", id);
+			voegInstellingToe("TypeContent", "Erfgoed", id);
+			voegInstellingToe("View", "TegelView", id);
+		}
+		
+		return id;
+		
 	}
 	
 	public void deleteBeheerder(int id)

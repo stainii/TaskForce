@@ -2,21 +2,27 @@ package controllers.mail;
 
 import java.util.Date;
 
+import controllers.Databank;
+
+import model.Beheerder;
 import model.DocumentCMS;
+import model.Model;
 
 /**Verstuurt een mail dat een document is afgekeurd **/
 
-public class WijzigingMail implements SoortMail
+public class NieuweBeheerderMail implements SoortMail
 {
-	private DocumentCMS document;
+	private Beheerder beheerder;
+	private String wachtwoord;
 	
-	public WijzigingMail(DocumentCMS doc)
+	public NieuweBeheerderMail(Beheerder b, String w)
 	{
-		this.document = doc;
+		this.beheerder = b;
+		this.wachtwoord = w;
 	}
 	public String getMail()
 	{
-		String wijzigingmail = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" +
+		String nieuweBeheerderMail = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" +
 				"<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style type=\"text/css\">" +
 				"/* Client-specific Styles */"+
 				"#outlook a { padding: 0; }	/* Force Outlook to provide a \"view in browser\" button. */" +
@@ -90,8 +96,8 @@ public class WijzigingMail implements SoortMail
 				"<tbody><tr><td class=\"w640\" height=\"20\" width=\"640\"></td></tr>" +
 				"<tr>" +
 				"<td class=\"w640\" width=\"640\">" +
-				"<table id=\"top-bar\" class=\"w640\" bgcolor=\"#00da15\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"640\">" +
-				"<tbody><tr>" +
+				"<table id=\"top-bar\" class=\"w640\" bgcolor=\"#000000\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"640\">" +
+				"<tbody><tr>" +					/*Hierboven staat achtergrondkleur titel balk */
 				"<td class=\"w15\" width=\"15\"></td>" +
 				"<td class=\"w325\" align=\"left\" valign=\"middle\" width=\"350\">" +
 				"<table class=\"w325\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"350\">" +
@@ -117,12 +123,12 @@ public class WijzigingMail implements SoortMail
 				" </td>" +
 				"</tr>" +
 				"<tr>" +
-				" <td id=\"header\" class=\"w640\" align=\"center\" bgcolor=\"#00a9da\" width=\"640\">" +
+				" <td id=\"header\" class=\"w640\" align=\"center\" bgcolor=\"#00da15\" width=\"640\">" +
 				"<table class=\"w640\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"640\">" +
 				"<tbody><tr><td class=\"w30\" width=\"30\"></td><td class=\"w580\" height=\"30\" width=\"580\"></td><td class=\"w30\" width=\"30\"></td></tr>" +
 				"<tr>" +
 				"<td class=\"w30\" width=\"30\"></td>" +
-				"<td class=\"w580\" width=\"580\"><div id=\"headline\" align=\"center\"><p><strong>Document gewijzigd</strong></p></div></td>" +
+				"<td class=\"w580\" width=\"580\"><div id=\"headline\" align=\"center\"><p><strong>Welkom!</strong></p></div></td>" +
 				" <td class=\"w30\" width=\"30\"></td>" +
 				"</tr>" +
 				"</tbody></table>" +
@@ -141,22 +147,20 @@ public class WijzigingMail implements SoortMail
 				"<td class=\"w580\" width=\"580\">" +
 				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
 
-// 1ste titel		
-"<strong>"+ "Wijziging voorgesteld voor " + document.getTitel()+ "(" + document.getErfgoed().getNaam() + ")" + "</strong>"+
-
-
+				// 1ste titel		
+				"<strong>Welkom op de erfgoedbank van Herzele</strong>"+
 				"</singleline></p>" +
 				"<div class=\"article-content\" align=\"left\">" +
 				"<multiline label=\"Description\">" +
 				
-// Tekst
-"Geachte Mr./Mevr. " + (document.getBurger()!=null?document.getBurger().getFamilienaam():document.getBeheerder().getAchternaam()) +","+ "<br/>" + "<p>Er werd een wijziging voorgesteld voor uw document. Gelieve deze wijziging goed- of af te keuren.</p> "+
-"<p>Wij danken u vriendelijk voor uw bijdrage.</p>"+
-"Met vriendelijke groet" +
-"<p>Gemeente Herzele</p>"+
-
-
-
+				// Tekst
+				"<p>Beste " + beheerder.getNaam() + ",</p>"+
+				"<p>U bent successvol geregistreerd als beheerder voor de erfgoedbank van Herzele. " +
+				"U kan zich met uw inloggegevens, die u onderaan deze mail vindt, inloggen op het CMS. " +
+				"Daarna kan u eventueel een nieuw wachtwoord instellen in het instellingen-menu.</p> "+
+				"<p>Wij danken u vriendelijk voor uw medewerking.</p>"+
+				"Met vriendelijke groet" +
+				"<p>Gemeente Herzele</p>"+
 				"</multiline>" +
 				"</div>" +
 				"</td>" +
@@ -172,51 +176,27 @@ public class WijzigingMail implements SoortMail
 				"</tr>" +
 				"<tr><td class=\"w580\" height=\"10\" width=\"580\"></td></tr>" +
 				"</tbody></table>" +
-				"</layout></div>"	+			
-
-				"<div class=\"article-content\" align=\"left\">" +
-				"<multiline label=\"Description\">" +
+				"</layout>" +
+				"<layout label=\"Text with left-aligned image\">" +
+				"<table class=\"w580\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"580\">" +
+				"<tbody><tr>" +
+				"<td class=\"w580\" width=\"580\">" +
+				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
 				
-//informatie naast foto		
-
-"<table border=\"0\">" +
-	"<tr>"+
-		"<td colspan=\"2\">" +
-			"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
-				"<strong>"+"Origineel"+"</strong>" +
-			"</singleline></p>" +
-		"</td>" +
-		"<td colspan=\"2\">"+
-			"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
-				"<strong>"+"Voorgestelde wijziging"+"</strong>" +
-			"</singleline></p>"+
-		"</td>" +
-	"</tr>" +
-	"<tr>"+
-		"<td>" + "<strong>Titel: </strong>" + "</td>" +
-		"<td>" + document.getTitel() + "</td>" +
-		"<td>" + "<strong>Titel: </strong>" + "</td>" +
-		"<td>" + document.getLaatsteWijziging().getTitel() + "</td>" +
-	"</tr>"+
-	"<tr>"+
-		"<td>" + "<strong>Opmerkingen: </strong>" + "</td>" +
-		"<td>" + document.getOpmerkingen() + "</td>" +
-		"<td>" + "<strong>Opmerkingen: </strong>" + "</td>" +
-		"<td>" + document.getLaatsteWijziging().getOpmerkingen() + "</td>" +
-	"</tr>"+
-"</table>" +
-"</multiline><br />" +
-"<multiline>" +
-"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">"+
-		"<strong>Wat vindt u van deze wijziging?</strong>" +
-"</p>" +
-"<table>" +
-	"<tr>"+
-		"<td colspan=\"2\"><a href=\"http://taskforce.somee.com/mail/afkeuren/" + document.getLaatsteWijziging().getId() + "\" ><img src=\"http://taskforce.somee.com/mail/afkeuren.png\" alt=\"Wijziging afkeuren\" /></a></td>" +
-		"<td colspan=\"2\"><a href=\"http://taskforce.somee.com/mail/goedkeuren/" + document.getLaatsteWijziging().getId() + "\" ><img src=\"http://taskforce.somee.com/mail/goedkeuren.png\" alt=\"Wijziging goedkeuring\" /></a></td>" +
-	"</tr>" +
-"</table>" +
-
+				// 2de titel			
+				"<strong>"+"Uw inloggegevens"+"</strong>" +
+				"</singleline></p>" +
+				"<table>"+
+					"<tr>"+
+						"<td>Gebruikersnaam:</td>" +
+						"<td>" + beheerder.getVoornaam() +"</td>"+
+						
+					"</tr>" +
+					"<tr>" +
+						"<td>Wachtwoord:</td>" +
+						"<td>" + wachtwoord + "</td>"+
+					"</tr>"+
+				"</table>" +
 				"</multiline>" +
 				"</div>" +
 				"</td>" +
@@ -281,6 +261,7 @@ public class WijzigingMail implements SoortMail
 				"</td>" +
 				"<td class=\"w30\" width=\"30\"></td>" +
 				"</tr>" +
+				"</tbody></table>" +
 				"</td></tr>"+
 				"<tr><td class=\"w640\" bgcolor=\"#ffffff\" height=\"15\" width=\"640\"></td></tr>" +
 				"<tr>" +
@@ -309,6 +290,6 @@ public class WijzigingMail implements SoortMail
 				"</tr>" +
 				"</tbody></table></body></html>"
 				;
-		return wijzigingmail;
+		return nieuweBeheerderMail;
 	}
 }

@@ -31,10 +31,20 @@ public class MailThuis implements Runnable
 		this.mail=mail;
 		this.m = model;
 		
-		host = m.getEmailVoorkeur("EmailOut");
-		port = Integer.parseInt(m.getEmailVoorkeur("EmailPoort"));
-		user = m.getEmailVoorkeur("EmailGebruikernaam");
-		pwd = m.getEmailVoorkeur("EmailWachtwoord");
+		if (!m.getEmailVoorkeur("EmailOut").equals(""))
+		{
+			host = m.getEmailVoorkeur("EmailOut");
+			port = Integer.parseInt(m.getEmailVoorkeur("EmailPoort"));
+			user = m.getEmailVoorkeur("EmailGebruikernaam");
+			pwd = m.getEmailVoorkeur("EmailWachtwoord");
+		}
+		else
+		{
+			host = "smtp.gmail.com";
+			port = 587;
+			user = "task.forceb2@gmail.com";
+			pwd = "azertyb2";
+		}
 		
 	}
 		

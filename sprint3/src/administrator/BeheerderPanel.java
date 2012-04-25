@@ -10,6 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -23,9 +26,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import sun.security.jgss.LoginConfigImpl;
 import controllers.Databank;
+import controllers.mail.MailThuis;
 import model.Beheerder;
 import model.Model;
+import controllers.mail.SoortMail;
+import controllers.mail.NieuweBeheerderMail;
+import controllers.WachtwoordGenerator;
+import controllers.Login;
 
 @SuppressWarnings("serial")
 public class BeheerderPanel extends JPanel
@@ -306,8 +316,39 @@ public class BeheerderPanel extends JPanel
 				JOptionPane.showMessageDialog(null,"Alle velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),"test",emailTxt.getText(),true,true,true,true,false);
+				String wachtwoord = WachtwoordGenerator.randomstring();
+				
+				int id = 0;
+				try
+				{
+					id = d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),Login.convert(wachtwoord),emailTxt.getText(),true,true,true,true,false);
+				}
+				catch (NoSuchAlgorithmException e)
+				{
+					e.printStackTrace();
+				}
+				catch (UnsupportedEncodingException e)
+				{
+					e.printStackTrace();
+				}
 				d.getBeheerdersEnBurgersUitDatabank();
+				
+				//mail sturen
+				Beheerder beheerder = null;
+				for (Beheerder b: m.getBeheerders())
+				{
+					if (b.getId() == id)
+						beheerder = b;
+				}
+				if (beheerder!=null)
+				{
+					
+					SoortMail smail = new NieuweBeheerderMail(beheerder, wachtwoord);
+					MailThuis mail = new MailThuis(beheerder.getEmail(), "Nieuw wachtwoord", smail ,m);
+					ExecutorService ex = Executors.newFixedThreadPool(1);; 
+					ex.execute(mail);
+				}				
+				JOptionPane.showMessageDialog(null, "De beheerder zal op het opgegeven emailadres een mail krijgen waarin het wachtwoord te vinden is.");
 				
 				naamTxt.setText("");
 				achternaamTxt.setText("");
@@ -436,6 +477,10 @@ public class BeheerderPanel extends JPanel
 					m.verwijderBeheerder(m.getBeheerder().getId());			// verwijderen uit ArrayList<Beheerder>
 					
 					beheerderModel.remove(beheerderList.getSelectedIndex());
+					
+					naamTxt.setText("");
+					achternaamTxt.setText("");
+					emailTxt.setText("");
 				}
 			}
 		}
