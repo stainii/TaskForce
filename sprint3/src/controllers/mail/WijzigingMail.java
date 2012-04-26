@@ -142,7 +142,7 @@ public class WijzigingMail implements SoortMail
 				"<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">" +
 
 // 1ste titel		
-"<strong>"+ "Wijziging voorgesteld voor " + document.getTitel()+ "(" + document.getErfgoed().getNaam() + ")" + "</strong>"+
+"<strong>"+ "Wijziging voorgesteld voor " + document.getTitel()+ " (" + document.getErfgoed().getNaam() + ")" + "</strong>"+
 
 
 				"</singleline></p>" +

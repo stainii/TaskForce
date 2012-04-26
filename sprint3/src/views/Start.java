@@ -81,6 +81,8 @@ public class Start extends JPanel implements ActionListener
 		
 		m = new Model();
 		d = new Databank(m);
+		d.getBeheerdersEnBurgersUitDatabank();
+		d.getInstellingen();
 		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
@@ -221,10 +223,7 @@ public class Start extends JPanel implements ActionListener
 					"wachtwoord gestuurd naar de gebruiker.\nBent u hiermee akkoord?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 			
 			if(resultaat == JOptionPane.YES_OPTION)
-			{
-				d.getBeheerdersEnBurgersUitDatabank();
-				d.getInstellingen();
-				
+			{				
 				WachtwoordMail wachtwoord = new WachtwoordMail();
 				
 				for(Beheerder b : m.getBeheerders())
@@ -279,7 +278,6 @@ class Laden extends SwingWorker<Void,Void>
 		//databank inladen in model
 		laden.setText("Bezig met laden databank...");
 		d.laadDatabank();
-		d.getInstellingen();
 		m.setBeheerder(beheerderNaam);
 		
 		//Interface (GUI) maken en eigenschappen instellen

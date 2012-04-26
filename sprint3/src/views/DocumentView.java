@@ -29,5 +29,9 @@ public class DocumentView extends JPanel
 		add(content, BorderLayout.CENTER);
 		add(menu,BorderLayout.EAST);
 	}
+	public void quit()
+	{
+		content.quit();
+	}
 
 }

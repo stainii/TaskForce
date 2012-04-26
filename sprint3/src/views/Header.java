@@ -46,6 +46,7 @@ public class Header extends JPanel implements MouseListener
 	private JFrame frame;
 	private OverzichtView v;
 	private Databank d;
+	private Hoofd h;
 
 	@Override
 	protected void paintComponent(Graphics g) 		//headerachtergrond tekenen
@@ -57,12 +58,13 @@ public class Header extends JPanel implements MouseListener
 			g.drawImage(logo, 8,0,88,110,this);
 	}
 	
-	public Header(Model model, JFrame f,OverzichtView view,Databank data)
+	public Header(Model model, JFrame f,OverzichtView view, Hoofd h, Databank data)
 	{
 		this.m = model;
 		this.frame =f;
 		this.v = view;
 		this.d = data;
+		this.h = h;
 		
 		setOpaque(false);
 		
@@ -125,6 +127,7 @@ public class Header extends JPanel implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
+		h.quit();
 		String[] args = new String[1];	//er wordt een argument meegegeven met de main-methode. Dit zorgt ervoor
 		Start.main(args);				//dat de system tray niet opnieuw gemaakt wordt
 		frame.dispose();
