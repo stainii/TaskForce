@@ -40,7 +40,7 @@ public class Hoofd extends JPanel
 		setLayout(new BorderLayout());
 		
 		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
-		add(new Header(m,f,ingeladenOverzicht,d),BorderLayout.NORTH);
+		add(new Header(m,f,ingeladenOverzicht,this,d),BorderLayout.NORTH);
 		
 		contentWrapper = new JPanel(new BorderLayout());
 		contentWrapper.setOpaque(false);
@@ -75,5 +75,16 @@ public class Hoofd extends JPanel
 		ingeladenOverzicht.refresh();		//de tegels/rijen in de view eens herladen, zodat alle doorgevoerde wijzigingen zichtbaar zijn
 		contentWrapper.add(content);
 		contentWrapper.setVisible(true);
+	}
+	public void quit()
+	{
+		try
+		{
+			((DocumentView)(content)).quit();
+		}
+		catch (Exception e)
+		{
+			//het is geen documentview dat ingeladen is, en er moet dus geen video gestopt worden
+		}
 	}
 }

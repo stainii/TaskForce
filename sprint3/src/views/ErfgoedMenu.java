@@ -146,7 +146,7 @@ public class ErfgoedMenu extends JPanel
 			
 			add(toevoegen);
 		
-			// pdf button
+			/*// pdf button
 			pdf = new JLabelFactory().getMenuTitel("Pdf maken");
 			pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
 			pdf.addMouseListener(new MouseListener() {
@@ -194,7 +194,7 @@ public class ErfgoedMenu extends JPanel
 					catch (IOException ioe){}
 				}
 			});
-			add(pdf);
+			add(pdf);*/
 			
 			
 			verwijderen = new JLabel();
