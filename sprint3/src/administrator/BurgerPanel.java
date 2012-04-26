@@ -150,7 +150,7 @@ public class BurgerPanel extends JPanel
 						m.setBurger(burgerList.getSelectedValue().toString());
 						
 						gebruikerTxt.setText(b.getGebruikersnaam());
-						naamTxt.setText(b.getNaam());
+						naamTxt.setText(b.getVoornaam());
 						familienaamTxt.setText(b.getFamilienaam());
 						emailTxt.setText(b.getEmail());			
 					}

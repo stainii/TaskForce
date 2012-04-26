@@ -35,9 +35,11 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ComboBoxUI;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.PlainDocument;
 
 import sun.java2d.loops.MaskFill;
 
@@ -46,6 +48,7 @@ import model.DocumentCMS;
 import model.Erfgoed;
 import model.Gemeenten;
 import model.Model;
+import guiElementen.JTextFieldLimit;
 
 /**De linkerkant van DocumentView. Toont alle details van een document en haar erfgoed. Geeft ook de
  * mogelijkheid om het document te bewerken of verwijderen */
@@ -98,7 +101,9 @@ public class ErfgoedContent extends JPanel
 		c.ipady = 0;
 		c.gridwidth = 6;
 		
-		MooiTextField titel = new MooiTextField(erfgoed.getNaam(),"Titel",new JLabelFactory().getTitel("").getFont());
+		MooiTextField titel = new MooiTextField("","Titel",new JLabelFactory().getTitel("").getFont());
+		titel.setDocument(new JTextFieldLimit(40));
+		titel.setText(erfgoed.getNaam());
 		tekstvakken.add(titel);
 		titel.setEditable(false);
 		titel.setBorder(null);
@@ -147,7 +152,9 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=5;
 		c.gridwidth=3;
-		MooiTextField straat = new MooiTextField(erfgoed.getStraat(),"Straat");
+		MooiTextField straat = new MooiTextField("","Straat");
+		straat.setDocument(new JTextFieldLimit(50));
+		straat.setText(erfgoed.getStraat());
 		tekstvakken.add(straat);
 		straat.setColumns(25);
 		straat.setEditable(false);
@@ -158,7 +165,9 @@ public class ErfgoedContent extends JPanel
 		
 		c.gridx=4;
 		c.gridwidth=2;
-		MooiTextField huisNr = new MooiTextField(erfgoed.getHuisnr(),"Nr");
+		MooiTextField huisNr = new MooiTextField("","Nr");
+		huisNr.setDocument(new JTextFieldLimit(10));
+		huisNr.setText(erfgoed.getHuisnr());
 		tekstvakken.add(huisNr);
 		huisNr.setColumns(4);
 		huisNr.setEditable(false);

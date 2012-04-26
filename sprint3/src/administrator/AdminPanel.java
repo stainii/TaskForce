@@ -44,6 +44,7 @@ public class AdminPanel extends JPanel
 	private JPasswordField password1Txt, password2Txt;
 	private int index;
 	private String gebruiker;
+	private Beheerder beheerder;
 	
 	public AdminPanel(Model model , Databank data,String g)
 	{
@@ -220,7 +221,7 @@ public class AdminPanel extends JPanel
 			{
 				if(b.isAdmin() == true)
 				{
-					m.setBeheerder(adminList.getSelectedValue().toString());
+					beheerder = b;
 					index = adminList.getSelectedIndex();
 					naamTxt.setText(b.getVoornaam());
 					password1Txt.setText("wachtwoord");			// voor elke admin hetzelfde wachtwoord laten zien ! MD5 string is veel te lang!
@@ -316,23 +317,36 @@ public class AdminPanel extends JPanel
 			{
 				if(password1Txt.getText().equals(password2Txt.getText()))
 				{
-					try
+					boolean dubbel = false;
+					for (Beheerder b: m.getBeheerders())
 					{
-						d.voegBeheerderToeAanDatabank(naamTxt.getText(),naamTxt.getText(),Login.convert(password2Txt.getText()),emailTxt.getText(),false,false,false,false,true);
+						if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()))
+							dubbel = true;
 					}
-					catch (NoSuchAlgorithmException e)
+					
+					if (!dubbel)
 					{
-						e.printStackTrace();
+						try
+						{
+							d.voegBeheerderToeAanDatabank(naamTxt.getText(),naamTxt.getText(),Login.convert(password2Txt.getText()),emailTxt.getText(),false,false,false,false,true);
+						}
+						catch (NoSuchAlgorithmException e)
+						{
+							e.printStackTrace();
+						}
+						catch (UnsupportedEncodingException e)
+						{
+							e.printStackTrace();
+						}
 					}
-					catch (UnsupportedEncodingException e)
+					else
 					{
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Er bestaat reeds een administrator met deze gebruikersnaam." ,"Fout",JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else
 				{
 					JOptionPane.showMessageDialog(null,"Wachtwoorden komen niet overeen" ,"Fout",JOptionPane.ERROR_MESSAGE);
-					password2Txt.setText("");
 				}
 				
 				d.getBeheerdersEnBurgersUitDatabank();
@@ -381,13 +395,13 @@ public class AdminPanel extends JPanel
 			}
 			else if(verwijderen.isEnabled() == true)
 			{
-				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +m.getBeheerder().getVoornaam().toString()+
+				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +beheerder.getVoornaam().toString()+
 						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 								
 				if(resultaat == JOptionPane.YES_OPTION)
 				{
-					d.deleteBeheerder(m.getBeheerder().getId());			// verwijderen uit databank
-					m.verwijderBeheerder(m.getBeheerder().getId());			// verwijderen uit ArrayList<Beheerder>
+					d.deleteBeheerder(beheerder.getId());			// verwijderen uit databank
+					m.verwijderBeheerder(beheerder.getId());			// verwijderen uit ArrayList<Beheerder>
 					
 					adminModel.remove(adminList.getSelectedIndex());
 					adminList.setSelectedIndex(adminList.getLastVisibleIndex());
@@ -435,52 +449,65 @@ public class AdminPanel extends JPanel
 		@Override
 		public void mouseExited(MouseEvent arg0) {}
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			
-			m.getBeheerder().setVoornaam(naamTxt.getText());
-			/*
-			 * Beetje smerig opgelost: Voor veiligheid gaan we MD5 niet terug naar String converteren ( wat denk ik zelfs niet mogelijk is)
-			 * krijgt het password1Txt een defaultweergave van "wachtwoord" Bij het bewerken wordt er dan eerst gekeken of het textfield zijn 
-			 * waarde veranderd is? Als het textfield nog steeds de waarde "wachtwoord" bevat gaat hij niets doen en dus ook het wachtwoord 
-			 * van de Beheerder(admin) NIET veranderen. Is het wel veranderd gaat hij het wachtwoord wel veranderen en encrypteren.
-			 */
-			if(!password1Txt.getText().equals("wachtwoord"))
+		public void mousePressed(MouseEvent e)
+		{
+			boolean dubbel = false;
+			for (Beheerder b: m.getBeheerders())
 			{
-				m.getBeheerder().setWachtwoord(password1Txt.getText());
+				if (b.getNaam().equalsIgnoreCase(naamTxt.getText()))
+					dubbel = true;
 			}
 			
-			
-			m.getBeheerder().setEmail(emailTxt.getText());
-			
-			try
+			if (!dubbel)
 			{
-				d.updateBeheerdersDatabank(m.getBeheerder());
+				beheerder.setVoornaam(naamTxt.getText());
+				beheerder.setEmail(emailTxt.getText());
+				
+				if(!password1Txt.getText().equals("wachtwoord"))
+				{
+					if (!password1Txt.getText().equals(beheerder.getWachtwoord()))
+						try {
+							beheerder.setWachtwoord(Login.convert(password1Txt.getText()));
+						} catch (NoSuchAlgorithmException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (UnsupportedEncodingException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+				}
+				
+				try {
+					d.updateBeheerdersDatabank(beheerder);
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				adminModel.removeAllElements();
+				
+				for(Beheerder b : m.getBeheerders())
+				{
+					if(b.isAdmin()==true)
+						adminModel.addElement(b.getVoornaam());
+				}
+				adminList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
+				
+				naamTxt.setEditable(false);
+				password1Txt.setEditable(false);
+				emailTxt.setEditable(false);
+				verwijderen.setVisible(true);
+				
+				bewerken.setVisible(true);
+				bewerkenOpslaan.setVisible(false);
 			}
-			catch (NoSuchAlgorithmException e)
+			else
 			{
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null,"Er bestaat reeds een administrator met deze gebruikersnaam." ,"Fout",JOptionPane.ERROR_MESSAGE);
 			}
-			catch (UnsupportedEncodingException e)
-			{
-				e.printStackTrace();
-			}
-			
-			adminModel.removeAllElements();
-			
-			for(Beheerder b : m.getBeheerders())
-			{
-				if(b.isAdmin()==true)
-					adminModel.addElement(b.getVoornaam());
-			}
-			adminList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
-			
-			naamTxt.setEditable(false);
-			password1Txt.setEditable(false);
-			emailTxt.setEditable(false);
-			verwijderen.setVisible(true);
-			
-			bewerken.setVisible(true);
-			bewerkenOpslaan.setVisible(false);
 		}
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}		
@@ -554,6 +581,6 @@ public class AdminPanel extends JPanel
 		{
 			maxChars = m;
 		}
-}
+	}
 
 }

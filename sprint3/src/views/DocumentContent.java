@@ -27,15 +27,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.PlainDocument;
 
 import controllers.Databank;
 import controllers.DocumentController;
 import model.DocumentCMS;
 import model.Model;
+import guiElementen.JTextFieldLimit;
 
 /**De linkerkant van DocumentView. Toont alle details van een document en haar erfgoed. Geeft ook de
  * mogelijkheid om het document te bewerken of verwijderen */
@@ -398,26 +396,3 @@ public class DocumentContent extends JPanel
 		
 	}
 }
-
-
-class JTextFieldLimit extends PlainDocument {
-	  private int limit;
-	  JTextFieldLimit(int limit) {
-	    super();
-	    this.limit = limit;
-	  }
-
-	  JTextFieldLimit(int limit, boolean upper) {
-	    super();
-	    this.limit = limit;
-	  }
-
-	  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
-	    if (str == null)
-	      return;
-
-	    if ((getLength() + str.length()) <= limit) {
-	      super.insertString(offset, str, attr);
-	    }
-	  }
-	}

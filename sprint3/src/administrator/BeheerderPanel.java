@@ -26,6 +26,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
+import administrator.AdminPanel.MaxLengthTextDocument;
 
 import sun.security.jgss.LoginConfigImpl;
 import controllers.Databank;
@@ -67,10 +72,13 @@ public class BeheerderPanel extends JPanel
 		
 		naamTxt.setEditable(false);
 		naamTxt.setColumns(17);
+		naamTxt.setDocument(new JTextFieldLimit(20));
 		achternaamTxt.setEditable(false);
 		achternaamTxt.setColumns(17);
+		achternaamTxt.setDocument(new JTextFieldLimit(20));
 		emailTxt.setEditable(false);
 		emailTxt.setColumns(17);
+		emailTxt.setDocument(new JTextFieldLimit(60));
 		
 		rechtenPlus = new JLabel("Rechten");
 		rechtenPlus.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
@@ -141,6 +149,7 @@ public class BeheerderPanel extends JPanel
 		beheerderScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		beheerderList.addListSelectionListener(new ListListener());
 		beheerderList.setSelectedIndex(0);
+		m.setBeheerder(beheerderList.getSelectedValue().toString());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);		
@@ -316,55 +325,69 @@ public class BeheerderPanel extends JPanel
 				JOptionPane.showMessageDialog(null,"Alle velden moeten ingevuld zijn!" ,"Velden zijn leeg",JOptionPane.ERROR_MESSAGE);
 			else
 			{
-				String wachtwoord = WachtwoordGenerator.randomstring();
-				
-				int id = 0;
-				try
-				{
-					id = d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),Login.convert(wachtwoord),emailTxt.getText(),true,true,true,true,false);
-				}
-				catch (NoSuchAlgorithmException e)
-				{
-					e.printStackTrace();
-				}
-				catch (UnsupportedEncodingException e)
-				{
-					e.printStackTrace();
-				}
-				d.getBeheerdersEnBurgersUitDatabank();
-				
-				//mail sturen
-				Beheerder beheerder = null;
+				boolean dubbel = false;
 				for (Beheerder b: m.getBeheerders())
 				{
-					if (b.getId() == id)
-						beheerder = b;
+					if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()))
+						dubbel = true;
 				}
-				if (beheerder!=null)
+				
+				if (!dubbel)
 				{
+					String wachtwoord = WachtwoordGenerator.randomstring();
 					
-					SoortMail smail = new NieuweBeheerderMail(beheerder, wachtwoord);
-					MailThuis mail = new MailThuis(beheerder.getEmail(), "Nieuw wachtwoord", smail ,m);
-					ExecutorService ex = Executors.newFixedThreadPool(1);; 
-					ex.execute(mail);
-				}				
-				JOptionPane.showMessageDialog(null, "De beheerder zal op het opgegeven emailadres een mail krijgen waarin het wachtwoord te vinden is.");
-				
-				naamTxt.setText("");
-				achternaamTxt.setText("");
-				emailTxt.setText("");
-								
-				beheerderModel.removeAllElements();
-				for(Beheerder b : m.getBeheerders())
+					int id = 0;
+					try
+					{
+						id = d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),Login.convert(wachtwoord),emailTxt.getText(),true,true,true,true,false);
+					}
+					catch (NoSuchAlgorithmException e)
+					{
+						e.printStackTrace();
+					}
+					catch (UnsupportedEncodingException e)
+					{
+						e.printStackTrace();
+					}
+					d.getBeheerdersEnBurgersUitDatabank();
+					
+					//mail sturen
+					Beheerder beheerder = null;
+					for (Beheerder b: m.getBeheerders())
+					{
+						if (b.getId() == id)
+							beheerder = b;
+					}
+					if (beheerder!=null)
+					{
+						
+						SoortMail smail = new NieuweBeheerderMail(beheerder, wachtwoord);
+						MailThuis mail = new MailThuis(beheerder.getEmail(), "Nieuwe beheerder", smail ,m);
+						ExecutorService ex = Executors.newFixedThreadPool(1);; 
+						ex.execute(mail);
+					}				
+					JOptionPane.showMessageDialog(null, "De beheerder zal op het opgegeven emailadres een mail krijgen waarin het wachtwoord te vinden is.");
+					
+					naamTxt.setText("");
+					achternaamTxt.setText("");
+					emailTxt.setText("");
+									
+					beheerderModel.removeAllElements();
+					for(Beheerder b : m.getBeheerders())
+					{
+						if(b.isAdmin()==false)
+							beheerderModel.addElement(b.getVoornaam());
+					}
+					
+					beheerderList.setSelectedIndex(beheerderList.getLastVisibleIndex());
+					rechtenPlus.setVisible(true);
+				}
+				else
 				{
-					if(b.isAdmin()==false)
-						beheerderModel.addElement(b.getVoornaam());
+					JOptionPane.showMessageDialog(null,"Er bestaat reeds een beheerder met deze gebruikersnaam." ,"Fout",JOptionPane.ERROR_MESSAGE);
 				}
 				
-				beheerderList.setSelectedIndex(beheerderList.getLastVisibleIndex());
 			}
-			
-			rechtenPlus.setVisible(true);
 				
 		}
 		@Override
@@ -411,43 +434,56 @@ public class BeheerderPanel extends JPanel
 		@Override
 		public void mouseExited(MouseEvent arg0) {}
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			
-			m.getBeheerder().setVoornaam(naamTxt.getText());
-			m.getBeheerder().setAchternaam(achternaamTxt.getText());
-			m.getBeheerder().setEmail(emailTxt.getText());
-			m.getBeheerder().setKanBeoordelen(beoordelenCb.isSelected());
-			m.getBeheerder().setKanToevoegen(toevoegenCb.isSelected());
-			m.getBeheerder().setKanVerwijderen(verwijderenCb.isSelected());
-			m.getBeheerder().setKanWijzigen(wijzigenCb.isSelected());
-			
-			try {
-				d.updateBeheerdersDatabank(m.getBeheerder());
-			} catch (NoSuchAlgorithmException e) {e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {e.printStackTrace();
-			}
-			
-			beheerderModel.removeAllElements();
-			
-			for(Beheerder b : m.getBeheerders())
+		public void mousePressed(MouseEvent arg0)
+		{
+			boolean dubbel = false;
+			for (Beheerder b: m.getBeheerders())
 			{
-				if(b.isAdmin()==false)
-					beheerderModel.addElement(b.getVoornaam());
+				if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()) && b.getId()!=m.getBeheerder().getId())
+					dubbel = true;
 			}
-			beheerderList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
 			
-			naamTxt.setEditable(false);
-			achternaamTxt.setEditable(false);
-			emailTxt.setEditable(false);
-			
-			wijzigenCb.setEnabled(false);
-			toevoegenCb.setEnabled(false);
-			verwijderenCb.setEnabled(false);
-			beoordelenCb.setEnabled(false);
-			
-			bewerken.setVisible(true);
-			bewerkenOpslaan.setVisible(false);
-			
+			if (!dubbel)
+			{
+				m.getBeheerder().setVoornaam(naamTxt.getText());
+				m.getBeheerder().setAchternaam(achternaamTxt.getText());
+				m.getBeheerder().setEmail(emailTxt.getText());
+				m.getBeheerder().setKanBeoordelen(beoordelenCb.isSelected());
+				m.getBeheerder().setKanToevoegen(toevoegenCb.isSelected());
+				m.getBeheerder().setKanVerwijderen(verwijderenCb.isSelected());
+				m.getBeheerder().setKanWijzigen(wijzigenCb.isSelected());
+				
+				try {
+					d.updateBeheerdersDatabank(m.getBeheerder());
+				} catch (NoSuchAlgorithmException e) {e.printStackTrace();
+				} catch (UnsupportedEncodingException e) {e.printStackTrace();
+				}
+				
+				beheerderModel.removeAllElements();
+				
+				for(Beheerder b : m.getBeheerders())
+				{
+					if(b.isAdmin()==false)
+						beheerderModel.addElement(b.getVoornaam());
+				}
+				beheerderList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
+				
+				naamTxt.setEditable(false);
+				achternaamTxt.setEditable(false);
+				emailTxt.setEditable(false);
+				
+				wijzigenCb.setEnabled(false);
+				toevoegenCb.setEnabled(false);
+				verwijderenCb.setEnabled(false);
+				beoordelenCb.setEnabled(false);
+				
+				bewerken.setVisible(true);
+				bewerkenOpslaan.setVisible(false);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null,"Er bestaat reeds een beheerder met deze gebruikersnaam." ,"Fout",JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}		
@@ -543,5 +579,26 @@ public class BeheerderPanel extends JPanel
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}	
-	}	
+	}
 }
+class JTextFieldLimit extends PlainDocument {
+	  private int limit;
+	  JTextFieldLimit(int limit) {
+	    super();
+	    this.limit = limit;
+	  }
+
+	  JTextFieldLimit(int limit, boolean upper) {
+	    super();
+	    this.limit = limit;
+	  }
+
+	  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+	    if (str == null)
+	      return;
+
+	    if ((getLength() + str.length()) <= limit) {
+	      super.insertString(offset, str, attr);
+	    }
+	  }
+	}

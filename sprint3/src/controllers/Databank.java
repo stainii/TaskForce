@@ -1065,15 +1065,18 @@ public class Databank
 						String actie = rs.getString("Actie");
 						if (actie.equals("Toegevoegd"))
 						{
-							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));							
+							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
+							aantalToegevoegd++;
 						}
 						else if (actie.equals("Verwijderd"))
 						{
 							m.verwijderDocument(id);
+							aantalVerwijderd++;
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
 							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
+							aantalWijzigingen++;
 						}
 						else if (actie.equals("Goedgekeurd"))
 						{
@@ -1084,6 +1087,7 @@ public class Databank
 									d.setStatus("Goedgekeurd");
 								}
 							}
+							aantalWijzigingen++;
 						}
 						else if (actie.equals("Afgekeurd"))
 						{
@@ -1095,6 +1099,7 @@ public class Databank
 									d.setRedenAfwijzing(rs2.getString("RedenAfwijzing"));
 								}
 							}
+							aantalWijzigingen++;
 						}
 							
 					}
@@ -1112,17 +1117,20 @@ public class Databank
 						{
 							m.getErfgoed().add(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
-									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"), m));							
+									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"), m));
+							aantalToegevoegd++;
 						}
 						else if (actie.equals("Verwijderd"))
 						{
 							m.verwijderErfgoed(id);
+							aantalVerwijderd++;
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
 							m.bewerkErfgoed(new Erfgoed(rs2.getInt("ErfgoedId"),rs2.getString("Naam"), rs2.getString("Postcode"), rs2.getString("Deelgemeente"), rs2.getString("Straat"),
 									rs2.getString("Huisnr"), rs2.getString("Omschrijving"), rs2.getString("TypeErfgoed"), rs2.getString("Kenmerken"), rs2.getString("Geschiedenis"),
 									rs2.getString("NuttigeInfo"), rs2.getString("Link"), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),m));
+							aantalWijzigingen++;
 						}
 					}
 				}

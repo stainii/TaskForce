@@ -40,10 +40,10 @@ public class MailThuis implements Runnable
 		}
 		else
 		{
-			host = "smtp.gmail.com";
-			port = 587;
-			user = "task.forceb2@gmail.com";
-			pwd = "azertyb2";
+			host = "mail-out.hogent.be"/*"smtp.gmail.com"*/;
+			port = 25/*587*/;
+			user = "096120sh"/*"task.forceb2@gmail.com"*/;
+			pwd = "fbn44f9"/*"azertyb2"*/;
 		}
 		
 	}

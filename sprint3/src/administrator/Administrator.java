@@ -104,7 +104,7 @@ public class Administrator extends JPanel
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		welkomPnl.add(new JLabelFactory().getTitel("Welkom " + getGebruiker()+ "                                   "),c);
+		welkomPnl.add(new JLabelFactory().getTitel("Welkom administrator!" /*+ getGebruiker()*/+ "                                   "),c);
 		
 		c.gridx = 2;
 		c.gridy = 1;
