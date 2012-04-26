@@ -8,27 +8,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import guiElementen.AutoaanvullendeCombobox;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ComboBoxUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.MaskFormatter;
 
-import speeltuin.AutoaanvullendeCombobox;
+import sun.java2d.loops.MaskFill;
+
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -49,8 +61,8 @@ public class ErfgoedContent extends JPanel
 	@SuppressWarnings("rawtypes")
 	private JComboBox type;
 	private String[] types;
-	//private MooiTextField postcode;
 	private AutoaanvullendeCombobox deelgemeente,postcode;
+	private JTextField postcodeTxt,deelgemeenteTxt;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -166,21 +178,22 @@ public class ErfgoedContent extends JPanel
 			if(!post.contains(g.getPostcode()))
 				post.add(g.getPostcode());	
 		}
+	
+		postcode = new AutoaanvullendeCombobox(post,"Integer", "Postcode",new JFormattedTextField());
+		postcode.setSelectedItem(erfgoed.getPostcode());
+		postcode.setEnabled(false);
+		postcode.setVisible(false);
 		
-		final ArrayList<String> gemeente = new ArrayList<String>();
-		for(Gemeenten g : m.getGemeenten())
-		{
-			gemeente.add(g.getGemeente());
-		}
-		postcode = new AutoaanvullendeCombobox(post,"Integer");
-		//postcode = new MooiTextField(erfgoed.getPostcode(),"Postcode");
-		//tekstvakken.add(postcode);
-		//postcode.setColumns(4);
-		//postcode.setEditable(false);
-		postcode.setBorder(null);
-		//postcode.setOpaque(false);
-		//postcode.setForeground(Color.WHITE);
+		postcodeTxt = new JTextField();
+		postcodeTxt.setEditable(false);
+		postcodeTxt.setBorder(null);
+		postcodeTxt.setOpaque(false);
+		postcodeTxt.setForeground(Color.white);
+		postcodeTxt.setVisible(true);
+		postcodeTxt.setText(erfgoed.getPostcode());
+		
 		add(postcode,c);
+		add(postcodeTxt,c);
 		
 		postcode.addActionListener(new ActionListener() {
 			
@@ -191,51 +204,52 @@ public class ErfgoedContent extends JPanel
 				{
 					if(postcode.getSelectedItem() == null)
 					{
+						DefaultComboBoxModel m = new DefaultComboBoxModel();
+						for(String s : model.getNaamGemeenten())
+						{
+							m.addElement(s);
+						}
+						deelgemeente.setModel(m);
 						deelgemeente.setSelectedItem("");
 						return;
 					}
 					else if(postcode.getSelectedItem().equals(g.getPostcode()))
 						if(postcode.getSelectedItem().equals(9550))
 						{
+							DefaultComboBoxModel m = new DefaultComboBoxModel();
+							for(String s : model.getNaamGemeentenZonderAndereGemeenten(Integer.parseInt(postcode.getSelectedItem().toString())))
+							{
+								m.addElement(s);
+							}
+							
+							deelgemeente.setModel(m);
 							deelgemeente.setSelectedItem("-- Kies een gemeente --");
 						}
 						else
 							deelgemeente.setSelectedItem(g.getGemeente());
 				}
 			}
-		});
-		
+		});		
 		
 		c.gridx=2;
 		c.gridwidth = 5;
 				
-		deelgemeente = new AutoaanvullendeCombobox(gemeente,"String");
-		//tekstvakken.add(deelgemeente);
-		//deelgemeente.setColumns(25);
-	//	deelgemeente.setEditable(false);
-		deelgemeente.setBorder(null);
-	//	deelgemeente.setOpaque(false);
-	//	deelgemeente.setForeground(Color.WHITE);
-		add(deelgemeente,c);
+		deelgemeente = new AutoaanvullendeCombobox(model.getNaamGemeenten(),"String", "Deelgemeente",new JTextField());
+		deelgemeente.setSelectedItem(erfgoed.getDeelgemeente());
+		deelgemeente.setEnabled(false);
+		deelgemeente.setVisible(false);
 		
-		/*deelgemeente.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for(Gemeenten g : m.getGemeenten())
-				{
-					if(deelgemeente.getSelectedItem() == null)
-					{
-						return;
-					}
-					else if(deelgemeente.getSelectedItem().equals(g.getGemeente()))
-					{
-						deelgemeente.setSelectedItem(g.getGemeente());
-						postcode.setSelectedItem(g.getPostcode());
-					}
-						
-				}
-			}
-		});*/
+		deelgemeenteTxt = new JTextField();
+		deelgemeenteTxt.setEditable(false);
+		deelgemeenteTxt.setBorder(null);
+		deelgemeenteTxt.setOpaque(false);
+		deelgemeenteTxt.setForeground(Color.white);
+		deelgemeenteTxt.setVisible(true);
+		deelgemeenteTxt.setText(erfgoed.getDeelgemeente());
+
+		add(deelgemeente,c);
+		add(deelgemeenteTxt,c);
+		
 		
 		c.gridx=1;
 		c.gridy=7;
@@ -380,10 +394,16 @@ public class ErfgoedContent extends JPanel
 	
 	public String[] bewerken()
 	{
-		String[] s = new String[tekstvakken.size()+1];
+		String[] s = new String[tekstvakken.size()+3];
 		
 		if (tekstvakken.get(0).isEditable())
 		{
+			postcode.setVisible(false);
+			postcodeTxt.setVisible(true);
+			
+			deelgemeente.setVisible(false);
+			deelgemeenteTxt.setVisible(true);
+			
 			if (tekstvakken.get(0).getText().equals("") && tekstvakken.get(4).getText().equals(""))
 			{
 				JOptionPane.showMessageDialog(null,"Gelieve een titel en een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
@@ -407,7 +427,10 @@ public class ErfgoedContent extends JPanel
 				tekstvakken.get(i).setForeground(Color.WHITE);
 			}
 			s[tekstvakken.size()] = type.getSelectedItem().toString();
+			s[tekstvakken.size()+1] = postcode.getSelectedItem().toString();
+			s[tekstvakken.size()+2] = deelgemeente.getSelectedItem().toString();
 			type.setEnabled(false);
+			
 		}
 		else
 		{
@@ -418,6 +441,12 @@ public class ErfgoedContent extends JPanel
 				tekstvakken.get(i).setForeground(Color.BLACK);
 			}
 			type.setEnabled(true);
+			postcode.setEnabled(true);
+			postcode.setVisible(true);
+			postcodeTxt.setVisible(false);
+			deelgemeente.setEnabled(true);
+			deelgemeente.setVisible(true);
+			deelgemeenteTxt.setVisible(false);
 		}
 		
 		return s;

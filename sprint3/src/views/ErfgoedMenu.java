@@ -263,13 +263,13 @@ public class ErfgoedMenu extends JPanel
 							controller.getVoorlopigErfgoed().setNaam(s[0]);
 							controller.getVoorlopigErfgoed().setStraat(s[1]);
 							controller.getVoorlopigErfgoed().setHuisnr(s[2]);
-							controller.getVoorlopigErfgoed().setPostcode(s[3]);
-							controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
-							controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
-							controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
-							controller.getVoorlopigErfgoed().setKenmerken(s[7]);
-							controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
-							controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
+							controller.getVoorlopigErfgoed().setOmschrijving(s[3]);
+							controller.getVoorlopigErfgoed().setNuttigeInfo(s[4]);
+							controller.getVoorlopigErfgoed().setKenmerken(s[5]);
+							controller.getVoorlopigErfgoed().setGeschiedenis(s[6]);
+							controller.getVoorlopigErfgoed().setTypeErfgoed(s[7]);
+							controller.getVoorlopigErfgoed().setPostcode(s[8]);
+							controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 							controller.update();
 							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 						}
@@ -311,13 +311,13 @@ public class ErfgoedMenu extends JPanel
 						controller.getVoorlopigErfgoed().setNaam(s[0]);
 						controller.getVoorlopigErfgoed().setStraat(s[1]);
 						controller.getVoorlopigErfgoed().setHuisnr(s[2]);
-						controller.getVoorlopigErfgoed().setPostcode(s[3]);
-						controller.getVoorlopigErfgoed().setDeelgemeente(s[4]);
-						controller.getVoorlopigErfgoed().setOmschrijving(s[5]);
-						controller.getVoorlopigErfgoed().setNuttigeInfo(s[6]);
-						controller.getVoorlopigErfgoed().setKenmerken(s[7]);
-						controller.getVoorlopigErfgoed().setGeschiedenis(s[8]);
-						controller.getVoorlopigErfgoed().setTypeErfgoed(s[9]);
+						controller.getVoorlopigErfgoed().setOmschrijving(s[3]);
+						controller.getVoorlopigErfgoed().setNuttigeInfo(s[4]);
+						controller.getVoorlopigErfgoed().setKenmerken(s[5]);
+						controller.getVoorlopigErfgoed().setGeschiedenis(s[6]);
+						controller.getVoorlopigErfgoed().setTypeErfgoed(s[7]);
+						controller.getVoorlopigErfgoed().setPostcode(s[8]);
+						controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 						controller.toevoegen();
 						
 						hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd));

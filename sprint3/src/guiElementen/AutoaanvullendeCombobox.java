@@ -1,32 +1,71 @@
-package speeltuin;
+package guiElementen;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 
 @SuppressWarnings("serial")
 public class AutoaanvullendeCombobox<T> extends JComboBox  
 {
-	private JTextField txt = new JTextField(); 
+	private JTextComponent txt; 
 	private ArrayList<T> lijst;
 	private boolean hide_flag;
 	private String object;
+	private String defaultTekst;
+	private Font font;
 	
-	public AutoaanvullendeCombobox(ArrayList<T> l, String ob)
+	@Override
+	protected void paintComponent(Graphics g)
 	{
+		super.paintComponent(g);
+		if (((JTextComponent) txt).getText().equals("") && isEditable())
+		{
+			
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setFont(font);
+			g2.setColor(new Color(180,180,180));
+			g2.drawString(defaultTekst, 2, font.getSize());
+		}
+		else
+		{
+			setBackground(Color.WHITE);
+		}
+	}
+	
+	public AutoaanvullendeCombobox(ArrayList<T> l, String ob, String defaultTekst,JTextComponent soort)
+	{
+		this.defaultTekst = defaultTekst;
 		this.lijst = l;
 		this.object = ob;
+		this.font = getFont();
 		setEditable(true);
+		
+		txt = soort; 
+		
 		txt = (JTextField) this.getEditor().getEditorComponent();
 		
 		txt.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
+				
+				if(object.equals("Integer"))
+				{
+
+				}
 
 				EventQueue.invokeLater(new Runnable() 
 				{
@@ -101,6 +140,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		}
 		else
 			this.setPrototypeDisplayValue("XXXXXXXXXXXXXXXXXXXXX");
+		
 	}
 	
 	public JComboBox getAutoCombo()

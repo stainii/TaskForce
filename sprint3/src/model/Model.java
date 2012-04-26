@@ -342,7 +342,29 @@ public class Model
 			}
 		}
 	}
+	public ArrayList<String> getNaamGemeenten()
+	{
+		ArrayList<String> gemeente = new ArrayList<String>();
+		for(Gemeenten g : getGemeenten())
+		{
+			gemeente.add(g.getGemeente());
+		}
+		notifyListeners();
+		return gemeente;
+	}
 	
+	public ArrayList<String> getNaamGemeentenZonderAndereGemeenten(int postcode)
+	{
+		ArrayList<String> gemeente = new ArrayList<String>();
+		for(Gemeenten g : getGemeenten())
+		{
+			if(g.getPostcode() == postcode)
+				gemeente.add(g.getGemeente());
+		}
+		
+		return gemeente;
+		
+	}
 	
 	//Listeners
 	public void addListener(ChangeListener l)
