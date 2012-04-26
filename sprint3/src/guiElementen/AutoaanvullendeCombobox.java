@@ -5,8 +5,15 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.InputVerifier;
@@ -16,6 +23,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.MaskFormatter;
 
 @SuppressWarnings("serial")
 public class AutoaanvullendeCombobox<T> extends JComboBox  
@@ -33,7 +41,6 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		super.paintComponent(g);
 		if (((JTextComponent) txt).getText().equals("") && isEditable())
 		{
-			
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setFont(font);
 			g2.setColor(new Color(180,180,180));
@@ -51,12 +58,43 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		this.lijst = l;
 		this.object = ob;
 		this.font = getFont();
+		
 		setEditable(true);
 		
 		txt = soort; 
+		txt = (JTextField)this.getEditor().getEditorComponent();
 		
-		txt = (JTextField) this.getEditor().getEditorComponent();
+
+			txt.addMouseListener(new MouseAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					if(txt.getText().equals("Postcode"))
+						txt.setText("");
+					if(txt.getText().equals("Deelgemeente"))
+						txt.setText("");
+				}
+			});
+			
+			txt.addFocusListener(new FocusAdapter() {
+				
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					if(object.equals("Integer"))
+					{
+						if(txt.getText().equals(""))
+							txt.setText("Postcode");
+					}
+					if(object.equals("String"))
+					{
+						if(txt.getText().equals(""))
+							txt.setText("Deelgemeente");
+					}
+					
+				}
+			});
 		
+
 		txt.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -64,7 +102,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 				
 				if(object.equals("Integer"))
 				{
-
+					
 				}
 
 				EventQueue.invokeLater(new Runnable() 

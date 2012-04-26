@@ -11,6 +11,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -192,6 +194,10 @@ public class ErfgoedContent extends JPanel
 		postcode.setSelectedItem(erfgoed.getPostcode());
 		postcode.setEnabled(false);
 		postcode.setVisible(false);
+		String p = "Postcode";
+		
+		if(postcode.getSelectedItem().equals(""))
+		postcode.getEditor().setItem(p);
 		
 		postcodeTxt = new JTextField();
 		postcodeTxt.setEditable(false);
@@ -247,6 +253,8 @@ public class ErfgoedContent extends JPanel
 		deelgemeente.setSelectedItem(erfgoed.getDeelgemeente());
 		deelgemeente.setEnabled(false);
 		deelgemeente.setVisible(false);
+		if(deelgemeente.getSelectedItem().equals(""))
+			deelgemeente.getEditor().setItem("Deelgemeente");
 		
 		deelgemeenteTxt = new JTextField();
 		deelgemeenteTxt.setEditable(false);
