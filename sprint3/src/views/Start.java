@@ -260,6 +260,7 @@ class Laden extends SwingWorker<Void,Void>
 	private boolean sysTrayAlIngeladen;
 	private Model m;
 	private Databank d;
+	private Hoofd hoofd;
 	
 	public Laden(JFrame f, JLabel laden, String beheerderNaam, boolean sysTrayAlIngeladen, Model model , Databank data)
 	{
@@ -284,7 +285,8 @@ class Laden extends SwingWorker<Void,Void>
 		laden.setText("Bezig met laden interface...");
 		JFrame f = new JFrame();
 		f.setTitle("Herzele Erfgoed CMS");
-		f.add(new Hoofd(m, d, f));
+		hoofd = new Hoofd(m, d, f);
+		f.add(hoofd);
 		f.setSize(new Dimension(1005,720));
 		f.setMinimumSize(new Dimension(1005,700));
 		f.setLocationRelativeTo(null);
@@ -298,7 +300,21 @@ class Laden extends SwingWorker<Void,Void>
 				@Override
 				public void windowClosing(WindowEvent e)
 				{
+					hoofd.quit();	//video's uitzetten
 					systemTray.zegHallo();	//boodschap weergeven dat de system tray nog werkt
+					((JFrame)(e.getSource())).dispose();	//het frame vernietigen
+					
+				}
+			});
+		}
+		else
+		{
+			f.addWindowListener(new WindowAdapter()
+			{
+				@Override
+				public void windowClosing(WindowEvent e)
+				{
+					hoofd.quit();	//video's uitzetten
 					((JFrame)(e.getSource())).dispose();	//het frame vernietigen
 				}
 			});

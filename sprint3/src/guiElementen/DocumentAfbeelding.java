@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -12,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
 import controllers.Databank;
 import controllers.DocumentController;
@@ -130,6 +133,29 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 				{
 					//chooser openen
 					JFileChooser chooser = new JFileChooser();
+					chooser.addChoosableFileFilter(new FileFilter() {
+						
+						@Override
+						public String getDescription()
+						{
+							return "Afbeeldingen (.jpg, .gif, .png)";
+						}
+						
+						@Override
+						public boolean accept(File f)
+						{
+							String[] okFileExtensions = {".jpg", ".gif", ".png"};
+							for (String extension : okFileExtensions)
+						    {
+						      if (f.getName().toLowerCase().endsWith(extension))
+						      {
+						        return true;
+						      }
+						    }
+							return false;
+						}
+					});
+					
 					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
 						//afbeelding lezen en in voorlopig document steken
