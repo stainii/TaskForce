@@ -63,14 +63,14 @@ public class JLabelFactory
 	public JLabel getPaginaNummer(int s)
 	{
 		JLabel label = new JLabel(s + "");
-		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 14));
+		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 16));
 		label.setForeground(Color.GRAY);
 		return label;
 	}
 	public JLabel getPaginaNummerBlank()
 	{
 		JLabel label = new JLabel("...");
-		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 14));
+		label.setFont(new Font("Comic Sans", Font.CENTER_BASELINE, 16));
 		label.setForeground(Color.GRAY);
 		return label;
 	}

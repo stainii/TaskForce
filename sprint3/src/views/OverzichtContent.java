@@ -285,7 +285,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		scrollPanel = new JPanel();
 		scrollPanel.setLayout(new FlowLayout());
 		scrollPanel.setOpaque(false);
-		scrollPanel.setPreferredSize(new Dimension(0,22));
+		scrollPanel.setPreferredSize(new Dimension(0,25));
 		add(scrollPanel, BorderLayout.SOUTH);
 			
 		if(model.getBeheerder().getView().equals(""))		//defaultwaarde wanneer er geen instellingen zijn
@@ -696,7 +696,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	
 	public int bepaalAantalOpScherm()
 	{
-		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)((this.getHeight()-100) / 150)) : (int) (this.getHeight() / 50) - 1);
+		return (view.equals("TegelView") ? (int) ( (double)(this.getWidth() / 300) * (double)((this.getHeight()-50) / 150)) : (int) (this.getHeight() / 50) - 1);
 	}
 
 	@Override

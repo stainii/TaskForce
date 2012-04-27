@@ -3,6 +3,8 @@ package guiElementen;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -69,13 +71,14 @@ public class RedenAfwijzing extends JPanel
 		});
 		
 		defaultRedenenCbx.setMaximumRowCount(3);
-		defaultRedenenCbx.addItemListener(new ItemListener()
+		defaultRedenenCbx.addActionListener(new ActionListener()
 		{	
 			@Override
-			public void itemStateChanged(ItemEvent e)
-			{
-				if (((JComboBox)(e.getSource())).getSelectedIndex() !=0) 
-					redenTxt.setText(((JComboBox)(e.getSource())).getSelectedItem().toString());
+			public void actionPerformed(ActionEvent e) {
+				if (defaultRedenenCbx.getSelectedIndex() !=-1)
+				{
+					redenTxt.setText(defaultRedenenCbx.getSelectedItem().toString());
+				}
 			}
 		});
 		
