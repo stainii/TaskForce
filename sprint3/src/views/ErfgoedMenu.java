@@ -259,10 +259,7 @@ public class ErfgoedMenu extends JPanel
 							controller.getVoorlopigErfgoed().setKenmerken(s[5]);
 							controller.getVoorlopigErfgoed().setGeschiedenis(s[6]);
 							controller.getVoorlopigErfgoed().setTypeErfgoed(s[7]);
-							controller.getVoorlopigErfgoed().setPostcode(s[8]);
-							
-			System.out.println(s[8].toString()+" " + s[9].toString());
-							
+							controller.getVoorlopigErfgoed().setPostcode(s[8]);							
 							controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 							controller.update();
 							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));

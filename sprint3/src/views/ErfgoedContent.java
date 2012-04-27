@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -44,7 +45,8 @@ public class ErfgoedContent extends JPanel
 	private String[] types;
 	@SuppressWarnings("rawtypes")
 	private AutoaanvullendeCombobox deelgemeente,postcode;
-	private JTextField postcodeTxt,deelgemeenteTxt;
+	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
+	private MooiTextField straat;
 	private JPanel background;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -56,7 +58,8 @@ public class ErfgoedContent extends JPanel
 		this.erfgoed = e;
 		
 		background = new JPanel();
-		background.setBackground(new Color(100,100,100));
+		background.setBackground(Color.black);
+		background.setOpaque(false);
 		background.setLayout(new GridBagLayout());
 		tekstvakken = new ArrayList<JTextComponent>();
 				
@@ -98,10 +101,19 @@ public class ErfgoedContent extends JPanel
 		titel.setColumns(20);
 		background.add(titel,c);
 		
+		//naam eigenaar
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridwidth = 6;
+		background.add(new JLabelFactory().getItalic(erfgoed.getBurger()!=null? "Geplaatst door: "+erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam(): "Geplaatst door: "+erfgoed.getBeheerder().getNaam()),c);
+				
+		
+		// type
 		c.gridx=1;
-		c.gridy=2;
+		c.gridy=3;
 		c.gridwidth=2;
 		type = new JComboBox(types);
+		type.setVisible(false);
 		type.setEnabled(false);
 		UIManager.put("ComboBox.disabledForeground", Color.BLACK);	//maakt de tekst van de JComboBox zwart.
 		
@@ -114,30 +126,34 @@ public class ErfgoedContent extends JPanel
 			}
 		}
 		
-		background.add(type,c);
+		typeTxt = new JTextField();
+		typeTxt.setEditable(false);
+		typeTxt.setBorder(null);
+		typeTxt.setOpaque(false);
+		typeTxt.setForeground(Color.white);
+		typeTxt.setVisible(true);
+		typeTxt.setText("Type: " +erfgoed.getTypeErfgoed());
 		
-		//naam eigenaar
-		c.gridx = 3;
-		c.gridy = 2;
-		c.gridwidth = 4;
-		background.add(new JLabelFactory().getNormaleTekst(erfgoed.getBurger()!=null?erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam()),c);
+		background.add(type,c);
+		background.add(typeTxt,c);
+		
 		
 		//beetje ruimte
 		c.gridx=1;
-		c.gridy=3;
+		c.gridy=4;
 		c.gridwidth=6;
 		background.add(new JLabel("   "),c);
 		
 		//locatie
 		c.gridx=1;
-		c.gridy=4;
+		c.gridy=5;
 		c.gridwidth=6;
 		background.add(new JLabelFactory().getMenuTitel("Locatie: "),c);
 		
 		c.gridx=1;
-		c.gridy=5;
+		c.gridy=6;
 		c.gridwidth=3;
-		MooiTextField straat = new MooiTextField("","Straat");
+		straat = new MooiTextField("","Straat");
 		straat.setDocument(new JTextFieldLimit(50));
 		straat.setText(erfgoed.getStraat());
 		tekstvakken.add(straat);
@@ -162,7 +178,7 @@ public class ErfgoedContent extends JPanel
 		background.add(huisNr,c);
 		
 		c.gridx=1;
-		c.gridy=6;
+		c.gridy=7;
 		c.gridwidth=1;
 		
 		ArrayList<Integer> post = new ArrayList<Integer>();
@@ -251,7 +267,7 @@ public class ErfgoedContent extends JPanel
 		
 		
 		c.gridx=1;
-		c.gridy=7;
+		c.gridy=8;
 		c.gridwidth = 6;
 		MooiTextArea omschrijving = new MooiTextArea(erfgoed.getOmschrijving(),"Omschrijving");
 		tekstvakken.add(omschrijving);
@@ -272,12 +288,12 @@ public class ErfgoedContent extends JPanel
 		
 		//nuttige info
 		c.gridx=1;
-		c.gridy=8;
+		c.gridy=9;
 		c.gridwidth=6;
 		background.add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
 		
 		c.gridx=1;
-		c.gridy=9;
+		c.gridy=10;
 		c.gridwidth = 6;
 		MooiTextArea nuttigeInfo = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
 		tekstvakken.add(nuttigeInfo);
@@ -297,12 +313,12 @@ public class ErfgoedContent extends JPanel
 		
 		//kenmerken
 		c.gridx=1;
-		c.gridy=10;
+		c.gridy=11;
 		c.gridwidth=6;
 		background.add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
 				
 		c.gridx=1;
-		c.gridy=11;
+		c.gridy=12;
 		c.gridwidth = 6;
 		MooiTextArea kenmerken = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
 		tekstvakken.add(kenmerken);
@@ -322,12 +338,12 @@ public class ErfgoedContent extends JPanel
 		
 		//geschiedenis
 		c.gridx=1;
-		c.gridy=12;
+		c.gridy=13;
 		c.gridwidth=6;
 		background.add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
 				
 		c.gridx=1;
-		c.gridy=13;
+		c.gridy=14;
 		c.gridwidth = 6;
 		MooiTextArea geschiedenis = new MooiTextArea(erfgoed.getGeschiedenis(),"Geschiedenis");
 		tekstvakken.add(geschiedenis);
@@ -395,15 +411,22 @@ public class ErfgoedContent extends JPanel
 	{
 		String[] s = new String[tekstvakken.size()+3];
 		
+		postcode.setVisible(false);
+		postcodeTxt.setVisible(true);
+		
+		deelgemeente.setVisible(false);
+		deelgemeenteTxt.setVisible(true);
+		
+		type.setVisible(false);
+		typeTxt.setVisible(true);
+		
 		if (tekstvakken.get(0).isEditable())
 		{
-			postcode.setVisible(false);
-			postcodeTxt.setVisible(true);
+			postcode.setVisible(true);
+			deelgemeente.setVisible(true);
+			type.setVisible(true);
 			
-			deelgemeente.setVisible(false);
-			deelgemeenteTxt.setVisible(true);
-			
-			if (tekstvakken.get(0).getText().equals("") && tekstvakken.get(4).getText().equals(""))
+			if (tekstvakken.get(0).getText().equals("") && deelgemeente.getEditor().getItem().equals(""))
 			{
 				JOptionPane.showMessageDialog(null,"Gelieve een titel en een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
 				return null;
@@ -413,7 +436,13 @@ public class ErfgoedContent extends JPanel
 				JOptionPane.showMessageDialog(null,"Gelieve een titel in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
 				return null;
 			}
-			if (tekstvakken.get(4).getText().equals(""))
+			if(postcode.getEditor().getItem().equals("Post") || postcode.getEditor().getItem().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Gelieve een postcode in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			
+			if (deelgemeente.getEditor().getItem().equals("Deelgemeente") || deelgemeente.getEditor().getItem().equals(""))
 			{
 				JOptionPane.showMessageDialog(null,"Gelieve een deelgemeente in te vullen", "Foute invoer", JOptionPane.ERROR_MESSAGE);
 				return null;
@@ -447,6 +476,10 @@ public class ErfgoedContent extends JPanel
 			deelgemeente.setEnabled(true);
 			deelgemeente.setVisible(true);
 			deelgemeenteTxt.setVisible(false);
+			type.setEnabled(true);
+			type.setVisible(true);
+			typeTxt.setVisible(false);
+			
 		}
 		
 		return s;
