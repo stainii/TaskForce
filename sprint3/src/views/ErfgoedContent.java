@@ -227,6 +227,8 @@ public class ErfgoedContent extends JPanel
 						return;
 					}
 					else if(postcode.getSelectedItem().equals(g.getPostcode()))
+					{
+						
 						if(postcode.getSelectedItem().equals(9550))
 						{
 							DefaultComboBoxModel m = new DefaultComboBoxModel();
@@ -236,10 +238,12 @@ public class ErfgoedContent extends JPanel
 							}
 							
 							deelgemeente.setModel(m);
-							deelgemeente.setSelectedItem("-- Kies een gemeente --");
+							
+							
 						}
 						else
 							deelgemeente.setSelectedItem(g.getGemeente());
+					}
 				}
 			}
 		});		

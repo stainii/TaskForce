@@ -345,6 +345,7 @@ public class Model
 	public ArrayList<String> getNaamGemeenten()
 	{
 		ArrayList<String> gemeente = new ArrayList<String>();
+		gemeente.clear();
 		for(Gemeenten g : getGemeenten())
 		{
 			gemeente.add(g.getGemeente());
@@ -356,6 +357,7 @@ public class Model
 	public ArrayList<String> getNaamGemeentenZonderAndereGemeenten(int postcode)
 	{
 		ArrayList<String> gemeente = new ArrayList<String>();
+		gemeente.clear();
 		for(Gemeenten g : getGemeenten())
 		{
 			if(g.getPostcode() == postcode)
