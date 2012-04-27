@@ -7,6 +7,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 import model.Model;
 
@@ -40,10 +41,10 @@ public class MailThuis implements Runnable
 		}
 		else
 		{
-			host = "mail-out.hogent.be"/*"smtp.gmail.com"*/;
-			port = 25/*587*/;
-			user = "096120sh"/*"task.forceb2@gmail.com"*/;
-			pwd = "fbn44f9"/*"azertyb2"*/;
+			host = "smtp.gmail.com";
+			port = 587;
+			user = "task.forceb2@gmail.com";
+			pwd = "azertyb2";
 		}
 		
 	}
@@ -74,9 +75,13 @@ public class MailThuis implements Runnable
 			trans.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			trans.close();
 		}
-		catch(MessagingException ex)
+		/*catch(MessagingException ex)
 		{
 			throw new RuntimeException(ex);
+		}*/
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "De mailfunctie werkt via de servers van GMail.\nHet lijkt dat deze echter geblokkeerd wordt op het huidig netwerk.\nIn de finale versie zal dit systeem werken met jullie eigen serverinstellingen.", "Fout bij het versturen van een mail", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
