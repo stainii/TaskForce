@@ -6,24 +6,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import guiElementen.AutoaanvullendeCombobox;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
-
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -32,19 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.ComboBoxUI;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.PlainDocument;
-
-import sun.java2d.loops.MaskFill;
-
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -63,11 +40,12 @@ public class ErfgoedContent extends JPanel
 	private Hoofd hoofd;
 	private Erfgoed erfgoed;
 	private ArrayList<JTextComponent> tekstvakken;
-	@SuppressWarnings("rawtypes")
 	private JComboBox type;
 	private String[] types;
+	@SuppressWarnings("rawtypes")
 	private AutoaanvullendeCombobox deelgemeente,postcode;
 	private JTextField postcodeTxt,deelgemeenteTxt;
+	private JPanel background;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -77,6 +55,9 @@ public class ErfgoedContent extends JPanel
 		this.hoofd = h;
 		this.erfgoed = e;
 		
+		background = new JPanel();
+		background.setBackground(new Color(100,100,100));
+		background.setLayout(new GridBagLayout());
 		tekstvakken = new ArrayList<JTextComponent>();
 				
 		types = new String[5];
@@ -90,6 +71,8 @@ public class ErfgoedContent extends JPanel
 		setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
+		
+		add(background);
 		
 		/**LINKERKANT**/
 		//erfgoed titel
@@ -113,7 +96,7 @@ public class ErfgoedContent extends JPanel
 		titel.setForeground(Color.WHITE);
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
 		titel.setColumns(20);
-		add(titel,c);
+		background.add(titel,c);
 		
 		c.gridx=1;
 		c.gridy=2;
@@ -131,25 +114,25 @@ public class ErfgoedContent extends JPanel
 			}
 		}
 		
-		add(type,c);
+		background.add(type,c);
 		
 		//naam eigenaar
 		c.gridx = 3;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		add(new JLabelFactory().getNormaleTekst(erfgoed.getBurger()!=null?erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam()),c);
+		background.add(new JLabelFactory().getNormaleTekst(erfgoed.getBurger()!=null?erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam():erfgoed.getBeheerder().getNaam()),c);
 		
 		//beetje ruimte
 		c.gridx=1;
 		c.gridy=3;
 		c.gridwidth=6;
-		add(new JLabel("   "),c);
+		background.add(new JLabel("   "),c);
 		
 		//locatie
 		c.gridx=1;
 		c.gridy=4;
 		c.gridwidth=6;
-		add(new JLabelFactory().getMenuTitel("Locatie: "),c);
+		background.add(new JLabelFactory().getMenuTitel("Locatie: "),c);
 		
 		c.gridx=1;
 		c.gridy=5;
@@ -163,7 +146,7 @@ public class ErfgoedContent extends JPanel
 		straat.setBorder(null);
 		straat.setOpaque(false);
 		straat.setForeground(Color.WHITE);
-		add(straat,c);
+		background.add(straat,c);
 		
 		c.gridx=4;
 		c.gridwidth=2;
@@ -176,7 +159,7 @@ public class ErfgoedContent extends JPanel
 		huisNr.setBorder(null);
 		huisNr.setOpaque(false);
 		huisNr.setForeground(Color.WHITE);
-		add(huisNr,c);
+		background.add(huisNr,c);
 		
 		c.gridx=1;
 		c.gridy=6;
@@ -190,14 +173,13 @@ public class ErfgoedContent extends JPanel
 				post.add(g.getPostcode());	
 		}
 	
-		postcode = new AutoaanvullendeCombobox(post,"Integer", "Postcode",new JFormattedTextField());
+		postcode = new AutoaanvullendeCombobox(post,"Integer", "Postcode",new JFormattedTextField(),4);
 		postcode.setSelectedItem(erfgoed.getPostcode());
 		postcode.setEnabled(false);
 		postcode.setVisible(false);
-		String p = "Postcode";
 		
 		if(postcode.getSelectedItem().equals(""))
-		postcode.getEditor().setItem(p);
+			postcode.getEditor().setItem("Post");
 		
 		postcodeTxt = new JTextField();
 		postcodeTxt.setEditable(false);
@@ -207,8 +189,8 @@ public class ErfgoedContent extends JPanel
 		postcodeTxt.setVisible(true);
 		postcodeTxt.setText(erfgoed.getPostcode());
 		
-		add(postcode,c);
-		add(postcodeTxt,c);
+		background.add(postcode,c);
+		background.add(postcodeTxt,c);
 		
 		postcode.addActionListener(new ActionListener() {
 			
@@ -249,7 +231,7 @@ public class ErfgoedContent extends JPanel
 		c.gridx=2;
 		c.gridwidth = 5;
 				
-		deelgemeente = new AutoaanvullendeCombobox(model.getNaamGemeenten(),"String", "Deelgemeente",new JTextField());
+		deelgemeente = new AutoaanvullendeCombobox(model.getNaamGemeenten(),"String", "Deelgemeente",new JTextField(),20);
 		deelgemeente.setSelectedItem(erfgoed.getDeelgemeente());
 		deelgemeente.setEnabled(false);
 		deelgemeente.setVisible(false);
@@ -264,8 +246,8 @@ public class ErfgoedContent extends JPanel
 		deelgemeenteTxt.setVisible(true);
 		deelgemeenteTxt.setText(erfgoed.getDeelgemeente());
 
-		add(deelgemeente,c);
-		add(deelgemeenteTxt,c);
+		background.add(deelgemeente,c);
+		background.add(deelgemeenteTxt,c);
 		
 		
 		c.gridx=1;
@@ -285,14 +267,14 @@ public class ErfgoedContent extends JPanel
 		omschrijvingScroll.getViewport().setBorder(null);
 		omschrijvingScroll.setOpaque(false);
 		omschrijvingScroll.getViewport().setOpaque(false);
-		add(omschrijvingScroll,c);
+		background.add(omschrijvingScroll,c);
 		
 		
 		//nuttige info
 		c.gridx=1;
 		c.gridy=8;
 		c.gridwidth=6;
-		add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
+		background.add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
 		
 		c.gridx=1;
 		c.gridy=9;
@@ -311,13 +293,13 @@ public class ErfgoedContent extends JPanel
 		nuttigeInfoScroll.getViewport().setBorder(null);
 		nuttigeInfoScroll.setOpaque(false);
 		nuttigeInfoScroll.getViewport().setOpaque(false);
-		add(nuttigeInfoScroll,c);
+		background.add(nuttigeInfoScroll,c);
 		
 		//kenmerken
 		c.gridx=1;
 		c.gridy=10;
 		c.gridwidth=6;
-		add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
+		background.add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
 				
 		c.gridx=1;
 		c.gridy=11;
@@ -336,13 +318,13 @@ public class ErfgoedContent extends JPanel
 		kenmerkenScroll.getViewport().setBorder(null);
 		kenmerkenScroll.setOpaque(false);
 		kenmerkenScroll.getViewport().setOpaque(false);
-		add(kenmerkenScroll,c);
+		background.add(kenmerkenScroll,c);
 		
 		//geschiedenis
 		c.gridx=1;
 		c.gridy=12;
 		c.gridwidth=6;
-		add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
+		background.add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
 				
 		c.gridx=1;
 		c.gridy=13;
@@ -361,13 +343,13 @@ public class ErfgoedContent extends JPanel
 		geschiedenisScroll.getViewport().setBorder(null);
 		geschiedenisScroll.setOpaque(false);
 		geschiedenisScroll.getViewport().setOpaque(false);
-		add(geschiedenisScroll,c);
+		background.add(geschiedenisScroll,c);
 		
 		/**RECHTERKANT**/
 		c.gridx=7;
 		c.gridy=2;
 		c.gridwidth=2;
-		add(new JLabelFactory().getMenuTitel("Documenten"),c);
+		background.add(new JLabelFactory().getMenuTitel("Documenten"),c);
 		
 		JPanel documentenPanel = new JPanel(new GridBagLayout());
 		documentenPanel.setOpaque(false);
@@ -401,7 +383,7 @@ public class ErfgoedContent extends JPanel
 		c.weightx = 0;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.VERTICAL;
-		add(documentenPanel,c);	
+		background.add(documentenPanel,c);	
 		
 		
 		//als het een nieuw erfgoed is (m.a.w. een leeg erfgoed), dan worden alles editable gezet
@@ -444,8 +426,9 @@ public class ErfgoedContent extends JPanel
 				tekstvakken.get(i).setForeground(Color.WHITE);
 			}
 			s[tekstvakken.size()] = type.getSelectedItem().toString();
-			s[tekstvakken.size()+1] = postcode.getSelectedItem().toString();
-			s[tekstvakken.size()+2] = deelgemeente.getSelectedItem().toString();
+			s[tekstvakken.size()+1] = postcode.getEditor().getItem().toString();
+			s[tekstvakken.size()+2] = deelgemeente.getEditor().getItem().toString();
+			
 			type.setEnabled(false);
 			
 		}

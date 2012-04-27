@@ -6,8 +6,6 @@ package views;
  **/
 
 import guiElementen.JLabelFactory;
-
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,20 +13,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
-
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import controllers.Databank;
 import controllers.ErfgoedController;
-import controllers.PdfMaker;
-
 import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
@@ -269,9 +260,13 @@ public class ErfgoedMenu extends JPanel
 							controller.getVoorlopigErfgoed().setGeschiedenis(s[6]);
 							controller.getVoorlopigErfgoed().setTypeErfgoed(s[7]);
 							controller.getVoorlopigErfgoed().setPostcode(s[8]);
+							
+			System.out.println(s[8].toString()+" " + s[9].toString());
+							
 							controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 							controller.update();
 							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
+							hoofd.setContentPaneel(new ErfgoedView(model, databank, controller.getOrigineelErfgoed(), hoofd));
 						}
 					}
 				}

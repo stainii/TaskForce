@@ -52,7 +52,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		}
 	}
 	
-	public AutoaanvullendeCombobox(ArrayList<T> l, String ob, String defaultTekst,JTextComponent soort)
+	public AutoaanvullendeCombobox(ArrayList<T> l, String ob, String defaultTekst,JTextComponent soort, int max)
 	{
 		this.defaultTekst = defaultTekst;
 		this.lijst = l;
@@ -63,6 +63,9 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		
 		txt = soort; 
 		txt = (JTextField)this.getEditor().getEditorComponent();
+		
+		
+		txt.setDocument(new JTextFieldLimit(max));
 		
 
 			txt.addMouseListener(new MouseAdapter() {
@@ -98,43 +101,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		txt.addKeyListener(new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-				if(object.equals("Integer"))
-				{
-					
-				}
-
-				EventQueue.invokeLater(new Runnable() 
-				{
-					@Override
-					public void run() {
-						String tekst = txt.getText();
-						
-						if(tekst.length()==0)
-						{
-							getAutoCombo().hidePopup();
-							setModel(new DefaultComboBoxModel(lijst.toArray()),"");
-						}
-						else
-						{
-							DefaultComboBoxModel m = getSuggestedModel(lijst,tekst,object);
-							
-							if(m.getSize()==0 || hide_flag) 
-            				{
-            					getAutoCombo().hidePopup();
-            					hide_flag = false;
-            				}
-            				else
-            				{
-            					setModel(m,tekst);
-            					getAutoCombo().showPopup();
-            				}
-						}
-					}
-					
-				});
-			}
+			public void keyTyped(KeyEvent e) {}
 
 			@Override
 			public void keyPressed(KeyEvent e) 
@@ -167,7 +134,37 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {
+				EventQueue.invokeLater(new Runnable() 
+				{
+					@Override
+					public void run() {
+						String tekst = txt.getText();
+						
+						if(tekst.length()==0)
+						{
+							getAutoCombo().hidePopup();
+							setModel(new DefaultComboBoxModel(lijst.toArray()),"");
+						}
+						else
+						{
+							DefaultComboBoxModel m = getSuggestedModel(lijst,tekst,object);
+							
+							if(m.getSize()==0 || hide_flag) 
+            				{
+            					getAutoCombo().hidePopup();
+            					hide_flag = false;
+            				}
+            				else
+            				{
+            					setModel(m,tekst);
+            					getAutoCombo().showPopup();
+            				}
+						}
+					}
+					
+				});
+			}
 		});
 		
 		setModel(new DefaultComboBoxModel(lijst.toArray()), "");
