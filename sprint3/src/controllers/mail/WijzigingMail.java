@@ -198,12 +198,18 @@ public class WijzigingMail implements SoortMail
 		"<td>" + "<strong>Titel: </strong>" + "</td>" +
 		"<td>" + document.getLaatsteWijziging().getTitel() + "</td>" +
 	"</tr>"+
+	"<tr>" +
+		"<td>" + "<strong>Aard: </strong>" + "</td>" +
+		"<td>" + document.getAard() + "</td>" +
+		"<td>" + "<strong>Aard: </strong>" + "</td>" +
+		"<td>" + document.getLaatsteWijziging().getAard() + "</td>" +
+	"</tr>"+
 	"<tr>"+
 		"<td>" + "<strong>Opmerkingen: </strong>" + "</td>" +
 		"<td>" + document.getOpmerkingen() + "</td>" +
 		"<td>" + "<strong>Opmerkingen: </strong>" + "</td>" +
 		"<td>" + document.getLaatsteWijziging().getOpmerkingen() + "</td>" +
-	"</tr>"+
+	"</tr>" +
 "</table>" +
 "</multiline><br />" +
 "<multiline>" +

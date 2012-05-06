@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -38,7 +39,6 @@ public class Hoofd extends JPanel
 	public Hoofd(Model m, Databank d, JFrame f)
 	{		
 		setLayout(new BorderLayout());
-		
 		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
 		add(new Header(m,f,ingeladenOverzicht,this,d),BorderLayout.NORTH);
 		

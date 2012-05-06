@@ -21,7 +21,7 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(),doc.getAard(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
 		voorlopigDocument.setImage(doc.getImage());
 		voorlopigDocument.setTemp(doc.getTemp());
@@ -70,6 +70,7 @@ public class DocumentController
 		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
 		origineelDocument.setBeheerderId(voorlopigDocument.getBeheerderId());
+		origineelDocument.setAard(voorlopigDocument.getAard());
 		origineelDocument.setTemp(voorlopigDocument.getTemp());
 		
 		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());

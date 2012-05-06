@@ -82,6 +82,7 @@ public class MailThuis implements Runnable
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "De mailfunctie werkt via de servers van GMail.\nHet lijkt dat deze echter geblokkeerd wordt op het huidig netwerk.\nIn de finale versie zal dit systeem werken met jullie eigen serverinstellingen.", "Fout bij het versturen van een mail", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 	}
 

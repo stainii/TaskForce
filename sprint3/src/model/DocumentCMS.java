@@ -28,9 +28,10 @@ public class DocumentCMS
 	private DocumentCMS laatsteWijziging;
 	private int burgerId;
 	private int beheerderId;
+	private String aard;
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, String extensie, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, String extensie, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId,String aard, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -48,6 +49,7 @@ public class DocumentCMS
 		this.mediaId = mediaId;
 		this.burgerId = burgerId;
 		this.beheerderId = beheerderId;
+		this.aard = aard;
 	}
 	
 	//deze constructor wordt gebruikt hij het toevoegen van een nieuw document aan een erfgoed
@@ -67,6 +69,7 @@ public class DocumentCMS
 		this.setExtensieDocument("Onbekend");
 		this.redenAfwijzing = "";
 		this.beheerderId = beheerderId;
+		this.aard = "";
 	}
 
 
@@ -184,6 +187,9 @@ public class DocumentCMS
 	{
 		return laatsteWijziging;
 	}
+	public String getAard() {
+		return aard;
+	}
 
 
 	// setters
@@ -277,6 +283,10 @@ public class DocumentCMS
 		laatsteWijziging = doc;
 	}
 
+	public void setAard(String aard) {
+		this.aard = aard;
+	}
+	
 	public String getExtensieDocument() {
 		return extensieDocument;
 	}

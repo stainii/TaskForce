@@ -22,6 +22,7 @@ import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
 import guiElementen.TypeKiezer;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,6 +52,7 @@ public class DocumentContent extends JPanel
 	private ArrayList<JTextComponent> tekstvakken;
 	private JLabel wijzigingMedia;
 	private JPanel documentPanel;
+	private JComboBox aard;
 	
 	public DocumentContent(Model m, Databank db, Hoofd h, DocumentCMS doc)
 	{
@@ -93,7 +95,7 @@ public class DocumentContent extends JPanel
 		titel.setForeground(Color.WHITE);
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
 		documentPanel.add(titel,c);
-		
+
 		//wijziging titel
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getTitel().equals(document.getTitel()))
 		{
@@ -103,9 +105,44 @@ public class DocumentContent extends JPanel
 		
 		//naam eigenaar
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		c.gridwidth = 4;
 		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getBurger()!=null?doc.getBurger().getGebruikersnaam() + " - " + doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
+				
+		//aard
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		documentPanel.add(new JLabelFactory().getNormaleTekst("Aard: "),c);
+		
+		String[] a = {"Postkaart", "Foto", "Prent", "Tekening", "Film" , "Kaart", "Brochure", "Affiche", "Andere"};
+		aard = new JComboBox(a);
+		aard.setEnabled(false);
+		aard.setSelectedItem(doc.getAard());
+		
+		c.gridx = 2;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		documentPanel.add(aard,c);
+		
+		//aard wijziging
+		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getAard().equals(document.getAard()))
+		{
+			c.gridx = 1;
+			c.gridy = 4;
+			c.gridwidth = 1;
+			documentPanel.add(new JLabelFactory().getWijziging("Wijziging: "),c);
+			
+			JComboBox aardWijziging = new JComboBox(a);
+			aardWijziging.setEnabled(false);
+			aardWijziging.setSelectedItem(doc.getLaatsteWijziging().getAard());
+			aardWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
+			
+			c.gridx = 2;
+			c.gridy = 4;
+			c.gridwidth = 2;
+			documentPanel.add(aardWijziging,c);
+		}
 		
 		//beetje ruimte
 		c.gridy =4;
@@ -371,10 +408,15 @@ public class DocumentContent extends JPanel
 	{
 		return tekstvakken;
 	}
+	public JComboBox getComboBox()
+	{
+		return aard;		
+	}
 	
 	public void setEditable(boolean b)
 	{
 		media.setEditable(b);
+		aard.setEnabled(b);
 	}
 	public void quit()
 	{

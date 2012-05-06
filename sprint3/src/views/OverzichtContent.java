@@ -242,7 +242,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				setTypeContent("Erfgoed");
+				setTypeContent("Document");
 				documentenTitel.setForeground(new Color(120,120,120));
 				erfgoedTitel.setForeground(Color.WHITE);
 				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));

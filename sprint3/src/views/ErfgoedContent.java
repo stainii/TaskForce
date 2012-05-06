@@ -47,7 +47,7 @@ public class ErfgoedContent extends JPanel
 	private AutoaanvullendeCombobox deelgemeente,postcode;
 	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
 	private MooiTextField straat;
-	private JPanel background;
+	private JPanel background, links , documenten, rechts;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -61,6 +61,16 @@ public class ErfgoedContent extends JPanel
 		background.setBackground(Color.black);
 		background.setOpaque(false);
 		background.setLayout(new GridBagLayout());
+		
+		links = new JPanel(new GridBagLayout());
+		links.setOpaque(false);
+		
+		documenten = new JPanel(new GridBagLayout());
+		documenten.setOpaque(false);
+		
+		rechts = new JPanel(new GridBagLayout());
+		rechts.setOpaque(false);
+		
 		tekstvakken = new ArrayList<JTextComponent>();
 				
 		types = new String[5];
@@ -99,13 +109,13 @@ public class ErfgoedContent extends JPanel
 		titel.setForeground(Color.WHITE);
 		titel.setFont(new JLabelFactory().getTitel("").getFont());
 		titel.setColumns(20);
-		background.add(titel,c);
+		links.add(titel,c);
 		
 		//naam eigenaar
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 6;
-		background.add(new JLabelFactory().getItalic(erfgoed.getBurger()!=null? "Geplaatst door: "+erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam(): "Geplaatst door: "+erfgoed.getBeheerder().getNaam()),c);
+		links.add(new JLabelFactory().getItalic(erfgoed.getBurger()!=null? "Geplaatst door: "+erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam(): "Geplaatst door: "+erfgoed.getBeheerder().getNaam()),c);
 				
 		
 		// type
@@ -134,21 +144,21 @@ public class ErfgoedContent extends JPanel
 		typeTxt.setVisible(true);
 		typeTxt.setText("Type: " +erfgoed.getTypeErfgoed());
 		
-		background.add(type,c);
-		background.add(typeTxt,c);
+		links.add(type,c);
+		links.add(typeTxt,c);
 		
 		
 		//beetje ruimte
 		c.gridx=1;
 		c.gridy=4;
 		c.gridwidth=6;
-		background.add(new JLabel("   "),c);
+		links.add(new JLabel("   "),c);
 		
 		//locatie
 		c.gridx=1;
 		c.gridy=5;
 		c.gridwidth=6;
-		background.add(new JLabelFactory().getMenuTitel("Locatie: "),c);
+		links.add(new JLabelFactory().getMenuTitel("Locatie: "),c);
 		
 		c.gridx=1;
 		c.gridy=6;
@@ -162,10 +172,10 @@ public class ErfgoedContent extends JPanel
 		straat.setBorder(null);
 		straat.setOpaque(false);
 		straat.setForeground(Color.WHITE);
-		background.add(straat,c);
+		links.add(straat,c);
 		
 		c.gridx=4;
-		c.gridwidth=2;
+		c.gridwidth=3;
 		MooiTextField huisNr = new MooiTextField("","Nr");
 		huisNr.setDocument(new JTextFieldLimit(10));
 		huisNr.setText(erfgoed.getHuisnr());
@@ -175,7 +185,7 @@ public class ErfgoedContent extends JPanel
 		huisNr.setBorder(null);
 		huisNr.setOpaque(false);
 		huisNr.setForeground(Color.WHITE);
-		background.add(huisNr,c);
+		links.add(huisNr,c);
 		
 		c.gridx=1;
 		c.gridy=7;
@@ -205,8 +215,8 @@ public class ErfgoedContent extends JPanel
 		postcodeTxt.setVisible(true);
 		postcodeTxt.setText(erfgoed.getPostcode());
 		
-		background.add(postcode,c);
-		background.add(postcodeTxt,c);
+		links.add(postcode,c);
+		links.add(postcodeTxt,c);
 		
 		postcode.addActionListener(new ActionListener() {
 			
@@ -266,13 +276,13 @@ public class ErfgoedContent extends JPanel
 		deelgemeenteTxt.setVisible(true);
 		deelgemeenteTxt.setText(erfgoed.getDeelgemeente());
 
-		background.add(deelgemeente,c);
-		background.add(deelgemeenteTxt,c);
+		links.add(deelgemeente,c);
+		links.add(deelgemeenteTxt,c);
 		
 		
 		c.gridx=1;
 		c.gridy=8;
-		c.gridwidth = 6;
+		//c.gridwidth = 6;
 		MooiTextArea omschrijving = new MooiTextArea(erfgoed.getOmschrijving(),"Omschrijving");
 		tekstvakken.add(omschrijving);
 		omschrijving.setRows(3);
@@ -287,21 +297,23 @@ public class ErfgoedContent extends JPanel
 		omschrijvingScroll.getViewport().setBorder(null);
 		omschrijvingScroll.setOpaque(false);
 		omschrijvingScroll.getViewport().setOpaque(false);
-		background.add(omschrijvingScroll,c);
+		links.add(omschrijvingScroll,c);
+	
 		
 		
+		/**RECHTERKANT**/
 		//nuttige info
-		c.gridx=1;
-		c.gridy=9;
+		c.gridx=7;
+		c.gridy=2;
 		c.gridwidth=6;
-		background.add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
+		rechts.add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
 		
-		c.gridx=1;
-		c.gridy=10;
+		c.gridx=7;
+		c.gridy=3;
 		c.gridwidth = 6;
 		MooiTextArea nuttigeInfo = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
 		tekstvakken.add(nuttigeInfo);
-		nuttigeInfo.setRows(5);
+		nuttigeInfo.setRows(9);
 		nuttigeInfo.setColumns(30);
 		nuttigeInfo.setEditable(false);
 		nuttigeInfo.setOpaque(false);
@@ -313,20 +325,20 @@ public class ErfgoedContent extends JPanel
 		nuttigeInfoScroll.getViewport().setBorder(null);
 		nuttigeInfoScroll.setOpaque(false);
 		nuttigeInfoScroll.getViewport().setOpaque(false);
-		background.add(nuttigeInfoScroll,c);
+		rechts.add(nuttigeInfoScroll,c);
 		
 		//kenmerken
-		c.gridx=1;
-		c.gridy=11;
+		c.gridx=7;
+		c.gridy=4;
 		c.gridwidth=6;
-		background.add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
+		rechts.add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
 				
-		c.gridx=1;
-		c.gridy=12;
+		c.gridx=7;
+		c.gridy=5;
 		c.gridwidth = 6;
 		MooiTextArea kenmerken = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
 		tekstvakken.add(kenmerken);
-		kenmerken.setRows(5);
+		kenmerken.setRows(9);
 		kenmerken.setColumns(30);
 		kenmerken.setEditable(false);
 		kenmerken.setBorder(null);
@@ -338,20 +350,20 @@ public class ErfgoedContent extends JPanel
 		kenmerkenScroll.getViewport().setBorder(null);
 		kenmerkenScroll.setOpaque(false);
 		kenmerkenScroll.getViewport().setOpaque(false);
-		background.add(kenmerkenScroll,c);
+		rechts.add(kenmerkenScroll,c);
 		
 		//geschiedenis
-		c.gridx=1;
-		c.gridy=13;
+		c.gridx=7;
+		c.gridy=6;
 		c.gridwidth=6;
-		background.add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
+		rechts.add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
 				
-		c.gridx=1;
-		c.gridy=14;
+		c.gridx=7;
+		c.gridy=7;
 		c.gridwidth = 6;
 		MooiTextArea geschiedenis = new MooiTextArea(erfgoed.getGeschiedenis(),"Geschiedenis");
 		tekstvakken.add(geschiedenis);
-		geschiedenis.setRows(5);
+		geschiedenis.setRows(9);
 		geschiedenis.setColumns(30);
 		geschiedenis.setEditable(false);
 		geschiedenis.setBorder(null);
@@ -363,13 +375,15 @@ public class ErfgoedContent extends JPanel
 		geschiedenisScroll.getViewport().setBorder(null);
 		geschiedenisScroll.setOpaque(false);
 		geschiedenisScroll.getViewport().setOpaque(false);
-		background.add(geschiedenisScroll,c);
+		rechts.add(geschiedenisScroll,c);
 		
-		/**RECHTERKANT**/
-		c.gridx=7;
-		c.gridy=2;
+		/**DOCUMENEN- LINKS 2de VAK **/
+		JLabel titelDocument= new JLabelFactory().getMenuTitel("Documenten");
+		titelDocument.setVisible(true);
+		c.gridx=1;
+		c.gridy=1;
 		c.gridwidth=2;
-		background.add(new JLabelFactory().getMenuTitel("Documenten"),c);
+		documenten.add(titelDocument,c);
 		
 		JPanel documentenPanel = new JPanel(new GridBagLayout());
 		documentenPanel.setOpaque(false);
@@ -377,14 +391,17 @@ public class ErfgoedContent extends JPanel
 		int x = 0;
 		int y = 1;
 		c.gridwidth=1;
+		c.gridx = 1;
+		c.gridy = 2;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
+				
 		for (DocumentCMS doc: erfgoed.getDocumenten())
 		{
 			x++;
-			if (x>4)
+			if (x>3)
 			{
 				x=1;
 				y++;
@@ -395,20 +412,51 @@ public class ErfgoedContent extends JPanel
 			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
 			documentenPanel.add(l, c);
 		}
+		System.out.println(c.gridx + " " + c.gridy);
 		
-		c.gridx=7;
-		c.gridy=3;
-		c.gridwidth=2;
-		c.gridheight=11;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.VERTICAL;
-		background.add(documentenPanel,c);	
+		JScrollPane docs = new JScrollPane(documentenPanel);
+		docs.setPreferredSize(new Dimension(300,300));
+		docs.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		docs.setBorder(null);
+		docs.getViewport().setBorder(null);
+		docs.setOpaque(false);
+		docs.getViewport().setOpaque(false);
+		JLabel geendoc = new JLabelFactory().getItalic("Dit erfgoed bevat geen documenten");
+		geendoc.setVisible(false);
 		
+		//default label als er geen documenten zijn om weer te geven. 
+		if(erfgoed.getDocumenten().isEmpty())
+			geendoc.setVisible(true);
 		
+		documenten.add(docs,c);
+		documenten.add(geendoc,c);
+		
+
+			
+		//Panels toevoegen aan ErfgoedContent	
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridheight = 1;
+		background.add(links,c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridheight = 1;
+		background.add(documenten,c);
+		
+		c.gridx = 2;
+		c.gridy = 1;
+		c.gridheight = 2;
+		background.add(rechts,c);
+		
+	
 		//als het een nieuw erfgoed is (m.a.w. een leeg erfgoed), dan worden alles editable gezet
 		if (tekstvakken.get(0).getText().equals(""))
+		{
 			bewerken();
+			titelDocument.setVisible(false);		// als nieuw erfgoeddocument wordt toegevoegd moet label "Documenten" er niet staan
+		}
+			
 	}
 	
 	public String[] bewerken()

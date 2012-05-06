@@ -230,9 +230,11 @@ public class Beoordeling extends JPanel
 								{
 									case 0: controller.getVoorlopigDocument().setTitel(t.getText()); break;
 									case 1: controller.getVoorlopigDocument().setOpmerkingen(t.getText()); break; 
+									case 2: controller.getVoorlopigDocument().setAard(t.getText()); break;
 								}
-								
 							}
+							//aard
+							controller.getVoorlopigDocument().setAard(documentContent.getComboBox().getSelectedItem().toString());
 							
 							documentContent.setEditable(false);
 							controller.update();

@@ -9,8 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToolTip;
+import javax.swing.ToolTipManager;
 
 import controllers.Databank;
 
@@ -44,8 +47,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 			else
 				g2.setColor(Color.WHITE);
 			g2.fillRect(0, 0, 85, 3);
-		}
-			
+		}	
 	}
 
 	private Model model;
@@ -63,6 +65,9 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		this.hoofd = h;
 		this.content = cont;
 		
+		ToolTipManager.sharedInstance().registerComponent(DocumentThumbnail.this);
+		this.setToolTipText("test");
+
 		setOpaque(false);
 		setPreferredSize(new Dimension(85,85));
 		
@@ -113,7 +118,8 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	public void mouseExited(MouseEvent arg0) {}
 	
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
+	public void mouseEntered(MouseEvent arg0) 
+	{
 		this.setCursor(hand);
 	}
 	
@@ -123,6 +129,12 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		if (content!=null)		//is nul als je van erfgoedfiche naar hier komt
 			content.quit();
 		hoofd.setContentPaneel(new DocumentView(model,databank,document,hoofd));
+	}
+	
+	@Override
+	public String getToolTipText()
+	{
+		return document.getTitel();
 	}
 
 }

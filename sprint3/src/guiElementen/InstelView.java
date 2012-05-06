@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -409,6 +410,19 @@ public class InstelView extends JPanel
 		Dimension sizeWbtn = wachtwoordBtn.getPreferredSize();
 		wachtwoordBtn.setBounds(320,350, sizeWbtn.width, sizeWbtn.height);
 		
+		
+		oudW.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(oudW.getText().isEmpty())
+				{
+					nieuwW1.setEnabled(false);
+					nieuwW2.setEnabled(false);
+					wachtwoordBtn.setVisible(false);
+				}	
+			}
+		});
 		
 		// Email
 		JLabel emailLbl = jLabelFactory.getMenuTitel("E-mail voorkeuren");
