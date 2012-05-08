@@ -327,10 +327,7 @@ public class AfgekeurdMail implements SoortMail
 				"</tbody></table>" +
 				"</td>" +
 				"</tr>" +
-				"</tbody></table></body></html>"
-				;
-		
-		System.out.println(document.getMediaId());
+				"</tbody></table></body></html>";
 		return afkeurmail;
 	}
 }

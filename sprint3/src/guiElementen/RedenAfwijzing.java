@@ -55,21 +55,6 @@ public class RedenAfwijzing extends JPanel
 		defaultRedenenCbx = new JComboBox(m.getStandaardReden().toArray());
 		add(defaultRedenenCbx, c);
 		
-		redenTxt.addKeyListener(new KeyListener()
-		{	
-			@Override
-			public void keyTyped(KeyEvent arg0) {}
-			
-			@Override
-			public void keyReleased(KeyEvent arg0){}
-			
-			@Override
-			public void keyPressed(KeyEvent e)
-			{
-				defaultRedenenCbx.setSelectedIndex(0);
-			}
-		});
-		
 		defaultRedenenCbx.setMaximumRowCount(3);
 		defaultRedenenCbx.addActionListener(new ActionListener()
 		{	
@@ -78,6 +63,7 @@ public class RedenAfwijzing extends JPanel
 				if (defaultRedenenCbx.getSelectedIndex() !=-1)
 				{
 					redenTxt.setText(defaultRedenenCbx.getSelectedItem().toString());
+					System.out.println("ik doe dit");
 				}
 			}
 		});
