@@ -209,8 +209,21 @@ public class WijzigingMail implements SoortMail
 		"<td>" + document.getOpmerkingen() + "</td>" +
 		"<td>" + "<strong>Opmerkingen: </strong>" + "</td>" +
 		"<td>" + document.getLaatsteWijziging().getOpmerkingen() + "</td>" +
-	"</tr>" +
-"</table>" +
+	"</tr>";
+		
+		if (document.getTypeDocument().equals("Afbeelding"))
+		{
+			wijzigingmail += "<tr>"+
+					"<td>" + "<strong>Afbeelding: </strong>" + "</td>" +
+					"<td><img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getMediaId() + "?type=" + document.getExtensieDocument() + "\" "+
+					"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\"></td>" +
+					"<td>" + "<strong>Afbeelding: </strong>" + "</td>" +
+					"<td><img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getMediaId() + "?type=" + document.getExtensieDocument() + "\" "+
+					"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\"></td>" +
+				"</tr>";
+		}
+		
+wijzigingmail += "</table>" +
 "</multiline><br />" +
 "<multiline>" +
 "<p class=\"article-title\" align=\"left\"><singleline label=\"Title\">"+
@@ -315,6 +328,7 @@ public class WijzigingMail implements SoortMail
 				"</tr>" +
 				"</tbody></table></body></html>"
 				;
+
 		return wijzigingmail;
 	}
 }

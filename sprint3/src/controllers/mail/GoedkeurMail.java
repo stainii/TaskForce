@@ -188,14 +188,17 @@ public class GoedkeurMail implements SoortMail
 				"</singleline></p>" +
 				"<table align=\"left\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" +
 				"<tbody><tr>" +
-				"<td>" +
+				"<td>";
 				
-// Foto			
-/*"<img src=\""+ document.getUrl() + "\" "+
-		"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\">" +*/
+// Foto
+		if (document.getTypeDocument().equals("Afbeelding"))
+		{
+			goedkeurmail += "<img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getMediaId() + "?type=" + document.getExtensieDocument() + "\" "+
+					"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\">";
+		}
 		
 		
-				"</td>" +
+				goedkeurmail += "</td>" +
 				"<td class=\"w30\" width=\"15\"></td>" +
 				"</tr>" +
 				"<tr><td></td><td class=\"w30\" height=\"5\" width=\"15\"></td></tr>" +
