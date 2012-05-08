@@ -1208,6 +1208,7 @@ public class Databank
 			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public void updateBeheerdersDatabank(Beheerder b) throws NoSuchAlgorithmException, UnsupportedEncodingException
@@ -1311,21 +1312,42 @@ public class Databank
 	public void deleteBeheerder(int id)
 	{
 		Connection c = null;
-		PreparedStatement s = null;
+		PreparedStatement s = null , s2 = null;
 		
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("DELETE FROM BEHEERDER WHERE BeheerderId = ?");
-			s.setInt(1, id);
 			
+			// instellingen van een beheerder verwijderen
+			s = c.prepareStatement("DELETE FROM INSTELLINGEN WHERE BeheerderId = ?");
+			s.setInt(1, id);
 			s.executeUpdate();
+			
+			// de beheerder verwijderen
+			s2 = c.prepareStatement("DELETE FROM BEHEERDER WHERE BeheerderId = ?");
+			s2.setInt(1, id);
+			
+			s2.executeUpdate();
 			getBeheerdersEnBurgersUitDatabank();
 		}
 		catch (SQLException e)
 		{
 			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				if(s !=null)
+					s.close();
+				if(s2 != null)
+					s2.close();
+			}
+			catch (SQLException e)
+			{
+				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het verwijderen van een beheerder, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
 		}
 	}
 	

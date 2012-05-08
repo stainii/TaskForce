@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
@@ -47,7 +48,7 @@ public class ErfgoedContent extends JPanel
 	private AutoaanvullendeCombobox deelgemeente,postcode;
 	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
 	private MooiTextField straat;
-	private JPanel background, links , documenten, rechts;
+	private JPanel background, links , documenten, rechts,rechtsTest;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
@@ -302,6 +303,25 @@ public class ErfgoedContent extends JPanel
 		
 		
 		/**RECHTERKANT**/
+		
+		//TESTPANEL_____________________________________________________________________________
+		
+		rechtsTest = new JPanel();
+		
+		JTabbedPane tab = new JTabbedPane();
+		
+		MooiTextArea n = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
+		n.setColumns(40);
+		
+		
+		MooiTextArea k = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
+		k.setColumns(40);
+		
+		tab.add("Nuttige Info",n);
+		tab.add("Kenmerken",n);
+		
+		//______________________________________________________________________________________
+		
 		//nuttige info
 		c.gridx=7;
 		c.gridy=2;
@@ -380,7 +400,7 @@ public class ErfgoedContent extends JPanel
 		/**DOCUMENEN- LINKS 2de VAK **/
 		JLabel titelDocument= new JLabelFactory().getMenuTitel("Documenten");
 		titelDocument.setVisible(true);
-		c.gridx=1;
+		c.gridx=0;
 		c.gridy=1;
 		c.gridwidth=2;
 		documenten.add(titelDocument,c);
@@ -397,22 +417,6 @@ public class ErfgoedContent extends JPanel
 		c.weighty = 1.0;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
-				
-		for (DocumentCMS doc: erfgoed.getDocumenten())
-		{
-			x++;
-			if (x>3)
-			{
-				x=1;
-				y++;
-			}
-			
-			c.gridx=x;
-			c.gridy=y;
-			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
-			documentenPanel.add(l, c);
-		}
-		System.out.println(c.gridx + " " + c.gridy);
 		
 		JScrollPane docs = new JScrollPane(documentenPanel);
 		docs.setPreferredSize(new Dimension(300,300));
@@ -421,6 +425,27 @@ public class ErfgoedContent extends JPanel
 		docs.getViewport().setBorder(null);
 		docs.setOpaque(false);
 		docs.getViewport().setOpaque(false);
+		
+		documenten.add(docs,c);
+				
+		for (DocumentCMS doc: erfgoed.getDocumenten())
+		{
+			if (x>2)
+			{
+				x=0;			// hier zit nog foutje in?? 
+				y++;
+			}
+			
+			c.gridx=x;
+			c.gridy=y;
+			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
+			documentenPanel.add(l, c);
+			
+			x++;
+		}
+		//System.out.println(c.gridx + " " + c.gridy);
+		
+
 		JLabel geendoc = new JLabelFactory().getItalic("Dit erfgoed bevat geen documenten");
 		geendoc.setVisible(false);
 		
@@ -428,7 +453,7 @@ public class ErfgoedContent extends JPanel
 		if(erfgoed.getDocumenten().isEmpty())
 			geendoc.setVisible(true);
 		
-		documenten.add(docs,c);
+
 		documenten.add(geendoc,c);
 		
 
