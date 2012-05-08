@@ -50,8 +50,29 @@ public class DocumentController
 		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
 		origineelDocument.setLaatsteWijziging(voorlopigDocument);
 		
-		d.updateDocument(voorlopigDocument);
-		JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
+		if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
+		{
+			d.updateDocument(voorlopigDocument,true);
+			
+			origineelDocument.setAard(voorlopigDocument.getAard());
+			origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
+			origineelDocument.setImage(voorlopigDocument.getImage());
+			origineelDocument.setMediaId(voorlopigDocument.getMediaId());
+			origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
+			origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
+			origineelDocument.setStatus(voorlopigDocument.getStatus());
+			origineelDocument.setTekst(voorlopigDocument.getTekst());
+			origineelDocument.setTemp(voorlopigDocument.getTemp());
+			origineelDocument.setTitel(voorlopigDocument.getTitel());
+			origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
+			origineelDocument.setLaatsteWijziging(null);
+		}
+		else
+		{
+			d.updateDocument(voorlopigDocument,false);
+			origineelDocument.setLaatsteWijziging(voorlopigDocument);
+			JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	public void toevoegen()
 	{

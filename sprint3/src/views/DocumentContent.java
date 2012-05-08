@@ -105,13 +105,13 @@ public class DocumentContent extends JPanel
 		
 		//naam eigenaar
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		c.gridwidth = 4;
 		documentPanel.add(new JLabelFactory().getNormaleTekst(doc.getBurger()!=null?doc.getBurger().getGebruikersnaam() + " - " + doc.getBurger().getNaam():doc.getBeheerder().getNaam()),c);
 				
 		//aard
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 1;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Aard: "),c);
 		
@@ -121,7 +121,7 @@ public class DocumentContent extends JPanel
 		aard.setSelectedItem(doc.getAard());
 		
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 2;
 		documentPanel.add(aard,c);
 		
@@ -129,7 +129,7 @@ public class DocumentContent extends JPanel
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getAard().equals(document.getAard()))
 		{
 			c.gridx = 1;
-			c.gridy = 4;
+			c.gridy = 5;
 			c.gridwidth = 1;
 			documentPanel.add(new JLabelFactory().getWijziging("Wijziging: "),c);
 			
@@ -139,18 +139,15 @@ public class DocumentContent extends JPanel
 			aardWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
 			
 			c.gridx = 2;
-			c.gridy = 4;
+			c.gridy = 5;
 			c.gridwidth = 2;
 			documentPanel.add(aardWijziging,c);
 		}
 		
-		//beetje ruimte
-		c.gridy =4;
-		documentPanel.add(new JLabel("   "),c);
 		
 		//datum toegevoegd
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy = 6;
 		c.gridwidth = 1;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Datum ingediend: "), c);
 		
@@ -166,7 +163,7 @@ public class DocumentContent extends JPanel
 		
 		//datum gewijzigd
 		c.gridx = 1;
-		c.gridy = 6;
+		c.gridy = 7;
 		c.gridwidth = 1;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Laatste geaccep. wijz.: "), c);
 				
@@ -181,12 +178,12 @@ public class DocumentContent extends JPanel
 		
 		//opmerkingen
 		c.gridx = 1;
-		c.gridy = 7;
+		c.gridy = 8;
 		c.gridwidth = 2;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Opmerkingen: "), c);
 		
 		c.gridx= 1;
-		c.gridy = 8 ;
+		c.gridy = 9 ;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.VERTICAL;
 		
@@ -210,7 +207,7 @@ public class DocumentContent extends JPanel
 		
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
 		{
-			c.gridy = 9;
+			c.gridy = 10;
 			JTextArea opmerkingenWijziging = new JTextArea(3,30);
 			opmerkingenWijziging.setText("Wijziging: " + document.getLaatsteWijziging().getOpmerkingen());
 			opmerkingenWijziging.setFont(new JLabelFactory().getWijziging("").getFont());

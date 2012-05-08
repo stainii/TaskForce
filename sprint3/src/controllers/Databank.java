@@ -517,7 +517,7 @@ public class Databank
 		}
 	}
 	
-	public void updateDocument(DocumentCMS doc)
+	public void updateDocument(DocumentCMS doc, boolean eigenaar)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -558,7 +558,7 @@ public class Databank
 				doc.setMediaId(rs.getInt("MediaId"));
 			}
 			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId, Aard) VALUES (?,?,?,?,?,?,?,?,?,?,'Nog niet beoordeeld', ?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId, Aard) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -570,30 +570,49 @@ public class Databank
 			s.setString(8, doc.getExtensieDocument());
 			s.setString(9, doc.getRedenAfwijzing());
 			s.setTimestamp(10, doc.getDatumGewijzigd());
-			s.setInt(11,doc.getErfgoedId());
-			s.setInt(13, doc.getId());
+			
+			if (eigenaar)
+				s.setString(11, "Actief");
+			else
+				s.setString(11, "Nog niet beoordeeld");
+			
+			s.setInt(12,doc.getErfgoedId());
+			s.setInt(14, doc.getId());
 			if (doc.getBurgerId()!=0)
 			{
-				s.setInt(14,doc.getBurgerId());
-				s.setNull(15, Types.INTEGER);
+				s.setInt(15,doc.getBurgerId());
+				s.setNull(16, Types.INTEGER);
 			}
 			else
 			{
-				s.setNull(14, Types.INTEGER);
-				s.setInt(15,doc.getBeheerderId());
+				s.setNull(15, Types.INTEGER);
+				s.setInt(16,doc.getBeheerderId());
 			}
 			if (doc.getTypeDocument().equals("Tekst") || doc.getTypeDocument().equals("Link") )
-				s.setNull(12, Types.INTEGER);
+				s.setNull(13, Types.INTEGER);
 			else 
-				s.setInt(12, doc.getMediaId());
-			s.setString(16,doc.getAard());
+				s.setInt(13, doc.getMediaId());
+			s.setString(17,doc.getAard());
 			s.executeUpdate();
 			
+			if (eigenaar)
+			{
+				s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE DocumentId=?");
+				s.setInt(1, doc.getId());
+				s.executeUpdate();
+			}
 			
 			s2 = c.createStatement();
 			rs = s2.executeQuery(("SELECT DocumentId FROM Document ORDER BY DocumentId DESC"));
 			rs.next();
 			id = rs.getInt("DocumentId");
+			
+			if (eigenaar)
+			{
+				doc.setId(id);
+				//doe dit niet, en je krijgt 2 documenten in model (de oude versie blijft)
+			}
+				
 			
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, id);
@@ -765,8 +784,6 @@ public class Databank
 					InputStream imageBlobStream = imageBlob.getBinaryStream();
 					image = ImageIO.read(imageBlobStream);
 				}
-				else
-					System.out.println("Afbeelding niet gevonden");
 			}
 			catch(IOException ioe)
 			{
@@ -828,8 +845,6 @@ public class Databank
 				    os.flush();
 				    os.close();
 				}
-				else
-					System.out.println("Video niet gevonden");
 			}
 			catch(IOException ioe)
 			{
