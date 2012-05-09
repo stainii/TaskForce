@@ -19,6 +19,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import model.Actie;
@@ -35,7 +37,7 @@ public class Databank
 	private Model m;
 	private final String online = "jdbc:sqlserver://Projecten2.mssql.somee.com;database=Projecten2;user=JDBC;password=TaskForceB2";
 	private final String offline = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
-	private final String connectie = offline; 
+	private final String connectie = online; 
 	
 	public Databank(Model m)
 	{
@@ -517,7 +519,7 @@ public class Databank
 		}
 	}
 	
-	public void updateDocument(DocumentCMS doc, boolean eigenaar)
+	public int updateDocument(DocumentCMS doc, boolean eigenaar)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -649,6 +651,8 @@ public class Databank
 				e.printStackTrace();
 			}
 		}
+		
+		return id;
 	}
 	
 	public void updateErfgoed(Erfgoed e)
@@ -877,7 +881,7 @@ public class Databank
 	
 	public Timestamp getDatabankTijd()	//omdat de systeemtijd verschillend kan zijn van de databanktijd,
 	{									//gebruiken we steeds de databanktijd
-		Connection c = null;
+		/*Connection c = null;
 		PreparedStatement s = null;
 		ResultSet rs = null;
 		Timestamp t = null;
@@ -912,7 +916,8 @@ public class Databank
 				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ophalen van de tijd, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
-		}
+		}*/
+		Timestamp t = new Timestamp(new Date().getTime());
 		return t;
 	}
 	public Timestamp getTijdLaatsteRijLogboek()		//voor het synchronisatiesysteem
@@ -925,7 +930,7 @@ public class Databank
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE BeheerderId IS NOT NULL AND BeheerderId <> ? ORDER BY DatumTijd DESC;");
+			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE (BeheerderId IS NOT NULL AND BeheerderId <> ?) OR BurgerId IS NOT NULL ORDER BY DatumTijd DESC;");
 			s.setInt(1, m.getBeheerder().getId());
 			
 			rs = s.executeQuery();
@@ -1082,7 +1087,7 @@ public class Databank
 						String actie = rs.getString("Actie");
 						if (actie.equals("Toegevoegd"))
 						{
-							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs.getString("Aard"),m));
+							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m));
 							aantalToegevoegd++;
 						}
 						else if (actie.equals("Verwijderd"))
@@ -1092,7 +1097,7 @@ public class Databank
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
-							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs.getString("Aard"),m));
+							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m));
 							aantalWijzigingen++;
 						}
 						else if (actie.equals("Goedgekeurd"))

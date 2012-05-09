@@ -69,7 +69,7 @@ public class DocumentController
 		}
 		else
 		{
-			d.updateDocument(voorlopigDocument,false);
+			voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
 			origineelDocument.setLaatsteWijziging(voorlopigDocument);
 			JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
 		}
