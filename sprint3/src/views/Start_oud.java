@@ -1,7 +1,12 @@
 package views;
 
+/** Deze klasse start het programma en is het loginvenster. Het volgende panel wordt geladen door de
+ *  klasse Laden, die ook in dit bestand staat */
+
+
 import guiElementen.JLabelFactory;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -32,19 +37,20 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import systemTray.InSystemTray;
-
 import administrator.Administrator;
 
-import model.Beheerder;
-import model.Model;
+import systemTray.InSystemTray;
+
 import controllers.Databank;
 import controllers.Login;
 import controllers.mail.MailThuis;
 import controllers.mail.WachtwoordMail;
 
-public class Start extends JPanel
-{
+import model.Beheerder;
+import model.Model;
+@SuppressWarnings("serial")
+public class Start_oud extends JPanel implements ActionListener
+{	
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/ladenBackground.jpg"));
 	private Image background = backgroundIcon.getImage();
 	
@@ -68,18 +74,22 @@ public class Start extends JPanel
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public Start(JFrame fra, boolean sysTrayAlIngeladen)
+	public Start_oud(JFrame fra, boolean sysTrayAlIngeladen)
 	{
 		this.frame = fra;
 		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
 		
 		m = new Model();
 		d = new Databank(m);
+		d.getBeheerdersEnBurgersUitDatabank();
+		d.getInstellingen();
 		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
+		
+		ex = Executors.newFixedThreadPool(1);
 		
 		logo = new JLabel();
 		logo.setIcon(new ImageIcon(getClass().getResource("imgs/logo.png")));
@@ -141,35 +151,59 @@ public class Start extends JPanel
 		JButton inloggenBtn = new JButton("    Inloggen    ");
 		login.add(inloggenBtn,c);
 		
-		inloggenBtn.addActionListener(new InloggenListener());
-		gebruikersnaamTxt.addActionListener(new InloggenListener());
-		wachtwoordTxt.addActionListener(new InloggenListener());
+		inloggenBtn.addActionListener(this);
+		gebruikersnaamTxt.addActionListener(this);
+		wachtwoordTxt.addActionListener(this);
+		
 	}
 	
 	public static void main(String args[])
 	{
 		JFrame f = new JFrame();
-		f.setTitle("Herzele Erfgoedbank CMS");
+		f.setTitle("Herzele erfgoed CMS");
 		f.setSize(new Dimension(500,300));
 		f.setResizable(false);
 		f.setLocationRelativeTo(null);
 		
 		boolean sysTrayAlIngeladen =  (args.length>0);
 		
-		f.add(new Start(f, sysTrayAlIngeladen));
+		f.add(new Start_oud(f, sysTrayAlIngeladen));
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
-	
-	private class InloggenListener implements ActionListener
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void actionPerformed(ActionEvent e)		//wordt uitgevoerd bij het klikken op inloggen of op enter duwen in een van de tekstvakken
 	{
-		@Override
-		public void actionPerformed(ActionEvent e)
+		login.setVisible(false);
+		voortgang.setVisible(true);
+		repaint();
+		
+		if(Administrator.isAdministrator(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 		{
-			ex = Executors.newFixedThreadPool(1);
-			ex.execute(new Inloggen());
-		}					
+			voortgang.setVisible(false);
+			logo.setVisible(false);
+			frame.dispose();
+			new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame	
+		}
+		
+		else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+		{
+			new Laden(frame, voortgangLbl, gebruikersnaamTxt.getText(), sysTrayAlIngeladen,m,d).execute();	//laadt het programma in					
+		}
+		else
+		{
+			wachtwoordVergeten.setVisible(true);
+			wachtwoordTxt.setText("");
+			JOptionPane.showMessageDialog(null, "U bent geen beheerder en niet gemachtigd om dit programma te gebruiken!","Beheerder niet gevonden of wachtwoord foutief",JOptionPane.ERROR_MESSAGE);
+			login.setVisible(true);
+			voortgang.setVisible(false);
+			wachtwoordTxt.grabFocus();
+		}	
 	}
+	
+	
 	private class WachtwoordVergetenListener implements MouseListener
 	{
 		@Override
@@ -214,98 +248,83 @@ public class Start extends JPanel
 		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
+}
 
-	private class Inloggen extends SwingWorker<Void,Void>
+
+class Laden extends SwingWorker<Void,Void>
+{
+	private JFrame frame;
+	private String beheerderNaam;
+	private JLabel laden;
+	private InSystemTray systemTray;
+	private boolean sysTrayAlIngeladen;
+	private Model m;
+	private Databank d;
+	private Hoofd hoofd;
+	
+	public Laden(JFrame f, JLabel laden, String beheerderNaam, boolean sysTrayAlIngeladen, Model model , Databank data)
 	{
-		private Hoofd hoofd;
-		private InSystemTray systemTray;
+		this.frame =f;
+		this.laden = laden;
+		this.beheerderNaam = beheerderNaam;
+		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
+		this.m = model;
+		this.d = data;
+	}
+	
 
-		@Override
-		protected Void doInBackground() throws Exception
+	@Override
+	protected Void doInBackground() throws Exception
+	{
+		//databank inladen in model
+		laden.setText("Bezig met laden databank...");
+		d.laadDatabank();
+		m.setBeheerder(beheerderNaam);
+		
+		//Interface (GUI) maken en eigenschappen instellen
+		laden.setText("Bezig met laden interface...");
+		JFrame f = new JFrame();
+		f.setTitle("Herzele Erfgoed CMS");
+		hoofd = new Hoofd(m, d, f);
+		f.add(hoofd);
+		f.setSize(new Dimension(1005,720));
+		f.setMinimumSize(new Dimension(1005,700));
+		f.setLocationRelativeTo(null);
+		
+		//system tray inladen
+		if (!sysTrayAlIngeladen)
 		{
-			login.setVisible(false);
-			voortgang.setVisible(true);
-			
-			/*INLOGGEN*/
-			voortgangLbl.setText("Bezig met inloggen...");
-			d.getBeheerdersEnBurgersUitDatabank();
-			d.getInstellingen();
-			
-			if(Administrator.isAdministrator(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+			systemTray = new InSystemTray(m,d);
+			f.addWindowListener(new WindowAdapter()
 			{
-				voortgang.setVisible(false);
-				logo.setVisible(false);
-				frame.dispose();
-				new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame	
-			}
-			
-			else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
-			{
-				//LADEN
-				voortgangLbl.setText("Klaar");
-				//databank inladen in model
-				voortgangLbl.setText("Bezig met laden databank...");
-				d.laadDatabank();
-				m.setBeheerder(gebruikersnaamTxt.getText());
-				
-				//Interface (GUI) maken en eigenschappen instellen
-				voortgangLbl.setText("Bezig met laden interface...");
-				JFrame f = new JFrame();
-				f.setTitle("Herzele Erfgoed CMS");
-				hoofd = new Hoofd(m, d, f);
-				f.add(hoofd);
-				f.setSize(new Dimension(1005,720));
-				f.setMinimumSize(new Dimension(1005,700));
-				f.setLocationRelativeTo(null);
-				
-				//system tray inladen
-				if (!sysTrayAlIngeladen)
+				@Override
+				public void windowClosing(WindowEvent e)
 				{
-					systemTray = new InSystemTray(m,d);
-					f.addWindowListener(new WindowAdapter()
-					{
-						@Override
-						public void windowClosing(WindowEvent e)
-						{
-							hoofd.quit();	//video's uitzetten
-							systemTray.zegHallo();	//boodschap weergeven dat de system tray nog werkt
-							((JFrame)(e.getSource())).dispose();	//het frame vernietigen
-							
-						}
-					});
+					hoofd.quit();	//video's uitzetten
+					systemTray.zegHallo();	//boodschap weergeven dat de system tray nog werkt
+					((JFrame)(e.getSource())).dispose();	//het frame vernietigen
+					
 				}
-				else
-				{
-					f.addWindowListener(new WindowAdapter()
-					{
-						@Override
-						public void windowClosing(WindowEvent e)
-						{
-							hoofd.quit();	//video's uitzetten
-							((JFrame)(e.getSource())).dispose();	//het frame vernietigen
-						}
-					});
-				}
-				
-				f.setVisible(true);
-				
-				//het inlogvenster verbergen en daarna vernietigen
-				frame.setVisible(false);
-				frame.dispose();
-			}
-			else
+			});
+		}
+		else
+		{
+			f.addWindowListener(new WindowAdapter()
 			{
-				wachtwoordVergeten.setVisible(true);
-				wachtwoordTxt.setText("");
-				JOptionPane.showMessageDialog(null, "U bent geen beheerder en niet gemachtigd om dit programma te gebruiken!","Beheerder niet gevonden of wachtwoord foutief",JOptionPane.ERROR_MESSAGE);
-				login.setVisible(true);
-				voortgang.setVisible(false);
-				wachtwoordTxt.grabFocus();
-			}
-			
-			
-			return null;
+				@Override
+				public void windowClosing(WindowEvent e)
+				{
+					hoofd.quit();	//video's uitzetten
+					((JFrame)(e.getSource())).dispose();	//het frame vernietigen
+				}
+			});
 		}
 		
+		f.setVisible(true);
+		
+		//het inlogvenster verbergen en daarna vernietigen
+		frame.setVisible(false);
+		frame.dispose();
+		return null;
 	}
 }
