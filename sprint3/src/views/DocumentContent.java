@@ -180,12 +180,10 @@ public class DocumentContent extends JPanel
 		c.gridx = 1;
 		c.gridy = 8;
 		c.gridwidth = 2;
-		documentPanel.add(new JLabelFactory().getNormaleTekst("Opmerkingen: "), c);
-		
-		c.gridx= 1;
-		c.gridy = 9 ;
-		c.gridwidth = 2;
-		c.fill = GridBagConstraints.VERTICAL;
+		JPanel opmerkingenPnl = new JPanel();
+		opmerkingenPnl.setOpaque(false);
+		opmerkingenPnl.setBorder(new JLabelFactory().getFieldSet("Opmerkingen"));
+		documentPanel.add(opmerkingenPnl, c);
 		
 		MooiTextArea opmerkingen = new MooiTextArea(document.getOpmerkingen(),"Opmerkingen",new JLabelFactory().getItalic("").getFont());
 		tekstvakken.add(opmerkingen);
@@ -197,13 +195,14 @@ public class DocumentContent extends JPanel
 		opmerkingen.setBorder(null);
 		opmerkingen.setForeground(Color.WHITE);
 		opmerkingen.setLineWrap(true);
+		opmerkingen.setWrapStyleWord(true);
 		JScrollPane opmerkingenScroll = new JScrollPane(opmerkingen);
 		opmerkingenScroll.getViewport().setOpaque(false);
 		opmerkingenScroll.getViewport().setBorder(null);
 		opmerkingenScroll.setBorder(null);
 		opmerkingenScroll.setOpaque(false);
 		
-		documentPanel.add(opmerkingenScroll, c);
+		opmerkingenPnl.add(opmerkingenScroll);
 		
 		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
 		{

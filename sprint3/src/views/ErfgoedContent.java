@@ -297,6 +297,7 @@ public class ErfgoedContent extends JPanel
 		omschrijving.setBorder(null);
 		omschrijving.setForeground(Color.WHITE);
 		omschrijving.setLineWrap(true);
+		omschrijving.setWrapStyleWord(true);
 		JScrollPane omschrijvingScroll = new JScrollPane(omschrijving);
 		omschrijvingScroll.setBorder(null);
 		omschrijvingScroll.getViewport().setBorder(null);
@@ -328,6 +329,7 @@ public class ErfgoedContent extends JPanel
 		nuttigeInfo.setBorder(null);
 		nuttigeInfo.setForeground(Color.WHITE);
 		nuttigeInfo.setLineWrap(true);
+		nuttigeInfo.setWrapStyleWord(true);
 		JScrollPane nuttigeInfoScroll = new JScrollPane(nuttigeInfo);
 		nuttigeInfoScroll.setBorder(null);
 		nuttigeInfoScroll.getViewport().setBorder(null);
@@ -356,6 +358,7 @@ public class ErfgoedContent extends JPanel
 		kenmerken.setOpaque(false);
 		kenmerken.setForeground(Color.WHITE);
 		kenmerken.setLineWrap(true);
+		kenmerken.setWrapStyleWord(true);
 		JScrollPane kenmerkenScroll = new JScrollPane(kenmerken);
 		kenmerkenScroll.setBorder(null);
 		kenmerkenScroll.getViewport().setBorder(null);
@@ -384,6 +387,7 @@ public class ErfgoedContent extends JPanel
 		geschiedenis.setOpaque(false);
 		geschiedenis.setForeground(Color.WHITE);
 		geschiedenis.setLineWrap(true);
+		geschiedenis.setWrapStyleWord(true);
 		JScrollPane geschiedenisScroll = new JScrollPane(geschiedenis);
 		geschiedenisScroll.setBorder(null);
 		geschiedenisScroll.getViewport().setBorder(null);
