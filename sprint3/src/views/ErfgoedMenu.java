@@ -31,7 +31,7 @@ public class ErfgoedMenu extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/transparantGrijs.png"));
 	private Image background = backgroundIcon.getImage();
 	
-	private JLabel toevoegen, pdf;
+	private JLabel toevoegen;
 	private Model model;
 	private Databank databank;
 	private Hoofd hoofd;
@@ -136,57 +136,6 @@ public class ErfgoedMenu extends JPanel
 				toevoegen.setVisible(false);
 			
 			add(toevoegen);
-		
-			/*// pdf button
-			pdf = new JLabelFactory().getMenuTitel("Pdf maken");
-			pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-			pdf.addMouseListener(new MouseListener() {
-				
-				@Override
-				public void mouseReleased(MouseEvent e) {}
-				
-				@Override
-				public void mousePressed(MouseEvent e) {}
-				
-				@Override
-				public void mouseExited(MouseEvent e)
-				{
-					pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf_zwartwit.png")));
-				}
-				
-				@Override
-				public void mouseEntered(MouseEvent e)
-				{
-					pdf.setIcon(new ImageIcon(getClass().getResource("imgs/pdf.png")));
-					pdf.setCursor(hand);
-				}
-				
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					
-					JFileChooser chooser = new JFileChooser();
-					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					
-					File file = new File("");
-					
-					int resul = chooser.showSaveDialog(hoofd);
-					if(resul == JFileChooser.APPROVE_OPTION)
-					{
-						file = chooser.getSelectedFile();
-					}
-					
-					new PdfMaker(erfgoed, model, file);
-					
-					try
-					{
-						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file.getAbsolutePath());
-					}
-					catch (IOException ioe){}
-				}
-			});
-			add(pdf);*/
-			
 			
 			verwijderen = new JLabel();
 			verwijderen.setIcon(new ImageIcon(getClass().getResource("imgs/verwijderen.png")));

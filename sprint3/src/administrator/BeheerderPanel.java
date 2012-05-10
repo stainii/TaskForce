@@ -40,7 +40,7 @@ import model.Model;
 import controllers.mail.SoortMail;
 import controllers.mail.NieuweBeheerderMail;
 import controllers.WachtwoordGenerator;
-import controllers.Login;
+import controllers.MD5;
 
 @SuppressWarnings("serial")
 public class BeheerderPanel extends JPanel
@@ -339,7 +339,7 @@ public class BeheerderPanel extends JPanel
 					int id = 0;
 					try
 					{
-						id = d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),Login.convert(wachtwoord),emailTxt.getText(),true,true,true,true,false);
+						id = d.voegBeheerderToeAanDatabank(naamTxt.getText(),achternaamTxt.getText(),MD5.convert(wachtwoord),emailTxt.getText(),true,true,true,true,false);
 					}
 					catch (NoSuchAlgorithmException e)
 					{

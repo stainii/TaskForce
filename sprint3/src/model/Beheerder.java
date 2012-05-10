@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-import controllers.Login;
+import controllers.MD5;
 
 public class Beheerder 
 {

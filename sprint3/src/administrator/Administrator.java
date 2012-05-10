@@ -45,7 +45,7 @@ import model.Erfgoed;
 import model.Model;
 
 import controllers.Databank;
-import controllers.Login;
+import controllers.MD5;
 
 
 public class Administrator extends JPanel
@@ -142,7 +142,7 @@ public class Administrator extends JPanel
 			c = DriverManager.getConnection(connectie);
 			s = c.prepareStatement("SELECT COUNT (*) FROM Beheerder WHERE Gebruikersnaam=? AND Wachtwoord=? AND IsAdministrator = 1");
 			s.setString(1, gebruikersnaam);
-			s.setString(2, Login.convert(wachtwoord));
+			s.setString(2, MD5.convert(wachtwoord));
 			rs = s.executeQuery();
 			
 			rs.next();

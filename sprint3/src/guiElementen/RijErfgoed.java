@@ -63,7 +63,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 		add(new JLabelFactory().getTegelTitel(e.getNaam()));
 		add(new JLabelFactory().getTegelTekst(e.getTypeErfgoed()));
 		add(new JLabelFactory().getTegelTekst(e.getDeelgemeente()));
-		add(new JLabelFactory().getTegelTekst(e.getBurger()!=null?e.getBurger().getNaam():e.getBeheerder().getNaam()));
+		//add(new JLabelFactory().getTegelTekst(e.getBurger()!=null?e.getBurger().getNaam():e.getBeheerder().getNaam()));
 		
 		JPanel documenten = new JPanel(new FlowLayout());
 		documenten.setBorder(new EmptyBorder(10,0,0,0));

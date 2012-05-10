@@ -39,7 +39,7 @@ import administrator.Administrator;
 import model.Beheerder;
 import model.Model;
 import controllers.Databank;
-import controllers.Login;
+import controllers.MD5;
 import controllers.mail.MailThuis;
 import controllers.mail.WachtwoordMail;
 
@@ -199,7 +199,7 @@ public class Start extends JPanel
 						m.setBeheerder(gebruikersnaamTxt.getText());
 						
 						try {
-							b.setWachtwoord(Login.convert(wachtwoord.getWachtwoord()));
+							b.setWachtwoord(MD5.convert(wachtwoord.getWachtwoord()));
 							d.updateBeheerdersDatabank(b);
 						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
 						
@@ -239,7 +239,7 @@ public class Start extends JPanel
 				new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame	
 			}
 			
-			else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+			else if (d.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 			{
 				//LADEN
 				//databank inladen in model

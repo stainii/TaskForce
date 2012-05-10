@@ -79,9 +79,9 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		c.gridwidth = 6;
 		add(new JLabelFactory().getTegelTekst40(e.getTypeErfgoed() + " in " + e.getDeelgemeente()),c);
 		
-		c.gridx = 1;
-		c.gridy = 3;
-		add(new JLabelFactory().getTegelTekst40(e.getBurger()!=null?e.getBurger().getNaam():e.getBeheerder().getNaam()),c);
+		//c.gridx = 1;
+		//c.gridy = 3;
+		//add(new JLabelFactory().getTegelTekst40(e.getBurger()!=null?e.getBurger().getNaam():e.getBeheerder().getNaam()),c);
 		
 		c.gridx = 1;
 		c.gridy = 4;

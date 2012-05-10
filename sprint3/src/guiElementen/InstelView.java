@@ -50,7 +50,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import controllers.Databank;
-import controllers.Login;
+import controllers.MD5;
 
 import views.OverzichtContent;
 import views.OverzichtView;
@@ -758,11 +758,11 @@ public class InstelView extends JPanel
 		public void mousePressed(MouseEvent e) {
 
 			try {
-				if(Login.convert(oudW.getText()).equals(m.getBeheerder().getWachtwoord()))
+				if(MD5.convert(oudW.getText()).equals(m.getBeheerder().getWachtwoord()))
 				{
 					if(nieuwW1.getText().equals(nieuwW2.getText()))
 					{
-						m.getBeheerder().setWachtwoord(Login.convert(nieuwW2.getText()));
+						m.getBeheerder().setWachtwoord(MD5.convert(nieuwW2.getText()));
 						d.updateBeheerdersDatabank(m.getBeheerder());
 
 					}

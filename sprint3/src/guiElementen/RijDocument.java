@@ -94,11 +94,11 @@ public class RijDocument extends JPanel implements MouseListener
 		
 		add(new JLabelFactory().getTegelTekst("Voor " + document.getErfgoed().getNaam()));
 		
-		add(new JLabelFactory().getTegelTekst(document.getBurger()!=null?document.getBurger().getNaam():document.getBeheerder().getNaam()));
+		//add(new JLabelFactory().getTegelTekst(document.getBurger()!=null?document.getBurger().getNaam():document.getBeheerder().getNaam()));
 		
 		add(new JLabelFactory().getTegelTekst(document.getErfgoed().getDeelgemeente()));
 		
-		add(new JLabelFactory().getTegelTekst(document.getDatumToegevoegd().toString().substring(0,10)));
+		//add(new JLabelFactory().getTegelTekst(document.getDatumToegevoegd().toString().substring(0,10)));
 		
 		if (document.getStatus().equals("Goedgekeurd"))
 			add(new JLabelFactory().getGoedgekeurd(document.getStatus()));

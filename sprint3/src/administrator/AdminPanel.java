@@ -28,7 +28,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 import controllers.Databank;
-import controllers.Login;
+import controllers.MD5;
 import model.Beheerder;
 import model.Model;
 
@@ -328,7 +328,7 @@ public class AdminPanel extends JPanel
 					{
 						try
 						{
-							d.voegBeheerderToeAanDatabank(naamTxt.getText(),naamTxt.getText(),Login.convert(password2Txt.getText()),emailTxt.getText(),false,false,false,false,true);
+							d.voegBeheerderToeAanDatabank(naamTxt.getText(),naamTxt.getText(),MD5.convert(password2Txt.getText()),emailTxt.getText(),false,false,false,false,true);
 						}
 						catch (NoSuchAlgorithmException e)
 						{
@@ -467,7 +467,7 @@ public class AdminPanel extends JPanel
 				{
 					if (!password1Txt.getText().equals(beheerder.getWachtwoord()))
 						try {
-							beheerder.setWachtwoord(Login.convert(password1Txt.getText()));
+							beheerder.setWachtwoord(MD5.convert(password1Txt.getText()));
 						} catch (NoSuchAlgorithmException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
