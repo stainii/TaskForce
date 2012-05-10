@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 import controllers.Databank;
 import model.DocumentCMS;
@@ -159,7 +160,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx=1;
 		c.gridy=5;
 		c.gridwidth=6;
-		links.add(new JLabelFactory().getMenuTitel("Locatie: "),c);
+		JPanel locatiePnl = new JPanel(new GridBagLayout());
+		locatiePnl.setOpaque(false);
+		locatiePnl.setBorder(new JLabelFactory().getFieldSet("Locatie"));
+		links.add(locatiePnl,c);
 		
 		c.gridx=1;
 		c.gridy=6;
@@ -173,7 +177,7 @@ public class ErfgoedContent extends JPanel
 		straat.setBorder(null);
 		straat.setOpaque(false);
 		straat.setForeground(Color.WHITE);
-		links.add(straat,c);
+		locatiePnl.add(straat,c);
 		
 		c.gridx=4;
 		c.gridwidth=3;
@@ -186,7 +190,7 @@ public class ErfgoedContent extends JPanel
 		huisNr.setBorder(null);
 		huisNr.setOpaque(false);
 		huisNr.setForeground(Color.WHITE);
-		links.add(huisNr,c);
+		locatiePnl.add(huisNr,c);
 		
 		c.gridx=1;
 		c.gridy=7;
@@ -216,8 +220,8 @@ public class ErfgoedContent extends JPanel
 		postcodeTxt.setVisible(true);
 		postcodeTxt.setText(erfgoed.getPostcode());
 		
-		links.add(postcode,c);
-		links.add(postcodeTxt,c);
+		locatiePnl.add(postcode,c);
+		locatiePnl.add(postcodeTxt,c);
 		
 		postcode.addActionListener(new ActionListener() {
 			
@@ -277,8 +281,8 @@ public class ErfgoedContent extends JPanel
 		deelgemeenteTxt.setVisible(true);
 		deelgemeenteTxt.setText(erfgoed.getDeelgemeente());
 
-		links.add(deelgemeente,c);
-		links.add(deelgemeenteTxt,c);
+		locatiePnl.add(deelgemeente,c);
+		locatiePnl.add(deelgemeenteTxt,c);
 		
 		
 		c.gridx=1;
@@ -287,7 +291,7 @@ public class ErfgoedContent extends JPanel
 		MooiTextArea omschrijving = new MooiTextArea(erfgoed.getOmschrijving(),"Omschrijving");
 		tekstvakken.add(omschrijving);
 		omschrijving.setRows(3);
-		omschrijving.setColumns(30);
+		omschrijving.setColumns(29);
 		omschrijving.setEditable(false);
 		omschrijving.setOpaque(false);
 		omschrijving.setBorder(null);
@@ -298,35 +302,19 @@ public class ErfgoedContent extends JPanel
 		omschrijvingScroll.getViewport().setBorder(null);
 		omschrijvingScroll.setOpaque(false);
 		omschrijvingScroll.getViewport().setOpaque(false);
-		links.add(omschrijvingScroll,c);
+		locatiePnl.add(omschrijvingScroll,c);
 	
 		
 		
 		/**RECHTERKANT**/
-		
-		//TESTPANEL_____________________________________________________________________________
-		
-		rechtsTest = new JPanel();
-		
-		JTabbedPane tab = new JTabbedPane();
-		
-		MooiTextArea n = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
-		n.setColumns(40);
-		
-		
-		MooiTextArea k = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
-		k.setColumns(40);
-		
-		tab.add("Nuttige Info",n);
-		tab.add("Kenmerken",n);
-		
-		//______________________________________________________________________________________
-		
 		//nuttige info
 		c.gridx=7;
 		c.gridy=2;
 		c.gridwidth=6;
-		rechts.add(new JLabelFactory().getMenuTitel("Nuttige info:"),c);
+		JPanel nuttigeInfoPnl = new JPanel(new GridBagLayout());
+		nuttigeInfoPnl.setOpaque(false);
+		nuttigeInfoPnl.setBorder(new JLabelFactory().getFieldSet("Nuttige info"));
+		rechts.add(nuttigeInfoPnl,c);
 		
 		c.gridx=7;
 		c.gridy=3;
@@ -334,7 +322,7 @@ public class ErfgoedContent extends JPanel
 		MooiTextArea nuttigeInfo = new MooiTextArea(erfgoed.getNuttigeInfo(), "Nuttige info");
 		tekstvakken.add(nuttigeInfo);
 		nuttigeInfo.setRows(9);
-		nuttigeInfo.setColumns(30);
+		nuttigeInfo.setColumns(29);
 		nuttigeInfo.setEditable(false);
 		nuttigeInfo.setOpaque(false);
 		nuttigeInfo.setBorder(null);
@@ -345,13 +333,16 @@ public class ErfgoedContent extends JPanel
 		nuttigeInfoScroll.getViewport().setBorder(null);
 		nuttigeInfoScroll.setOpaque(false);
 		nuttigeInfoScroll.getViewport().setOpaque(false);
-		rechts.add(nuttigeInfoScroll,c);
+		nuttigeInfoPnl.add(nuttigeInfoScroll,c);
 		
 		//kenmerken
 		c.gridx=7;
 		c.gridy=4;
 		c.gridwidth=6;
-		rechts.add(new JLabelFactory().getMenuTitel("Kenmerken:"),c);
+		JPanel kenmerkenPnl = new JPanel(new GridBagLayout());
+		kenmerkenPnl.setOpaque(false);
+		kenmerkenPnl.setBorder(new JLabelFactory().getFieldSet("Kenmerken"));
+		rechts.add(kenmerkenPnl,c);
 				
 		c.gridx=7;
 		c.gridy=5;
@@ -359,7 +350,7 @@ public class ErfgoedContent extends JPanel
 		MooiTextArea kenmerken = new MooiTextArea(erfgoed.getKenmerken(), "Kenmerken");
 		tekstvakken.add(kenmerken);
 		kenmerken.setRows(9);
-		kenmerken.setColumns(30);
+		kenmerken.setColumns(29);
 		kenmerken.setEditable(false);
 		kenmerken.setBorder(null);
 		kenmerken.setOpaque(false);
@@ -370,13 +361,16 @@ public class ErfgoedContent extends JPanel
 		kenmerkenScroll.getViewport().setBorder(null);
 		kenmerkenScroll.setOpaque(false);
 		kenmerkenScroll.getViewport().setOpaque(false);
-		rechts.add(kenmerkenScroll,c);
+		kenmerkenPnl.add(kenmerkenScroll,c);
 		
 		//geschiedenis
 		c.gridx=7;
 		c.gridy=6;
 		c.gridwidth=6;
-		rechts.add(new JLabelFactory().getMenuTitel("Geschiedenis:"),c);
+		JPanel geschiedenisPnl = new JPanel(new GridBagLayout());
+		geschiedenisPnl.setOpaque(false);
+		geschiedenisPnl.setBorder(new JLabelFactory().getFieldSet("Geschiedenis"));
+		rechts.add(geschiedenisPnl,c);
 				
 		c.gridx=7;
 		c.gridy=7;
@@ -384,7 +378,7 @@ public class ErfgoedContent extends JPanel
 		MooiTextArea geschiedenis = new MooiTextArea(erfgoed.getGeschiedenis(),"Geschiedenis");
 		tekstvakken.add(geschiedenis);
 		geschiedenis.setRows(9);
-		geschiedenis.setColumns(30);
+		geschiedenis.setColumns(29);
 		geschiedenis.setEditable(false);
 		geschiedenis.setBorder(null);
 		geschiedenis.setOpaque(false);
@@ -395,17 +389,11 @@ public class ErfgoedContent extends JPanel
 		geschiedenisScroll.getViewport().setBorder(null);
 		geschiedenisScroll.setOpaque(false);
 		geschiedenisScroll.getViewport().setOpaque(false);
-		rechts.add(geschiedenisScroll,c);
+		geschiedenisPnl.add(geschiedenisScroll,c);
 		
-		/**DOCUMENEN- LINKS 2de VAK **/
-		JLabel titelDocument= new JLabelFactory().getMenuTitel("Documenten");
-		titelDocument.setVisible(true);
-		c.gridx=0;
-		c.gridy=1;
-		c.gridwidth=2;
-		documenten.add(titelDocument,c);
-		
+		/**DOCUMENEN- LINKS 2de VAK **/	
 		JPanel documentenPanel = new JPanel(new GridBagLayout());
+		documentenPanel.setBorder(new JLabelFactory().getFieldSet("Documenten"));
 		documentenPanel.setOpaque(false);
 		
 		int x = 0;
@@ -419,12 +407,12 @@ public class ErfgoedContent extends JPanel
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		
 		JScrollPane docs = new JScrollPane(documentenPanel);
-		docs.setPreferredSize(new Dimension(300,300));
+		docs.setPreferredSize(new Dimension(384,300));
 		docs.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		docs.setBorder(null);
 		docs.getViewport().setBorder(null);
-		docs.setOpaque(false);
 		docs.getViewport().setOpaque(false);
+		docs.setOpaque(false);
 		
 		documenten.add(docs,c);
 				
@@ -432,7 +420,7 @@ public class ErfgoedContent extends JPanel
 		{
 			if (x>2)
 			{
-				x=0;			// hier zit nog foutje in?? 
+				x=0; 
 				y++;
 			}
 			
@@ -443,7 +431,6 @@ public class ErfgoedContent extends JPanel
 			
 			x++;
 		}
-		//System.out.println(c.gridx + " " + c.gridy);
 		
 
 		JLabel geendoc = new JLabelFactory().getItalic("Dit erfgoed bevat geen documenten");
@@ -479,7 +466,7 @@ public class ErfgoedContent extends JPanel
 		if (tekstvakken.get(0).getText().equals(""))
 		{
 			bewerken();
-			titelDocument.setVisible(false);		// als nieuw erfgoeddocument wordt toegevoegd moet label "Documenten" er niet staan
+			documentenPanel.setVisible(false);		// als nieuw erfgoeddocument wordt toegevoegd moet label "Documenten" er niet staan
 		}
 			
 	}

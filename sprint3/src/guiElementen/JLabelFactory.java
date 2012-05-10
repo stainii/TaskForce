@@ -6,8 +6,11 @@ package guiElementen;
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 public class JLabelFactory
 {
@@ -146,4 +149,13 @@ public class JLabelFactory
 		label.setForeground(Color.RED);
 		return label;
 	}
+	
+	public TitledBorder getFieldSet(String s)
+	{
+		Color c = new Color(100,100,100);
+		Border b = BorderFactory.createLineBorder(c);
+		Font f = new Font("Comic Sans", Font.BOLD, 12);
+		return new TitledBorder(b,s,TitledBorder.DEFAULT_JUSTIFICATION,TitledBorder.TOP, f, Color.WHITE);
+	}
+	
 }
