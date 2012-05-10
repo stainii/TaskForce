@@ -242,7 +242,6 @@ public class Start extends JPanel
 			else if (Login.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 			{
 				//LADEN
-				voortgangLbl.setText("Klaar");
 				//databank inladen in model
 				voortgangLbl.setText("Bezig met laden databank...");
 				d.laadDatabank();

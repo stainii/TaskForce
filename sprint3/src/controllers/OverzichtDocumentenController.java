@@ -148,7 +148,7 @@ public class OverzichtDocumentenController
 				resultaat.add(d);
 			else if (d.getErfgoed().getTypeErfgoed().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getBurger()!=null && d.getErfgoed().getBurger().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getErfgoed().getBurger()!=null && d.getErfgoed().getBurger().getGebruikersnaam().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if ((d.getErfgoed().getBurger()!=null?d.getErfgoed().getBurger().getNaam():d.getErfgoed().getBeheerder().getNaam()).toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
@@ -156,9 +156,9 @@ public class OverzichtDocumentenController
 				resultaat.add(d);
 			else if (d.getStatus().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getRedenAfwijzing().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getRedenAfwijzing()!=null && d.getRedenAfwijzing().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getTekst().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getTekst()!=null && d.getTekst().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getOpmerkingen().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
