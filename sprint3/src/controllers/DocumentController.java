@@ -1,5 +1,8 @@
 package controllers;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.swing.JOptionPane;
 
 import model.DocumentCMS;
@@ -46,8 +49,8 @@ public class DocumentController
 	
 	public void update()
 	{
-		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
-		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		origineelDocument.setLaatsteWijziging(voorlopigDocument);
 		
 		if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
@@ -94,8 +97,8 @@ public class DocumentController
 		origineelDocument.setAard(voorlopigDocument.getAard());
 		origineelDocument.setTemp(voorlopigDocument.getTemp());
 		
-		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
-		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		
 		origineelDocument.setId(d.toevoegenDocument(origineelDocument));
 		m.toevoegenDocument(origineelDocument);
@@ -105,8 +108,8 @@ public class DocumentController
 	{
 		origineelDocument.setStatus("Goedgekeurd");
 		voorlopigDocument.setStatus("Goedgekeurd");
-		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
-		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		
 		d.beoordeelDocument(origineelDocument,true);
 	}
@@ -116,8 +119,8 @@ public class DocumentController
 		origineelDocument.setRedenAfwijzing(reden);
 		voorlopigDocument.setStatus("Afgekeurd");
 		voorlopigDocument.setRedenAfwijzing(reden);
-		origineelDocument.setDatumGewijzigd(d.getDatabankTijd());
-		voorlopigDocument.setDatumGewijzigd(d.getDatabankTijd());
+		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
+		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		
 		d.beoordeelDocument(origineelDocument,false);
 	}

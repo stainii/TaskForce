@@ -879,68 +879,27 @@ public class Databank
 		return pad;
 	}
 	
-	public Timestamp getDatabankTijd()	//omdat de systeemtijd verschillend kan zijn van de databanktijd,
-	{									//gebruiken we steeds de databanktijd
-		/*Connection c = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		Timestamp t = null;
-		
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT CURRENT_TIMESTAMP;");			
-			rs = s.executeQuery();
-		
-			rs.next();
-			t = rs.getTimestamp(1);
-		}
-		catch (SQLException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ophalen van de tijd)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				if (rs!=null)
-					rs.close();
-				if (s!=null)
-					s.close();
-				if (c!=null)
-					c.close();
-			}
-			catch (SQLException e)
-			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het ophalen van de tijd, het sluiten van de verbinding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
-		}*/
-		Timestamp t = new Timestamp(new Date().getTime());
-		return t;
-	}
-	public Timestamp getTijdLaatsteRijLogboek()		//voor het synchronisatiesysteem
+	public int getIdLaatsteRijLogboek()		//voor het synchronisatiesysteem
 	{
 		Connection c = null;
 		PreparedStatement s = null;
 		ResultSet rs = null;
-		Timestamp t = null;
+		int i = -1;
 		
 		try
 		{
 			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT TOP 1 DatumTijd FROM LOGBOEK WHERE (BeheerderId IS NOT NULL AND BeheerderId <> ?) OR BurgerId IS NOT NULL ORDER BY DatumTijd DESC;");
+			s = c.prepareStatement("SELECT TOP 1 LogId FROM LOGBOEK WHERE (BeheerderId IS NOT NULL AND BeheerderId <> ?) OR BurgerId IS NOT NULL ORDER BY LogId DESC;");
 			s.setInt(1, m.getBeheerder().getId());
 			
 			rs = s.executeQuery();
 		
 			if (rs.next())
-				t = rs.getTimestamp(1);
+				i = rs.getInt(1);
 		}
 		catch (SQLException e)
 		{
-			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het controleren van het logboek)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			System.err.println("Fout by synchroniseren!");
 			e.printStackTrace();
 		}
 		finally
@@ -960,7 +919,7 @@ public class Databank
 				e.printStackTrace();
 			}
 		}
-		return t;
+		return i;
 	}
 	
 	public ArrayList<Actie> getActies()
@@ -1046,8 +1005,8 @@ public class Databank
 		return acties;
 	}
 	
-	public String synchroniseerModel(Timestamp tijd)	//synchroniseert het model. Houdt rekenening met de
-	{													//aanpassingen in het logboek vanaf de meegegeven tijd.
+	public String synchroniseerModel(int logId)	//synchroniseert het model. Houdt rekenening met de
+	{											//aanpassingen in het logboek vanaf het aangegeven id.
 		int aantalWijzigingen = 0;
 		int aantalVerwijderd = 0;
 		int aantalToegevoegd = 0;
@@ -1061,9 +1020,9 @@ public class Databank
 				c = DriverManager.getConnection(connectie);
 				
 				//controle
-				s = c.prepareStatement("SELECT LogId, Actie FROM LOGBOEK WHERE DatumTijd > ? AND (BeheerderId IS NULL OR BeheerderId <> ?);");
+				s = c.prepareStatement("SELECT LogId, Actie FROM LOGBOEK WHERE LogId > ? AND (BeheerderId IS NULL OR BeheerderId <> ?);");
 				
-				s.setTimestamp(1,tijd);
+				s.setInt(1,logId);
 				s.setInt(2, m.getBeheerder().getId());
 				
 				rs = s.executeQuery();

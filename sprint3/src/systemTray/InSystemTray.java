@@ -29,7 +29,7 @@ public class InSystemTray
     private final TrayIcon trayIcon =	new TrayIcon(createImage("erfgoedpin.png", "tray icon"));
     private final SystemTray tray = SystemTray.getSystemTray();
     private MenuItem openenItem = null;
-    private Timestamp startTijd;
+    private int startId;
     
     public InSystemTray(Model m, Databank d)
 	{	
@@ -115,8 +115,8 @@ public class InSystemTray
     		trayIcon.displayMessage("Welkom bij Herzele Erfgoed CMS", "Welkom, er zijn " + aantalNogNietBeoordeeld + " nog niet beoordeelde documenten.", TrayIcon.MessageType.INFO);
     	
     	
-    	//De huidige databanktijd opslaan
-    	startTijd = d.getDatabankTijd();
+    	//Het id van de laatste log opslaan
+    	startId = d.getIdLaatsteRijLogboek();
     	//om de 4000 ms (4 seconden) een controle uitvoeren
     	new Timer().scheduleAtFixedRate(new Controleren(), 0, 4000);
     	
@@ -132,15 +132,13 @@ public class InSystemTray
         @Override
         public void run()
         {
-        	Timestamp laatsteTijd = d.getTijdLaatsteRijLogboek();	//de tijd van de laatste aanpassing in het logboek
-        	if (laatsteTijd!=null)
-        	{
-        		if (laatsteTijd.compareTo(startTijd) >0)	//vergelijk die tijd met de tijd waar we begonnen controleren zijn
+        	int laatsteId = d.getIdLaatsteRijLogboek();
+        	
+        	if (laatsteId > startId)	//kijk of er nieuwe id's bijgekomen zijn
         		{
-        			trayIcon.displayMessage("Externe wijziging", d.synchroniseerModel(startTijd), TrayIcon.MessageType.INFO);
-        			startTijd = d.getDatabankTijd();		//controle uitgevoerd, we beginnen opnieuw te controleren met de huidige tijd        		        		
+        			trayIcon.displayMessage("Externe wijziging", d.synchroniseerModel(startId), TrayIcon.MessageType.INFO);
+        			startId = laatsteId;		//controle uitgevoerd, we beginnen opnieuw te controleren met de huidige tijd        		        		
         		}
         	}
         }  
-    }
 }

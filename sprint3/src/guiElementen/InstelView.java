@@ -112,7 +112,7 @@ public class InstelView extends JPanel
 		close.addMouseListener(new CloseListener());
 		close.setIcon(new ImageIcon(getClass().getResource("imgs/close.png")));
 		Dimension sizeClose = close.getPreferredSize();
-		close.setBounds(482, 3, sizeClose.width, sizeClose.height);
+		close.setBounds(470, 10, sizeClose.width, sizeClose.height);
 		
 		JLabel overzicht = jLabelFactory.getMenuTitel("Overzicht");
 		Dimension sizeOverzicht = overzicht.getPreferredSize();

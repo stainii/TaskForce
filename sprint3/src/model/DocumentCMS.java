@@ -3,6 +3,7 @@ package model;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 import controllers.Databank;
 
@@ -61,8 +62,8 @@ public class DocumentCMS
 		this.status = "Goedgekeurd";
 		this.verwijderd = false;
 		this.erfgoedId = e.getId();
-		this.datumToegevoegd = d.getDatabankTijd();
-		this.datumGewijzigd = d.getDatabankTijd();
+		this.datumToegevoegd = new Timestamp(new Date().getTime());;
+		this.datumGewijzigd = new Timestamp(new Date().getTime());;
 		this.opmerkingen = "";
 		this.tekst = "";
 		this.typeDocument = "Onbekend";
