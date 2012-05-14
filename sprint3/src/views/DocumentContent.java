@@ -188,7 +188,7 @@ public class DocumentContent extends JPanel
 		MooiTextArea opmerkingen = new MooiTextArea(document.getOpmerkingen(),"Opmerkingen",new JLabelFactory().getItalic("").getFont());
 		tekstvakken.add(opmerkingen);
 		opmerkingen.setRows(5);
-		opmerkingen.setColumns(30);
+		opmerkingen.setColumns(28);
 		opmerkingen.setFont(new JLabelFactory().getItalic("").getFont());
 		opmerkingen.setEditable(false);
 		opmerkingen.setOpaque(false);
@@ -204,10 +204,10 @@ public class DocumentContent extends JPanel
 		
 		opmerkingenPnl.add(opmerkingenScroll);
 		
-		if (document.getLaatsteWijziging() != null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
+		if (document.getLaatsteWijziging() != null && document.getOpmerkingen()!=null && !document.getLaatsteWijziging().getOpmerkingen().equals(document.getOpmerkingen()))
 		{
 			c.gridy = 10;
-			JTextArea opmerkingenWijziging = new JTextArea(3,30);
+			JTextArea opmerkingenWijziging = new JTextArea(5,30);
 			opmerkingenWijziging.setText("Wijziging: " + document.getLaatsteWijziging().getOpmerkingen());
 			opmerkingenWijziging.setFont(new JLabelFactory().getWijziging("").getFont());
 			opmerkingenWijziging.setEditable(false);

@@ -130,11 +130,5 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 			content.quit();
 		hoofd.setContentPaneel(new DocumentView(model,databank,document,hoofd));
 	}
-	
-	@Override
-	public String getToolTipText()
-	{
-		return document.getTitel();
-	}
 
 }

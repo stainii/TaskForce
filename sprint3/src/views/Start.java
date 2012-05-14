@@ -190,7 +190,8 @@ public class Start extends JPanel
 			
 			if(resultaat == JOptionPane.YES_OPTION)
 			{				
-				WachtwoordMail wachtwoord = new WachtwoordMail();
+				m.setBeheerder(gebruikersnaamTxt.getText());
+				WachtwoordMail wachtwoord = new WachtwoordMail(m.getBeheerder());
 				
 				for(Beheerder b : m.getBeheerders())
 				{

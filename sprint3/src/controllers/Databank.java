@@ -563,7 +563,7 @@ public class Databank
 			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId, Aard) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
-			s.setString(2, doc.getStatus());
+			s.setString(2, "Goedgekeurd");		//een wijziging houdt in dat de beheerder vindt dat het document in zijn gewijzigde vorm zichtbaar mag zijn op de site
 			s.setTimestamp(3, doc.getDatumToegevoegd());
 			s.setBoolean(4,doc.isVerwijderd());
 			s.setString(5, doc.getOpmerkingen());

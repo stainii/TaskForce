@@ -49,7 +49,7 @@ public class ErfgoedContent extends JPanel
 	private AutoaanvullendeCombobox deelgemeente,postcode;
 	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
 	private MooiTextField straat;
-	private JPanel background, links , documenten, rechts,rechtsTest;
+	private JPanel background, links , documenten, rechts;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
