@@ -28,7 +28,7 @@ import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
 import model.Erfgoed;
-import model.Gemeenten;
+import model.Gemeente;
 import model.Instellingen;
 import model.Model;
 
@@ -51,7 +51,7 @@ public class Databank
 		ArrayList<Erfgoed> erfgoed = new ArrayList<Erfgoed>();
 		ArrayList<Beheerder> beheerders = new ArrayList<Beheerder>();
 		ArrayList<Instellingen> instellingen = new ArrayList<Instellingen>();
-		ArrayList<Gemeenten> gemeente = new ArrayList<Gemeenten>();
+		ArrayList<Gemeente> gemeente = new ArrayList<Gemeente>();
 		Connection c = null;
 		Statement s = null;
 		PreparedStatement s2 = null;
@@ -119,10 +119,10 @@ public class Databank
 				instellingen.add(new Instellingen(rs.getInt("InstellingId"),rs.getString("InstellingSleutel"),rs.getString("InstellingWaarde"),rs.getInt("BeheerderId")));
 			}
 			
-			rs = s.executeQuery("SELECT * FROM Gemeenten");
+			rs = s.executeQuery("SELECT * FROM Gemeente");
 			while(rs.next())
 			{
-				gemeente.add(new Gemeenten(rs.getInt("Postcode"),rs.getString("NaamGemeente")));
+				gemeente.add(new Gemeente(rs.getInt("Postcode"),rs.getString("Gemeente")));
 			}
 
 		}
@@ -154,7 +154,7 @@ public class Databank
 		m.setBurgers(burgers);
 		m.setBeheerders(beheerders);
 		m.setInstellingen(instellingen);
-		m.setGemeenten(gemeente);
+		m.setGemeente(gemeente);
 	}
 	
 	

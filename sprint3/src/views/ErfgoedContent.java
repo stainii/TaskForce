@@ -28,7 +28,7 @@ import javax.swing.text.JTextComponent;
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
-import model.Gemeenten;
+import model.Gemeente;
 import model.Model;
 import guiElementen.JTextFieldLimit;
 
@@ -198,7 +198,7 @@ public class ErfgoedContent extends JPanel
 		
 		ArrayList<Integer> post = new ArrayList<Integer>();
 
-		for(Gemeenten g : m.getGemeenten())
+		for(Gemeente g : m.getGemeente())
 		{
 			if(!post.contains(g.getPostcode()))
 				post.add(g.getPostcode());	
@@ -228,12 +228,12 @@ public class ErfgoedContent extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				for(Gemeenten g : m.getGemeenten())
+				for(Gemeente g : m.getGemeente())
 				{
 					if(postcode.getSelectedItem() == null)
 					{
 						DefaultComboBoxModel m = new DefaultComboBoxModel();
-						for(String s : model.getNaamGemeenten())
+						for(String s : model.getNaamGemeente())
 						{
 							m.addElement(s);
 						}
@@ -247,7 +247,7 @@ public class ErfgoedContent extends JPanel
 						if(postcode.getSelectedItem().equals(9550))
 						{
 							DefaultComboBoxModel m = new DefaultComboBoxModel();
-							for(String s : model.getNaamGemeentenZonderAndereGemeenten(Integer.parseInt(postcode.getSelectedItem().toString())))
+							for(String s : model.getNaamGemeenteZonderAndereGemeenten(Integer.parseInt(postcode.getSelectedItem().toString())))
 							{
 								m.addElement(s);
 							}
@@ -266,7 +266,7 @@ public class ErfgoedContent extends JPanel
 		c.gridx=2;
 		c.gridwidth = 5;
 				
-		deelgemeente = new AutoaanvullendeCombobox(model.getNaamGemeenten(),"String", "Deelgemeente",new JTextField(),20);
+		deelgemeente = new AutoaanvullendeCombobox(model.getNaamGemeente(),"String", "Deelgemeente",new JTextField(),20);
 		deelgemeente.setSelectedItem(erfgoed.getDeelgemeente());
 		deelgemeente.setEnabled(false);
 		deelgemeente.setVisible(false);

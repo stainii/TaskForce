@@ -15,7 +15,7 @@ public class Model
 	private ArrayList<DocumentCMS> documenten;
 	private ArrayList<Beheerder> beheerders;
 	private ArrayList<Instellingen> instellingen;
-	private ArrayList<Gemeenten> gemeente;
+	private ArrayList<Gemeente> gemeente;
 	private ArrayList<ChangeListener> listeners;
 	private Beheerder beheerder;
 	private Burger burger;
@@ -30,7 +30,7 @@ public class Model
 		beheerders = new ArrayList<Beheerder>();
 		documenten = new ArrayList<DocumentCMS>();
 		instellingen = new ArrayList<Instellingen>();
-		gemeente = new ArrayList<Gemeenten>();
+		gemeente = new ArrayList<Gemeente>();
 		reden = new ArrayList<String>() ;
 	}
 	
@@ -56,7 +56,7 @@ public class Model
 	{
 		return instellingen;
 	}
-	public ArrayList<Gemeenten> getGemeenten()
+	public ArrayList<Gemeente> getGemeente()
 	{
 		return gemeente;
 	}
@@ -87,7 +87,7 @@ public class Model
 		this.instellingen = instel;
 		notifyListeners();
 	}
-	public void setGemeenten(ArrayList<Gemeenten> gemeente)
+	public void setGemeente(ArrayList<Gemeente> gemeente)
 	{
 		this.gemeente = gemeente;
 		notifyListeners();
@@ -342,11 +342,11 @@ public class Model
 			}
 		}
 	}
-	public ArrayList<String> getNaamGemeenten()
+	public ArrayList<String> getNaamGemeente()
 	{
 		ArrayList<String> gemeente = new ArrayList<String>();
 		gemeente.clear();
-		for(Gemeenten g : getGemeenten())
+		for(Gemeente g : getGemeente())
 		{
 			gemeente.add(g.getGemeente());
 		}
@@ -354,11 +354,11 @@ public class Model
 		return gemeente;
 	}
 	
-	public ArrayList<String> getNaamGemeentenZonderAndereGemeenten(int postcode)
+	public ArrayList<String> getNaamGemeenteZonderAndereGemeenten(int postcode)
 	{
 		ArrayList<String> gemeente = new ArrayList<String>();
 		gemeente.clear();
-		for(Gemeenten g : getGemeenten())
+		for(Gemeente g : getGemeente())
 		{
 			if(g.getPostcode() == postcode)
 				gemeente.add(g.getGemeente());

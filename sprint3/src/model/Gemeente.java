@@ -1,11 +1,11 @@
 package model;
 
-public class Gemeenten 
+public class Gemeente 
 {
 	private int postcode;
 	private String gemeente;
 	
-	public Gemeenten(int p , String g)
+	public Gemeente(int p , String g)
 	{
 		this.postcode = p;
 		this.gemeente = g;
