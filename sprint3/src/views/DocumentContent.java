@@ -47,9 +47,9 @@ public class DocumentContent extends JPanel
 	private DocumentMedia media;
 	private DocumentController controller;
 	private ArrayList<JTextComponent> tekstvakken;
-	private JLabel wijzigingMedia;
+	private JLabel wijzigingMedia,aard;
 	private JPanel documentPanel;
-	private JComboBox aard;
+	private JComboBox aardBox;
 	
 	public DocumentContent(Model m, Databank db, Hoofd h, DocumentCMS doc)
 	{
@@ -113,13 +113,19 @@ public class DocumentContent extends JPanel
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Aard: "),c);
 		
 		String[] a = {"Postkaart", "Foto", "Prent", "Tekening", "Film" , "Kaart", "Brochure", "Affiche", "Andere"};
-		aard = new JComboBox(a);
-		aard.setEnabled(false);
-		aard.setSelectedItem(doc.getAard());
+		aardBox = new JComboBox(a);
+		//aardBox.setEnabled(false);
+		aardBox.setSelectedItem(doc.getAard());
+		aardBox.setVisible(false);
+		
+		aard = new JLabelFactory().getNormaleTekst(doc.getAard());
+		aard.setVisible(true);
 		
 		c.gridx = 2;
 		c.gridy = 4;
 		c.gridwidth = 2;
+		
+		documentPanel.add(aardBox,c);
 		documentPanel.add(aard,c);
 		
 		//aard wijziging
@@ -399,11 +405,13 @@ public class DocumentContent extends JPanel
 	//retourneert alle tekstvakken die bewerkbaar mogen gezet worden door (o.a.) Beoordeling
 	public ArrayList<JTextComponent> getTekstvakken()
 	{
+		aardBox.setVisible(true);
+		aard.setVisible(false);
 		return tekstvakken;
 	}
 	public JComboBox getComboBox()
 	{
-		return aard;		
+		return aardBox;		
 	}
 	
 	public void setEditable(boolean b)

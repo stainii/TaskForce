@@ -46,7 +46,7 @@ public class ErfgoedContent extends JPanel
 	@SuppressWarnings("rawtypes")
 	private AutoaanvullendeCombobox deelgemeente,postcode;
 	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
-	private MooiTextField straat;
+	private MooiTextField straat,huisNr;
 	private JPanel background, links , documenten, rechts;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -168,7 +168,7 @@ public class ErfgoedContent extends JPanel
 		c.gridwidth=3;
 		straat = new MooiTextField("","Straat");
 		straat.setDocument(new JTextFieldLimit(50));
-		straat.setText(erfgoed.getStraat());
+		straat.setText(erfgoed.getStraat()+" " + erfgoed.getHuisnr());
 		tekstvakken.add(straat);
 		straat.setColumns(25);
 		straat.setEditable(false);
@@ -179,7 +179,7 @@ public class ErfgoedContent extends JPanel
 		
 		c.gridx=4;
 		c.gridwidth=3;
-		MooiTextField huisNr = new MooiTextField("","Nr");
+		huisNr = new MooiTextField("","Nr");
 		huisNr.setDocument(new JTextFieldLimit(10));
 		huisNr.setText(erfgoed.getHuisnr());
 		tekstvakken.add(huisNr);
@@ -188,6 +188,7 @@ public class ErfgoedContent extends JPanel
 		huisNr.setBorder(null);
 		huisNr.setOpaque(false);
 		huisNr.setForeground(Color.WHITE);
+		huisNr.setVisible(false);
 		locatiePnl.add(huisNr,c);
 		
 		c.gridx=1;
@@ -476,6 +477,9 @@ public class ErfgoedContent extends JPanel
 	public String[] bewerken()
 	{
 		String[] s = new String[tekstvakken.size()+3];
+		
+		straat.setText(erfgoed.getStraat());
+		huisNr.setVisible(true);
 		
 		postcode.setVisible(false);
 		postcodeTxt.setVisible(true);

@@ -236,6 +236,7 @@ public class Beoordeling extends JPanel
 							controller.getVoorlopigDocument().setAard(documentContent.getComboBox().getSelectedItem().toString());
 							
 							documentContent.setEditable(false);
+							
 							controller.update();
 							
 							if (document.getBeheerder()==null || !document.getBeheerder().equals(model.getBeheerder()))

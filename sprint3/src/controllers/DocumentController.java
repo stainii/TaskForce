@@ -47,7 +47,7 @@ public class DocumentController
 		m.verwijderDocument(origineelDocument);
 	}
 	
-	public void update()
+	public void update() 
 	{
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
@@ -76,6 +76,7 @@ public class DocumentController
 			origineelDocument.setLaatsteWijziging(voorlopigDocument);
 			JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
 	}
 	public void toevoegen()
 	{
