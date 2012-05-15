@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -29,10 +28,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
-import administrator.AdminPanel.MaxLengthTextDocument;
-
-import sun.security.jgss.LoginConfigImpl;
 import controllers.Databank;
 import controllers.mail.MailThuis;
 import model.Beheerder;
@@ -41,6 +36,10 @@ import controllers.mail.SoortMail;
 import controllers.mail.NieuweBeheerderMail;
 import controllers.WachtwoordGenerator;
 import controllers.MD5;
+
+/**
+ * Panel waar beheerders worden weergegeven en kunnen worden beheerd.
+ */
 
 @SuppressWarnings("serial")
 public class BeheerderPanel extends JPanel

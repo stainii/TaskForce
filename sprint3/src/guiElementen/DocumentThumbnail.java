@@ -7,28 +7,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToolTip;
 import javax.swing.ToolTipManager;
-
 import controllers.Databank;
-
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
-
 import model.DocumentCMS;
 import model.Model;
 
 /** In het menu rechts van het scherm in DocumentView worden er thumbnails van andere documenten
  *  van het erfgoed weergegeven. Deze klasse is zo één thumbnail.
  */
-
-
 
 @SuppressWarnings("serial")
 public class DocumentThumbnail extends JPanel implements MouseListener

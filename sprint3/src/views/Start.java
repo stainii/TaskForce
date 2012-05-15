@@ -43,11 +43,15 @@ import controllers.MD5;
 import controllers.mail.MailThuis;
 import controllers.mail.WachtwoordMail;
 
+/**
+ *	Het inlogvenster en het laden van de applicatie.
+ */
+
+@SuppressWarnings("serial")
 public class Start extends JPanel
 {
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/ladenBackground.jpg"));
 	private Image background = backgroundIcon.getImage();
-	
 	private JPasswordField wachtwoordTxt;
 	private JTextField gebruikersnaamTxt;
 	private JPanel voortgang, login, wachtwoordVergetenPnl;
@@ -221,6 +225,7 @@ public class Start extends JPanel
 		private Hoofd hoofd;
 		private InSystemTray systemTray;
 
+		@SuppressWarnings("deprecation")
 		@Override
 		protected Void doInBackground() throws Exception
 		{

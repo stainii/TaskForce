@@ -16,14 +16,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import model.Actie;
+
+import speeltuin.Actie;
 import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
@@ -36,7 +34,7 @@ public class Databank
 {	
 	private Model m;
 	private final String online = "jdbc:sqlserver://Projecten2.mssql.somee.com;database=Projecten2;user=JDBC;password=TaskForceB2";
-	private final String offline = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
+	//private final String offline = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
 	private final String connectie = online; 
 	
 	public Databank(Model m)

@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
-
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
@@ -26,7 +24,6 @@ import controllers.Databank;
 import controllers.DocumentController;
 import controllers.mail.AfgekeurdMail;
 import controllers.mail.GoedkeurMail;
-import controllers.mail.MailSchool;
 import controllers.mail.MailThuis;
 import controllers.mail.WijzigingMail;
 

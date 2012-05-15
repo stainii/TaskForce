@@ -17,6 +17,7 @@ import views.OverzichtContent;
 import controllers.OverzichtDocumentenController;
 
 /** Zorgt voor de keuze tussen tabelview en lijstview in het overzichtscherm**/
+
 @SuppressWarnings("serial")
 public class OverzichtKiezer extends JPanel
 {

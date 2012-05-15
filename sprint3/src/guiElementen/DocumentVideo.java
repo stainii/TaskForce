@@ -5,17 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
-
 import controllers.Databank;
-
 import model.DocumentCMS;
-
 import de.humatic.dsj.DSFiltergraph;
 import de.humatic.dsj.DSMovie;
 import de.humatic.dsj.SwingMovieController;
@@ -64,6 +58,7 @@ public class DocumentVideo extends JPanel implements DocumentMedia, PropertyChan
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	class VideoLaden extends SwingWorker
 	{
 		private PropertyChangeListener prop;

@@ -1,14 +1,9 @@
 package controllers.mail;
 
-import java.util.Date;
-
-import controllers.Databank;
-
 import model.Beheerder;
-import model.DocumentCMS;
-import model.Model;
 
-/**Verstuurt een mail dat een document is afgekeurd **/
+
+/**Verstuurt een mail naar de nieuwe beheerder **/
 
 public class NieuweBeheerderMail implements SoortMail
 {

@@ -1,7 +1,5 @@
 package controllers.mail;
 
-import java.util.Date;
-
 import model.DocumentCMS;
 
 /**Verstuurt een mail dat een document is afgekeurd **/

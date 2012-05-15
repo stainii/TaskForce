@@ -1,28 +1,14 @@
 package guiElementen;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.IOException;
-
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
-
 import controllers.Databank;
-
 import model.DocumentCMS;
-
-import de.humatic.dsj.DSFiltergraph;
-import de.humatic.dsj.DSMovie;
-import de.humatic.dsj.SwingMovieController;
 
 /** Deze klasse wordt gebruikt om een video in DocumentView weer te geven*/
 
@@ -57,6 +43,7 @@ public class DocumentAndere extends JPanel implements DocumentMedia
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	class BestandLaden extends SwingWorker
 	{
 		@Override

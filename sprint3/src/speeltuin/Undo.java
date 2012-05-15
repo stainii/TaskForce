@@ -7,22 +7,18 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import controllers.Databank;
-
-import model.Actie;
-import model.DocumentCMS;
 import model.Model;
 
 @SuppressWarnings("serial")
 public class Undo extends JFrame
 {
+	
 	private Model model;
 	private Databank databank;
 	private JPanel panel;

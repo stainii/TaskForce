@@ -4,6 +4,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+/**
+ *	Deze klasse zorgt ervoor dat er een limiet aan tekens kan gegeven worden aan tekstveld.
+ *  Deze klasse wordt in veel andere klassen gebruikt waar een JTextField aanwezig is.
+ */
+
+@SuppressWarnings("serial")
 public class JTextFieldLimit extends PlainDocument
 {
 	  private int limit;

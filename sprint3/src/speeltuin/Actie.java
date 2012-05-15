@@ -1,6 +1,14 @@
-package model;
+package speeltuin;
 
 import java.sql.Timestamp;
+
+import model.DocumentCMS;
+import model.Erfgoed;
+
+/**
+ * 	Deze klasse doet momenteel niets, dit werd gebruikt in het undo-system. Maar dit
+ * 	wordt momenteel NIET meer gebruikt.
+ */
 
 public class Actie
 {

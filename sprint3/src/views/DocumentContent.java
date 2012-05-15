@@ -9,7 +9,6 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
 import guiElementen.Beoordeling;
 import guiElementen.DocumentAndere;
 import guiElementen.DocumentLink;
@@ -21,7 +20,6 @@ import guiElementen.DocumentAfbeelding;
 import guiElementen.MooiTextField;
 import guiElementen.MooiTextArea;
 import guiElementen.TypeKiezer;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +27,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
-
 import controllers.Databank;
 import controllers.DocumentController;
 import model.DocumentCMS;

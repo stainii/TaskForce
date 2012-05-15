@@ -1,6 +1,6 @@
 package controllers.mail;
 
-/**Interface voor AfgekeurdMail en GoedkeurMail */
+/**Interface voor mails */
 public interface SoortMail 
 {
 	String getMail();

@@ -1,11 +1,8 @@
 package administrator;
 
 import guiElementen.JLabelFactory;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,37 +14,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
-
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-
 import views.Start;
-
-import model.Beheerder;
-import model.Burger;
-import model.Erfgoed;
 import model.Model;
-
 import controllers.Databank;
 import controllers.MD5;
 
+/**
+ * Deze klasse is het administratorpaneel. Deze view zal te zien zijn wanneer een administrator zich aanmeldt. 
+ * Het bevat 3 panelen, het BeheerderPanel, AdminPanel en het BurgerPanel. 
+ */
 
+@SuppressWarnings("serial")
 public class Administrator extends JPanel
 {
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/ladenBackground.jpg"));
@@ -58,7 +40,7 @@ public class Administrator extends JPanel
 	private Databank d;
 	private JFrame frame;
 	private static String gebruiker;
-	private JLabel uitlogLbl,toevoegenBeheerderLbl;
+	private JLabel uitlogLbl;
 	private JPanel welkomPnl;
 	private JTabbedPane tab;
 	private BeheerderPanel beheerderPnl;

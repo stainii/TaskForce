@@ -4,14 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.ImageIcon;
-
 import views.Start;
-
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Model;

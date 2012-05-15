@@ -1,9 +1,6 @@
 package controllers.mail;
 
-import java.util.Date;
-
 import model.Beheerder;
-
 import controllers.WachtwoordGenerator;
 
 public class WachtwoordMail implements SoortMail 

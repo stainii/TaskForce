@@ -1,11 +1,5 @@
 package model;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-
-import controllers.MD5;
-
 public class Beheerder 
 {
 	private int id;

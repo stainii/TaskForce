@@ -17,7 +17,8 @@ import views.DocumentContent;
 import controllers.Databank;
 import controllers.DocumentController;
 
-/**Zit in DocumentView. Als je een nieuw document toevoegt, moet je een type kiezen: afbeelding, video, tekst, ...
+/**Zit in DocumentView. Als je een nieuw document toevoegt, moet je een type 
+ * kiezen: afbeelding, video, tekst, ...
  * Deze klasse geeft je de keuze */
 
 @SuppressWarnings("serial")

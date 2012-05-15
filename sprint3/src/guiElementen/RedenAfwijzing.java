@@ -5,11 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,11 +23,9 @@ import controllers.DocumentController;
 public class RedenAfwijzing extends JPanel
 {
 	private JTextField redenTxt;
-	@SuppressWarnings("rawtypes")
 	private JComboBox defaultRedenenCbx;
 	private Model m;
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public RedenAfwijzing(DocumentController cont,Model model)
 	{		
 		this.m = model;

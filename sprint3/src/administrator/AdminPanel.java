@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -26,12 +25,16 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
 import controllers.Databank;
 import controllers.MD5;
 import model.Beheerder;
 import model.Model;
 
+/**
+ * Panel waar alle administrators worden weergegeven en kunnen worden beheerd.
+ */
+
+@SuppressWarnings("serial")
 public class AdminPanel extends JPanel
 {
 	private Model m;

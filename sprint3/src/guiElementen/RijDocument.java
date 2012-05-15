@@ -17,6 +17,8 @@ import views.DocumentView;
 import views.Hoofd;
 import controllers.Databank;
 
+/**Dit is een rij in de lijstview, vergelijkbaar met een Tegel in de tegelview.
+ * Toont info over een document en is aanklikbaar **/
 
 @SuppressWarnings("serial")
 public class RijDocument extends JPanel implements MouseListener
@@ -28,9 +30,6 @@ public class RijDocument extends JPanel implements MouseListener
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
-	
-	/**Dit is een rij in de lijstview, vergelijkbaar met een Tegel in de tegelview.
-	 * Toont info over een document en is aanklikbaar **/
 	
 	@Override
 	protected void paintComponent(Graphics g)	//achtergrond tekenen

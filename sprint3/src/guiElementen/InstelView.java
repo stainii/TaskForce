@@ -1,19 +1,11 @@
 package guiElementen;
 
-import harsh.p.raval.lightbox.LightBox;
-
 import java.awt.Color;
-import java.awt.Container;
+import harsh.p.raval.lightbox.LightBox;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -27,12 +19,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -44,20 +33,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import controllers.Databank;
 import controllers.MD5;
-
-import views.OverzichtContent;
 import views.OverzichtView;
-
 import model.Instellingen;
 import model.Model;
-
+/**
+ * Dit het het instellingenpanel die verschijnt bij het klikken op instellingen boven Uitloggen.
+ * Hierin kan de opstartview gekozen worden, de standaardredenen van afkeuring aangevuld worden, 
+ * het wachtwoord wijzigen en de emailvoorkeuren wijzigen.
+ */
 @SuppressWarnings("serial")
 public class InstelView extends JPanel
 {
@@ -75,7 +60,6 @@ public class InstelView extends JPanel
 	private JPasswordField pwdTxt,oudW, nieuwW1,nieuwW2;
 	private DefaultListModel redenModel;
 	private JList standaardRedenen;
-	private ArrayList<String> reden;
 	private boolean inPanel = false;
 	String nieuweReden = "Typ hier een nieuwe reden...";
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
@@ -94,7 +78,6 @@ public class InstelView extends JPanel
 		this.f = frame;
 		this.v = view;
 		this.d = data;
-		reden = new ArrayList<String>();
 		
 		jLabelFactory = new JLabelFactory();
 		
@@ -413,6 +396,7 @@ public class InstelView extends JPanel
 		
 		oudW.addFocusListener(new FocusAdapter() {
 			
+			@SuppressWarnings("deprecation")
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				if(oudW.getText().isEmpty())
@@ -667,6 +651,7 @@ public class InstelView extends JPanel
 		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 		
+		@SuppressWarnings("deprecation")
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			
@@ -754,6 +739,7 @@ public class InstelView extends JPanel
 		@Override
 		public void mouseExited(MouseEvent e) {}
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public void mousePressed(MouseEvent e) {
 

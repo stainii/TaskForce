@@ -1,8 +1,14 @@
 package controllers;
 
+/**
+ * Deze klasse wordt gebruikt om nieuwe wachtwoorden te genereren voor nieuwe gebruikers
+ * en wanneer een beheerder zijn wachtwoord is vergeten.
+ */
+
 public class WachtwoordGenerator 
 {
-    public static String randomstring(int lo, int hi){  
+    @SuppressWarnings("deprecation")
+	public static String randomstring(int lo, int hi){  
         int n = rand(lo, hi);  
         byte b[] = new byte[n];  
         for (int i = 0; i < n; i++)  

@@ -7,24 +7,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.MaskFormatter;
-
+/**
+ * Deze klasse is een automatische aanvullende combobox. Wanneer 1ste letter dat getypt is
+ * overeen komt met 1 van de gegevens in de ArrayList gaat de combobox een popupvenster tonen
+ * met voorgestelde gegevens. 
+ */
 @SuppressWarnings("serial")
 public class AutoaanvullendeCombobox<T> extends JComboBox  
 {

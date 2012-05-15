@@ -1,7 +1,7 @@
 package views;
+
 import guiElementen.InstelView;
 import guiElementen.JLabelFactory;
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,16 +12,11 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JWindow;
-
 import controllers.Databank;
-
-
 import model.Model;
 
 

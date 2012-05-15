@@ -6,7 +6,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JTextField;
-
+/**
+ *	Deze klasse zorgt ervoor dat er een titeltje IN het tekstvak wordt getekend. 
+ *	Van zodra er in de textfield wordt getypt verdwijnt dit titeltje.
+ */
 @SuppressWarnings("serial")
 public class MooiTextField extends JTextField
 {

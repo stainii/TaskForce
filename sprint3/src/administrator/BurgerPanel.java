@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -17,10 +16,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import controllers.Databank;
-import model.Beheerder;
 import model.Burger;
 import model.Model;
 
+/**
+ *	Panel waar alle Burgers worden weergegeven.
+ */
 @SuppressWarnings("serial")
 public class BurgerPanel extends JPanel
 {
