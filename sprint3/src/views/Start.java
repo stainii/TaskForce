@@ -62,7 +62,6 @@ public class Start extends JPanel
 	private Databank d;
 	private Model m;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
-	private boolean sysTrayAlIngeladen;	//is de system tray al ingeladen? zo ja, dan moet hij niet opnieuw gemaakt worden
 	
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
@@ -72,10 +71,9 @@ public class Start extends JPanel
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public Start(JFrame fra, boolean sysTrayAlIngeladen)
+	public Start(JFrame fra)
 	{
 		this.frame = fra;
-		this.sysTrayAlIngeladen = sysTrayAlIngeladen;
 		
 		m = new Model();
 		d = new Databank(m);
@@ -157,10 +155,7 @@ public class Start extends JPanel
 		f.setSize(new Dimension(500,300));
 		f.setResizable(false);
 		f.setLocationRelativeTo(null);
-		
-		boolean sysTrayAlIngeladen =  (args.length>0);
-		
-		f.add(new Start(f, sysTrayAlIngeladen));
+		f.add(new Start(f));
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -241,8 +236,8 @@ public class Start extends JPanel
 			{
 				voortgang.setVisible(false);
 				logo.setVisible(false);
+				new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame
 				frame.dispose();
-				new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame	
 			}
 			
 			else if (d.controleerLogin(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
@@ -254,44 +249,26 @@ public class Start extends JPanel
 				m.setBeheerder(gebruikersnaamTxt.getText());
 				
 				//Interface (GUI) maken en eigenschappen instellen
-				voortgangLbl.setText("Bezig met laden interface...");
+				voortgangLbl.setText("Bezig met laden interface...");				
+				systemTray = new InSystemTray(m,d);
 				JFrame f = new JFrame();
 				f.setTitle("Herzele Erfgoed CMS");
-				hoofd = new Hoofd(m, d, f);
+				hoofd = new Hoofd(m, d, f, systemTray);
 				f.add(hoofd);
 				f.setSize(new Dimension(1005,720));
 				f.setMinimumSize(new Dimension(1005,700));
 				f.setLocationRelativeTo(null);
-				
-				//system tray inladen
-				if (!sysTrayAlIngeladen)
+				f.addWindowListener(new WindowAdapter()
 				{
-					systemTray = new InSystemTray(m,d);
-					f.addWindowListener(new WindowAdapter()
+					@Override
+					public void windowClosing(WindowEvent e)
 					{
-						@Override
-						public void windowClosing(WindowEvent e)
-						{
-							hoofd.quit();	//video's uitzetten
-							systemTray.zegHallo();	//boodschap weergeven dat de system tray nog werkt
-							((JFrame)(e.getSource())).dispose();	//het frame vernietigen
-							
-						}
-					});
-				}
-				else
-				{
-					f.addWindowListener(new WindowAdapter()
-					{
-						@Override
-						public void windowClosing(WindowEvent e)
-						{
-							hoofd.quit();	//video's uitzetten
-							((JFrame)(e.getSource())).dispose();	//het frame vernietigen
-						}
-					});
-				}
-				
+						hoofd.quit();	//video's uitzetten
+						systemTray.zegHallo();	//boodschap weergeven dat de system tray nog werkt
+						((JFrame)(e.getSource())).dispose();	//het frame vernietigen
+						
+					}
+				});
 				f.setVisible(true);
 				
 				//het inlogvenster verbergen en daarna vernietigen
@@ -307,10 +284,7 @@ public class Start extends JPanel
 				voortgang.setVisible(false);
 				wachtwoordTxt.grabFocus();
 			}
-			
-			
 			return null;
 		}
-		
 	}
 }

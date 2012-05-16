@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import systemTray.InSystemTray;
 import controllers.Databank;
 import controllers.ErfgoedController;
 import model.DocumentCMS;
@@ -39,7 +41,8 @@ public class ErfgoedMenu extends JPanel
 	private JLabel overzicht, bewerken, verwijderen, nieuwOpslaan;
 	private ErfgoedContent content;
 	private ErfgoedController controller;
-	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);	
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;	
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -49,7 +52,7 @@ public class ErfgoedMenu extends JPanel
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public ErfgoedMenu(Model m, Databank d, Erfgoed e, Hoofd h, ErfgoedContent c)
+	public ErfgoedMenu(Model m, Databank d, Erfgoed e, Hoofd h, ErfgoedContent c, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = d;
@@ -57,6 +60,7 @@ public class ErfgoedMenu extends JPanel
 		this.erfgoed = e;
 		this.content = c;
 		controller = new ErfgoedController(m, d, e);
+		this.systray = tray;
 		
 		setOpaque(false);
 		setPreferredSize(new Dimension(200,0));
@@ -128,7 +132,7 @@ public class ErfgoedMenu extends JPanel
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, model.getBeheerder().getId()),hoofd));
+					hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(erfgoed,model, databank, model.getBeheerder().getId()),hoofd,systray));
 				}
 			});
 			
@@ -212,7 +216,7 @@ public class ErfgoedMenu extends JPanel
 							controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 							controller.update();
 							bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
-							hoofd.setContentPaneel(new ErfgoedView(model, databank, controller.getOrigineelErfgoed(), hoofd));
+							hoofd.setContentPaneel(new ErfgoedView(model, databank, controller.getOrigineelErfgoed(), hoofd,systray));
 						}
 					}
 				}
@@ -261,7 +265,7 @@ public class ErfgoedMenu extends JPanel
 						controller.getVoorlopigErfgoed().setDeelgemeente(s[9]);
 						controller.toevoegen();
 						
-						hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd));
+						hoofd.setContentPaneel(new ErfgoedView(model,databank,erfgoed,hoofd,systray));
 					}
 				}
 			});

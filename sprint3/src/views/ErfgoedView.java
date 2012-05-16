@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import systemTray.InSystemTray;
+
 import controllers.Databank;
 
 import model.Erfgoed;
@@ -18,13 +20,13 @@ public class ErfgoedView extends JPanel
 	private ErfgoedContent content;
 	private ErfgoedMenu menu;
 	
-	public ErfgoedView(Model m, Databank d, Erfgoed e, Hoofd h)
+	public ErfgoedView(Model m, Databank d, Erfgoed e, Hoofd h, InSystemTray tray)
 	{
 		setOpaque(false);		
 		setLayout(new BorderLayout());
 		
-		content = new ErfgoedContent(m, d, h, e);
-		menu = new ErfgoedMenu(m, d, e, h, content);
+		content = new ErfgoedContent(m, d, h, e,tray);
+		menu = new ErfgoedMenu(m, d, e, h, content,tray);
 		
 		add(content, BorderLayout.CENTER);
 		add(menu,BorderLayout.EAST);

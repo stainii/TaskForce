@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
+
+import systemTray.InSystemTray;
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
@@ -43,9 +45,10 @@ public class Beoordeling extends JPanel
 	private ExecutorService ex;
 	private RedenAfwijzing redenAfwijzing;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
 	
-	public Beoordeling(Databank d, Model m , DocumentCMS doc, Hoofd h, DocumentContent dc, DocumentController cont)
+	public Beoordeling(Databank d, Model m , DocumentCMS doc, Hoofd h, DocumentContent dc, DocumentController cont, InSystemTray tray)
 	{
 		this.hoofd = h;
 		this.documentContent= dc;
@@ -53,6 +56,7 @@ public class Beoordeling extends JPanel
 		this.model = m;
 		this.databank = d;
 		this.document = doc;
+		this.systray = tray;
 		
 		//multithreading om de mail in achtergrond te versturen
 		ex = Executors.newFixedThreadPool(1);
@@ -176,7 +180,7 @@ public class Beoordeling extends JPanel
 							documentContent.setEditable(false);
 							controller.toevoegen();
 							//maak een nieuw DocumentView van het net gemaakte document
-							hoofd.setContentPaneel(new DocumentView(model,databank,controller.getOrigineelDocument(),hoofd));
+							hoofd.setContentPaneel(new DocumentView(model,databank,controller.getOrigineelDocument(),hoofd,systray));
 						}
 						else
 						{
@@ -245,7 +249,7 @@ public class Beoordeling extends JPanel
 								mail = new MailThuis((controller.getOrigineelDocument().getBurger()!=null?controller.getOrigineelDocument().getBurger().getEmail():controller.getOrigineelDocument().getBeheerder().getEmail()),"Document is gewijzigd", new WijzigingMail(controller.getOrigineelDocument()),model);
 								ex.execute(mail);						
 							}
-							hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd));
+							hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd,systray));
 						}
 						else
 						{

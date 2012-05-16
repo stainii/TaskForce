@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 import controllers.Databank;
+import systemTray.InSystemTray;
 import views.DocumentContent;
 import views.DocumentView;
 import views.Hoofd;
@@ -48,14 +49,16 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	private Hoofd hoofd;
 	private DocumentContent content;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
-	public DocumentThumbnail(Model m, Databank d, DocumentCMS doc, Hoofd h, DocumentContent cont)
+	public DocumentThumbnail(Model m, Databank d, DocumentCMS doc, Hoofd h, DocumentContent cont, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = d;
 		this.document = doc;
 		this.hoofd = h;
 		this.content = cont;
+		this.systray = tray;
 		
 		ToolTipManager.sharedInstance().registerComponent(DocumentThumbnail.this);
 		this.setToolTipText("test");
@@ -120,7 +123,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 	{
 		if (content!=null)		//is nul als je van erfgoedfiche naar hier komt
 			content.quit();
-		hoofd.setContentPaneel(new DocumentView(model,databank,document,hoofd));
+		hoofd.setContentPaneel(new DocumentView(model,databank,document,hoofd,systray));
 	}
 
 }

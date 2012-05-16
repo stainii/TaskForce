@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import model.DocumentCMS;
 import model.Erfgoed;
 import model.Model;
+import systemTray.InSystemTray;
 import views.DocumentView;
 import views.ErfgoedView;
 import views.Hoofd;
@@ -35,6 +36,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	private Hoofd hoofd;
 	private Erfgoed erfgoed;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 		
 	@Override
 	protected void paintComponent(Graphics g)	//achtergrond tekenen
@@ -44,12 +46,13 @@ public class RijErfgoed extends JPanel implements MouseListener
 			g.drawImage(backgroundTegel, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public RijErfgoed(Model m, Databank d, Erfgoed e, Hoofd h)
+	public RijErfgoed(Model m, Databank d, Erfgoed e, Hoofd h, InSystemTray tray)
 	{
 		this.model = m;
 		this.data = d;
 		this.erfgoed = e;
 		this.hoofd = h;
+		this.systray = tray;
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(0,10,0,10) );
@@ -102,7 +105,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd));
+				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd, systray));
 			}
 		});
 		if(m.getBeheerder().KanToevoegen() == false) // mag beheerder toevoegen?
@@ -155,7 +158,7 @@ public class RijErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent arg0)
 	{
-		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd));
+		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd,systray));
 	}
 	@Override
 	public void mouseEntered(MouseEvent e)
