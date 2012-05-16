@@ -1220,7 +1220,7 @@ public class Databank
 	public int voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
-		PreparedStatement s = null;
+		PreparedStatement s = null, s3 =null;
 		Statement s2 = null;
 		ResultSet rs = null;
 		int id=-1;
@@ -1245,6 +1245,12 @@ public class Databank
 			rs = s2.executeQuery(("SELECT BeheerderId FROM Beheerder ORDER BY BeheerderId DESC"));
 			rs.next();
 			id = rs.getInt("BeheerderId");
+			
+			// Default mailvoorkeuren voor nieuwe beheerder 
+			voegInstellingToe("EmailOut", "smtp.gmail.com", id);
+			voegInstellingToe("EmailPoort", "587", id);
+			voegInstellingToe("EmailGebruikernaam", "task.forceb2@gmail.com", id);
+			voegInstellingToe("EmailWachtwoord", "azertyb2", id);
 			
 			m.toevoegenBeheerder(new Beheerder(id,n,a, w,em, kb, kw, kv, kt,isAdmin,m));
 		}
