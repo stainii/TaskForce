@@ -1,6 +1,7 @@
 package views;
 
 import guiElementen.InstelView;
+import guiElementen.InstelViewNieuw;
 import guiElementen.JLabelFactory;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -154,7 +155,7 @@ public class Header extends JPanel implements MouseListener
 			f.setLocationRelativeTo(frame);
 			f.setVisible(true);*/
 			
-			new InstelView(m,frame,v,d);
+			new InstelViewNieuw(m,frame,v,d);
 		}
 
 		@Override
