@@ -1,8 +1,10 @@
 package guiElementen;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import harsh.p.raval.lightbox.LightBox;
@@ -43,9 +45,9 @@ import controllers.MD5;
 @SuppressWarnings("serial")
 public class InstelViewNieuw extends JPanel
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelviewLang.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelviewNieuw.png"));
 	private Image background = backgroundIcon.getImage();
-	private JPanel instelPanel, opstartviewPanel,standaardredenPanel,wachtwoordPanel,emailPanel;
+	private JPanel opstartviewPanel,standaardredenPanel,wachtwoordPanel,emailPanel;
 	private JLabel bewerken,opslaan,close,wachtwoordBtn;
 	private Model m;
 	private JFrame f;
@@ -61,6 +63,14 @@ public class InstelViewNieuw extends JPanel
 	String nieuweReden = "Typ hier een nieuwe reden...";
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
+	@Override
+	protected void paintComponent(Graphics g) 
+	{
+		super.paintComponent(g);
+		if (background != null)
+			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	}
+	
 	public InstelViewNieuw(Model model,JFrame frame,OverzichtView view,Databank data)
 	{
 		this.m = model;
@@ -70,12 +80,12 @@ public class InstelViewNieuw extends JPanel
 		
 		jLabelFactory = new JLabelFactory();
 		
-		setSize(new Dimension(510,630));
-		//setOpaque(false);
+		setSize(new Dimension(510,645));
+		setOpaque(false);
 		setLayout(new GridBagLayout());
-		setBackground(Color.GRAY);
+		//setBackground(Color.GRAY);
 		
-		// Panels
+		// Panels		
 		opstartviewPanel = new JPanel();
 		opstartviewPanel.setLayout(null);
 		opstartviewPanel.setBorder(jLabelFactory.getFieldSet("Overzicht"));
@@ -104,9 +114,9 @@ public class InstelViewNieuw extends JPanel
 		close = new JLabel();
 		close.addMouseListener(new CloseListener());
 		close.setIcon(new ImageIcon(getClass().getResource("imgs/close.png")));
-		Dimension sizeClose = close.getPreferredSize();
-		close.setBounds(470, 15, sizeClose.width, sizeClose.height);
-		
+	/*	Dimension sizeClose = close.getPreferredSize();
+		close.setBounds(470, 15, sizeClose.width, sizeClose.height);*/
+	
 		
 		//Overzicht_________________________________________________________________________________________
 		JLabel ikWil = jLabelFactory.getNormaleTekst("Bij het opstarten wil ik ");
@@ -540,7 +550,7 @@ public class InstelViewNieuw extends JPanel
 		
 		
 		GridBagConstraints c = new GridBagConstraints();
-		
+			
 		c.gridx = 1;
 		c.gridy = 1;
 		add(jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam()),c);
@@ -610,7 +620,7 @@ public class InstelViewNieuw extends JPanel
 			public void componentResized(ComponentEvent arg0) {
 				//Lightbox wegsmijten en een nieuwe maken bij het resizen.
 				box.closeLightBox(f, getInstelView());
-				box.createLightBoxEffect(f, getInstelView());
+				//box.createLightBoxEffect(f, getInstelView());
 			}
 			
 			@Override
@@ -781,7 +791,7 @@ public class InstelViewNieuw extends JPanel
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, "Verkeerde wachtwoord", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Verkeerd wachtwoord", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
 					nieuwW1.setText("");
 					nieuwW2.setText("");
 				}

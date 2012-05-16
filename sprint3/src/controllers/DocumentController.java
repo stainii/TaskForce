@@ -128,9 +128,9 @@ public class DocumentController
 		@Override
 		protected Void doInBackground()
 		{
+			tray.zegIets("Bezig met het wijzigen van het " + voorlopigDocument.getTitel());
 			if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
 			{
-				tray.zegIets("Bezig met het wijzigen van uw document");
 				d.updateDocument(voorlopigDocument,true);
 				origineelDocument.setAard(voorlopigDocument.getAard());
 				origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
@@ -143,15 +143,17 @@ public class DocumentController
 				origineelDocument.setTemp(voorlopigDocument.getTemp());
 				origineelDocument.setTitel(voorlopigDocument.getTitel());
 				origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
-				origineelDocument.setLaatsteWijziging(null);
-				tray.zegIets("Uw document is gewijzigd");				
+				origineelDocument.setLaatsteWijziging(null);	
+				tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");		
 			}
 			else
 			{
 				voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
 				origineelDocument.setLaatsteWijziging(voorlopigDocument);
+				tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");		
 				JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
 			}
+			
 			return null;
 		}
 	}
