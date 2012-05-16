@@ -6,6 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import systemTray.InSystemTray;
 import controllers.Databank;
 import model.Model;
 
@@ -35,10 +37,10 @@ public class Hoofd extends JPanel
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public Hoofd(Model m, Databank d, JFrame f)
+	public Hoofd(Model m, Databank d, JFrame f, InSystemTray tray)
 	{		
 		setLayout(new BorderLayout());
-		ingeladenOverzicht = new OverzichtView(m, d, this);		// de OverzichtView bijhouden
+		ingeladenOverzicht = new OverzichtView(m, d, this, tray);		// de OverzichtView bijhouden
 		add(new Header(m,f,ingeladenOverzicht,this,d),BorderLayout.NORTH);
 		
 		contentWrapper = new JPanel(new BorderLayout());

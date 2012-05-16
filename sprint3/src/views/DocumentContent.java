@@ -27,6 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
+
+import systemTray.InSystemTray;
 import controllers.Databank;
 import controllers.DocumentController;
 import model.DocumentCMS;
@@ -50,13 +52,14 @@ public class DocumentContent extends JPanel
 	private JLabel wijzigingMedia,aard;
 	private JPanel documentPanel;
 	private JComboBox aardBox;
+	private InSystemTray systray;
 	
-	public DocumentContent(Model m, Databank db, Hoofd h, DocumentCMS doc)
+	public DocumentContent(Model m, Databank db, Hoofd h, DocumentCMS doc, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = db;
 		this.hoofd = h;
-		this.controller = new DocumentController(m,db,doc);		
+		this.controller = new DocumentController(m,db,doc, tray);		
 		this.document = doc;
 		
 		tekstvakken = new ArrayList<JTextComponent>();
@@ -381,7 +384,7 @@ public class DocumentContent extends JPanel
 		c.gridx = 3;
 		c.gridy = 13;
 		c.gridheight = 1;
-		beoordeling = new Beoordeling(databank,model,document,hoofd,this, controller);
+		beoordeling = new Beoordeling(databank,model,document,hoofd,this, controller,tray);
 		documentPanel.add(beoordeling,c);
 		
 		/**

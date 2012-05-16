@@ -2,8 +2,14 @@ package controllers;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+
+import systemTray.InSystemTray;
 
 import model.DocumentCMS;
 import model.Model;
@@ -20,8 +26,10 @@ public class DocumentController
 	private DocumentCMS origineelDocument;
 	private Databank d;
 	private Model m;
+	private ExecutorService ex;
+	private InSystemTray tray;
 	
-	public DocumentController(Model m, Databank d, DocumentCMS doc)
+	public DocumentController(Model m, Databank d, DocumentCMS doc, InSystemTray tray)
 	{
 		this.origineelDocument = doc;
 		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(),doc.getAard(), m);
@@ -30,6 +38,8 @@ public class DocumentController
 		voorlopigDocument.setTemp(doc.getTemp());
 		this.m = m;
 		this.d = d;
+		ex = Executors.newCachedThreadPool();
+		this.tray = tray;
 	}
 	
 	public DocumentCMS getOrigineelDocument()
@@ -52,31 +62,7 @@ public class DocumentController
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		origineelDocument.setLaatsteWijziging(voorlopigDocument);
-		
-		if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
-		{
-			d.updateDocument(voorlopigDocument,true);
-			
-			origineelDocument.setAard(voorlopigDocument.getAard());
-			origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
-			origineelDocument.setImage(voorlopigDocument.getImage());
-			origineelDocument.setMediaId(voorlopigDocument.getMediaId());
-			origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
-			origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
-			origineelDocument.setStatus(voorlopigDocument.getStatus());
-			origineelDocument.setTekst(voorlopigDocument.getTekst());
-			origineelDocument.setTemp(voorlopigDocument.getTemp());
-			origineelDocument.setTitel(voorlopigDocument.getTitel());
-			origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
-			origineelDocument.setLaatsteWijziging(null);
-		}
-		else
-		{
-			voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
-			origineelDocument.setLaatsteWijziging(voorlopigDocument);
-			JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
+		ex.execute(new Updaten());
 	}
 	public void toevoegen()
 	{
@@ -101,8 +87,7 @@ public class DocumentController
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		
-		origineelDocument.setId(d.toevoegenDocument(origineelDocument));
-		m.toevoegenDocument(origineelDocument);
+		ex.execute(new Toevoegen());
 	}
 	
 	public void goedkeuren()
@@ -111,8 +96,7 @@ public class DocumentController
 		voorlopigDocument.setStatus("Goedgekeurd");
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
-		
-		d.beoordeelDocument(origineelDocument,true);
+		ex.execute(new Beoordelen(true));		
 	}
 	public void afkeuren(String reden)
 	{
@@ -122,7 +106,68 @@ public class DocumentController
 		voorlopigDocument.setRedenAfwijzing(reden);
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
+		ex.execute(new Beoordelen(false));
+	}
+	
+	private class Toevoegen extends SwingWorker<Void,Void>
+	{
+
+		@Override
+		protected Void doInBackground()
+		{
+			tray.zegIets("Bezig met het toevoegen van uw document");
+			origineelDocument.setId(d.toevoegenDocument(origineelDocument));
+			m.toevoegenDocument(origineelDocument);
+			tray.zegIets("Uw document is toegevoegd");
+			return null;
+		}
+	}
+	private class Updaten extends SwingWorker<Void,Void>
+	{
+
+		@Override
+		protected Void doInBackground()
+		{
+			if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
+			{
+				tray.zegIets("Bezig met het wijzigen van uw document");
+				d.updateDocument(voorlopigDocument,true);
+				origineelDocument.setAard(voorlopigDocument.getAard());
+				origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
+				origineelDocument.setImage(voorlopigDocument.getImage());
+				origineelDocument.setMediaId(voorlopigDocument.getMediaId());
+				origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
+				origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
+				origineelDocument.setStatus(voorlopigDocument.getStatus());
+				origineelDocument.setTekst(voorlopigDocument.getTekst());
+				origineelDocument.setTemp(voorlopigDocument.getTemp());
+				origineelDocument.setTitel(voorlopigDocument.getTitel());
+				origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
+				origineelDocument.setLaatsteWijziging(null);
+				tray.zegIets("Uw document is gewijzigd");				
+			}
+			else
+			{
+				voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
+				origineelDocument.setLaatsteWijziging(voorlopigDocument);
+				JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
+			}
+			return null;
+		}
+	}
+	private class Beoordelen extends SwingWorker<Void,Void>
+	{
+		private boolean goedkeuren;
 		
-		d.beoordeelDocument(origineelDocument,false);
+		public Beoordelen(boolean goedkeuren)
+		{
+			this.goedkeuren = goedkeuren;
+		}
+		@Override
+		protected Void doInBackground()
+		{
+			d.beoordeelDocument(origineelDocument,goedkeuren);
+			return null;
+		}
 	}
 }

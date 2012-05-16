@@ -3,6 +3,9 @@ package systemTray;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,8 +49,7 @@ public class InSystemTray
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				String[] args = new String[1];	//er wordt een argument meegegeven met de main-methode. Dit doen we zodat er geen nieuwe System Tray meer gemaakt wordt
-				Start.main(args);
+				restartApplication();
 			}
 		});
         MenuItem afsluitenItem = new MenuItem("Afsluiten");
@@ -77,7 +79,24 @@ public class InSystemTray
         //start het controleren
         start();
 	}
-
+    
+    public void restartApplication()
+	{
+		StringBuilder cmd = new StringBuilder();
+        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+            cmd.append(jvmArg + " ");
+        }
+        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+        cmd.append(Start.class.getName()).append(" ");
+        try {
+			Runtime.getRuntime().exec(cmd.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.exit(0);
+	}
 	//maakt een icoon van een afbeelding
     public static Image createImage(String path, String description) {
         URL imageURL = InSystemTray.class.getResource(path);
@@ -121,6 +140,10 @@ public class InSystemTray
     public void zegHallo()	//wordt aangeroepen als het venster gesloten wordt
     {
     	trayIcon.displayMessage("Task Force", "De CMS draait nog steeds in de achtergrond. U wordt verwittigd als er externe wijzigingen aan de databank worden aangebracht.", TrayIcon.MessageType.INFO);
+    }
+    public void zegIets(String s)
+    {
+    	trayIcon.displayMessage("Task Force", s, TrayIcon.MessageType.INFO);
     }
     
     private class Controleren extends TimerTask

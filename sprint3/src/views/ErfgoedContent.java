@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
+
+import systemTray.InSystemTray;
 import controllers.Databank;
 import model.DocumentCMS;
 import model.Erfgoed;
@@ -48,14 +50,16 @@ public class ErfgoedContent extends JPanel
 	private JTextField typeTxt,postcodeTxt,deelgemeenteTxt;
 	private MooiTextField straat,huisNr;
 	private JPanel background, links , documenten, rechts;
+	private InSystemTray systray;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e)
+	public ErfgoedContent(final Model m, Databank db, Hoofd h, Erfgoed e, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = db;
 		this.hoofd = h;
 		this.erfgoed = e;
+		this.systray = tray;
 		
 		background = new JPanel();
 		background.setBackground(Color.black);
@@ -429,7 +433,7 @@ public class ErfgoedContent extends JPanel
 			
 			c.gridx=x;
 			c.gridy=y;
-			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null);
+			JPanel l =new DocumentThumbnail(model, databank, doc, hoofd, null,systray);
 			documentenPanel.add(l, c);
 			
 			x++;

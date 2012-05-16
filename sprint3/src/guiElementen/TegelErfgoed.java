@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import controllers.Databank;
 
+import systemTray.InSystemTray;
 import views.DocumentView;
 import views.ErfgoedView;
 import views.Hoofd;
@@ -42,6 +43,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	private Erfgoed erfgoed;
 	private JLabel documentToevoegen;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
 	@Override
 	protected void paintComponent(Graphics g)		//achtergrond tekenen
@@ -52,12 +54,13 @@ public class TegelErfgoed extends JPanel implements MouseListener
 		
 	}
 	
-	public TegelErfgoed(Model m, Databank d, Erfgoed e, Hoofd h)
+	public TegelErfgoed(Model m, Databank d, Erfgoed e, Hoofd h, InSystemTray tray)
 	{
 		this.model = m;
 		this.data = d;
 		this.erfgoed = e;
 		this.hoofd = h;
+		this.systray = tray;
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(10,10,10,10) );
@@ -135,7 +138,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd));
+				hoofd.setContentPaneel(new DocumentView(model, data, new DocumentCMS(erfgoed,model,data, model.getBeheerder().getId()), hoofd,systray));
 			}
 		});
 		if(m.getBeheerder().KanToevoegen() == false) // mag beheerder toevoegen?
@@ -189,7 +192,7 @@ public class TegelErfgoed extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd));
+		hoofd.setContentPaneel(new ErfgoedView(model,data,erfgoed,hoofd,systray));
 	}
 
 	@Override

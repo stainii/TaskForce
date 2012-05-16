@@ -13,6 +13,10 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -100,6 +104,24 @@ public class Header extends JPanel implements MouseListener
 		add(p);
 		
 	}
+	
+	public void restartApplication()
+	{
+		StringBuilder cmd = new StringBuilder();
+        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+            cmd.append(jvmArg + " ");
+        }
+        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+        cmd.append(Start.class.getName()).append(" ");
+        try {
+			Runtime.getRuntime().exec(cmd.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.exit(0);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {}
@@ -124,9 +146,7 @@ public class Header extends JPanel implements MouseListener
 	public void mouseReleased(MouseEvent e) 
 	{
 		h.quit();
-		String[] args = new String[1];	//er wordt een argument meegegeven met de main-methode. Dit zorgt ervoor
-		Start.main(args);				//dat de system tray niet opnieuw gemaakt wordt
-		frame.dispose();
+		restartApplication();
 	}
 
 	private class InstellingenListener implements MouseListener
@@ -136,7 +156,8 @@ public class Header extends JPanel implements MouseListener
 		public void mouseClicked(MouseEvent e) {}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
+		public void mouseEntered(MouseEvent e)
+		{
 			instellingen.setIcon(new ImageIcon(getClass().getResource("imgs/instellingen_hover.png")));
 			instellingen.setCursor(hand);
 		}
@@ -147,14 +168,8 @@ public class Header extends JPanel implements MouseListener
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-		/*	JFrame f = new JFrame();
-			if(f.isVisible())
-				System.out.println("bla");
-			f.setSize(200,200);
-			f.setLocationRelativeTo(frame);
-			f.setVisible(true);*/
-			
+		public void mousePressed(MouseEvent e)
+		{			
 			new InstelViewNieuw(m,frame,v,d);
 		}
 

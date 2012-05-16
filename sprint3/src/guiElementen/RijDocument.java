@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import model.DocumentCMS;
 import model.Model;
+import systemTray.InSystemTray;
 import views.DocumentView;
 import views.Hoofd;
 import controllers.Databank;
@@ -30,6 +31,7 @@ public class RijDocument extends JPanel implements MouseListener
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
 	@Override
 	protected void paintComponent(Graphics g)	//achtergrond tekenen
@@ -39,12 +41,13 @@ public class RijDocument extends JPanel implements MouseListener
 			g.drawImage(backgroundTegel, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public RijDocument(Model m, Databank d, DocumentCMS doc, Hoofd h)
+	public RijDocument(Model m, Databank d, DocumentCMS doc, Hoofd h, InSystemTray tray)
 	{
 		this.model = m;
 		this.data = d;
 		this.document = doc;
 		this.hoofd = h;
+		this.systray = tray;
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(0,2,0,2) );
@@ -150,7 +153,7 @@ public class RijDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent arg0)
 	{
-		hoofd.setContentPaneel(new DocumentView(model,data,document,hoofd));
+		hoofd.setContentPaneel(new DocumentView(model,data,document,hoofd,systray));
 	}
 	@Override
 	public void mouseEntered(MouseEvent e)

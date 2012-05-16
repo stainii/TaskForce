@@ -25,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import systemTray.InSystemTray;
 import controllers.Databank;
 import controllers.OverzichtDocumentenController;
 import controllers.OverzichtErfgoedController;
@@ -76,9 +78,10 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 	private int huidigePagina;
 	private String view;
 	private String typeContent;
-	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);	
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;	
 
-	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtDocumentenController c1, OverzichtErfgoedController c2)
+	public OverzichtContent(Model m, Databank d, Hoofd h, OverzichtDocumentenController c1, OverzichtErfgoedController c2, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = d;
@@ -87,7 +90,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 		this.controller2 = c2;
 		this.view = "TegelView";
 		this.typeContent = m.getBeheerder().getTypeContent();
-		
+		this.systray = tray;		
 		
 		addComponentListener(this);
 				
@@ -212,7 +215,7 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 			public void mouseClicked(MouseEvent e)
 			{
 				documentToevoegen.setIcon(new ImageIcon(getClass().getResource("imgs/toevoegenIco.png")));
-				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd));
+				hoofd.setContentPaneel(new ErfgoedView(model,databank,new Erfgoed(model),hoofd,systray));
 			}
 		});
 		
@@ -381,11 +384,11 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (view.equals("TegelView"))
 					{
-						docPanel.add(new TegelDocument(model,databank,controller1.getInTeLaden().get(i),hoofd));
+						docPanel.add(new TegelDocument(model,databank,controller1.getInTeLaden().get(i),hoofd, systray));
 					}
 					else if (view.equals("LijstView"))
 					{
-						docPanel.add(new RijDocument(model,databank,controller1.getInTeLaden().get(i),hoofd));
+						docPanel.add(new RijDocument(model,databank,controller1.getInTeLaden().get(i),hoofd, systray));
 					}
 				}
 			}
@@ -395,11 +398,11 @@ public class OverzichtContent extends JPanel implements ComponentListener, Chang
 				{
 					if (view.equals("TegelView"))
 					{
-						docPanel.add(new TegelErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd));
+						docPanel.add(new TegelErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd, systray));
 					}
 					else if (view.equals("LijstView"))
 					{
-						docPanel.add(new RijErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd));
+						docPanel.add(new RijErfgoed(model,databank,controller2.getInTeLaden().get(i),hoofd, systray));
 					}
 				}				
 			}

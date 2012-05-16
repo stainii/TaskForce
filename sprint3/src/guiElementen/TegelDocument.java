@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import controllers.Databank;
 
+import systemTray.InSystemTray;
 import views.DocumentView;
 import views.Hoofd;
 
@@ -37,6 +38,7 @@ public class TegelDocument extends JPanel implements MouseListener
 	private Hoofd hoofd;
 	private DocumentCMS document;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
 
 	@Override
@@ -47,12 +49,13 @@ public class TegelDocument extends JPanel implements MouseListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public TegelDocument(Model m, Databank d, DocumentCMS doc, Hoofd h)
+	public TegelDocument(Model m, Databank d, DocumentCMS doc, Hoofd h, InSystemTray tray)
 	{
 		this.model = m;
 		this.data = d;
 		this.document = doc;
 		this.hoofd = h;
+		this.systray = tray;
 		
 		setOpaque(false);
 		setBorder(new EmptyBorder(10,10,10,10) );
@@ -162,7 +165,7 @@ public class TegelDocument extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		hoofd.setContentPaneel(new DocumentView(model,data,document,hoofd));		
+		hoofd.setContentPaneel(new DocumentView(model,data,document,hoofd,systray));		
 	}
 
 	@Override

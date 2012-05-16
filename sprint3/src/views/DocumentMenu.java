@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import systemTray.InSystemTray;
+
 import controllers.Databank;
 
 import model.DocumentCMS;
@@ -41,6 +43,7 @@ public class DocumentMenu extends JPanel
 	private DocumentContent content;
 	private JLabel overzicht, erfgoed;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private InSystemTray systray;
 	
 
 	@Override
@@ -51,13 +54,14 @@ public class DocumentMenu extends JPanel
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public DocumentMenu(Model m, Databank d, DocumentCMS doc, Hoofd h, DocumentContent cont)
+	public DocumentMenu(Model m, Databank d, DocumentCMS doc, Hoofd h, DocumentContent cont, InSystemTray tray)
 	{
 		this.model = m;
 		this.databank = d;
 		this.hoofd = h;
 		this.document = doc;
 		this.content = cont;
+		this.systray = tray;
 		setOpaque(false);
 		setPreferredSize(new Dimension(200,0));
 		setBorder(new EmptyBorder(15, 10, 0, 0) );
@@ -127,7 +131,7 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				hoofd.setContentPaneel(new ErfgoedView(model,databank,document.getErfgoed(),hoofd));
+				hoofd.setContentPaneel(new ErfgoedView(model,databank,document.getErfgoed(),hoofd,systray));
 			}
 		});
 		add(erfgoed);
@@ -160,7 +164,7 @@ public class DocumentMenu extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				content.quit();
-				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, model.getBeheerder().getId()),hoofd));
+				hoofd.setContentPaneel(new DocumentView(model,databank,new DocumentCMS(document.getErfgoed(),model, databank, model.getBeheerder().getId()),hoofd,systray));
 			}
 		});
 		
@@ -177,7 +181,7 @@ public class DocumentMenu extends JPanel
 		{
 			if (!doc.equals(document))
 			{
-				add(new DocumentThumbnail(model, d, document, hoofd, content));
+				add(new DocumentThumbnail(model, d, document, hoofd, content,tray));
 				gevonden = true;
 			}
 		}
