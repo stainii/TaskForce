@@ -1,5 +1,6 @@
 package guiElementen;
 
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
@@ -27,7 +28,8 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 	private Databank databank;
 	private boolean wijziging;
 	private Afbeelding afb;
-	private JLabel kiesAndereAfbeelding; 
+	private JLabel kiesAndereAfbeelding,kopieOpslaan; 
+	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
 	public DocumentAfbeelding(DocumentController con, Databank d, boolean w)
 	{
@@ -119,7 +121,9 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 			public void mouseExited(MouseEvent arg0) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {
+				kiesAndereAfbeelding.setCursor(hand);
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -187,7 +191,7 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 		add(kiesAndereAfbeelding, c);
 		
 		c.gridx = 2;
-		JLabel kopieOpslaan = new JLabelFactory().getNormaleTekst("   Kopie opslaan");
+		kopieOpslaan = new JLabelFactory().getNormaleTekst("   Kopie opslaan");
 		kopieOpslaan.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -200,7 +204,9 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 			public void mouseExited(MouseEvent arg0) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {
+				kopieOpslaan.setCursor(hand);
+			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)

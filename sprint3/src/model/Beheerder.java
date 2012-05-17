@@ -3,7 +3,7 @@ package model;
 public class Beheerder 
 {
 	private int id;
-	private String voornaam,achternaam,email;
+	private String gebruikersnaam,achternaam,email;
 	private String wachtwoord;
 	private boolean KanToevoegen,KanBeoordelen, KanWijzigen, KanVerwijderen,isAdmin;
 	private Model m;
@@ -11,7 +11,7 @@ public class Beheerder
 	public Beheerder(int id, String n, String a,String w,String em, boolean kb ,boolean kw, boolean kv, boolean kt,boolean isAdmin, Model model)
 	{
 		this.id=id;
-		this.voornaam=n;
+		this.gebruikersnaam=n;
 		this.achternaam=a;
 		this.wachtwoord = w;
 		this.email=em;
@@ -27,15 +27,15 @@ public class Beheerder
 		return id;
 	}
 
-	public String getVoornaam() {
-		return voornaam;
+	public String getGebruikersnaam() {
+		return gebruikersnaam;
 	}
 	public String getAchternaam(){
 		return achternaam;
 	}
 	public String getNaam()
 	{
-		return voornaam + " " + achternaam;
+		return gebruikersnaam + " " + achternaam;
 	}
 	public String getWachtwoord()  
 	{
@@ -104,8 +104,8 @@ public class Beheerder
 		m.notifyListeners();
 	}
 
-	public void setVoornaam(String naam) {
-		this.voornaam = naam;
+	public void setGebruikersnaam(String naam) {
+		this.gebruikersnaam = naam;
 		m.notifyListeners();
 	}
 	public void setAchternaam(String achternaam){

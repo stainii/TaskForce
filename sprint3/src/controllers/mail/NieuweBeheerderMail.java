@@ -184,7 +184,7 @@ public class NieuweBeheerderMail implements SoortMail
 				"<table>"+
 					"<tr>"+
 						"<td>Gebruikersnaam:</td>" +
-						"<td>" + beheerder.getVoornaam() +"</td>"+
+						"<td>" + beheerder.getGebruikersnaam() +"</td>"+
 						
 					"</tr>" +
 					"<tr>" +

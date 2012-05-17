@@ -184,30 +184,48 @@ public class Start extends JPanel
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			int resultaat = JOptionPane.showConfirmDialog(null,"Om de veiligheid te blijven garanderen wordt het oud wachtwoord verwijderd \nen wordt er een nieuw " +
-					"wachtwoord gestuurd naar de gebruiker.\nBent u hiermee akkoord?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 			
-			if(resultaat == JOptionPane.YES_OPTION)
-			{				
-				m.setBeheerder(gebruikersnaamTxt.getText());
-				WachtwoordMail wachtwoord = new WachtwoordMail(m.getBeheerder());
+			String beheerderDatWiltInloggen = gebruikersnaamTxt.getText();
+			boolean isEenBeheerder = false;
+			Object[] opties = {"Ja", "Nee"};
+			
+			for(Beheerder s : m.getBeheerders())
+			{
+				if(s.getGebruikersnaam().equals(beheerderDatWiltInloggen))
+					isEenBeheerder = true;
+			}
+			
+			if(isEenBeheerder)
+			{
+				int resultaat = JOptionPane.showOptionDialog(null,"Om de veiligheid te blijven garanderen wordt het oud wachtwoord verwijderd \nen wordt er een nieuw " +
+						"wachtwoord gestuurd naar de gebruiker.\nBent u hiermee akkoord?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE, null, opties, opties[0]);
 				
-				for(Beheerder b : m.getBeheerders())
-				{
-					if(gebruikersnaamTxt.getText().equalsIgnoreCase(b.getVoornaam()))
+				if(resultaat == JOptionPane.YES_OPTION)
+				{				
+					m.setBeheerder(gebruikersnaamTxt.getText());
+					WachtwoordMail wachtwoord = new WachtwoordMail(m.getBeheerder());
+					
+					for(Beheerder b : m.getBeheerders())
 					{
-						m.setBeheerder(gebruikersnaamTxt.getText());
-						
-						try {
-							b.setWachtwoord(MD5.convert(wachtwoord.getWachtwoord()));
-							d.updateBeheerdersDatabank(b);
-						} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
-						
-						mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord,m);
-						ex.execute(mail);
-					}
-				}	
-						
+						if(gebruikersnaamTxt.getText().equalsIgnoreCase(b.getGebruikersnaam()))
+						{
+							m.setBeheerder(gebruikersnaamTxt.getText());
+							
+							try {
+								b.setWachtwoord(MD5.convert(wachtwoord.getWachtwoord()));
+								d.updateBeheerdersDatabank(b);
+							} catch (NoSuchAlgorithmException e1) {e1.printStackTrace();} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
+							
+							mail = new MailThuis(b.getEmail(), "Nieuw wachtwoord", wachtwoord,m);
+							ex.execute(mail);
+						}
+					}	
+							
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Er kan geen nieuw wachtwoord worden verstuurd omdat de ingevulde beheerder niet werd teruggevonden." +
+						"\nControleer of de naam juist is geschreven.","Beheerder niet gevonden",JOptionPane.ERROR_MESSAGE);
 			}
 		}
 
@@ -279,7 +297,7 @@ public class Start extends JPanel
 			{
 				wachtwoordVergeten.setVisible(true);
 				wachtwoordTxt.setText("");
-				JOptionPane.showMessageDialog(null, "U bent geen beheerder en niet gemachtigd om dit programma te gebruiken!","Beheerder niet gevonden of wachtwoord foutief",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Er werd geen overeenkomst gevonden van gebruikersnaam en wachtwoord.\nGelieve de juiste gegevens in te vullen.","Beheerder niet gevonden of wachtwoord foutief",JOptionPane.ERROR_MESSAGE);
 				login.setVisible(true);
 				voortgang.setVisible(false);
 				wachtwoordTxt.grabFocus();

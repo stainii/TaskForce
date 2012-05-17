@@ -151,9 +151,9 @@ public class WachtwoordMail implements SoortMail
 				"<multiline label=\"Description\">" +
 				
 // Tekst
-"Beste " + b.getVoornaam() + " " + b.getAchternaam() + ",<br/>" + "Er werd een nieuw wachtwoord aangemaakt voor uw account.<br/> U kan een eigen wachtwoord kiezen door met het onderstaande wachtwoord in te loggen en te klikken op instellingen. In dat paneel kan u het wachtwoord wijzigen.<br /><br />"
+"Beste " + b.getGebruikersnaam() + " " + b.getAchternaam() + ",<br/>" + "Er werd een nieuw wachtwoord aangemaakt voor uw account.<br/> U kan een eigen wachtwoord kiezen door met het onderstaande wachtwoord in te loggen en te klikken op instellingen. In dat paneel kan u het wachtwoord wijzigen.<br /><br />"
 + "<br/><strong>Uw nieuwe gegevens</strong><br />"
-+ "Naam: " + b.getVoornaam()
++ "Naam: " + b.getGebruikersnaam()
 +"<br />Wachtwoord: " + wachtwoord +
 
 				"</multiline>" +

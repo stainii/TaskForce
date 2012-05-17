@@ -1,7 +1,7 @@
 package views;
 
 import guiElementen.InstelView;
-import guiElementen.InstelViewNieuw;
+import guiElementen.InstelView;
 import guiElementen.JLabelFactory;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -70,7 +70,7 @@ public class Header extends JPanel implements MouseListener
 		
 		setPreferredSize(new Dimension(1000,135));	//de breedte maakt niet uit, wordt overridden door de layoutmanager
 		
-		inlogLbl = new JLabelFactory().getBeheerderLogin(m.getBeheerder().getVoornaam());
+		inlogLbl = new JLabelFactory().getBeheerderLogin(m.getBeheerder().getGebruikersnaam());
 		uitlogLbl = new JLabelFactory().getUitloggenTekst("Uitloggen");
 		uitlogLbl.setIcon(new ImageIcon(getClass().getResource("imgs/uitloggen.png")));
 		uitlogLbl.addMouseListener(this);
@@ -170,7 +170,7 @@ public class Header extends JPanel implements MouseListener
 		@Override
 		public void mousePressed(MouseEvent e)
 		{			
-			new InstelViewNieuw(m,frame,v,d);
+			new InstelView(m,frame,v,d);
 		}
 
 		@Override

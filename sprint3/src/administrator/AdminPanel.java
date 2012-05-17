@@ -126,7 +126,7 @@ public class AdminPanel extends JPanel
 		for(Beheerder b : m.getBeheerders())
 		{
 			if(b.isAdmin()==true)
-				adminModel.addElement(b.getVoornaam());
+				adminModel.addElement(b.getGebruikersnaam());
 		}
 		
 		adminList = new JList(adminModel);
@@ -220,13 +220,13 @@ public class AdminPanel extends JPanel
 	{
 		for(Beheerder b : m.getBeheerders())
 		{
-			if(adminList.getSelectedValue().equals(b.getVoornaam()))
+			if(adminList.getSelectedValue().equals(b.getGebruikersnaam()))
 			{
 				if(b.isAdmin() == true)
 				{
 					beheerder = b;
 					index = adminList.getSelectedIndex();
-					naamTxt.setText(b.getVoornaam());
+					naamTxt.setText(b.getGebruikersnaam());
 					password1Txt.setText("wachtwoord");			// voor elke admin hetzelfde wachtwoord laten zien ! MD5 string is veel te lang!
 					emailTxt.setText(b.getEmail());
 				}
@@ -310,6 +310,7 @@ public class AdminPanel extends JPanel
 		public void mouseEntered(MouseEvent arg0) {}
 		@Override
 		public void mouseExited(MouseEvent arg0) {}
+		@SuppressWarnings("deprecation")
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 
@@ -323,7 +324,7 @@ public class AdminPanel extends JPanel
 					boolean dubbel = false;
 					for (Beheerder b: m.getBeheerders())
 					{
-						if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()))
+						if (b.getGebruikersnaam().equalsIgnoreCase(naamTxt.getText()))
 							dubbel = true;
 					}
 					
@@ -363,7 +364,7 @@ public class AdminPanel extends JPanel
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(b.isAdmin()==true)
-						adminModel.addElement(b.getVoornaam());
+						adminModel.addElement(b.getGebruikersnaam());
 				}
 				
 				adminList.setSelectedIndex(adminList.getLastVisibleIndex());
@@ -398,7 +399,7 @@ public class AdminPanel extends JPanel
 			}
 			else if(verwijderen.isEnabled() == true)
 			{
-				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +beheerder.getVoornaam().toString()+
+				int resultaat = JOptionPane.showConfirmDialog(null, "Wilt u " +beheerder.getGebruikersnaam().toString()+
 						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 								
 				if(resultaat == JOptionPane.YES_OPTION)
@@ -451,6 +452,7 @@ public class AdminPanel extends JPanel
 		public void mouseEntered(MouseEvent arg0) {}
 		@Override
 		public void mouseExited(MouseEvent arg0) {}
+		@SuppressWarnings("deprecation")
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
@@ -463,7 +465,7 @@ public class AdminPanel extends JPanel
 			
 			if (!dubbel)
 			{
-				beheerder.setVoornaam(naamTxt.getText());
+				beheerder.setGebruikersnaam(naamTxt.getText());
 				beheerder.setEmail(emailTxt.getText());
 				
 				if(!password1Txt.getText().equals("wachtwoord"))
@@ -495,7 +497,7 @@ public class AdminPanel extends JPanel
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(b.isAdmin()==true)
-						adminModel.addElement(b.getVoornaam());
+						adminModel.addElement(b.getGebruikersnaam());
 				}
 				adminList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
 				

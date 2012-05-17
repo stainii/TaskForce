@@ -259,8 +259,13 @@ public class ErfgoedContent extends JPanel
 							
 							
 						}
-						else
+						else{
+							DefaultComboBoxModel m = new DefaultComboBoxModel();
+							m.addElement(g.getGemeente());
+							deelgemeente.setModel(m);
 							deelgemeente.setSelectedItem(g.getGemeente());
+						}
+							
 					}
 				}
 			}
@@ -420,6 +425,7 @@ public class ErfgoedContent extends JPanel
 		docs.getViewport().setBorder(null);
 		docs.getViewport().setOpaque(false);
 		docs.setOpaque(false);
+		docs.setVisible(true);
 		
 		documenten.add(docs,c);
 				
@@ -445,11 +451,16 @@ public class ErfgoedContent extends JPanel
 		
 		//default label als er geen documenten zijn om weer te geven. 
 		if(erfgoed.getDocumenten().isEmpty())
-			geendoc.setVisible(true);
-		
-
+		{
+			if(titel.getText().equals(""))	// Als er nieuw erfgoed wordt gemaakt moet dit labeltje NIET zichtbaar zijn.
+				geendoc.setVisible(false);
+			else
+				geendoc.setVisible(true);
+			docs.setVisible(false);
+		}
+			
 		documenten.add(geendoc,c);
-		
+		System.out.println(erfgoed.getDocumenten().isEmpty());
 
 			
 		//Panels toevoegen aan ErfgoedContent	

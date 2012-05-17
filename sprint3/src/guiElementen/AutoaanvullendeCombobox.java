@@ -60,7 +60,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 		txt = soort; 
 		txt = (JTextField)this.getEditor().getEditorComponent();
 		
-		
+
 		txt.setDocument(new JTextFieldLimit(max));
 		
 
@@ -68,7 +68,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 				
 				@Override
 				public void mousePressed(MouseEvent e) {
-					if(txt.getText().equals("Postcode"))
+					if(txt.getText().equals("Post"))
 						txt.setText("");
 					if(txt.getText().equals("Deelgemeente"))
 						txt.setText("");
@@ -82,7 +82,7 @@ public class AutoaanvullendeCombobox<T> extends JComboBox
 					if(object.equals("Integer"))
 					{
 						if(txt.getText().equals(""))
-							txt.setText("Postcode");
+							txt.setText("Post");
 					}
 					if(object.equals("String"))
 					{

@@ -137,7 +137,7 @@ public class BeheerderPanel extends JPanel
 		for(Beheerder b : m.getBeheerders())			// BeheerderModel vullen met Beheerders uit de ArrayList<Beheerder>
 		{
 			if(b.isAdmin()==false)
-				beheerderModel.addElement(b.getVoornaam());
+				beheerderModel.addElement(b.getGebruikersnaam());
 		}
 		
 		beheerderList = new JList(beheerderModel);
@@ -252,10 +252,10 @@ public class BeheerderPanel extends JPanel
 				
 				for(Beheerder b : m.getBeheerders())
 				{
-					if(beheerderList.getSelectedValue().equals(b.getVoornaam()))
+					if(beheerderList.getSelectedValue().equals(b.getGebruikersnaam()))
 					{
 						m.setBeheerder(beheerderList.getSelectedValue().toString());
-						naamTxt.setText(m.getBeheerder().getVoornaam());
+						naamTxt.setText(m.getBeheerder().getGebruikersnaam());
 						achternaamTxt.setText(m.getBeheerder().getAchternaam());
 						emailTxt.setText(m.getBeheerder().getEmail());
 						
@@ -327,7 +327,7 @@ public class BeheerderPanel extends JPanel
 				boolean dubbel = false;
 				for (Beheerder b: m.getBeheerders())
 				{
-					if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()))
+					if (b.getGebruikersnaam().equalsIgnoreCase(naamTxt.getText()))
 						dubbel = true;
 				}
 				
@@ -375,7 +375,7 @@ public class BeheerderPanel extends JPanel
 					for(Beheerder b : m.getBeheerders())
 					{
 						if(b.isAdmin()==false)
-							beheerderModel.addElement(b.getVoornaam());
+							beheerderModel.addElement(b.getGebruikersnaam());
 					}
 					
 					beheerderList.setSelectedIndex(beheerderList.getLastVisibleIndex());
@@ -438,13 +438,13 @@ public class BeheerderPanel extends JPanel
 			boolean dubbel = false;
 			for (Beheerder b: m.getBeheerders())
 			{
-				if (b.getVoornaam().equalsIgnoreCase(naamTxt.getText()) && b.getId()!=m.getBeheerder().getId())
+				if (b.getGebruikersnaam().equalsIgnoreCase(naamTxt.getText()) && b.getId()!=m.getBeheerder().getId())
 					dubbel = true;
 			}
 			
 			if (!dubbel)
 			{
-				m.getBeheerder().setVoornaam(naamTxt.getText());
+				m.getBeheerder().setGebruikersnaam(naamTxt.getText());
 				m.getBeheerder().setAchternaam(achternaamTxt.getText());
 				m.getBeheerder().setEmail(emailTxt.getText());
 				m.getBeheerder().setKanBeoordelen(beoordelenCb.isSelected());
@@ -463,7 +463,7 @@ public class BeheerderPanel extends JPanel
 				for(Beheerder b : m.getBeheerders())
 				{
 					if(b.isAdmin()==false)
-						beheerderModel.addElement(b.getVoornaam());
+						beheerderModel.addElement(b.getGebruikersnaam());
 				}
 				beheerderList.setSelectedIndex(index);			//zorgt ervoor dat na het "hertekenen" terug op de geselecteerde index staat
 				
@@ -503,7 +503,7 @@ public class BeheerderPanel extends JPanel
 		public void mousePressed(MouseEvent e) {
 			if(verwijderen.isEnabled() == true)
 			{
-				int resultaat = JOptionPane.showConfirmDialog(beheerderPnl, "Wilt u " +m.getBeheerder().getVoornaam().toString()+
+				int resultaat = JOptionPane.showConfirmDialog(beheerderPnl, "Wilt u " +m.getBeheerder().getGebruikersnaam().toString()+
 						" verwijderen?","Verwijderen",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 				
 				if(resultaat == JOptionPane.YES_OPTION)
@@ -580,6 +580,7 @@ public class BeheerderPanel extends JPanel
 		public void mouseReleased(MouseEvent e) {}	
 	}
 }
+@SuppressWarnings("serial")
 class JTextFieldLimit extends PlainDocument {
 	  private int limit;
 	  JTextFieldLimit(int limit) {

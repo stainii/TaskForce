@@ -1,10 +1,13 @@
 package guiElementen;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import harsh.p.raval.lightbox.LightBox;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import harsh.p.raval.lightbox.LightBox;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +18,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.UnsupportedEncodingException;
@@ -33,22 +37,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import controllers.Databank;
-import controllers.MD5;
-import views.OverzichtView;
+
+import com.itextpdf.text.Jpeg;
+
 import model.Instellingen;
 import model.Model;
-/**
- * Dit het het instellingenpanel die verschijnt bij het klikken op instellingen boven Uitloggen.
- * Hierin kan de opstartview gekozen worden, de standaardredenen van afkeuring aangevuld worden, 
- * het wachtwoord wijzigen en de emailvoorkeuren wijzigen.
- */
+import views.OverzichtView;
+import controllers.Databank;
+import controllers.MD5;
+
 @SuppressWarnings("serial")
 public class InstelView extends JPanel
 {
-	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelviewLang.png"));
+	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/background_instelviewNieuw.png"));
 	private Image background = backgroundIcon.getImage();
-	private JPanel instelPanel;
+	private JPanel titelPanel,opstartviewPanel,standaardredenPanel,wachtwoordPanel,emailPanel;
 	private JLabel bewerken,opslaan,close,wachtwoordBtn;
 	private Model m;
 	private JFrame f;
@@ -61,6 +64,7 @@ public class InstelView extends JPanel
 	private DefaultListModel redenModel;
 	private JList standaardRedenen;
 	private boolean inPanel = false;
+	boolean zichtbaar;
 	String nieuweReden = "Typ hier een nieuwe reden...";
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
@@ -81,30 +85,61 @@ public class InstelView extends JPanel
 		
 		jLabelFactory = new JLabelFactory();
 		
-		setSize(new Dimension(510,570));
+		setSize(new Dimension(510,655));
 		setOpaque(false);
-		setLayout(null);
-		setBackground(Color.GRAY);
+		setLayout(new GridBagLayout());
+		//setBackground(Color.GRAY);
 		
-	
-		// Absolute positionering 
-		JLabel titel = jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam());
+		// Panels		
+		
+		titelPanel = new JPanel();
+		titelPanel.setLayout(null);
+		titelPanel.setOpaque(false);
+		titelPanel.setPreferredSize(new Dimension(500,25));
+		
+		opstartviewPanel = new JPanel();
+		opstartviewPanel.setLayout(null);
+		opstartviewPanel.setBorder(jLabelFactory.getFieldSet("Overzicht"));
+		opstartviewPanel.setOpaque(false);
+		opstartviewPanel.setPreferredSize(new Dimension(500,100));
+		
+		standaardredenPanel = new JPanel();
+		standaardredenPanel.setLayout(null);
+		standaardredenPanel.setBorder(jLabelFactory.getFieldSet("Documenten"));
+		standaardredenPanel.setOpaque(false);
+		standaardredenPanel.setPreferredSize(new Dimension(500,200));
+		
+		wachtwoordPanel = new JPanel();
+		wachtwoordPanel.setLayout(null);
+		wachtwoordPanel.setBorder(jLabelFactory.getFieldSet("Wachtwoord wijzigen"));
+		wachtwoordPanel.setOpaque(false);
+		wachtwoordPanel.setPreferredSize(new Dimension(500,120));
+		
+		emailPanel = new JPanel();
+		emailPanel.setLayout(null);
+		emailPanel.setBorder(jLabelFactory.getFieldSet("E-mail voorkeuren"));
+		emailPanel.setOpaque(false);
+		emailPanel.setPreferredSize(new Dimension(500,180));
+		
+		//Titel_________________________________________________________________________________________
+		
+		JLabel titel = jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getGebruikersnaam());
 		Dimension sizeTitel = titel.getPreferredSize();
-		titel.setBounds(20,5,sizeTitel.width,sizeTitel.height);
+		titel.setBounds(20,0,sizeTitel.width,sizeTitel.height);
+		titelPanel.add(titel);
 		
 		close = new JLabel();
 		close.addMouseListener(new CloseListener());
 		close.setIcon(new ImageIcon(getClass().getResource("imgs/close.png")));
 		Dimension sizeClose = close.getPreferredSize();
-		close.setBounds(470, 10, sizeClose.width, sizeClose.height);
+		close.setBounds(470, 0, sizeClose.width, sizeClose.height);
+		titelPanel.add(close);
+	
 		
-		JLabel overzicht = jLabelFactory.getMenuTitel("Overzicht");
-		Dimension sizeOverzicht = overzicht.getPreferredSize();
-		overzicht.setBounds(10, 35, sizeOverzicht.width, sizeOverzicht.height);
-		
+		//Overzicht_________________________________________________________________________________________
 		JLabel ikWil = jLabelFactory.getNormaleTekst("Bij het opstarten wil ik ");
 		Dimension sizeIkWil = ikWil.getPreferredSize();
-		ikWil.setBounds(15, 55, sizeIkWil.width, sizeIkWil.height);
+		ikWil.setBounds(15, 15, sizeIkWil.width, sizeIkWil.height);
 		
 		//eerste groep radiobuttons
 		ImageIcon selected = new ImageIcon(getClass().getResource("imgs/radiobutton_selected.png"));
@@ -130,7 +165,7 @@ public class InstelView extends JPanel
 			}
 		});
 		Dimension sizeErfgoed = erfgoed.getPreferredSize();
-		erfgoed.setBounds(16, 75, sizeErfgoed.width, sizeErfgoed.height);
+		erfgoed.setBounds(16, 35, sizeErfgoed.width, sizeErfgoed.height);
 		
 		// Documenten
 		JRadioButton documenten = new JRadioButton("Documenten");
@@ -148,7 +183,7 @@ public class InstelView extends JPanel
 			}
 		});
 		Dimension sizeDocumenten = documenten.getPreferredSize();
-		documenten.setBounds(16, 95,sizeDocumenten.width, sizeDocumenten.height);
+		documenten.setBounds(16, 55,sizeDocumenten.width, sizeDocumenten.height);
 		
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(erfgoed);
@@ -157,7 +192,7 @@ public class InstelView extends JPanel
 		// in een
 		JLabel inEen = jLabelFactory.getNormaleTekst("in een");
 		Dimension sizeInEen = inEen.getPreferredSize();
-		inEen.setBounds(190, 89, sizeInEen.width, sizeInEen.height);
+		inEen.setBounds(160, 45, sizeInEen.width, sizeInEen.height);
 		
 		// tweede groep radiobuttons
 		JRadioButton tegel = new JRadioButton("lijst van tegels");
@@ -178,7 +213,7 @@ public class InstelView extends JPanel
 			}
 		});
 		Dimension sizeTegel = tegel.getPreferredSize();
-		tegel.setBounds(290, 75, sizeTegel.width, sizeTegel.height);
+		tegel.setBounds(260, 35, sizeTegel.width, sizeTegel.height);
 		
 		JRadioButton tabel = new JRadioButton("tabel");
 		tabel.setForeground(Color.white);
@@ -198,7 +233,7 @@ public class InstelView extends JPanel
 			}
 		});
 		Dimension sizeTabel = tabel.getPreferredSize();
-		tabel.setBounds(290, 95, sizeTabel.width, sizeTabel.height);
+		tabel.setBounds(260, 55, sizeTabel.width, sizeTabel.height);
 		
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(tegel);
@@ -207,18 +242,14 @@ public class InstelView extends JPanel
 		// zien
 		JLabel zien = jLabelFactory.getNormaleTekst("zien.");
 		Dimension sizeZien = zien.getPreferredSize();
-		zien.setBounds(440, 89, sizeZien.width, sizeZien.height);
-		
-		// titel documenten
-		JLabel documentenLbl = jLabelFactory.getMenuTitel("Document");
-		Dimension sizeDocumentenLbl = documentenLbl.getPreferredSize();
-		documentenLbl.setBounds(10, 130, sizeDocumentenLbl.width, sizeDocumentenLbl.height);
+		zien.setBounds(440, 45, sizeZien.width, sizeZien.height);
+				
+		// Standaardreden_________________________________________________________________________________________
 		
 		JLabel reden = jLabelFactory.getNormaleTekst("Standaard redenen voor afwijzing");
 		Dimension sizeStandaardReden = reden.getPreferredSize();
-		reden.setBounds(15, 150, sizeStandaardReden.width, sizeStandaardReden.height);
+		reden.setBounds(15, 20, sizeStandaardReden.width, sizeStandaardReden.height);
 		
-		// Standaardreden
 		redenModel = new DefaultListModel();
 		for(int i=0;i<m.getStandaardReden().size();i++)
 		{
@@ -231,7 +262,7 @@ public class InstelView extends JPanel
 		JScrollPane redenScroll = new JScrollPane(standaardRedenen);
 		redenScroll.setPreferredSize(new Dimension(150,130));
 		redenScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		redenScroll.setBounds(35,170,redenScroll.getPreferredSize().width,redenScroll.getPreferredSize().height);
+		redenScroll.setBounds(35,40,redenScroll.getPreferredSize().width,redenScroll.getPreferredSize().height);
 		
 		// Textfield voor nieuwe reden
 		nieuweRedenTxt = new JTextField(nieuweReden);
@@ -284,7 +315,7 @@ public class InstelView extends JPanel
 		});
 
 		Dimension sizeNieuweRedenTxt = nieuweRedenTxt.getPreferredSize();
-		nieuweRedenTxt.setBounds(220, 190, sizeNieuweRedenTxt.width, sizeNieuweRedenTxt.height);
+		nieuweRedenTxt.setBounds(240, 60, sizeNieuweRedenTxt.width, sizeNieuweRedenTxt.height);
 		
 		// Toevoegen nieuwe reden 
 		final JLabel nieuweRedenBtn = new JLabel();
@@ -318,7 +349,7 @@ public class InstelView extends JPanel
 		});
 		
 		Dimension sizeNieuweRedenBtn = nieuweRedenBtn.getPreferredSize();
-		nieuweRedenBtn.setBounds(240,215,sizeNieuweRedenBtn.width,sizeNieuweRedenBtn.height);
+		nieuweRedenBtn.setBounds(260,85,sizeNieuweRedenBtn.width,sizeNieuweRedenBtn.height);
 
 		// verwijderen reden
 		final JLabel verwijderenBtn = new JLabel();
@@ -350,49 +381,46 @@ public class InstelView extends JPanel
 			public void mouseClicked(MouseEvent e) {}
 		});
 		Dimension sizeVerwijderenBtn = verwijderenBtn.getPreferredSize();
-		verwijderenBtn.setBounds(240, 250, sizeVerwijderenBtn.width, sizeVerwijderenBtn.height);
+		verwijderenBtn.setBounds(260, 120, sizeVerwijderenBtn.width, sizeVerwijderenBtn.height);
 		
-		//Wachtwoord
-		JLabel wachtwoordLbl = jLabelFactory.getMenuTitel("Wachtwoord wijzigen");
-		Dimension sizeWachtwoord = wachtwoordLbl.getPreferredSize();
-		wachtwoordLbl.setBounds(10,310,sizeWachtwoord.width,sizeWachtwoord.height);
+		//Wachtwoord_________________________________________________________________________________________
 		
 		JLabel oudwLbl = jLabelFactory.getNormaleTekst("Oud wachtwoord");
 		Dimension sizeoudwLbl = oudwLbl.getPreferredSize();
-		oudwLbl.setBounds(20,330,sizeoudwLbl.width,sizeoudwLbl.height);
+		oudwLbl.setBounds(20,30,sizeoudwLbl.width,sizeoudwLbl.height);
 		
 		oudW = new JPasswordField();
 		oudW.addKeyListener(new OudwachtwoordListener());
 		oudW.setColumns(15);
 		Dimension sizeOudW = oudW.getPreferredSize();
-		oudW.setBounds(140,330,sizeOudW.width,sizeOudW.height);
+		oudW.setBounds(140,30,sizeOudW.width,sizeOudW.height);
 		
 		JLabel nieuwW1Lbl = jLabelFactory.getNormaleTekst("Nieuw wachtwoord");
 		Dimension sizenieuwW1Lbl = nieuwW1Lbl.getPreferredSize();
-		nieuwW1Lbl.setBounds(20,352,sizenieuwW1Lbl.width,sizenieuwW1Lbl.height);
+		nieuwW1Lbl.setBounds(20,55,sizenieuwW1Lbl.width,sizenieuwW1Lbl.height);
 		
 		nieuwW1 = new JPasswordField();
 		nieuwW1.setColumns(15);
 		nieuwW1.setEnabled(false);
 		Dimension sizenieuwW1 = nieuwW1.getPreferredSize();
-		nieuwW1.setBounds(140,352,sizenieuwW1.width,sizenieuwW1.height);
+		nieuwW1.setBounds(140,55,sizenieuwW1.width,sizenieuwW1.height);
 		
 		JLabel herhaalLbl = jLabelFactory.getNormaleTekst("Herhaal wachtwoord");
 		Dimension sizeherhaalLbl = herhaalLbl.getPreferredSize();
-		herhaalLbl.setBounds(20,374,sizeherhaalLbl.width,sizeherhaalLbl.height);
+		herhaalLbl.setBounds(20,77,sizeherhaalLbl.width,sizeherhaalLbl.height);
 		
 		nieuwW2 = new JPasswordField();
 		nieuwW2.setColumns(15);
 		nieuwW2.setEnabled(false);
 		Dimension sizenieuwW2 = nieuwW2.getPreferredSize();
-		nieuwW2.setBounds(140,374,sizenieuwW2.width,sizenieuwW2.height);
+		nieuwW2.setBounds(140,77,sizenieuwW2.width,sizenieuwW2.height);
 		
 		wachtwoordBtn = new JLabel();
 		wachtwoordBtn.addMouseListener(new WachtwoordOpslaanListener());
 		wachtwoordBtn.setVisible(false);
 		wachtwoordBtn.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		Dimension sizeWbtn = wachtwoordBtn.getPreferredSize();
-		wachtwoordBtn.setBounds(320,350, sizeWbtn.width, sizeWbtn.height);
+		wachtwoordBtn.setBounds(320,50, sizeWbtn.width, sizeWbtn.height);
 		
 		
 		oudW.addFocusListener(new FocusAdapter() {
@@ -409,50 +437,50 @@ public class InstelView extends JPanel
 			}
 		});
 		
-		// Email
+		// Email voorkeuren_________________________________________________________________________________________
 		JLabel emailLbl = jLabelFactory.getMenuTitel("E-mail voorkeuren");
 		Dimension sizeEmailLbl = emailLbl.getPreferredSize();
-		emailLbl.setBounds(10, 400, sizeEmailLbl.width, sizeEmailLbl.height);
+		emailLbl.setBounds(10, 10, sizeEmailLbl.width, sizeEmailLbl.height);
 		
 		JLabel emailzin = jLabelFactory.getNormaleTekst("Geef hieronder uw E-mail instellingen");
 		Dimension sizeEmailzin = emailzin.getPreferredSize();
-		emailzin.setBounds(15,420,sizeEmailzin.width,sizeEmailzin.height);
+		emailzin.setBounds(15,30,sizeEmailzin.width,sizeEmailzin.height);
 		
 		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out (smtp)");
 		Dimension sizeEmailOut = emailOut.getPreferredSize();
-		emailOut.setBounds(20,452,sizeEmailOut.width,sizeEmailOut.height);
+		emailOut.setBounds(20,62,sizeEmailOut.width,sizeEmailOut.height);
 		
 		JLabel poortLbl = jLabelFactory.getNormaleTekst("Poort");
 		Dimension sizePoortLbl = poortLbl.getPreferredSize();
-		poortLbl.setBounds(20,475,sizePoortLbl.width,sizePoortLbl.height);
+		poortLbl.setBounds(20,85,sizePoortLbl.width,sizePoortLbl.height);
 		
 		emailOutTxt = new JTextField();
 		emailOutTxt.setColumns(15);
 		Dimension sizeEmailOutTxt = emailOutTxt.getPreferredSize();
-		emailOutTxt.setBounds(130, 450, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
+		emailOutTxt.setBounds(130, 60, sizeEmailOutTxt.width, sizeEmailOutTxt.height);
 		
 		poortTxt = new JTextField();
 		poortTxt.setColumns(15);
 		Dimension sizePoortTxt = poortTxt.getPreferredSize();
-		poortTxt.setBounds(130, 475, sizePoortTxt.width, sizePoortTxt.height);
+		poortTxt.setBounds(130, 85, sizePoortTxt.width, sizePoortTxt.height);
 		
 		JLabel userLbl =  jLabelFactory.getNormaleTekst("Gebruikersnaam");
 		Dimension sizeUserLbl = userLbl.getPreferredSize();
-		userLbl.setBounds(20,500,sizeUserLbl.width,sizeUserLbl.height);
+		userLbl.setBounds(20,110,sizeUserLbl.width,sizeUserLbl.height);
 		
 		userTxt = new JTextField();
 		userTxt.setColumns(15);
 		Dimension sizeUserTxt = userTxt.getPreferredSize();
-		userTxt.setBounds(130,500,sizeUserTxt.width,sizeUserTxt.height);
+		userTxt.setBounds(130,110,sizeUserTxt.width,sizeUserTxt.height);
 		
 		JLabel pwdLbl =  jLabelFactory.getNormaleTekst("Wachtwoord");
 		Dimension sizePwdLbl = pwdLbl.getPreferredSize();
-		pwdLbl.setBounds(20,525,sizePwdLbl.width,sizePwdLbl.height);
+		pwdLbl.setBounds(20,135,sizePwdLbl.width,sizePwdLbl.height);
 		
 		pwdTxt = new JPasswordField();
 		pwdTxt.setColumns(15);
 		Dimension sizePwdTxt = pwdTxt.getPreferredSize();
-		pwdTxt.setBounds(130,525,sizePwdTxt.width,sizePwdTxt.height);
+		pwdTxt.setBounds(130,135,sizePwdTxt.width,sizePwdTxt.height);
 		
 		
 		// bewerken button
@@ -460,13 +488,13 @@ public class InstelView extends JPanel
 		bewerken.addMouseListener(new BewerkenListener());
 		bewerken.setIcon(new ImageIcon(getClass().getResource("imgs/bewerken.png")));
 		Dimension sizeBewerken = bewerken.getPreferredSize();
-		bewerken.setBounds(320, 480, sizeBewerken.width, sizeBewerken.height);
+		bewerken.setBounds(320, 90, sizeBewerken.width, sizeBewerken.height);
 		
 		opslaan = new JLabel();
 		opslaan.addMouseListener(new OpslaanListener());
 		opslaan.setIcon(new ImageIcon(getClass().getResource("imgs/opslaan.png")));
 		Dimension sizeOpslaan = opslaan.getPreferredSize();
-		opslaan.setBounds(320,480, sizeOpslaan.width,sizeOpslaan.height);
+		opslaan.setBounds(320,90, sizeOpslaan.width,sizeOpslaan.height);
 		opslaan.setVisible(false);
 		
 		
@@ -503,48 +531,71 @@ public class InstelView extends JPanel
 		if(m.getBeheerder().getView().equals("LijstView"))
 			tabel.setSelected(true);
 		
-		// alles toevoegen aan InstelView panel
-		add(titel);
-		add(close);
-		add(overzicht);
-		add(ikWil);
-		add(erfgoed);
-		add(documenten);
-		add(inEen);
-		add(tegel);
-		add(tabel);
-		add(zien);
-		add(documentenLbl);
-		add(reden);
-		add(redenScroll);
-		add(nieuweRedenTxt);
-		add(nieuweRedenBtn);
-		add(verwijderenBtn);
-		add(wachtwoordLbl);
-		add(oudwLbl);
-		add(oudW);
-		add(nieuwW1Lbl);
-		add(nieuwW1);
-		add(herhaalLbl);
-		add(nieuwW2);
-		add(wachtwoordBtn);
-		add(emailLbl);
-		add(emailzin);
-		add(emailOut);
-		add(emailOutTxt);
-		add(poortLbl);
-		add(poortTxt);
-		add(bewerken);
-		add(opslaan);
-		add(userLbl);
-		add(userTxt);
-		add(pwdLbl);
-		add(pwdTxt);
+		// Adden aan gerelateerde panel met Absolute positionering
+		opstartviewPanel.add(ikWil);		
+		opstartviewPanel.add(erfgoed);
+		opstartviewPanel.add(documenten);
+		opstartviewPanel.add(inEen);
+		opstartviewPanel.add(tegel);
+		opstartviewPanel.add(tabel);
+		opstartviewPanel.add(zien);
 		
-		// LightBox maken met nodige listeners om te sluiten
+		standaardredenPanel.add(reden);
+		standaardredenPanel.add(redenScroll);
+		standaardredenPanel.add(nieuweRedenTxt);
+		standaardredenPanel.add(nieuweRedenBtn);
+		standaardredenPanel.add(verwijderenBtn);
+		
+		wachtwoordPanel.add(oudwLbl);
+		wachtwoordPanel.add(oudW);
+		wachtwoordPanel.add(nieuwW1Lbl);
+		wachtwoordPanel.add(nieuwW1);
+		wachtwoordPanel.add(herhaalLbl);
+		wachtwoordPanel.add(nieuwW2);
+		wachtwoordPanel.add(wachtwoordBtn);
+		
+		emailPanel.add(emailzin);
+		emailPanel.add(emailOut);
+		emailPanel.add(emailOutTxt);
+		emailPanel.add(poortLbl);
+		emailPanel.add(poortTxt);
+		emailPanel.add(bewerken);
+		emailPanel.add(opslaan);
+		emailPanel.add(userLbl);
+		emailPanel.add(userTxt);
+		emailPanel.add(pwdLbl);
+		emailPanel.add(pwdTxt);
+		
+		GridBagConstraints c = new GridBagConstraints();
+			
+		c.gridx = 1;
+		c.gridy = 1;
+		//add(jLabelFactory.getTitel("Instellingen voor " + m.getBeheerder().getVoornaam()),c);
+		add(titelPanel,c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		add(opstartviewPanel,c);
+		
+		c.gridx = 1;
+		c.gridy = 3;
+		add(standaardredenPanel, c);
+		
+		c.gridx = 1;
+		c.gridy = 4;
+		add(wachtwoordPanel,c);
+		
+		c.gridx = 1;
+		c.gridy = 5;
+		add(emailPanel,c);
+		
+		
+		
+		//Lightbox
 		box = new LightBox();
 		box.createLightBoxEffect(f,this);
 		box.grabFocus();
+		zichtbaar = true;
 		box.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -556,40 +607,40 @@ public class InstelView extends JPanel
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == 27)			// 27 is de keycode voor Esc
+				{	
 					box.closeLightBox(f, getInstelView());
+					zichtbaar = false;
+				}
 			}
 		});
-		box.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
+		box.addMouseListener(new MouseAdapter() {	
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(!inPanel)
+				{
 					box.closeLightBox(f,getInstelView());
+					zichtbaar = false;
+				}
 			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {}
 		});
+		
 		
 		f.addComponentListener(new ComponentListener() {
 			
 			@Override
-			public void componentShown(ComponentEvent arg0) {}
+			public void componentShown(ComponentEvent arg0) {
+			}
 			
 			@Override
-			public void componentResized(ComponentEvent arg0) {
+			public void componentResized(ComponentEvent e) 
+			{
 				//Lightbox wegsmijten en een nieuwe maken bij het resizen.
-				box.closeLightBox(f, getInstelView());
-				box.createLightBoxEffect(f, getInstelView());
+
+				if(zichtbaar){
+					box.closeLightBox(f, getInstelView());
+					box.createLightBoxEffect(f, getInstelView());
+					zichtbaar = true;
+				}
 			}
 			
 			@Override
@@ -599,13 +650,11 @@ public class InstelView extends JPanel
 			public void componentHidden(ComponentEvent arg0) {}
 		});
 		
+		
 		// listener voor InstelView 
 		this.addMouseListener(new InstelViewListener());
-	}
-	
-	public JPanel getInstelPanel()
-	{
-		return instelPanel;
+		
+		
 	}
 	
 	public JPanel getInstelView()		// gebruiken in private klassen hieronder
@@ -763,7 +812,7 @@ public class InstelView extends JPanel
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, "Verkeerde wachtwoord", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Verkeerd wachtwoord", "Fout wachtwoord!",JOptionPane.ERROR_MESSAGE);
 					nieuwW1.setText("");
 					nieuwW2.setText("");
 				}
@@ -813,5 +862,4 @@ public class InstelView extends JPanel
 		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
-	
 }

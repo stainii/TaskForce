@@ -215,7 +215,7 @@ public class Model
 	{
 		for (Beheerder b : beheerders)
 		{
-			if (b.getVoornaam().equalsIgnoreCase(naam))
+			if (b.getGebruikersnaam().equalsIgnoreCase(naam))
 				beheerder = b;
 		}
 	}
