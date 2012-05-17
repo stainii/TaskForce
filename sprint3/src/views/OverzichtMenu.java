@@ -7,6 +7,7 @@ package views;
 import guiElementen.JLabelFactory;
 import guiElementen.OverzichtKiezer;
 
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -21,8 +22,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -33,6 +42,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 import controllers.OverzichtDocumentenController;
 import controllers.OverzichtErfgoedController;
@@ -58,6 +70,9 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 	private OverzichtErfgoedController c2;
 	private OverzichtContent linkerscherm;
 	private Model model;
+	
+	private InputStream easterEgg;
+	private AudioStream egg;
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -67,7 +82,7 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
 	
-	public OverzichtMenu(Model m, OverzichtDocumentenController controller1, OverzichtErfgoedController controller2, OverzichtContent content)
+	public OverzichtMenu(Model m, OverzichtDocumentenController controller1, OverzichtErfgoedController controller2, OverzichtContent content) 
 	{
 		this.c1 = controller1;
 		this.c2 = controller2;
@@ -82,6 +97,15 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		FlowLayout f =new FlowLayout();
 		f.setAlignment(FlowLayout.LEFT);
 		setLayout(f);
+		
+		try{
+			easterEgg = getClass().getResourceAsStream("easteregg/taskforce_easteregg.wav");
+			egg = new AudioStream(easterEgg);
+		}
+		catch(IOException ioe){
+			ioe.printStackTrace();
+		}
+	    
 		
 		//switch tussen tegel- of lijstview 
 		add(new OverzichtKiezer(linkerscherm, controller1));
@@ -106,16 +130,24 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 		zoekTxt.addKeyListener(new KeyListener()
 		{	
 			@Override
-			public void keyTyped(KeyEvent arg0){}
+			public void keyTyped(KeyEvent e){}
 			
 			@Override
-			public void keyReleased(KeyEvent arg0)
+			public void keyReleased(KeyEvent e)
 			{
 				stateChanged(new ChangeEvent(this));
+				if(e.isControlDown() && e.isShiftDown() && e.getKeyCode() == 84)
+				{
+					//AudioStream egg = new AudioStream(easterEgg);
+					AudioPlayer.player.start(egg);
+					AudioPlayer.player.stop();
+				}
+					
+				
 			}
 			
 			@Override
-			public void keyPressed(KeyEvent arg0){}
+			public void keyPressed(KeyEvent e){}
 		});
 		zoekTxt.addFocusListener(new FocusListener()
 		{	

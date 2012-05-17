@@ -3,6 +3,9 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -88,4 +91,5 @@ public class Hoofd extends JPanel
 			//het is geen documentview dat ingeladen is, en er moet dus geen video gestopt worden
 		}
 	}
+
 }

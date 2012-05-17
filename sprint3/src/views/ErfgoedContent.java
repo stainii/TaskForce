@@ -460,7 +460,6 @@ public class ErfgoedContent extends JPanel
 		}
 			
 		documenten.add(geendoc,c);
-		System.out.println(erfgoed.getDocumenten().isEmpty());
 
 			
 		//Panels toevoegen aan ErfgoedContent	
