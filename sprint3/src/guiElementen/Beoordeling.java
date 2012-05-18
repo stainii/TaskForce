@@ -243,12 +243,6 @@ public class Beoordeling extends JPanel
 							
 							controller.update();
 							
-							if (document.getBeheerder()==null || !document.getBeheerder().equals(model.getBeheerder()))
-							{
-								//mail versturen
-								mail = new MailThuis((controller.getOrigineelDocument().getBurger()!=null?controller.getOrigineelDocument().getBurger().getEmail():controller.getOrigineelDocument().getBeheerder().getEmail()),"Document is gewijzigd", new WijzigingMail(controller.getOrigineelDocument()),model);
-								ex.execute(mail);						
-							}
 							hoofd.setContentPaneel(new DocumentView(model, databank, controller.getOrigineelDocument(), hoofd,systray));
 						}
 						else

@@ -9,6 +9,9 @@ import java.util.concurrent.Executors;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import controllers.mail.MailThuis;
+import controllers.mail.WijzigingMail;
+
 import systemTray.InSystemTray;
 
 import model.DocumentCMS;
@@ -151,7 +154,7 @@ public class DocumentController
 				voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
 				origineelDocument.setLaatsteWijziging(voorlopigDocument);
 				tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");		
-				JOptionPane.showMessageDialog(null, "Uw wijzigingen werden opgeslagen. Deze worden zichtbaar wanneer de gebruiker deze goedkeurt.", "Wijzigingen doorgevoerd", JOptionPane.INFORMATION_MESSAGE);
+				new MailThuis(getOrigineelDocument().getBurger()!=null?getOrigineelDocument().getBurger().getEmail():getOrigineelDocument().getBeheerder().getEmail(),"Document is gewijzigd", new WijzigingMail(getOrigineelDocument()),m).run();
 			}
 			
 			return null;

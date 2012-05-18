@@ -160,7 +160,7 @@ public class OverzichtDocumentenController
 				resultaat.add(d);
 			else if (d.getTekst()!=null && d.getTekst().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
-			else if (d.getOpmerkingen().toLowerCase().contains(s.toLowerCase()))
+			else if (d.getOpmerkingen()!=null && d.getOpmerkingen().toLowerCase().contains(s.toLowerCase()))
 				resultaat.add(d);
 			else if (d.getDatumToegevoegd().toString().toLowerCase().contains(s.toLowerCase()))
 					resultaat.add(d);
