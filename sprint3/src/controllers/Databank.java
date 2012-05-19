@@ -447,6 +447,12 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
+			if (eigenaar)
+			{
+				s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE WijzigingVanDocument=? AND WijzigingStatus='Actief'");
+				s.setInt(1, doc.getId());
+				s.executeUpdate();
+			}
 			if (doc.getTypeDocument().equals("Afbeelding"))	
 			{
 				Blob afbBlob = c.createBlob();
