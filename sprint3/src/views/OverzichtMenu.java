@@ -138,9 +138,8 @@ public class OverzichtMenu extends JPanel implements ChangeListener
 				stateChanged(new ChangeEvent(this));
 				if(e.isControlDown() && e.isShiftDown() && e.getKeyCode() == 84)
 				{
-					//AudioStream egg = new AudioStream(easterEgg);
-					AudioPlayer.player.start(egg);
 					AudioPlayer.player.stop();
+					AudioPlayer.player.start(egg);
 				}
 					
 				
