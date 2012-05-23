@@ -115,7 +115,7 @@ public class DocumentContent extends JPanel
 		c.gridwidth = 1;
 		documentPanel.add(new JLabelFactory().getNormaleTekst("Aard: "),c);
 		
-		String[] a = {"Postkaart", "Foto", "Prent", "Tekening", "Film" , "Kaart", "Brochure", "Affiche", "Andere"};
+		String[] a = {"Affiche", "Andere","Brochure","Film", "Foto", "Kaart", "Postkaart", "Prent", "Tekening"};
 		aardBox = new JComboBox(a);
 		//aardBox.setEnabled(false);
 		aardBox.setSelectedItem(doc.getAard());

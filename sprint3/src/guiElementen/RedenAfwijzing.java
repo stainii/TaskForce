@@ -36,13 +36,18 @@ public class RedenAfwijzing extends JPanel
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		JLabel l = new JLabelFactory().getNormaleTekst("   Reden afwijzing: ");
+		JLabel l = new JLabelFactory().getNormaleTekst("Reden afwijzing: ");
 		add(l, c);
 		
 		c.gridx = 2;
 		redenTxt = new JTextField(20);
 		add(redenTxt,c);
 		
+		c.gridx = 1;
+		c.gridy = 2;
+		add(new JLabelFactory().getNormaleTekst("Of kies reden: "),c);
+		
+		c.gridx =2;
 		c.gridy = 2;
 		c.gridwidth = 1;
 		defaultRedenenCbx = new JComboBox(m.getStandaardReden().toArray());
@@ -56,7 +61,6 @@ public class RedenAfwijzing extends JPanel
 				if (defaultRedenenCbx.getSelectedIndex() !=-1)
 				{
 					redenTxt.setText(defaultRedenenCbx.getSelectedItem().toString());
-					System.out.println("ik doe dit");
 				}
 			}
 		});
