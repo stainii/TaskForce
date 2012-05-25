@@ -44,6 +44,10 @@ public class MailThuis implements Runnable
 			port = 587;
 			user = "task.forceb2@gmail.com";
 			pwd = "azertyb2";
+			/*host = "mail-out.hogent.be";
+			port = 25;
+			user = "096120sh";
+			pwd = "fbn44f9";*/
 		}
 		
 	}

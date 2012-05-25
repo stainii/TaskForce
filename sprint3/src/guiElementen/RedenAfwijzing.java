@@ -25,6 +25,7 @@ public class RedenAfwijzing extends JPanel
 	private JTextField redenTxt;
 	private JComboBox defaultRedenenCbx;
 	private Model m;
+	private JLabel ofLbl;
 	
 	public RedenAfwijzing(DocumentController cont,Model model)
 	{		
@@ -45,7 +46,8 @@ public class RedenAfwijzing extends JPanel
 		
 		c.gridx = 1;
 		c.gridy = 2;
-		add(new JLabelFactory().getNormaleTekst("Of kies reden: "),c);
+		ofLbl = new JLabelFactory().getNormaleTekst("Of kies reden: ");
+		add(ofLbl,c);
 		
 		c.gridx =2;
 		c.gridy = 2;
@@ -90,6 +92,7 @@ public class RedenAfwijzing extends JPanel
 			redenTxt.setOpaque(true);
 			redenTxt.setBorder(new JTextField().getBorder());
 			redenTxt.setForeground(Color.BLACK);
+			ofLbl.setVisible(true);
 		}
 		else
 		{
@@ -98,6 +101,7 @@ public class RedenAfwijzing extends JPanel
 			redenTxt.setOpaque(false);
 			redenTxt.setBorder(null);
 			redenTxt.setForeground(Color.WHITE);
+			ofLbl.setVisible(false);
 		}
 	}
 		

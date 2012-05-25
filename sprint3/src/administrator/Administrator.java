@@ -35,7 +35,6 @@ public class Administrator extends JPanel
 	private ImageIcon backgroundIcon = new ImageIcon(getClass().getResource("imgs/ladenBackground.jpg"));
 	private Image background = backgroundIcon.getImage();
 		
-	private final static String connectie = "jdbc:sqlserver://localhost;database=Projecten2;user=JDBC;password=jdbc";
 	private Model m;
 	private Databank d;
 	private JFrame frame;
@@ -108,35 +107,9 @@ public class Administrator extends JPanel
 	public String getGebruiker() {
 		return gebruiker;
 	}
-
-	
-	
-	public static boolean isAdministrator(String gebruikersnaam, String wachtwoord) 
+	public static void setGebruiker(String g)
 	{
-		gebruiker = gebruikersnaam;
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		boolean isAdmin = false;
-		
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			s = c.prepareStatement("SELECT COUNT (*) FROM Beheerder WHERE Gebruikersnaam=? AND Wachtwoord=? AND IsAdministrator = 1");
-			s.setString(1, gebruikersnaam);
-			s.setString(2, MD5.convert(wachtwoord));
-			rs = s.executeQuery();
-			
-			rs.next();
-			if (rs.getInt(1) == 1)
-				isAdmin = true;
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-
-		return isAdmin;
+		gebruiker = g;
 	}
 	
 	private class UitlogListener implements MouseListener

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import administrator.Administrator;
+
 import model.Beheerder;
 import model.Burger;
 import model.DocumentCMS;
@@ -1174,6 +1176,35 @@ public class Databank
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean isAdministrator(String gebruikersnaam, String wachtwoord) 
+	{
+		
+		Administrator.setGebruiker(gebruikersnaam);
+		Connection c = null;
+		PreparedStatement s = null;
+		ResultSet rs = null;
+		boolean isAdmin = false;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("SELECT COUNT (*) FROM Beheerder WHERE Gebruikersnaam=? AND Wachtwoord=? AND IsAdministrator = 1");
+			s.setString(1, gebruikersnaam);
+			s.setString(2, MD5.convert(wachtwoord));
+			rs = s.executeQuery();
+			
+			rs.next();
+			if (rs.getInt(1) == 1)
+				isAdmin = true;
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+
+		return isAdmin;
 	}
 	
 	//____________instellingen

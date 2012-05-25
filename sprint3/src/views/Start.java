@@ -250,7 +250,7 @@ public class Start extends JPanel
 			d.getBeheerdersEnBurgersUitDatabank();
 			d.getInstellingen();
 			
-			if(Administrator.isAdministrator(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
+			if(d.isAdministrator(gebruikersnaamTxt.getText(), wachtwoordTxt.getText()))
 			{
 				voortgang.setVisible(false);
 				logo.setVisible(false);
