@@ -30,6 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import systemTray.InSystemTray;
@@ -150,6 +152,24 @@ public class Start extends JPanel
 	
 	public static void main(String args[])
 	{
+		//set look en feel
+		try {
+			UIManager.setLookAndFeel(
+			        UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		JFrame f = new JFrame();
 		f.setTitle("Herzele Erfgoedbank CMS");
 		f.setSize(new Dimension(500,300));
