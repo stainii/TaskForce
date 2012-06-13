@@ -107,7 +107,7 @@ public class Databank
 			{				
 				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
-						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), rs.getBoolean("StuurEmails"), m));
 			}
 			
 			
@@ -1009,7 +1009,7 @@ public class Databank
 			{				
 				beheerders.add(new Beheerder(rs.getInt("BeheerderId"), rs.getString("Gebruikersnaam").trim(), rs.getString("Achternaam"),
 						rs.getString("Wachtwoord"),rs.getString("Email"), rs.getBoolean("KanBeoordelen"), 
-						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), m));
+						rs.getBoolean("KanWijzigen"), rs.getBoolean("KanVerwijderen"), rs.getBoolean("KanToevoegen"),rs.getBoolean("IsAdministrator"), rs.getBoolean("StuurEmails"), m));
 			}
 			
 			m.setBeheerders(beheerders);
@@ -1096,7 +1096,7 @@ public class Databank
 			voegInstellingToe("EmailGebruikernaam", "task.forceb2@gmail.com", id);
 			voegInstellingToe("EmailWachtwoord", "azertyb2", id);
 			
-			m.toevoegenBeheerder(new Beheerder(id,n,a, w,em, kb, kw, kv, kt,isAdmin,m));
+			m.toevoegenBeheerder(new Beheerder(id,n,a, w,em, kb, kw, kv, kt,isAdmin, true, m));
 		}
 		catch (SQLException e)
 		{
@@ -1277,6 +1277,20 @@ public class Databank
 			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void verwijderStandaardReden(Instellingen i )
@@ -1298,6 +1312,55 @@ public class Databank
 		{
 			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void setStuurEmails(Beheerder b)
+	{
+		Connection c = null;
+		PreparedStatement s = null;
+		
+		try
+		{
+			c = DriverManager.getConnection(connectie);
+			s = c.prepareStatement("UPDATE BEHEERDER SET StuurEmails =? WHERE BeheerderId = ?");
+			s.setBoolean(1,b.isStuurEmails());
+			s.setInt(2, b.getId());
+			s.executeUpdate();
+			
+		}
+		catch (SQLException e)
+		{
+			JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (s!=null)
+					s.close();
+				if (c!=null)
+					c.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	

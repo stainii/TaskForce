@@ -23,9 +23,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -37,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingWorker;
 
 import com.itextpdf.text.Jpeg;
 
@@ -67,6 +72,8 @@ public class InstelView extends JPanel
 	boolean zichtbaar;
 	String nieuweReden = "Typ hier een nieuwe reden...";
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private JCheckBox stuurEmailsCbx;
+	private ExecutorService exs;
 	
 	@Override
 	protected void paintComponent(Graphics g) 
@@ -442,9 +449,19 @@ public class InstelView extends JPanel
 		Dimension sizeEmailLbl = emailLbl.getPreferredSize();
 		emailLbl.setBounds(10, 10, sizeEmailLbl.width, sizeEmailLbl.height);
 		
+		
+		stuurEmailsCbx = new JCheckBox("Stuur mij emails als er materiaal wordt toegevoegd.");
+		Dimension sizeStuurEmailsCbx = stuurEmailsCbx.getPreferredSize();
+		stuurEmailsCbx.setBounds(15,16,sizeStuurEmailsCbx.width,sizeStuurEmailsCbx.height);
+		stuurEmailsCbx.setOpaque(false);
+		stuurEmailsCbx.setFont(new JLabelFactory().getNormaleTekst("").getFont());
+		stuurEmailsCbx.setForeground(Color.white);
+		stuurEmailsCbx.setSelected(m.getBeheerder().isStuurEmails());
+		
+		
 		JLabel emailzin = jLabelFactory.getNormaleTekst("Geef hieronder uw E-mail instellingen");
 		Dimension sizeEmailzin = emailzin.getPreferredSize();
-		emailzin.setBounds(15,30,sizeEmailzin.width,sizeEmailzin.height);
+		emailzin.setBounds(15,40,sizeEmailzin.width,sizeEmailzin.height);
 		
 		JLabel emailOut = jLabelFactory.getNormaleTekst("Email-Out (smtp)");
 		Dimension sizeEmailOut = emailOut.getPreferredSize();
@@ -565,6 +582,7 @@ public class InstelView extends JPanel
 		emailPanel.add(userTxt);
 		emailPanel.add(pwdLbl);
 		emailPanel.add(pwdTxt);
+		emailPanel.add(stuurEmailsCbx);
 		
 		GridBagConstraints c = new GridBagConstraints();
 			
@@ -589,7 +607,16 @@ public class InstelView extends JPanel
 		c.gridy = 5;
 		add(emailPanel,c);
 		
-		
+		exs = Executors.newCachedThreadPool();
+		stuurEmailsCbx.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				
+				exs.execute(new StuurEmailsCbxWorker());
+			}
+		});
 		
 		//Lightbox
 		box = new LightBox();
@@ -704,7 +731,7 @@ public class InstelView extends JPanel
 		@SuppressWarnings("deprecation")
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			
+			m.getBeheerder().setStuurEmails(stuurEmailsCbx.isSelected());
 			m.setEmailVoorkeur(emailOutTxt.getText(), "EmailOut");
 			m.setEmailVoorkeur(poortTxt.getText(), "EmailPoort");
 			m.setEmailVoorkeur(userTxt.getText(), "EmailGebruikernaam");
@@ -714,6 +741,7 @@ public class InstelView extends JPanel
 			d.updateInstellingen(poortTxt.getText(),m.getInstellingenId("EmailPoort"));
 			d.updateInstellingen(userTxt.getText(),m.getInstellingenId("EmailGebruikernaam"));
 			d.updateInstellingen(pwdTxt.getText(),m.getInstellingenId("EmailWachtwoord"));
+			d.setStuurEmails(m.getBeheerder());
 			
 			emailOutTxt.setEnabled(false);
 			poortTxt.setEnabled(false);
@@ -861,5 +889,16 @@ public class InstelView extends JPanel
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}
+	}
+	
+	private class StuurEmailsCbxWorker implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			m.getBeheerder().setStuurEmails(!m.getBeheerder().isStuurEmails());
+			d.setStuurEmails(m.getBeheerder());
+		}
+		
 	}
 }
