@@ -27,7 +27,6 @@ import controllers.DocumentController;
 import controllers.mail.AfgekeurdMail;
 import controllers.mail.GoedkeurMail;
 import controllers.mail.MailThuis;
-import controllers.mail.WijzigingMail;
 
 /** Deel van de GUI waarin je een document goedkeurt of afkeurt. **/
 

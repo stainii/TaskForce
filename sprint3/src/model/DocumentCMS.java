@@ -26,7 +26,7 @@ public class DocumentCMS
 	private BufferedImage image;
 	private int mediaId;
 	private String temp;
-	private DocumentCMS laatsteWijziging;
+	
 	private int burgerId;
 	private int beheerderId;
 	private String aard;
@@ -184,10 +184,6 @@ public class DocumentCMS
 		return mediaId;
 	}
 	
-	public DocumentCMS getLaatsteWijziging()
-	{
-		return laatsteWijziging;
-	}
 	public String getAard() {
 		return aard;
 	}
@@ -277,11 +273,6 @@ public class DocumentCMS
 	public void setMediaId(int mediaId)
 	{
 		this.mediaId = mediaId;
-	}
-	
-	public void setLaatsteWijziging(DocumentCMS doc)
-	{
-		laatsteWijziging = doc;
 	}
 
 	public void setAard(String aard) {

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import guiElementen.AutoaanvullendeCombobox;
+import guiElementen.Contact;
 import guiElementen.DocumentThumbnail;
 import guiElementen.JLabelFactory;
 import guiElementen.MooiTextField;
@@ -119,7 +120,10 @@ public class ErfgoedContent extends JPanel
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 6;
-		links.add(new JLabelFactory().getItalic(erfgoed.getBurger()!=null? "Geplaatst door: "+erfgoed.getBurger().getGebruikersnaam() + " - " + erfgoed.getBurger().getNaam(): "Geplaatst door: "+erfgoed.getBeheerder().getNaam()),c);
+		if (erfgoed.getBeheerder()!=null)
+			links.add(new Contact(erfgoed.getBeheerder()),c);
+		else
+			links.add(new Contact(erfgoed.getBurger()),c);
 				
 		
 		// type

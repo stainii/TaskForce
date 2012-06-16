@@ -21,7 +21,6 @@ import controllers.DocumentController;
 public class DocumentLink extends JPanel implements DocumentMedia
 {
 	private JTextField tekst;
-	private JLabel wijziging;
 	private DocumentController controller;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
@@ -30,13 +29,8 @@ public class DocumentLink extends JPanel implements DocumentMedia
 		this.controller = c;
 		setOpaque(false);
 		
-		
 		tekst = new MooiTextField("", "http://www.voorbeeld.be");
 		tekst.setText(c.getOrigineelDocument().getTekst());
-		
-		wijziging = new JLabelFactory().getWijziging("");
-		if(c.getOrigineelDocument().getLaatsteWijziging()!=null)
-			wijziging.setText("Wijziging: " + c.getOrigineelDocument().getLaatsteWijziging().getTekst());
 		
 		tekst.setColumns(30);
 		tekst.setEditable(false);
@@ -44,10 +38,8 @@ public class DocumentLink extends JPanel implements DocumentMedia
 		tekst.setOpaque(false);
 		tekst.setForeground(Color.WHITE);
 		
-		
 		tekst.addMouseListener(new MouseListener()
 		{
-			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {}
 			
@@ -79,40 +71,6 @@ public class DocumentLink extends JPanel implements DocumentMedia
 			}
 		});
 		
-		wijziging.addMouseListener(new MouseListener()
-		{
-			
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				if (!wijziging.getText().substring(11).equals(""))
-					wijziging.setCursor(hand);
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				try
-				{
-					Runtime.getRuntime().exec("cmd.exe /c start " + wijziging.getText().substring(11));
-				}
-				catch (IOException ioe)
-				{
-					JOptionPane.showMessageDialog(null, "Kan de website niet openen.", "Fout bij het openen van de website", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-		
-		
 		setLayout(new GridBagLayout());
 		GridBagConstraints con= new GridBagConstraints();
 		con.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -122,8 +80,6 @@ public class DocumentLink extends JPanel implements DocumentMedia
 		
 		con.gridy=1;
 		add(tekst,con);
-		con.gridy=2;
-		add(wijziging,con);
 	}
 
 	@Override

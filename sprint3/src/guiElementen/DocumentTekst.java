@@ -16,17 +16,13 @@ public class DocumentTekst extends JPanel implements DocumentMedia
 	private JTextArea tekst;
 	private DocumentController controller;
 	
-	public DocumentTekst(DocumentController c, boolean wijziging)
+	public DocumentTekst(DocumentController c)
 	{
 		this.controller = c;
 		setOpaque(false);
 		
 		tekst = new MooiTextArea("", "Tekst");
-		
-		if (!wijziging)
-			tekst.setText(c.getOrigineelDocument().getTekst());
-		else
-			tekst.setText(c.getOrigineelDocument().getLaatsteWijziging().getTekst());
+		tekst.setText(c.getOrigineelDocument().getTekst());
 		tekst.setRows(20);
 		tekst.setColumns(30);
 		tekst.setEditable(false);

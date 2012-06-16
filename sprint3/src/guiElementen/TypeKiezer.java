@@ -71,7 +71,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
 						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
 						
-						content.setMedia(new DocumentAfbeelding(controller,databank,false));
+						content.setMedia(new DocumentAfbeelding(controller,databank));
 					} 
 					catch (IOException e1) 
 					{
@@ -103,7 +103,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			{
 				//zet het documentType op tekst en verander naar de gewone view. In de gewone view, maak het tekstvak bewerkbaar.
 				controller.getVoorlopigDocument().setTypeDocument("Tekst");
-				DocumentTekst doctekst = new DocumentTekst(controller,false);
+				DocumentTekst doctekst = new DocumentTekst(controller);
 				content.setMedia(doctekst);
 				doctekst.setEditable(true);
 			}

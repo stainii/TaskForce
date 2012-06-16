@@ -166,18 +166,17 @@ public class Model
 		notifyListeners();
 	}
 	
-	public void bewerkDocument(DocumentCMS d)
+	public void bewerkDocument(DocumentCMS d, int origineel)
 	{
 		//overloop de array list van documenten
 		for(int i =0; i<documenten.size(); i++)
 		{
 			DocumentCMS doc = documenten.get(i);
-			if(doc.getId()==d.getId())
+			if(doc.getId()==origineel)
 			{
-				documenten.set(i,d);
-				i = documenten.size();
+				documenten.set(i, d);
 			}
-		}		
+		} 
 		notifyListeners();
 	}
 	

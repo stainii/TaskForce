@@ -26,17 +26,14 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 {
 	private DocumentController controller;
 	private Databank databank;
-	private boolean wijziging;
 	private Afbeelding afb;
 	private JLabel kiesAndereAfbeelding,kopieOpslaan; 
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 	
-	public DocumentAfbeelding(DocumentController con, Databank d, boolean w)
+	public DocumentAfbeelding(DocumentController con, Databank d)
 	{
 		this.controller = con;
 		this.databank = d;
-		this.wijziging = w;
-		
 		setOpaque(false);
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -47,56 +44,29 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 		c.weighty=0;
 		c.fill = GridBagConstraints.BOTH;
 		
-		if (!wijziging)
+		afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,d);
+		afb.addMouseListener(new MouseListener()
 		{
-			afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,d);
-			afb.addMouseListener(new MouseListener()
+				
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+				
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+				
+			@Override
+			public void mouseClicked(MouseEvent e)
 			{
-				
-				@Override
-				public void mouseReleased(MouseEvent arg0) {}
-				
-				@Override
-				public void mousePressed(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseExited(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseEntered(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					new FullScreenAfbeelding(controller.getVoorlopigDocument(),databank);				
-				}
-			});
-		}
-		else
-		{
-			afb = new Afbeelding(controller.getOrigineelDocument().getLaatsteWijziging(),350,300,d);
-			afb.addMouseListener(new MouseListener()
-			{
-				
-				@Override
-				public void mouseReleased(MouseEvent arg0) {}
-				
-				@Override
-				public void mousePressed(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseExited(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseEntered(MouseEvent arg0) {}
-				
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					new FullScreenAfbeelding(controller.getOrigineelDocument().getLaatsteWijziging(),databank);				
-				}
-			});
-		}
+				new FullScreenAfbeelding(controller.getVoorlopigDocument(),databank);				
+			}
+		});
+		
 		add(afb, c);
 		
 		
@@ -216,17 +186,13 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 					JFileChooser chooser = new JFileChooser();
 					if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						if (!wijziging)
-							ImageIO.write(controller.getVoorlopigDocument().getImage(),controller.getVoorlopigDocument().getExtensieDocument(), chooser.getSelectedFile());
-						else
-							ImageIO.write(controller.getOrigineelDocument().getLaatsteWijziging().getImage(),controller.getOrigineelDocument().getExtensieDocument(), chooser.getSelectedFile());
+						ImageIO.write(controller.getVoorlopigDocument().getImage(),controller.getVoorlopigDocument().getExtensieDocument(), chooser.getSelectedFile());
 					}
 				}
 				catch (IOException e1)
 				{
-					JOptionPane.showMessageDialog(null,"Er is een fout gebeurd bij het opslaan.", "Fout bij het opslaan", JFileChooser.ERROR_OPTION);
+					JOptionPane.showMessageDialog(null,"Er is een fout opgetreden bij het opslaan.", "Fout bij het opslaan", JFileChooser.ERROR_OPTION);
 				}
-				
 			}
 		});
 		add(kopieOpslaan, c);

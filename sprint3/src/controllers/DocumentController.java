@@ -2,15 +2,10 @@ package controllers;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-
-import controllers.mail.MailThuis;
-import controllers.mail.WijzigingMail;
 
 import systemTray.InSystemTray;
 
@@ -62,9 +57,26 @@ public class DocumentController
 	
 	public void update() 
 	{
+		origineelDocument.setTitel(voorlopigDocument.getTitel());
+		origineelDocument.setStatus(voorlopigDocument.getStatus());
+		origineelDocument.setDatumToegevoegd(voorlopigDocument.getDatumToegevoegd());
+		origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
+		origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
+		origineelDocument.setTekst(voorlopigDocument.getTekst());
+		origineelDocument.setTypeDocument(voorlopigDocument.getTypeDocument());
+		origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
+		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
+		origineelDocument.setImage(voorlopigDocument.getImage());
+		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
+		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
+		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
+		origineelDocument.setBeheerderId(voorlopigDocument.getBeheerderId());
+		origineelDocument.setAard(voorlopigDocument.getAard());
+		origineelDocument.setTemp(voorlopigDocument.getTemp());
+		
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
-		origineelDocument.setLaatsteWijziging(voorlopigDocument);
+		
 		ex.execute(new Updaten());
 	}
 	public void toevoegen()
@@ -119,8 +131,10 @@ public class DocumentController
 		protected Void doInBackground()
 		{
 			tray.zegIets("Bezig met het toevoegen van uw document");
-			origineelDocument.setId(d.toevoegenDocument(origineelDocument));
+			int id = d.toevoegenDocument(origineelDocument);
+			origineelDocument.setId(id);
 			m.toevoegenDocument(origineelDocument);
+			
 			tray.zegIets("Uw document is toegevoegd");
 			return null;
 		}
@@ -132,31 +146,8 @@ public class DocumentController
 		protected Void doInBackground()
 		{
 			tray.zegIets("Bezig met het wijzigen van het " + voorlopigDocument.getTitel());
-			if (voorlopigDocument.getBeheerder()!=null && voorlopigDocument.getBeheerder().equals(m.getBeheerder()))	//als de beheerder de eigenaar is van het document
-			{
-				d.updateDocument(voorlopigDocument,true);
-				origineelDocument.setAard(voorlopigDocument.getAard());
-				origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
-				origineelDocument.setImage(voorlopigDocument.getImage());
-				origineelDocument.setMediaId(voorlopigDocument.getMediaId());
-				origineelDocument.setOpmerkingen(voorlopigDocument.getOpmerkingen());
-				origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
-				origineelDocument.setStatus(voorlopigDocument.getStatus());
-				origineelDocument.setTekst(voorlopigDocument.getTekst());
-				origineelDocument.setTemp(voorlopigDocument.getTemp());
-				origineelDocument.setTitel(voorlopigDocument.getTitel());
-				origineelDocument.setVerwijderd(voorlopigDocument.isVerwijderd());
-				origineelDocument.setLaatsteWijziging(null);	
-				tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");		
-			}
-			else
-			{
-				voorlopigDocument.setId(d.updateDocument(voorlopigDocument,false));
-				origineelDocument.setLaatsteWijziging(voorlopigDocument);
-				tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");		
-				new MailThuis(getOrigineelDocument().getBurger()!=null?getOrigineelDocument().getBurger().getEmail():getOrigineelDocument().getBeheerder().getEmail(),"Document is gewijzigd", new WijzigingMail(getOrigineelDocument()),m).run();
-			}
-			
+			d.updateDocument(origineelDocument);
+			tray.zegIets("Uw document "+ voorlopigDocument.getTitel()+" is gewijzigd");	
 			return null;
 		}
 	}

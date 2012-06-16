@@ -154,7 +154,7 @@ public class InstelView extends JPanel
 		ImageIcon hover = new ImageIcon(getClass().getResource("imgs/radiobutton_hover.png"));
 		
 		// Erfgoed
-		JRadioButton erfgoed = new JRadioButton("Erfgoeden");
+		JRadioButton erfgoed = new JRadioButton("Erfgoederen");
 		erfgoed.setForeground(Color.white);
 		erfgoed.setOpaque(false);
 		erfgoed.setSelectedIcon(selected);		

@@ -87,19 +87,6 @@ public class Databank
 						rs.getString("NuttigeInfo"), rs.getString("Link"), rs.getTimestamp("DatumToegevoegd"), rs.getBoolean("Obsolete"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"), m));
 			}
 			
-			
-			//laatste wijziging inladen
-			for (DocumentCMS doc : documenten)
-			{
-				s2 = c.prepareStatement("SELECT TOP 1 * FROM Document WHERE WijzigingStatus='Nog niet beoordeeld' AND WijzigingVanDocument=? ORDER BY DatumLaatsteWijziging DESC");
-				s2.setInt(1, doc.getId());
-				rs = s2.executeQuery();
-				if (rs.next())
-				{
-					doc.setLaatsteWijziging(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(), rs.getString("ExtensieDocument").trim(), rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),rs.getString("Aard"),m));
-				}
-			}
-			
 			//beheerders (en admins) laden
 			rs = s.executeQuery("SELECT * FROM Beheerder");
 			
@@ -437,7 +424,7 @@ public class Databank
 	}
 	
 	
-	public int updateDocument(DocumentCMS doc, boolean eigenaar)
+	public int updateDocument(DocumentCMS doc)
 	{
 		Connection c = null;
 		PreparedStatement s = null;
@@ -449,12 +436,10 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			if (eigenaar)
-			{
-				s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE WijzigingVanDocument=? AND WijzigingStatus='Actief'");
-				s.setInt(1, doc.getId());
-				s.executeUpdate();
-			}
+			s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE WijzigingVanDocument=? AND WijzigingStatus='Actief'");
+			s.setInt(1, doc.getId());
+			s.executeUpdate();
+			
 			if (doc.getTypeDocument().equals("Afbeelding"))	
 			{
 				Blob afbBlob = c.createBlob();
@@ -496,12 +481,7 @@ public class Databank
 			s.setString(8, doc.getExtensieDocument());
 			s.setString(9, doc.getRedenAfwijzing());
 			s.setTimestamp(10, doc.getDatumGewijzigd());
-			
-			if (eigenaar)
-				s.setString(11, "Actief");
-			else
-				s.setString(11, "Nog niet beoordeeld");
-			
+			s.setString(11, "Actief");
 			s.setInt(12,doc.getErfgoedId());
 			s.setInt(14, doc.getId());
 			if (doc.getBurgerId()!=0)
@@ -521,25 +501,18 @@ public class Databank
 			s.setString(17,doc.getAard());
 			s.executeUpdate();
 			
-			if (eigenaar)
-			{
-				s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE DocumentId=?");
-				s.setInt(1, doc.getId());
-				s.executeUpdate();
-			}
+			s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE DocumentId=?");
+			s.setInt(1, doc.getId());
+			s.executeUpdate();
 			
 			s2 = c.createStatement();
 			rs = s2.executeQuery(("SELECT DocumentId FROM Document ORDER BY DocumentId DESC"));
 			rs.next();
 			id = rs.getInt("DocumentId");
 			
-			if (eigenaar)
-			{
-				doc.setId(id);
-				//doe dit niet, en je krijgt 2 documenten in model (de oude versie blijft)
-			}
-				
-			
+			//doe dit niet, en je krijgt 2 documenten in model (de oude versie blijft)
+			doc.setId(id);
+						
 			s = c.prepareStatement("INSERT INTO Logboek (DocumentId, Actie, BeheerderId) VALUES (?,?,?)");
 			s.setInt(1, id);
 			s.setString(2,"Gewijzigd");
@@ -846,7 +819,7 @@ public class Databank
 		return i;
 	}
 	
-		public String synchroniseerModel(int logId)	//synchroniseert het model. Houdt rekenening met de
+	public String synchroniseerModel(int logId)	//synchroniseert het model. Houdt rekenening met de
 	{											//aanpassingen in het logboek vanaf het aangegeven id.
 		int aantalWijzigingen = 0;
 		int aantalVerwijderd = 0;
@@ -897,7 +870,7 @@ public class Databank
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
-							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m));
+							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m),rs2.getInt("WijzigingVanDocument"));
 							
 							aantalWijzigingen++;
 						}
