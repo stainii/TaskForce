@@ -16,11 +16,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -64,6 +67,7 @@ public class Start extends JPanel
 	private Databank d;
 	private Model m;
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
+	private static BufferedImage image;
 	
 	@Override
 	protected void paintComponent(Graphics g) 		//achtergrond tekenen
@@ -79,6 +83,14 @@ public class Start extends JPanel
 		
 		m = new Model();
 		d = new Databank(m);
+		
+		//eigen icoon in startbalk
+        try {
+            image = ImageIO.read(
+                getClass().getResource("/views/imgs/startmenuIcon.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		
 		setBorder(new EmptyBorder(20,0,0,0) );
 		FlowLayout f =new FlowLayout();
@@ -178,6 +190,7 @@ public class Start extends JPanel
 		f.add(new Start(f));
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.setIconImage(image);		
 	}
 	
 	private class InloggenListener implements ActionListener
@@ -274,7 +287,7 @@ public class Start extends JPanel
 			{
 				voortgang.setVisible(false);
 				logo.setVisible(false);
-				new Administrator();		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame
+				new Administrator(image);		// maakt een nieuw JFrame aan! Moet nog vervangen worden zodat enkel JPanel vervangen wordt binnen DIT frame
 				frame.dispose();
 			}
 			
@@ -308,6 +321,7 @@ public class Start extends JPanel
 					}
 				});
 				f.setVisible(true);
+				f.setIconImage(image);
 				
 				//het inlogvenster verbergen en daarna vernietigen
 				frame.setVisible(false);

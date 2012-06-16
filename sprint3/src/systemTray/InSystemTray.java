@@ -25,7 +25,7 @@ public class InSystemTray
 	private Databank d;
 	
 	private final PopupMenu popUp = new PopupMenu();
-    private final TrayIcon trayIcon =	new TrayIcon(createImage("erfgoedpin.png", "tray icon"));
+    private final TrayIcon trayIcon =	new TrayIcon(createImage("systemtray.jpg", "tray icon"));
     private final SystemTray tray = SystemTray.getSystemTray();
     private MenuItem openenItem = null;
     private int startId;

@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,7 +55,7 @@ public class Administrator extends JPanel
 			g.drawImage(background, 0, 0, frame.getWidth(), frame.getHeight(), this);
 	}
 	
-	public Administrator()
+	public Administrator(BufferedImage image)
 	{
 		m = new Model();
 		d = new Databank(m);
@@ -101,7 +102,7 @@ public class Administrator extends JPanel
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-
+		frame.setIconImage(image);
 	}
 	
 	public String getGebruiker() {
