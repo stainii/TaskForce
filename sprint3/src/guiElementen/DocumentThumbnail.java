@@ -68,7 +68,7 @@ public class DocumentThumbnail extends JPanel implements MouseListener
 		
 		if (doc.getTypeDocument().equals("Afbeelding"))
 		{
-			Afbeelding afb = new Afbeelding(doc,85,85,databank);
+			Afbeelding afb = new Afbeelding(doc,85,85);
 			afb.addMouseListener(this);
 			add(afb);
 		}

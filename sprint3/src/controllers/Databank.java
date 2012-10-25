@@ -1,15 +1,7 @@
 package controllers;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import administrator.Administrator;
@@ -53,7 +44,6 @@ public class Databank
 		ArrayList<Gemeente> gemeente = new ArrayList<Gemeente>();
 		Connection c = null;
 		Statement s = null;
-		PreparedStatement s2 = null;
 		ResultSet rs = null;
 		
 		try
@@ -66,7 +56,7 @@ public class Databank
 		
 			while (rs.next())
 			{
-				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(), rs.getString("ExtensieDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("MediaId"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),rs.getString("Aard"),m));
+				documenten.add(new DocumentCMS(rs.getInt("DocumentId"),rs.getString("DocumentTitel").trim(), rs.getString("StatusDocument").trim(),rs.getTimestamp("DatumToegevoegd"),rs.getBoolean("Obsolete"), rs.getString("Opmerkingen"), rs.getString("Tekst"), rs.getString("TypeDocument").trim(), rs.getString("ExtensieDocument").trim(),rs.getInt("ErfgoedId"),rs.getString("RedenAfwijzing"), rs.getTimestamp("DatumLaatsteWijziging"), rs.getInt("BurgerId"), rs.getInt("BeheerderId"),rs.getString("Aard"), rs.getString("Pad") ,m));
 			}
 			
 			//burgers laden
@@ -156,36 +146,7 @@ public class Databank
 		{
 			c = DriverManager.getConnection(connectie);
 			
-			if (doc.getTypeDocument().equals("Afbeelding"))	
-			{
-				Blob afbBlob = c.createBlob();
-				OutputStream afbStream = afbBlob.setBinaryStream(1);
-				ImageIO.write(doc.getImage(), doc.getExtensieDocument(), afbStream);
-				
-				s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
-				s.setBlob(1,afbBlob);
-				s.executeUpdate();
-				
-				s2 = c.createStatement();
-				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
-				rs.next();
-				doc.setMediaId(rs.getInt("MediaId"));
-			}
-			else if (doc.getTypeDocument().equals("Video") || doc.getTypeDocument().equals("Andere"))
-			{
-				FileInputStream data = new FileInputStream(doc.getTemp());
-		        
-		        s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
-		        s.setObject(1, data);
-		        s.executeUpdate();
-		        
-		        s2 = c.createStatement();
-				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
-				rs.next();
-				doc.setMediaId(rs.getInt("MediaId"));
-			}
-			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, BeheerderId, Aard) VALUES (?,?,?,?,?,?,?,?,?,?,'Actief', ?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument,RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, BeheerderId, Aard, Pad) VALUES (?,?,?,?,?,?,?,?,?,?,'Actief', ?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, doc.getStatus());
@@ -198,12 +159,9 @@ public class Databank
 			s.setString(9, doc.getRedenAfwijzing());
 			s.setTimestamp(10, doc.getDatumGewijzigd());
 			s.setInt(11,doc.getErfgoedId());
-			if (doc.getTypeDocument().equals("Tekst") || doc.getTypeDocument().equals("Link"))
-					s.setNull(12, Types.INTEGER);
-			else 
-				s.setInt(12, doc.getMediaId());
-			s.setInt(13,doc.getBeheerderId());
-			s.setString(14,doc.getAard());
+			s.setInt(12,doc.getBeheerderId());
+			s.setString(13,doc.getAard());
+			s.setString(14, doc.getPad());
 				
 			s.executeUpdate();
 			
@@ -223,11 +181,6 @@ public class Databank
 		{
 			JOptionPane.showMessageDialog(null, "Fout bij het toevoegen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			sql.printStackTrace();
-		}
-		catch(IOException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het toevoegen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
 		}
 		finally
 		{
@@ -440,36 +393,7 @@ public class Databank
 			s.setInt(1, doc.getId());
 			s.executeUpdate();
 			
-			if (doc.getTypeDocument().equals("Afbeelding"))	
-			{
-				Blob afbBlob = c.createBlob();
-				OutputStream afbStream = afbBlob.setBinaryStream(1);
-				ImageIO.write(doc.getImage(), "jpg", afbStream);
-				
-				s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
-				s.setBlob(1,afbBlob);
-				s.executeUpdate();
-				
-				s2 = c.createStatement();
-				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
-				rs.next();
-				doc.setMediaId(rs.getInt("MediaId"));
-			}
-			else if (doc.getTypeDocument().equals("Video"))
-			{
-				FileInputStream data = new FileInputStream(doc.getTemp());
-		        
-		        s = c.prepareStatement("INSERT INTO Media(BLOB) VALUES (?)");
-		        s.setObject(1, data);
-		        s.executeUpdate();
-		        
-		        s2 = c.createStatement();
-				rs = s2.executeQuery(("SELECT MediaId FROM MEDIA ORDER BY MediaId DESC"));
-				rs.next();
-				doc.setMediaId(rs.getInt("MediaId"));
-			}
-			
-			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, MediaId, WijzigingVanDocument, BurgerId, BeheerderId, Aard) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			s = c.prepareStatement("INSERT INTO Document(DocumentTitel, StatusDocument,DatumToegevoegd,Obsolete,Opmerkingen,Tekst,TypeDocument,ExtensieDocument, RedenAfwijzing, DatumLaatsteWijziging, WijzigingStatus, ErfgoedId, WijzigingVanDocument, BurgerId, BeheerderId, Aard, Pad) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			s.setString(1, doc.getTitel());
 			s.setString(2, "Goedgekeurd");		//een wijziging houdt in dat de beheerder vindt dat het document in zijn gewijzigde vorm zichtbaar mag zijn op de site
@@ -483,22 +407,20 @@ public class Databank
 			s.setTimestamp(10, doc.getDatumGewijzigd());
 			s.setString(11, "Actief");
 			s.setInt(12,doc.getErfgoedId());
-			s.setInt(14, doc.getId());
+			s.setInt(13, doc.getId());
 			if (doc.getBurgerId()!=0)
 			{
-				s.setInt(15,doc.getBurgerId());
-				s.setNull(16, Types.INTEGER);
+				s.setInt(14,doc.getBurgerId());
+				s.setNull(15, Types.INTEGER);
 			}
 			else
 			{
-				s.setNull(15, Types.INTEGER);
-				s.setInt(16,doc.getBeheerderId());
+				s.setNull(14, Types.INTEGER);
+				s.setInt(15, doc.getBeheerderId());
 			}
-			if (doc.getTypeDocument().equals("Tekst") || doc.getTypeDocument().equals("Link") )
-				s.setNull(13, Types.INTEGER);
-			else 
-				s.setInt(13, doc.getMediaId());
-			s.setString(17,doc.getAard());
+			s.setString(16,doc.getAard());
+			s.setString(17, doc.getPad());
+			
 			s.executeUpdate();
 			
 			s = c.prepareStatement("UPDATE DOCUMENT SET WijzigingStatus='Gewijzigd' WHERE DocumentId=?");
@@ -523,11 +445,6 @@ public class Databank
 		{
 			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
 			sql.printStackTrace();
-		}
-		catch(IOException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het wijzigen van een document!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
 		}
 		finally
 		{
@@ -661,121 +578,6 @@ public class Databank
 		}
 	}
 	
-	public BufferedImage getBlobImage(int docId)
-	{
-		Connection c = null;
-		PreparedStatement s = null;
-		BufferedImage image = null;
-		ResultSet rs = null;
-
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			
-			s = c.prepareStatement("SELECT BLOB FROM MEDIA m, DOCUMENT d WHERE d.MediaId= m.MediaId AND d.DocumentId = ?");
-			s.setInt(1, docId);
-			
-			try
-			{
-				rs = s.executeQuery();
-				
-				if(rs.next())
-				{
-					Blob imageBlob = rs.getBlob("BLOB");		
-					InputStream imageBlobStream = imageBlob.getBinaryStream();
-					image = ImageIO.read(imageBlobStream);
-				}
-			}
-			catch(IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
-		}
-		catch (SQLException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het opvragen van een afbeelding!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-		}
-		finally
-		{
-			try
-			{
-				if (rs!=null)
-					rs.close();
-				if (s!=null)
-					s.close();
-				if (c!=null)
-					c.close();
-			}
-			catch (SQLException e)
-			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het opvragen van een afbeelding)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
-		}
-		return image;
-	}
-	
-	public String getBlobFile(int docId)
-	{
-		Connection c = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		String pad = "";
-
-		try
-		{
-			c = DriverManager.getConnection(connectie);
-			
-			s = c.prepareStatement("SELECT BLOB, ExtensieDocument FROM MEDIA m, DOCUMENT d WHERE d.MediaId= m.MediaId AND d.DocumentId = ?");
-			s.setInt(1, docId);
-			
-			try
-			{
-				rs = s.executeQuery();
-				if(rs.next())
-				{
-					Blob b = rs.getBlob("BLOB");
-				      
-					String ext = "." + rs.getString("ExtensieDocument").trim();
-					File temp = File.createTempFile("erfgoedbank_", ext);
-					temp.deleteOnExit();
-					pad = temp.getAbsolutePath();
-					
-				    FileOutputStream os = new FileOutputStream(temp);
-				    os.write(b.getBytes(1, (int) b.length()));
-				    os.flush();
-				    os.close();
-				}
-			}
-			catch(IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
-		}
-		catch (SQLException e)
-		{
-			JOptionPane.showMessageDialog(null, "Fout bij het opvragen van een bestand!", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-		}
-		finally
-		{
-			try
-			{
-				if (rs!=null)
-					rs.close();
-				if (s!=null)
-					s.close();
-				if (c!=null)
-					c.close();
-			}
-			catch (SQLException e)
-			{
-				JOptionPane.showMessageDialog(null, "Fout bij het verbinden met de databank! (bij het opvragen van een bestand)", "Databank fout!",JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
-		}
-		return pad;
-	}
-	
 	public int getIdLaatsteRijLogboek()		//voor het synchronisatiesysteem
 	{
 		Connection c = null;
@@ -860,7 +662,7 @@ public class Databank
 						String actie = rs.getString("Actie");
 						if (actie.equals("Toegevoegd"))
 						{
-							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m));
+							m.getDocumenten().add(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"), rs2.getString("Pad"),m));
 							aantalToegevoegd++;
 						}
 						else if (actie.equals("Verwijderd"))
@@ -870,8 +672,7 @@ public class Databank
 						}
 						else if (actie.equals("Gewijzigd"))
 						{
-							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("MediaId"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"),m),rs2.getInt("WijzigingVanDocument"));
-							
+							m.bewerkDocument(new DocumentCMS(rs2.getInt("DocumentId"),rs2.getString("DocumentTitel").trim(), rs2.getString("StatusDocument").trim(), rs2.getTimestamp("DatumToegevoegd"), rs2.getBoolean("Obsolete"), rs2.getString("Opmerkingen"), rs2.getString("Tekst"), rs2.getString("TypeDocument").trim(),  rs2.getString("ExtensieDocument").trim(), rs2.getInt("ErfgoedId"), rs2.getString("RedenAfwijzing"), rs2.getTimestamp("DatumLaatsteWijziging"), rs2.getInt("BurgerId"), rs2.getInt("BeheerderId"),rs2.getString("Aard"), rs2.getString("Pad"), m),rs2.getInt("WijzigingVanDocument"));							
 							aantalWijzigingen++;
 						}
 						else if (actie.equals("Goedgekeurd"))
@@ -1037,7 +838,7 @@ public class Databank
 	public int voegBeheerderToeAanDatabank(String n,String a ,String w,String em, boolean kb, boolean kw, boolean kv, boolean kt,boolean isAdmin)
 	{
 		Connection c = null;
-		PreparedStatement s = null, s3 =null;
+		PreparedStatement s = null;
 		Statement s2 = null;
 		ResultSet rs = null;
 		int id=-1;

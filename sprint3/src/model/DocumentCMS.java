@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,16 +22,15 @@ public class DocumentCMS
 	private String typeDocument; 
 	private String extensieDocument;
 	private String redenAfwijzing;
-	private BufferedImage image;
-	private int mediaId;
-	private String temp;
+	private String pad;
 	
 	private int burgerId;
 	private int beheerderId;
 	private String aard;
+	private String temp;
 
 	//deze constructor wordt gebruikt bij het inladen van de databank
-	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, String extensie, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int mediaId, int burgerId, int beheerderId,String aard, Model m)
+	public DocumentCMS(int id, String titel, String status, Timestamp datumToegevoegd, boolean verwijderd, String opmerkingen, String tekst, String type, String extensie, int erfgoedId, String redenAfwijzing, Timestamp datumWijziging, int burgerId, int beheerderId, String aard, String pad, Model m)
 	{
 		this.m = m;
 		this.id = id;
@@ -47,7 +45,7 @@ public class DocumentCMS
 		this.typeDocument = type;
 		this.setExtensieDocument(extensie);
 		this.redenAfwijzing = redenAfwijzing;
-		this.mediaId = mediaId;
+		this.pad = pad;
 		this.burgerId = burgerId;
 		this.beheerderId = beheerderId;
 		this.aard = aard;
@@ -72,32 +70,27 @@ public class DocumentCMS
 		this.beheerderId = beheerderId;
 		this.aard = "";
 	}
-
-
+	
 	public int getBurgerId()
 	{
 		return burgerId;
 	}
-	
 	public int getBeheerderId()
 	{
 		return beheerderId;
 	}
-
 	public int getId()
 	{
 		return id;
 	}
-	
 	public String getTitel()
 	{
 		return titel;
 	}
-
-	public String getStatus() {
+	public String getStatus()
+	{
 		return status;
 	}
-	
 	public Erfgoed getErfgoed()
 	{
 		for (Erfgoed e: m.getErfgoed())
@@ -107,7 +100,6 @@ public class DocumentCMS
 		}
 		return null;
 	}
-	
 	public Burger getBurger()
 	{
 		ArrayList<Burger> burgers = m.getBurgers();
@@ -132,7 +124,6 @@ public class DocumentCMS
 		}
 		return null;
 	}
-	
 	public Timestamp getDatumToegevoegd()
 	{
 		return datumToegevoegd;
@@ -141,53 +132,42 @@ public class DocumentCMS
 	{
 		return datumGewijzigd;
 	}
-
 	public boolean isVerwijderd()
 	{
 		return verwijderd;
 	}
-	
 	public String getOpmerkingen()
 	{
 		return opmerkingen;
 	}
-
-
 	public String getTekst()
 	{
 		return tekst;
 	}
-
-
 	public String getTypeDocument()
 	{
 		return typeDocument;
 	}
-	
-	public BufferedImage getImage()
-	{
-		return image;
-	}
-	
 	public String getRedenAfwijzing()
 	{
 		return redenAfwijzing;
 	}
-	
 	public int getErfgoedId()
 	{
 		return erfgoedId;
 	}	
-
-	public int getMediaId()
+	public String getAard()
 	{
-		return mediaId;
-	}
-	
-	public String getAard() {
 		return aard;
 	}
-
+	public String getPad()
+	{
+		return pad;
+	}
+	public String getTemp()
+	{
+		return temp;
+	}
 
 	// setters
 	public void setBurgerId(int burgerId)
@@ -198,49 +178,40 @@ public class DocumentCMS
 	{
 		this.beheerderId = beheerderId;
 	}
-	
 	public void setId(int id)
 	{
 		this.id = id;
 		m.notifyListeners();
 	}
-	
 	public void setTitel(String titel)
 	{
 		this.titel = titel;
 	}
-	
 	public void setStatus(String status)
 	{
 		this.status = status;
 		m.notifyListeners();
 	}
-	
 	public void setVerwijderd(boolean verwijderd)
 	{
 		this.verwijderd = verwijderd;
 		m.notifyListeners();		
 	}
-
 	public void setOpmerkingen(String opmerkingen)
 	{
 		this.opmerkingen = opmerkingen;
 		m.notifyListeners();
 	}
-
-
 	public void setTekst(String tekst)
 	{
 		this.tekst = tekst;
 		m.notifyListeners();
 	}
-
 	public void setTypeDocument(String type)
 	{
 		this.typeDocument = type;
 		m.notifyListeners();
 	}
-	
 	public void setDatumToegevoegd(Timestamp datum)
 	{
 		this.datumToegevoegd = datum;
@@ -251,47 +222,35 @@ public class DocumentCMS
 		this.datumGewijzigd = datum;
 		m.notifyListeners();
 	}
-	
-	public void setImage(BufferedImage image) 
+	public void setPad(String pad) 
 	{
-		this.image = image;
+		this.pad = pad;
 		//geen notify nodig
 	}
-	
 	public void setRedenAfwijzing(String redenAfwijzing)
 	{
 		this.redenAfwijzing = redenAfwijzing;
 		m.notifyListeners();
 	}
-	
 	public void setErfgoedId(int erfgoedId)
 	{
 		this.erfgoedId = erfgoedId;
 		m.notifyListeners();
 	}
-	
-	public void setMediaId(int mediaId)
+	public void setAard(String aard)
 	{
-		this.mediaId = mediaId;
-	}
-
-	public void setAard(String aard) {
 		this.aard = aard;
 	}
-	
-	public String getExtensieDocument() {
+	public String getExtensieDocument()
+	{
 		return extensieDocument;
 	}
-
-	public void setExtensieDocument(String extensieDocument) {
+	public void setExtensieDocument(String extensieDocument)
+	{
 		this.extensieDocument = extensieDocument;
 	}
-
-	public String getTemp() {
-		return temp;
-	}
-
-	public void setTemp(String temp) {
+	public void setTemp(String temp)
+	{
 		this.temp = temp;
 	}
 
@@ -299,15 +258,22 @@ public class DocumentCMS
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((aard == null) ? 0 : aard.hashCode());
+		result = prime * result + beheerderId;
+		result = prime * result + burgerId;
 		result = prime * result
 				+ ((datumGewijzigd == null) ? 0 : datumGewijzigd.hashCode());
 		result = prime * result
 				+ ((datumToegevoegd == null) ? 0 : datumToegevoegd.hashCode());
 		result = prime * result + erfgoedId;
+		result = prime
+				* result
+				+ ((extensieDocument == null) ? 0 : extensieDocument.hashCode());
 		result = prime * result + id;
-		result = prime * result + mediaId;
+		result = prime * result + ((m == null) ? 0 : m.hashCode());
 		result = prime * result
 				+ ((opmerkingen == null) ? 0 : opmerkingen.hashCode());
+		result = prime * result + ((pad == null) ? 0 : pad.hashCode());
 		result = prime * result
 				+ ((redenAfwijzing == null) ? 0 : redenAfwijzing.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -315,6 +281,7 @@ public class DocumentCMS
 		result = prime * result + ((titel == null) ? 0 : titel.hashCode());
 		result = prime * result
 				+ ((typeDocument == null) ? 0 : typeDocument.hashCode());
+		result = prime * result + (verwijderd ? 1231 : 1237);
 		return result;
 	}
 
@@ -327,6 +294,15 @@ public class DocumentCMS
 		if (getClass() != obj.getClass())
 			return false;
 		DocumentCMS other = (DocumentCMS) obj;
+		if (aard == null) {
+			if (other.aard != null)
+				return false;
+		} else if (!aard.equals(other.aard))
+			return false;
+		if (beheerderId != other.beheerderId)
+			return false;
+		if (burgerId != other.burgerId)
+			return false;
 		if (datumGewijzigd == null) {
 			if (other.datumGewijzigd != null)
 				return false;
@@ -339,14 +315,27 @@ public class DocumentCMS
 			return false;
 		if (erfgoedId != other.erfgoedId)
 			return false;
+		if (extensieDocument == null) {
+			if (other.extensieDocument != null)
+				return false;
+		} else if (!extensieDocument.equals(other.extensieDocument))
+			return false;
 		if (id != other.id)
 			return false;
-		if (mediaId != other.mediaId)
+		if (m == null) {
+			if (other.m != null)
+				return false;
+		} else if (!m.equals(other.m))
 			return false;
 		if (opmerkingen == null) {
 			if (other.opmerkingen != null)
 				return false;
 		} else if (!opmerkingen.equals(other.opmerkingen))
+			return false;
+		if (pad == null) {
+			if (other.pad != null)
+				return false;
+		} else if (!pad.equals(other.pad))
 			return false;
 		if (redenAfwijzing == null) {
 			if (other.redenAfwijzing != null)
@@ -373,7 +362,8 @@ public class DocumentCMS
 				return false;
 		} else if (!typeDocument.equals(other.typeDocument))
 			return false;
+		if (verwijderd != other.verwijderd)
+			return false;
 		return true;
 	}
-
 }

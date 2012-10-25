@@ -193,7 +193,8 @@ public class GoedkeurMail implements SoortMail
 // Foto
 		if (document.getTypeDocument().equals("Afbeelding"))
 		{
-			goedkeurmail += "<img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getMediaId() + "?type=" + document.getExtensieDocument() + "\" "+
+			//DIT KLOPT NIET
+			goedkeurmail += "<img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getPad() + "?type=" + document.getExtensieDocument() + "\" "+
 					"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\">";
 		}
 		

@@ -60,7 +60,7 @@ public class RijDocument extends JPanel implements MouseListener
 		//afbeelding		
 		if (document.getTypeDocument().equals("Afbeelding"))
 		{
-			add(new Afbeelding(document,50,50,data));
+			add(new Afbeelding(document,50,50));
 		}
 		else if (document.getTypeDocument().equals("Video"))
 		{

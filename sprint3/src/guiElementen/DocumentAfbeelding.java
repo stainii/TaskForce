@@ -5,13 +5,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import controllers.Databank;
@@ -25,7 +21,6 @@ import controllers.DocumentController;
 public class DocumentAfbeelding extends JPanel implements DocumentMedia
 {
 	private DocumentController controller;
-	private Databank databank;
 	private Afbeelding afb;
 	private JLabel kiesAndereAfbeelding,kopieOpslaan; 
 	private Cursor hand = new Cursor(Cursor.HAND_CURSOR);
@@ -33,7 +28,6 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 	public DocumentAfbeelding(DocumentController con, Databank d)
 	{
 		this.controller = con;
-		this.databank = d;
 		setOpaque(false);
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -44,7 +38,7 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 		c.weighty=0;
 		c.fill = GridBagConstraints.BOTH;
 		
-		afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,d);
+		afb = new Afbeelding(controller.getVoorlopigDocument(),350,300);
 		afb.addMouseListener(new MouseListener()
 		{
 				
@@ -63,7 +57,7 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				new FullScreenAfbeelding(controller.getVoorlopigDocument(),databank);				
+				new FullScreenAfbeelding(controller.getVoorlopigDocument());				
 			}
 		});
 		
@@ -98,64 +92,54 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{	
-				
-				BufferedImage image;
-				try
-				{
-					//chooser openen
-					JFileChooser chooser = new JFileChooser();
-					chooser.addChoosableFileFilter(new FileFilter() {
-						
-						@Override
-						public String getDescription()
-						{
-							return "Afbeeldingen (.jpg, .gif, .png)";
-						}
-						
-						@Override
-						public boolean accept(File f)
-						{
-							String[] okFileExtensions = {".jpg", ".gif", ".png"};
-							for (String extension : okFileExtensions)
-						    {
-						      if (f.getName().toLowerCase().endsWith(extension))
-						      {
-						        return true;
-						      }
-						    }
-							return false;
-						}
-					});
+				//chooser openen
+				JFileChooser chooser = new JFileChooser();
+				chooser.addChoosableFileFilter(new FileFilter() {
 					
-					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					@Override
+					public String getDescription()
 					{
-						//afbeelding lezen en in voorlopig document steken
-						image = ImageIO.read(chooser.getSelectedFile());
-						controller.getVoorlopigDocument().setImage(image);
-						
-						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
-						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
-						
-						//gui veranderen: de oude afbeelding wegdoen en de nieuwe afbeelding tonen
-						setVisible(false);
-						remove(afb);
-						afb = new Afbeelding(controller.getVoorlopigDocument(),350,300,databank);
-						
-						GridBagConstraints c = new GridBagConstraints();
-						c.gridx = 1;
-						c.gridy = 1;
-						c.gridwidth= 2;
-						c.weighty=0;
-						c.fill = GridBagConstraints.BOTH;
-						add(afb, c);
-						
-						setVisible(true);
+						return "Afbeeldingen (.jpg, .gif, .png)";
 					}
-				} catch (IOException e1)
-				{
-					JOptionPane.showMessageDialog(null, "Het geselecteerde bestand is geen geldige afbeelding!", "Bestand corrupt of geen afbeelding", JOptionPane.ERROR_MESSAGE);
-				}
+					
+					@Override
+					public boolean accept(File f)
+					{
+						String[] okFileExtensions = {".jpg", ".gif", ".png"};
+						for (String extension : okFileExtensions)
+					    {
+					      if (f.getName().toLowerCase().endsWith(extension))
+					      {
+					        return true;
+					      }
+					    }
+						return false;
+					}
+				});
 				
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					//afbeelding lezen en in voorlopig document steken
+					controller.getVoorlopigDocument().setPad(chooser.getSelectedFile().getPath());
+					
+					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+					controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+					
+					//gui veranderen: de oude afbeelding wegdoen en de nieuwe afbeelding tonen
+					setVisible(false);
+					remove(afb);
+					afb = new Afbeelding(controller.getVoorlopigDocument(),350,300);
+					
+					GridBagConstraints c = new GridBagConstraints();
+					c.gridx = 1;
+					c.gridy = 1;
+					c.gridwidth= 2;
+					c.weighty=0;
+					c.fill = GridBagConstraints.BOTH;
+					add(afb, c);
+					
+					setVisible(true);
+				}
 			}
 		});
 		add(kiesAndereAfbeelding, c);
@@ -181,17 +165,10 @@ public class DocumentAfbeelding extends JPanel implements DocumentMedia
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{	
-				try
+				JFileChooser chooser = new JFileChooser();
+				if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
 				{
-					JFileChooser chooser = new JFileChooser();
-					if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						ImageIO.write(controller.getVoorlopigDocument().getImage(),controller.getVoorlopigDocument().getExtensieDocument(), chooser.getSelectedFile());
-					}
-				}
-				catch (IOException e1)
-				{
-					JOptionPane.showMessageDialog(null,"Er is een fout opgetreden bij het opslaan.", "Fout bij het opslaan", JFileChooser.ERROR_OPTION);
+					new Afbeelding(controller.getVoorlopigDocument(), 0, 0).opslaan(chooser.getSelectedFile().getPath());
 				}
 			}
 		});

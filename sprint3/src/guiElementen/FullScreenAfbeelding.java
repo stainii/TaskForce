@@ -14,15 +14,13 @@ import javax.swing.JWindow;
 
 import model.DocumentCMS;
 
-import controllers.Databank;
-
 /**Toont een afbeelding fullscreen. Het is eigenlijk een JWindow (JFrame zonder titelbalk) dat de grootte
  * van het hele scherm heeft */
 
 @SuppressWarnings("serial")
 public class FullScreenAfbeelding extends JWindow implements MouseListener
 {
-	public FullScreenAfbeelding(DocumentCMS doc, Databank d)
+	public FullScreenAfbeelding(DocumentCMS doc)
 	{
 		//als er op een toets geduwd wordt, sluit dit venster af
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
@@ -47,7 +45,7 @@ public class FullScreenAfbeelding extends JWindow implements MouseListener
 		p.setBackground(Color.BLACK);
 		add(p);
 		
-		p.add(new Afbeelding(doc, (int)dim.getWidth(), (int)dim.getHeight(),d));
+		p.add(new Afbeelding(doc, (int)dim.getWidth(), (int)dim.getHeight()));
 		addMouseListener(this);
 	}
 

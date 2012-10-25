@@ -30,10 +30,9 @@ public class DocumentController
 	public DocumentController(Model m, Databank d, DocumentCMS doc, InSystemTray tray)
 	{
 		this.origineelDocument = doc;
-		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getMediaId(), doc.getBurgerId(), doc.getBeheerderId(),doc.getAard(), m);
+		this.voorlopigDocument = new DocumentCMS(doc.getId(), doc.getTitel(), doc.getStatus(), doc.getDatumToegevoegd(), doc.isVerwijderd(), doc.getOpmerkingen(), doc.getTekst(), doc.getTypeDocument(), doc.getExtensieDocument(), doc.getErfgoedId(),doc.getRedenAfwijzing(), doc.getDatumGewijzigd(), doc.getBurgerId(), doc.getBeheerderId(),doc.getAard(), doc.getPad(), m);
 		//niet voorlopigDocument = origineelDoc, want dan heb je referentiële integriteit
-		voorlopigDocument.setImage(doc.getImage());
-		voorlopigDocument.setTemp(doc.getTemp());
+		voorlopigDocument.setPad(doc.getPad());
 		this.m = m;
 		this.d = d;
 		ex = Executors.newCachedThreadPool();
@@ -66,13 +65,11 @@ public class DocumentController
 		origineelDocument.setTypeDocument(voorlopigDocument.getTypeDocument());
 		origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
 		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
-		origineelDocument.setImage(voorlopigDocument.getImage());
+		origineelDocument.setPad(voorlopigDocument.getPad());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
-		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
 		origineelDocument.setBeheerderId(voorlopigDocument.getBeheerderId());
 		origineelDocument.setAard(voorlopigDocument.getAard());
-		origineelDocument.setTemp(voorlopigDocument.getTemp());
 		
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
@@ -91,13 +88,11 @@ public class DocumentController
 		origineelDocument.setTypeDocument(voorlopigDocument.getTypeDocument());
 		origineelDocument.setExtensieDocument(voorlopigDocument.getExtensieDocument());
 		origineelDocument.setErfgoedId(voorlopigDocument.getErfgoedId());
-		origineelDocument.setImage(voorlopigDocument.getImage());
+		origineelDocument.setPad(voorlopigDocument.getPad());
 		origineelDocument.setRedenAfwijzing(voorlopigDocument.getRedenAfwijzing());
-		origineelDocument.setMediaId(voorlopigDocument.getMediaId());
 		origineelDocument.setBurgerId(voorlopigDocument.getBurgerId());
 		origineelDocument.setBeheerderId(voorlopigDocument.getBeheerderId());
 		origineelDocument.setAard(voorlopigDocument.getAard());
-		origineelDocument.setTemp(voorlopigDocument.getTemp());
 		
 		origineelDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));
 		voorlopigDocument.setDatumGewijzigd(new Timestamp(new Date().getTime()));

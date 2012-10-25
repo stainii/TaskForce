@@ -197,7 +197,8 @@ public class AfgekeurdMail implements SoortMail
 				
 		if (document.getTypeDocument().equals("Afbeelding"))
 		{
-			afkeurmail += "<img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getMediaId() + "?type=" + document.getExtensieDocument() + "\" "+
+			//DIT KLOPT NIET
+			afkeurmail += "<img src=\"http://taskforce.somee.com/Media/GetImage/"+ document.getPad() + "?type=" + document.getExtensieDocument() + "\" "+
 					"editable=\"true\" label=\"Image\" class=\"w300\" border=\"0\" width=\"300\">";
 		}
 		

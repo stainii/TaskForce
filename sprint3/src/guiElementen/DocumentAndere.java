@@ -48,11 +48,8 @@ public class DocumentAndere extends JPanel implements DocumentMedia
 	{
 		@Override
 		protected Object doInBackground() throws Exception
-		{			
-			if (doc.getTemp()==null || doc.getTemp().equals(""))
-			{
-				doc.setTemp(databank.getBlobFile(doc.getId()));
-			}
+		{	
+			//hier heb ik temp verwijderd?
 			
 			laden.setText("Klik hier om het bestand te openen (" + doc.getExtensieDocument() + ")");
 			laden.addMouseListener(new MouseListener()
@@ -75,7 +72,7 @@ public class DocumentAndere extends JPanel implements DocumentMedia
 				{
 					try
 					{
-						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ doc.getTemp());
+						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ doc.getPad());
 					}
 					catch (IOException ioe)
 					{

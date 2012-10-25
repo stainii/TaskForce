@@ -71,7 +71,7 @@ public class TegelDocument extends JPanel implements MouseListener
 		c.gridheight = 7;		
 		if (document.getTypeDocument().equals("Afbeelding"))
 		{
-			add(new Afbeelding(document,100,100,data), c);
+			add(new Afbeelding(document,100,100), c);
 		}
 		else if (document.getTypeDocument().equals("Video"))
 		{

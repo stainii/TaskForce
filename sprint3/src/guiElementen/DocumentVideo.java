@@ -22,12 +22,10 @@ public class DocumentVideo extends JPanel implements DocumentMedia, PropertyChan
 	private DSMovie movie;
 	private JLabel laden;
 	private DocumentCMS doc;
-	private Databank databank;
 	
 	public DocumentVideo(DocumentCMS doc, Databank databank)
 	{
 		this.doc = doc;
-		this.databank = databank;
 		setPreferredSize(new Dimension(400,300));
 		setBackground(Color.BLACK);
 		
@@ -71,12 +69,8 @@ public class DocumentVideo extends JPanel implements DocumentMedia, PropertyChan
 		@Override
 		protected Object doInBackground() throws Exception
 		{			
-			if (doc.getTemp()==null || doc.getTemp().equals(""))
-			{
-				doc.setTemp(databank.getBlobFile(doc.getId()));
-			}
-			
-			movie = new DSMovie(doc.getTemp(), DSFiltergraph.DD7, prop);
+			//temp hier verwijderd
+			movie = new DSMovie(doc.getPad(), DSFiltergraph.DD7, prop);
 			add(movie.asComponent(),BorderLayout.CENTER);
 			add(new SwingMovieController(movie),BorderLayout.SOUTH);
 

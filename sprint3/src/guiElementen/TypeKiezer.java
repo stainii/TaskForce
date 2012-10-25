@@ -4,9 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -62,21 +60,14 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			public void mouseClicked(MouseEvent e) {
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 				{
-					try 
-					{
-						//lees de afbeelding in en sla ze op in het voorlopige document. Toon daarna de afbeelding.
-						controller.getVoorlopigDocument().setImage(ImageIO.read(chooser.getSelectedFile()));
-						controller.getVoorlopigDocument().setTypeDocument("Afbeelding");
+					//lees de afbeelding in en sla ze op in het voorlopige document. Toon daarna de afbeelding.
+					controller.getVoorlopigDocument().setPad(chooser.getSelectedFile().getPath());
+					controller.getVoorlopigDocument().setTypeDocument("Afbeelding");
 
-						int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
-						controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
-						
-						content.setMedia(new DocumentAfbeelding(controller,databank));
-					} 
-					catch (IOException e1) 
-					{
-						e1.printStackTrace();
-					}
+					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
+					controller.getVoorlopigDocument().setExtensieDocument(chooser.getSelectedFile().getAbsolutePath().substring(positie+1));
+					
+					content.setMedia(new DocumentAfbeelding(controller,databank));
 				}
 				
 			}
@@ -128,7 +119,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			{
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 				{
-					controller.getVoorlopigDocument().setTemp(chooser.getSelectedFile().getAbsolutePath());
+					controller.getVoorlopigDocument().setPad(chooser.getSelectedFile().getAbsolutePath());
 					controller.getVoorlopigDocument().setTypeDocument("Video");
 
 					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
@@ -159,7 +150,7 @@ public class TypeKiezer extends JPanel implements DocumentMedia
 			{
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 				{
-					controller.getVoorlopigDocument().setTemp(chooser.getSelectedFile().getAbsolutePath());
+					controller.getVoorlopigDocument().setPad(chooser.getSelectedFile().getAbsolutePath());
 					controller.getVoorlopigDocument().setTypeDocument("Andere");
 
 					int positie = chooser.getSelectedFile().getAbsolutePath().lastIndexOf('.');
